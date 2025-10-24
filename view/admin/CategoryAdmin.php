@@ -64,7 +64,7 @@
                                     <td class="p-3">PC Bundling</td> <!-- ID kategori -->
                                     <td class="p-3 text-gray-500">Kategori untuk pc jadi</td> <!-- ID kategori -->
                                     <td class="p-3 pl-10">
-                                        <div class="text-center border w-15 rounded-lg bg-gray-400 text-shadow-gray-950">14</div>
+                                        <div class="text-center border w-15 rounded-md bg-gray-200 text-shadow-gray-950">14</div>
                                     </td> <!-- ID kategori -->
                                     <td class="p-3">Edit | Hapus</td> <!-- ID kategori -->
                                 </tr>

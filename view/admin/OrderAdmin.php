@@ -52,20 +52,28 @@
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Items</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Status</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Payment</th>
+                                    <th class="h-12 px-4 text-center align-middle font-bold text-muted-foreground text-gray-600">Status</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600"></th>
                                 </tr>
                             </thead>
                             <tbody class="text-sm">
                                 <tr class="border-t">
-                                    <td class="p-3">Order Id</td>
-                                    <td class="p-3">Customer</td>
-                                    <td class="p-3">Amount</td>
-                                    <td class="p-3">Items</td>
-                                    <td class="p-3">Status</td>
+                                    <td class="p-3">ORD69</td>
+                                    <td class="p-3">Juan Kamil</td>
+                                    <td class="p-3">2</td>
+                                    <td class="p-3">Monitor ZOWIE xl2546x, CPU i9 14th 14900k</td>
                                     <td class="p-3">Payment</td>
-                                    <td class="p-3">Actions</td>
+                                    <td class="p-3">
+                                        <div class=" text-center px-2 font-semibold bg-green-400 w-full rounded-lg hidden">Selesai</div> <!--Buat Status nya-->
+                                        <div class=" text-center px-2 font-semibold bg-orange-300 w-full rounded-lg ">Pengiriman</div> <!--Buat Status nya-->
+                                        <div class=" text-center px-2 font-semibold bg-red-500 w-full rounded-lg hidden">Batal/dikembalikan</div> <!--Buat Status nya-->
+                                    </td>
+                                    <td class="p-3">Edit | Hapus</td>
+                                    <td class="p-3">
+                                        <button class="px-2 font-semibold cursor-pointer text-blue-900 hover:brightness-100"> Lihat Detail</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
