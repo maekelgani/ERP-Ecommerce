@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+@theme {
+    --font-jost: "Jost", sans-serif;
+    --font-poppins: "Poppins" sans-serif;
+    --color-navbar: rgba(237, 237, 237, 0.9);
+    --color-red-nano: #512E2E;
+}
