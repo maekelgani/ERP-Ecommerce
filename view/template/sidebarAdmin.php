@@ -84,7 +84,7 @@
 
                 <!-- REPORT SECTION -->
                 <a class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground 
-                hover:bg-gray-100 hover:text-gray-800" href="">
+                hover:bg-gray-100 hover:text-gray-800" href="/view/admin/ReportAdmin.php">
                     <!-- GAMBAR LOGO REPORT NANTI -->
                     <span class="material-symbols-outlined">picture_as_pdf</span> <!-- icon by google brok-->
                     <span>Report</span>

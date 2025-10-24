@@ -27,17 +27,16 @@
                     <p class="text-gray-400">Manage your product inventory</p>
                 </div>
                 <div>
-                    <a class="px-5 py-2 bg-gray-800 text-white rounded-lg" href=""> Add Product</a>
+                    <a class="openForm px-5 py-2 bg-gray-800 text-white rounded-lg"> Add Product</a>
                 </div>
             </div>
 
             <!-- container TABEL PRODUCT -->
             <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
                 <div id="container-header" class="mb-6">
-                    <h2 class="text-2xl font-bold">Grafik pendapatan Bulanan</h2>
-                    <p class="text-gray-400">Pantau pendapatan setiap bulannya</p>
+                    <h2 class="text-2xl font-bold">Product List</h2>
                 </div>
-                
+
                 <!-- buat filter -->
                 <div id="filter-field" class="mb-4 flex flex-wrap items-center gap-4 pb-3 pt-0"">
                     <!-- Filter cari produk -->
@@ -140,5 +139,6 @@
             </div>
         </main>
     </div>
+    <script src="/src/js/main.js"></script>
 </body>
 </html>

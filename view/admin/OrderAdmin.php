@@ -35,10 +35,31 @@
                     <p class="text-base text-gray-400">Daftar order yang sedang dalam proses pengemasan</p>
                 </div>
 
-                <!-- buat filter -->
+                <!-- Filter -->
                 <div id="filter-field" class="mb-4 flex flex-wrap items-center gap-4 pb-3 pt-0"">
                     <!-- Filter cari produk -->
-                    <input type="text" placeholder="cari order id" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                    <div class="flex items-center gap-2">
+                        <input type="text" placeholder="Cari Product" class="border border-gray-300 rounded-lg px-3 w-md py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                    </div>
+                    <!-- filter by category -->
+                    <div>
+                        <select
+                            class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="">Semua Status</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="aksesoris">Aksesoris</option>
+                            <option value="komponen">Komponen</option>
+                            <option value="peripheral">Peripheral</option>
+                        </select>
+                    </div>
+                    <!-- filter by Tanggal -->
+                    <div>
+                        <input type="date" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+
+                    <button class=" px-10 bg-gray-800 text-white py-2 rounded-md font-semibold text-sm hover:bg-gray-500 cursor-pointer transition"> 
+                        Terapkan Filter 
+                    </button>
                 </div>
 
                 <!-- BAGIAN TABEL orders GEYS -->
