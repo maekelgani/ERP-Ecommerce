@@ -447,7 +447,7 @@
     width: calc(var(--spacing) * 64);
   }
   .w-\[\%\] {
-    width: %;
+    width: 0%;
   }
   .w-\[1\%\] {
     width: 1%;
