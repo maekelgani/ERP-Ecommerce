@@ -68,6 +68,9 @@
                     </button>
 
                     <div class="dropdown-menu ml-8 mt-1 space-y-1 hidden">
+                        <a href="/view/admin/IncomingOrdersAdmin.php" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-800">
+                            <span class="material-symbols-outlined">draft_orders</span> Incoming Orders
+                        </a>
                         <a href="/view/admin/OrderAdmin.php" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-800">
                             <span class="material-symbols-outlined">order_approve</span> All Orders
                         </a>
@@ -82,6 +85,14 @@
                     <span>Retrun Product</span>
                 </a>
 
+                <!-- HALAMAN HAK AKSES -->
+                <a class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground 
+                hover:bg-gray-100 hover:text-gray-800" href="/view/admin/HakAksesAdmin.php">
+                    <!-- GAMBAR LOGO NANTI -->
+                    <span class="material-symbols-outlined">add_moderator</span> <!-- icon by google brok-->
+                    <span>Kelola Akses</span>
+                </a>
+
                 <!-- REPORT SECTION -->
                 <a class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground 
                 hover:bg-gray-100 hover:text-gray-800" href="/view/admin/ReportAdmin.php">
@@ -93,69 +104,69 @@
         </div>
         
         <!-- Script untuk selected menu option -->
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sections = document.querySelectorAll('.dropdown-section');
-        const sidebar = document.getElementById('sidebar');
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.dropdown-section');
+            const sidebar = document.getElementById('sidebar');
 
-        // === 1. Pulihkan status setiap dropdown ===
-        sections.forEach(section => {
-            const sectionName = section.querySelector('.toggle-btn span:nth-child(2)').textContent.trim().toLowerCase();
-            const savedState = localStorage.getItem(`dropdown-${sectionName}`) === 'open';
+            // === 1. Pulihkan status setiap dropdown ===
+            sections.forEach(section => {
+                const sectionName = section.querySelector('.toggle-btn span:nth-child(2)').textContent.trim().toLowerCase();
+                const savedState = localStorage.getItem(`dropdown-${sectionName}`) === 'open';
 
-            const menu = section.querySelector('.dropdown-menu');
-            const arrow = section.querySelector('.arrow-icon');
+                const menu = section.querySelector('.dropdown-menu');
+                const arrow = section.querySelector('.arrow-icon');
 
-            if (savedState) {
-                menu.classList.remove('hidden');
-                arrow.classList.add('rotate-180');
-            } else {
-                menu.classList.add('hidden');
-                arrow.classList.remove('rotate-180');
-            }
-        });
-
-        // === 2. Event buka/tutup ===
-        sections.forEach(section => {
-            const btn = section.querySelector('.toggle-btn');
-            const menu = section.querySelector('.dropdown-menu');
-            const arrow = section.querySelector('.arrow-icon');
-            const sectionName = section.querySelector('.toggle-btn span:nth-child(2)').textContent.trim().toLowerCase();
-
-            btn.addEventListener('click', () => {
-                const isOpen = !menu.classList.contains('hidden');
-
-                // Toggle dropdown yang diklik
-                menu.classList.toggle('hidden');
-                arrow.classList.toggle('rotate-180');
-
-                // Simpan statusnya
-                localStorage.setItem(`dropdown-${sectionName}`, menu.classList.contains('hidden') ? 'closed' : 'open');
-            });
-        });
-
-        // === 3. Tandai menu aktif ===
-        const menuItems = document.querySelectorAll('.menu-item');
-        const activePage = localStorage.getItem('activeMenu');
-        if (activePage) {
-            menuItems.forEach(item => {
-                if (item.getAttribute('href') === activePage) {
-                    item.classList.add('bg-gray-100', 'text-gray-800');
+                if (savedState) {
+                    menu.classList.remove('hidden');
+                    arrow.classList.add('rotate-180');
                 } else {
-                    item.classList.remove('bg-gray-100', 'text-gray-800');
+                    menu.classList.add('hidden');
+                    arrow.classList.remove('rotate-180');
                 }
             });
-        }
 
-        // Simpan menu aktif saat diklik
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
-                localStorage.setItem('activeMenu', item.getAttribute('href'));
+            // === 2. Event buka/tutup ===
+            sections.forEach(section => {
+                const btn = section.querySelector('.toggle-btn');
+                const menu = section.querySelector('.dropdown-menu');
+                const arrow = section.querySelector('.arrow-icon');
+                const sectionName = section.querySelector('.toggle-btn span:nth-child(2)').textContent.trim().toLowerCase();
+
+                btn.addEventListener('click', () => {
+                    const isOpen = !menu.classList.contains('hidden');
+
+                    // Toggle dropdown yang diklik
+                    menu.classList.toggle('hidden');
+                    arrow.classList.toggle('rotate-180');
+
+                    // Simpan statusnya
+                    localStorage.setItem(`dropdown-${sectionName}`, menu.classList.contains('hidden') ? 'closed' : 'open');
+                });
             });
+
+            // === 3. Tandai menu aktif ===
+            const menuItems = document.querySelectorAll('.menu-item');
+            const activePage = localStorage.getItem('activeMenu');
+            if (activePage) {
+                menuItems.forEach(item => {
+                    if (item.getAttribute('href') === activePage) {
+                        item.classList.add('bg-gray-100', 'text-gray-800');
+                    } else {
+                        item.classList.remove('bg-gray-100', 'text-gray-800');
+                    }
+                });
+            }
+
+            // Simpan menu aktif saat diklik
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    localStorage.setItem('activeMenu', item.getAttribute('href'));
+                });
+            });
+            requestAnimationFrame(() => sidebar.classList.remove('invisible'));
         });
-        requestAnimationFrame(() => sidebar.classList.remove('invisible'));
-    });
-    </script>
+        </script>
     </aside>
 </body>
 </html>

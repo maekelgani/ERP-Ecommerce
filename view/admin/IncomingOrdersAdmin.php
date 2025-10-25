@@ -23,8 +23,8 @@
         <main class="p-6">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
-                    <h1 class="text-2xl font-bold"> Order List</h1>
-                    <p class="text-gray-400">Detail Semua order yang telah terjadi</p>
+                    <h1 class="text-2xl font-bold"> Incoming Orders </h1>
+                    <p class="text-gray-400">Kelola order yang masuk dan ubah status pengiriman</p>
                 </div>
             </div>
 
@@ -71,25 +71,28 @@
                                 <tr class="border-b bg-gray-50 rounded-lg ">
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Order ID</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Items</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Payment</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Total</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Tanggal-Pesan</th>
                                     <th class="h-12 px-4 text-center align-middle font-bold text-muted-foreground text-gray-600">Status</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th> 
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600"></th>
                                 </tr>
                             </thead>
                             <tbody class="text-sm">
                                 <tr class="border-t">
-                                    <td class="p-3">ORD69</td>
+                                    <td class="p-3">#ORD69</td>
                                     <td class="p-3">Juan Kamil</td>
                                     <td class="p-3">2</td>
-                                    <td class="p-3">Monitor ZOWIE xl2546x, CPU i9 14th 14900k</td>
-                                    <td class="p-3">Payment</td>
-                                    <td class="p-3">
-                                        <div class=" text-center px-2 font-semibold bg-green-400 w-full rounded-lg hidden">Selesai</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-orange-300 w-full rounded-lg ">Pengiriman</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-red-500 w-full rounded-lg hidden">Batal/dikembalikan</div> <!--Buat Status nya-->
+                                    <td class="p-3">Rp. 24,425,000</td>
+                                    <td class="p-3">23-10-2025</td>
+                                    <td class="p-3 text-center">
+                                        <select name="" id="" class="bg-gray-50 rounded-lg px-5 border border-gray-300">
+                                            <option value="dikemas" class="">Dikemas</option>
+                                            <option value="dikirim">Dikirim</option>
+                                        </select>
                                     </td>
+                                    <td class="p-3">Edit | Hapus</td>
                                     <td class="p-3">
                                         <button class="px-2 font-semibold cursor-pointer text-blue-900 hover:brightness-100"> Lihat Detail</button>
                                     </td>
