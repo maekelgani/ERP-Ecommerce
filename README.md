@@ -41,7 +41,7 @@ Klik itu untuk mengajukan agar perubahanmu digabung ke branch utama `(master)`
 <br>=================================
 <br>jangan lupa build ulang tailwindnya:
 <br>
-<br> _npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch_
+<br> _npx tailwindcss -i ./src/input.css -o ./src/output.css --watch_
 
 
 
