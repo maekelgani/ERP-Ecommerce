@@ -31,9 +31,23 @@
 
             <!-- container TABEL Pengembalian -->
             <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
-                <div id="container-header" class="mb-6">
-                    <h2 class="text-2xl font-bold">Return Requests</h2>
-                    <p class="text-base text-gray-400">Daftar permintaan pengembalian produk</p>
+                <div id="" class="mb-6 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold">Return Requests</h2>
+                        <p class="text-base text-gray-400">Daftar permintaan pengembalian produk</p>
+                    </div>
+                    <div id="filter-field" class="mb-2 flex flex-wrap items-center gap-4 pb-3 pt-0">
+                        <input type="text" placeholder="Cari Pengembalian..." class="border border-gray-300 rounded-lg px-3 w-sm py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                            <div class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <select name="" id="">
+                                <option value="">Pilih Status</option>
+                                <option value="">Diterima</option>
+                                <option value="">Menunggu</option>
+                                <option value="">Ditolak</option>
+                            </select>
+                        </div>
+                        <button class="bg-gray-800 text-white px-6 py-2 rounded-lg">Cari</button>
+                    </div>
                 </div>
 
                 <!-- BAGIAN TABEL Pengembalian GEYS -->
@@ -43,13 +57,13 @@
                         <table class="w-full caption-bottom text-sm">
                             <thead class="border-b uppercase">
                                 <tr class="border-b bg-gray-50 rounded-lg ">
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Return ID</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Order ID</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Reason</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Status</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Return ID</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Order ID</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Reason</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Status</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="text-sm">
@@ -60,7 +74,11 @@
                                     <td class="p-3">Reason</td>
                                     <td class="p-3">Amount</td>
                                     <td class="p-3">Status</td>
-                                    <td class="p-3">Actions</td>
+                                    <td class="p-3 flex gap-2">
+                                        <div class="text-red=500">Tolak</div>
+                                        <div class="text-green-500">terima</div>
+                                        <div>Lihat Detail</div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
