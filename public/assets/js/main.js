@@ -1,6 +1,6 @@
 // CHART nya GATAU GW WAK
 document.addEventListener("DOMContentLoaded", () => {    
-    // Untuk Product, menampilkan Modal di Product Admin
+    // Untuk Product, menampilkan Modal gambar prodyct di Product Admin
     (function () {
         const triggers = document.querySelectorAll('.lightbox-trigger');
         const lightbox = document.getElementById('lightbox');

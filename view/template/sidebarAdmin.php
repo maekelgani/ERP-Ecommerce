@@ -145,25 +145,28 @@
                 });
             });
 
-            // === 3. Tandai menu aktif ===
-            const menuItems = document.querySelectorAll('.menu-item');
-            const activePage = localStorage.getItem('activeMenu');
-            if (activePage) {
-                menuItems.forEach(item => {
-                    if (item.getAttribute('href') === activePage) {
-                        item.classList.add('bg-gray-100', 'text-gray-800');
-                    } else {
-                        item.classList.remove('bg-gray-100', 'text-gray-800');
-                    }
-                });
-            }
+        // === 3. Tandai menu aktif berdasarkan URL saat ini ===
+        const menuItems = document.querySelectorAll('.menu-item');
+        const currentUrl = window.location.pathname;
+        let foundActive = false;
 
-            // Simpan menu aktif saat diklik
-            menuItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    localStorage.setItem('activeMenu', item.getAttribute('href'));
-                });
-            });
+        menuItems.forEach(item => {
+            const itemUrl = item.getAttribute('href');
+
+            if (itemUrl === currentUrl) {
+                item.classList.add('bg-gray-100', 'text-gray-800');
+                localStorage.setItem('activeMenu', itemUrl);
+                foundActive = true;
+            } else {
+                item.classList.remove('bg-gray-100', 'text-gray-800');
+            }
+        });
+
+        // Jika halaman sekarang bukan salah satu menu sidebar, hapus activeMenu
+        if (!foundActive) {
+            localStorage.removeItem('activeMenu');
+        }
+
             requestAnimationFrame(() => sidebar.classList.remove('invisible'));
         });
         </script>
