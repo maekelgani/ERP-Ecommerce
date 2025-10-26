@@ -86,7 +86,7 @@
                             <p class="text-gray-400 text-sm">Detail lengkap penjualan dengan status dan detail lain</p>
                         </div>
                     </div>
-                    <button class="text-base hover:bg-gray-600 cursor-pointer bg-blue-800 text-white p-2 w-full rounded-lg"> Download </button>
+                    <button class=" text-base hover:bg-gray-600 cursor-pointer bg-gray-800 text-white p-2 w-full rounded-lg"> Download </button>
                 </div>
             </div>
 

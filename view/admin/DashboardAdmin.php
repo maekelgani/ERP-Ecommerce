@@ -104,49 +104,49 @@
                 </div>
                 <div id="container-content">
                     <div class="flex justify-between items-center bg-gray-50 p-2 rounded-2xl">
-                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-10 rounded-full " alt="">
+                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-15 rounded-full " alt="">
                         <div class="w-25 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div class="bg-red-600 h-2 w-[10%]"></div>
                         </div>
                         <p class="text-[12px] mt-1">Stok tersisa: <strong>10%</strong> </p>
                     </div>
                     <div class="flex justify-between items-center bg-gray-50 p-2 rounded-2xl">
-                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-10 rounded-full " alt="">
+                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-15 rounded-full " alt="">
                         <div class="w-25 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div class="bg-red-500 h-2 w-[20%]"></div>
                         </div>
                         <p class="text-[12px] mt-1">Stok tersisa: <strong>20%</strong> </p>
                     </div>
                     <div class="flex justify-between items-center bg-gray-50 p-2 rounded-2xl">
-                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-10 rounded-full " alt="">
+                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-15 rounded-full " alt="">
                         <div class="w-25 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div class="bg-orange-500 h-2 w-[30%]"></div>
                         </div>
                         <p class="text-[12px] mt-1">Stok tersisa: <strong>30%</strong> </p>
                     </div>
                     <div class="flex justify-between items-center bg-gray-50 p-2 rounded-2xl">
-                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-10 rounded-full " alt="">
+                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-15 rounded-full " alt="">
                         <div class="w-25 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div class="bg-orange-400 h-2 w-[40%]"></div>
                         </div>
                         <p class="text-[12px] mt-1">Stok tersisa: <strong>40%</strong> </p>
                     </div>
                     <div class="flex justify-between items-center bg-gray-50 p-2 rounded-2xl">
-                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-10 rounded-full " alt="">
+                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-15 rounded-full " alt="">
                         <div class="w-25 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div class="bg-yellow-500 h-2 w-[50%]"></div>
                         </div>
                         <p class="text-[12px] mt-1">Stok tersisa: <strong>50%</strong> </p>
                     </div>
                     <div class="flex justify-between items-center bg-gray-50 p-2 rounded-2xl">
-                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-10 rounded-full " alt="">
+                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-15 rounded-full " alt="">
                         <div class="w-25 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div class="bg-yellow-400 h-2 w-[60%]"></div>
                         </div>
                         <p class="text-[12px] mt-1">Stok tersisa: <strong>60%</strong> </p>
                     </div>
                     <div class="flex justify-between items-center bg-gray-50 p-2 rounded-2xl">
-                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-10 rounded-full " alt="">
+                        <img src="https://blossomzones.com/wp-content/uploads/2021/08/5600G.jpg" class="w-15 rounded-full " alt="">
                         <div class="w-25 bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div class="bg-green-500 h-2 w-[70%]"></div>
                         </div>
