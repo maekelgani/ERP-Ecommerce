@@ -57,27 +57,35 @@
                         <table class="w-full caption-bottom text-sm">
                             <thead class="border-b uppercase">
                                 <tr class="border-b bg-gray-50 rounded-lg ">
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Return ID</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Order ID</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Reason</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Status</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">ID Pengembalian</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">ID Pemesanan</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Nama Pelanggan</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Keluhan</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Tanggan Pengajuan</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600 w-1">Jumlah</th>
+                                    <th class="h-12 px-3 text-center align-middle font-bold text-muted-foreground text-gray-600">Status</th>
                                     <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="text-sm">
                                 <tr class="border-t">
-                                    <td class="p-3">Return ID</td>
-                                    <td class="p-3">Order ID</td>
-                                    <td class="p-3">Customer</td>
-                                    <td class="p-3">Reason</td>
-                                    <td class="p-3">Amount</td>
-                                    <td class="p-3">Status</td>
+                                    <td class="p-3"># RTN01</td>
+                                    <td class="p-3"># ORD24</td>
+                                    <td class="p-3">Jojon Satoru</td>
+                                    <td class="p-3 text-sm text-gray-400">Ada yang ga ada</td>
+                                    <td class="p-3">23-10-2025</td>
+                                    <td class="p-3">1</td>
+                                    <td class="p-3 text-center">
+                                        <div class="text-amber-600 rounded-lg bg-amber-50 border border-amber-600">Pending</div>
+                                        <div class="text-green-700 rounded-lg bg-green-100 border border-green-700 hidden">Diterima</div>
+                                        <div class="text-red-800 rounded-lg bg-red-200 border border-red-800 hidden">Ditolak</div>
+                                    </td>
                                     <td class="p-3 flex gap-2">
-                                        <div class="text-red=500">Tolak</div>
-                                        <div class="text-green-500">terima</div>
-                                        <div>Lihat Detail</div>
+                                        <div class="text-red-800 cursor-pointer">Tolak</div>
+                                        <div class="text-green-700 cursor-pointer">terima</div>
+                                    </td>
+                                    <td>
+                                        <button class="text-blue-800 cursor-pointer">Lihat Detail</button>
                                     </td>
                                 </tr>
                             </tbody>

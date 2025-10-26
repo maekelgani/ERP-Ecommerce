@@ -74,6 +74,7 @@
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Items</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Total</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Tanggal-Pesan</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Status Pembayaran</th>
                                     <th class="h-12 px-4 text-center align-middle font-bold text-muted-foreground text-gray-600">Status</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600"></th>
@@ -86,6 +87,10 @@
                                     <td class="p-3">2</td>
                                     <td class="p-3">Rp. 24,425,000</td>
                                     <td class="p-3">23-10-2025</td>
+                                    <td class="p-3">
+                                        <div class="px-2 text-green-800 border border-green-500 rounded-lg bg-green-200 hidden">Sudah Membayar</div>
+                                        <div class="px-2 text-gray-500 border border-gray-400 rounded-lg bg-gray-100">Belum Membayar</div>
+                                    </td>
                                     <td class="p-3 text-center">
                                         <select name="" id="" class="bg-gray-50 rounded-lg px-5 border border-gray-300">
                                             <option value="dikemas" class="">Dikemas</option>

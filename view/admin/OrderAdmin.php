@@ -69,13 +69,14 @@
                         <table class="w-full caption-bottom text-sm">
                             <thead class="border-b uppercase">
                                 <tr class="border-b bg-gray-50 rounded-lg ">
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Order ID</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Items</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Payment</th>
-                                    <th class="h-12 px-4 text-center align-middle font-bold text-muted-foreground text-gray-600">Status</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th> 
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Order ID</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Items</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Payment Status</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Payment Method</th>
+                                    <th class="h-12 px-3 text-center align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Status</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th> 
                                 </tr>
                             </thead>
                             <tbody class="text-sm">
@@ -84,10 +85,14 @@
                                     <td class="p-3">Juan Kamil</td>
                                     <td class="p-3">2</td>
                                     <td class="p-3">Monitor ZOWIE xl2546x, CPU i9 14th 14900k</td>
-                                    <td class="p-3">Payment</td>
+                                    <td class="p-3">
+                                        <div class="px-2 text-green-800 border border-green-500 rounded-lg bg-green-200 ">Sudah Membayar</div>
+                                        <div class="px-2 text-gray-500 border border-gray-400 rounded-lg bg-gray-100 hidden">Belum Membayar</div>
+                                    </td>
+                                    <td class="p-3">Bank Transfer</td>
                                     <td class="p-3">
                                         <div class=" text-center px-2 font-semibold bg-green-400 w-full rounded-lg hidden">Selesai</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-orange-300 w-full rounded-lg ">Pengiriman</div> <!--Buat Status nya-->
+                                        <div class=" text-center px-2 font-semibold bg-amber-300 w-full rounded-lg ">Pengiriman</div> <!--Buat Status nya-->
                                         <div class=" text-center px-2 font-semibold bg-red-500 w-full rounded-lg hidden">Batal/dikembalikan</div> <!--Buat Status nya-->
                                     </td>
                                     <td class="p-3">

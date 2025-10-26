@@ -118,25 +118,6 @@
 
                                     <td class="p-3">Edit | Delete</td> <!--actions-->
                                 </tr>
-                                <!-- Dummy 2 -->
-                                <tr class="border-t">
-                                    <td class="p-3">Gaming PC RTX 4080</td> <!--product-->
-                                    <td class="p-3">Pc Bundling</td> <!--Kategori-->
-                                    <td class="p-3">Rp 25.000.000</td> <!--Price-->
-                                    <td class="flex pt-3 gap-2">
-                                        <input type="number" disabled value="2" class="w-7 ">
-                                        <button class="w-5 pt-0 border rounded-md hover:bg-gray-100 cursor-pointer"> + </button>
-                                        <button class="w-5 pt-0 border rounded-md hover:bg-gray-100 cursor-pointer"> - </button>
-                                    </td> <!--Stock-->
-                                    
-                                    <td class="p-3">
-                                        <div class=" text-center px-2 font-semibold bg-green-400 w-[50%] rounded-lg hidden">Active</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-orange-300 w-[50%] rounded-lg ">Low Stock</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-red-500 w-[50%] rounded-lg hidden">Out of Stock</div> <!--Buat Status nya-->
-                                    </td> <!--Status-->
-
-                                    <td class="p-3">Edit | Delete</td> <!--actions-->
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -146,18 +127,18 @@
     </div>
     
     <!-- Modal Lightbox -->
-    <div id="lightbox" class="fixed inset-0 hidden z-50 items-center justify-center p-6">
+    <div id="lightbox" class="fixed inset-0 z-50 items-center justify-center p-6 hidden">
         <div id="lb-backdrop" class="absolute inset-0 bg-black bg-opacity-60"></div>
 
         <div class="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center">
-            <button id="lb-close" class="absolute top-2 right-2 bg-white/90 rounded-full p-1 shadow hover:bg-white z-20">
+            <button id="lb-close" class="absolute top-2 right-2 bg-white/90 rounded-lg p-2 shadow hover:bg-white z-20">
             ✕
             </button>
 
         <img id="lb-image"
-            src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/111/MTA-165688338/asus_pc_build_asus_rog_strix_i9-14900kf_32gb_ram_1tb_ssd_rtx_4080_super_16gb_gddr6x_full01_dazv7u7t.jpg"
+            src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/111/MTA-165688338/asus_pc_build_asus_rog_strix_i9-14900kf_32gb_ram_1tb_ssd_rtx_4080_super_16gb_gddr6x_full01_dazv7u7t.jpg" 
             alt=""
-            class="max-w-full max-h-[88vh] rounded-md shadow-lg opacity-0 transition-opacity duration-200" />
+            class="max-w-full max-h-[88vh] rounded-md shadow-lg opacity-0 transition-opacity duration-200" /> <!--bagian gambar di sini-->
         </div>
     </div>
     <script src="/public/assets/js/main.js" defer></script>
