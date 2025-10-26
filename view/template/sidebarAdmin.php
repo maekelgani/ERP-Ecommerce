@@ -17,7 +17,7 @@
             <!-- PASANG LOGO -->
             <div class="flex items-center justify-between p-4.5 border-b">
                 <div class="flex items-center gap-2">
-                    <img class="h-6 w-6 text-sidebar-primary bg-amber-50 rounded-4xl" src="/src/img/favicon.png" alt="">
+                    <img class="h-6 w-6 text-sidebar-primary bg-amber-50 rounded-4xl" src="/public/assets/img/favicon.png" alt="">
                     <span class="font-bold text-sm text-white">NANO KOMPUTER</span>    
                 </div>
             </div>
