@@ -36,8 +36,8 @@
             <!-- Card pilih waktu dan format file -->
             <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 mb-4 justify-center">
                 <div id="container-header" class="mb-4">
-                    <h2 class="text-2xl font-semibold">Grafik pendapatan Bulanan</h2>
-                    <p class="text-gray-400">Pantau pendapatan setiap bulannya</p>
+                    <h2 class="text-2xl font-semibold">Generate Report</h2>
+                    <p class="text-gray-400">Select time period and download your reports</p>
                 </div>
                 <div class="flex gap-4">
                     <div class="w-[50%]">
