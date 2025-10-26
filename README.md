@@ -9,16 +9,15 @@
 <br>`git clone <url repositori>`
 <br>Perintah "git clone" digunakan untuk mengunduh code yang ada pada repository.
 <br>
-<br>### 2. Lakukan Checkout
-<br>`git checkout master` 
-
-<br>perintah untuk pindah ke branch master, namun karna di repo cuman ada 1 brach bisa langsung longkap ke step 3
+<br>### 2. Lakukan PULL
+<br>`git pull / git pull origin master` 
+<br>perintah untuk mengambil update/perubahan terbaru dari repositori, 
+<br> jika menambahkan `origin master` artinya kalian mengambil update terbaru dari cabang tertentu
 <br>
-<br>### 3. Buat Branch baru
+<br>### 3. Buat Branch baru 
 <br>`git checkout -b <nama-branch>`
-
 <br>perintah ini akan membuatkan branch baru, dengan flag -b yang artinya _buat branch baru lalu langsung pindah ke sana._
-<br>
+<br>****
 <br>### 4. Ngedit file nya
 <br>otak atik aja, tambah file baru
 <br>
