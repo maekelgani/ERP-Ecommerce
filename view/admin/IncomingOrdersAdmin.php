@@ -76,8 +76,8 @@
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Tanggal-Pesan</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Status Pembayaran</th>
                                     <th class="h-12 px-4 text-center align-middle font-bold text-muted-foreground text-gray-600">Status</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600"></th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Actions</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600 w-[10%]"></th>
                                 </tr>
                             </thead>
                             <tbody class="text-sm">
@@ -97,7 +97,7 @@
                                             <option value="dikirim">Dikirim</option>
                                         </select>
                                     </td>
-                                    <td class="p-3">Edit | Hapus</td>
+                                    <td class="p-3">Tandai Selesai</td>
                                     <td class="p-3">
                                         <button class="px-2 font-semibold cursor-pointer text-blue-900 hover:brightness-100"> Lihat Detail</button>
                                     </td>

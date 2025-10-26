@@ -38,7 +38,7 @@
             </div>
 
             <!-- container WEB MANAJEMEN UMUM Diskon -->
-            <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
+            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">General Settings</h2>
                     <p class="text-sm text-gray-400">Basic website information</p>
@@ -68,8 +68,8 @@
                 </div>
             </div>
 
-            <!-- container WEB MANAJEMEN UMUM Diskon -->
-            <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
+            <!-- container WEB MANAJEMEN KONTAK -->
+            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">Contact Settings</h2>
                     <p class="text-sm text-gray-400">Your business contact details</p>
@@ -77,20 +77,32 @@
                 <div>
                     <form action="max-w-sm mx-auto">
                         <div class="mt-4">
-                            <label for="" class="text-sm font-semibold">Email</label>
+                            <div class="flex item-center gap-2">
+                                <span class="material-symbols-outlined">mail</span>
+                                <label for="" class="text-sm font-semibold">Email</label>
+                            </div>
                             <input type="text"
                             class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
                         </div>
                         <div class="mt-4">
-                            <label for="" class="text-sm font-semibold">Phone</label>
+                            <div class="flex item-center gap-2">
+                                <span class="material-symbols-outlined">Phone</span>
+                                <label for="" class="text-sm font-semibold">Telepone</label>
+                            </div>
                             <input type="text" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="mt-4">
-                            <label for="" class="text-sm font-semibold">WhatsApp</label>
+                            <div class="flex item-center gap-2">
+                                <span class="material-symbols-outlined">Phone</span>
+                                <label for="" class="text-sm font-semibold">WhatsApp</label>
+                            </div>
                             <input type="text" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="mt-4 mb-4">
-                            <label for="" class="text-sm font-semibold">Alamat</label>
+                            <div class="flex item-center gap-2">
+                                <span class="material-symbols-outlined">distance</span>
+                                <label for="" class="text-sm font-semibold">Alamat</label>
+                            </div>
                             <input type="text" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <button class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Save</button>
@@ -99,7 +111,7 @@
             </div>
 
             <!-- container WEB MANAJEMEN UMUM Diskon -->
-            <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
+            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">Social Media Links</h2>
                     <p class="text-sm text-gray-400">Connect your social media accounts</p>

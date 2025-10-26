@@ -24,7 +24,7 @@
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
                     <h1 class="text-2xl font-bold"> Product </h1>
-                    <p class="text-gray-400">Manage your product inventory</p>
+                    <p class="text-gray-400">Kelola produk-produk yang tersediadi penyimpanan</p>
                 </div>
                 <div>
                     <a class="openForm px-5 py-2 bg-gray-800 text-white rounded-lg"> Add Product</a>

@@ -80,9 +80,14 @@
                                         <div class="text-green-700 rounded-lg bg-green-100 border border-green-700 hidden">Diterima</div>
                                         <div class="text-red-800 rounded-lg bg-red-200 border border-red-800 hidden">Ditolak</div>
                                     </td>
+                                    <!-- Acction terima dan ga terima Permintaan pengajuan -->
                                     <td class="p-3 flex gap-2">
-                                        <div class="text-red-800 cursor-pointer">Tolak</div>
-                                        <div class="text-green-700 cursor-pointer">terima</div>
+                                        <div class="text-red-800 cursor-pointer">
+                                            <span class="material-symbols-outlined">close</span>
+                                        </div>
+                                        <div class="text-green-700 cursor-pointer">
+                                            <span class="material-symbols-outlined">check_circle</span>
+                                        </div>
                                     </td>
                                     <td>
                                         <button class="text-blue-800 cursor-pointer">Lihat Detail</button>

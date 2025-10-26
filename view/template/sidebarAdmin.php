@@ -93,6 +93,14 @@
                     <span>Kelola Akses</span>
                 </a>
 
+                <!-- HALAMAN WEB MANAGEMENT -->
+                <a class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground 
+                hover:bg-gray-100 hover:text-gray-800" href="/view/admin/WebManagement.php">
+                    <!-- GAMBAR LOGO NANTI -->
+                    <span class="material-symbols-outlined">construction</span> <!-- icon by google brok-->
+                    <span>Web Management</span>
+                </a>
+
                 <!-- REPORT SECTION -->
                 <a class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground 
                 hover:bg-gray-100 hover:text-gray-800" href="/view/admin/ReportAdmin.php">
