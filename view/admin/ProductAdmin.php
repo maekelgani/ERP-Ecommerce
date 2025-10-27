@@ -86,10 +86,10 @@
                             <thead class="border-b uppercase">
                                 <tr class="border-b bg-gray-50 rounded-lg">
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600 w-3">Gambar</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Product Name</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Nama Produk</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Brand</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Category</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Price</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Kategori</th>
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">harga</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Stock</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Status</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
@@ -128,7 +128,7 @@
     
     <!-- Modal Lightbox -->
     <div id="lightbox" class="fixed inset-0 z-50 items-center justify-center p-6 hidden">
-        <div id="lb-backdrop" class="absolute inset-0 bg-black bg-opacity-60"></div>
+        <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75"></div>
 
         <div class="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center">
             <button id="lb-close" class="absolute top-2 right-2 bg-white/90 rounded-lg p-2 shadow hover:bg-white z-20">
@@ -141,6 +141,77 @@
             class="max-w-full max-h-[88vh] rounded-md shadow-lg opacity-0 transition-opacity duration-200" /> <!--bagian gambar di sini-->
         </div>
     </div>
+
+    <!-- Modal Form -->
+    <div id="lightbox" class="fixed inset-0 z-50 items-center justify-center p-6">
+        <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75"></div>
+        
+        <div class="relative max-w-[95vw] max-h-[95vh] rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
+            <div id="" class="mb-4"> <!--ini header-->
+                <h2 class="text-lg font-semibold">Add Product</h2>
+                <p class="text-sm text-gray-400">Masukkan detail produk kedalam persediaan</p>
+            </div>
+            <form action="">
+                <!-- Imput ID Produk/ dibuat Otomatis paling -->
+                <div class="mb-4">
+                    <label for="" class="font-semibold text-sm">ID Produk</label>
+                    <input type="text" disabled
+                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-200 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                </div>
+
+                <!-- Input nama produk -->
+                <div class="mb-4">
+                    <label for="" class="font-semibold text-sm">Nama Produk</label>
+                    <input type="text" required 
+                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                
+                <!-- input kategori dan brand -->
+                <div class="flex gap-2 mb-4">
+                    <div class="w-[50%]">
+                        <label for="" class="font-semibold text-sm">Kategori</label>
+                        <select name="" id="" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                            <option value="" class="value:text-gray">Pilih Kategori</option>
+                            <option value="">CPU</option>
+                            <option value="">Monitor</option>
+                        </select>
+                    </div>
+                    <!-- brand -->
+                    <div class="w-[50%]">
+                        <label for="" class="font-semibold text-sm">Brand</label>
+                        <select name="" id="" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                            <option value="" class="value:text-gray">Pilih Kategori</option>
+                            <option value="">MSI</option>
+                            <option value="">AMD</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- input harga dan stok -->
+                <div class="flex gap-2 mb-4">
+                    <div class="w-[80%]">
+                        <label for="" class="font-semibold text-sm">Harga</label>
+                        <input type="text" placeholder="masukkan harga dalam rupiah" required
+                        class="w-full italic p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <!-- untuk stok -->
+                    <div class="w-[20%]">
+                        <label for="" class="font-semibold text-sm">Stok</label>
+                        <input type="number" required 
+                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="mb-4"">
+                    <label for="" class="text-sm font-semibold">Gambar Produk</label>
+                    <input type="file" id="file-upload" name="file-upload" class="block w-[35%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg"/>
+                </div>
+                <button class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
+            </form>
+        </div>
+    </div>
+
+
     <script src="/public/assets/js/main.js" defer></script>
 </body>
 </html>

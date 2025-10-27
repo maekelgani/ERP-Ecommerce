@@ -46,10 +46,9 @@
                         <select
                             class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                             <option value="">Semua Status</option>
-                            <option value="laptop">Laptop</option>
-                            <option value="aksesoris">Aksesoris</option>
-                            <option value="komponen">Komponen</option>
-                            <option value="peripheral">Peripheral</option>
+                            <option value="">Dikemas</option>
+                            <option value="">Pengiriman</option>
+                            <option value="">Selesai</option>
                         </select>
                     </div>
                     <!-- filter by Tanggal -->

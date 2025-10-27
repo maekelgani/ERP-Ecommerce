@@ -57,11 +57,11 @@
                             <label for="" class="text-sm font-semibold">Deskripsi Website</label>
                             <input type="text" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                         </div>
-                        <div class="mt-4">
+                        <div class="mt-4 mb-4"">
                                 <label for="" class="text-sm font-semibold">Fav icon</label>
                                 <input type="file" id="file-upload" name="file-upload" class="block w-[35%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg"/>
                         </div>
-                        <button class="mt-4 px-5 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Save</button>
+                        <button class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Save</button>
 
                     </form>
                 </div>
