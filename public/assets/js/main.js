@@ -1,4 +1,4 @@
-// CHART nya GATAU GW WAK
+
 document.addEventListener("DOMContentLoaded", () => {    
     // Untuk Product, menampilkan Modal gambar prodyct di Product Admin
     (function () {
@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const lbImage = document.getElementById('lb-image');
         const lbClose = document.getElementById('lb-close');
         const lbBackdrop = document.getElementById('lb-backdrop');
+        // pengecekan jika gada variabel diatas
+        if (!triggers.length || !lightbox || !lbImage || !lbClose || !lbBackdrop) return;
+
 
         function openLightbox(imgEl) {
         lbImage.src = imgEl.src;
@@ -45,4 +48,40 @@ document.addEventListener("DOMContentLoaded", () => {
         lbBackdrop.addEventListener('click', closeLightbox);
         lbClose.addEventListener('click', closeLightbox);
     })();
+
+    // UNTUK HALAMAN WEBMANAGEMENT
+    (function () {
+        const tabBtns = document.querySelectorAll(".tab-btn");
+        const tabContents = document.querySelectorAll(".tab-content");
+        //pengecekan kalo aga variabel diatas
+        if (!tabBtns.length || !tabContents.length) return;
+
+        let activeTabIndex = parseInt(localStorage.getItem("activeTabIndex")) || 0;
+
+        function setActiveTab(index) {
+
+            tabBtns.forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add("bg-white", "text-black");
+                    btn.classList.remove("text-gray-400");
+                } else {
+                    btn.classList.remove("bg-white", "text-black");
+                    btn.classList.add("text-gray-400");
+                }
+            });
+
+            tabContents.forEach((content, i) => {
+                content.classList.toggle("hidden", i !== index);
+            });
+
+            localStorage.setItem("activeTabIndex", index);
+        }
+
+        tabBtns.forEach((btn, index) => {
+            btn.addEventListener("click", () => setActiveTab(index));
+        });
+
+        setActiveTab(activeTabIndex);
+    })();
+    
 });

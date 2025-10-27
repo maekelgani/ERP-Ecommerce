@@ -30,15 +30,14 @@
             </div>
             <div class="flex flex-wrap mb-4">
                 <nav class="bg-gray-100 rounded-lg p-1 font-semibold text-sm gap-4 flex">
-                    <button 
-                    class="text-gray-400 p-1 px-2 rounded-lg  focus:bg-white focus:text-black active:bg-white active:text-black">Umum</button>
-                    <button class="text-gray-400 p-1 px-2 rounded-lg  focus:bg-white focus:text-black active:bg-white active:text-black">Kontak</button>
-                    <button class="text-gray-400 p-1 px-2 rounded-lg  focus:bg-white focus:text-black active:bg-white active:text-black">Sosial Media</button>
+                    <button class="tab-btn p-1 px-2 rounded-lg text-gray-400">Umum</button>
+                    <button class="tab-btn p-1 px-2 rounded-lg text-gray-400">Kontak</button>
+                    <button class="tab-btn p-1 px-2 rounded-lg text-gray-400">Sosial Media</button>
                 </nav>
             </div>
 
             <!-- container WEB MANAJEMEN UMUM Diskon -->
-            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
+            <div class="tab-content rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">General Settings</h2>
                     <p class="text-sm text-gray-400">Basic website information</p>
@@ -69,7 +68,7 @@
             </div>
 
             <!-- container WEB MANAJEMEN KONTAK -->
-            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
+            <div class="tab-content rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center hidden">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">Contact Settings</h2>
                     <p class="text-sm text-gray-400">Your business contact details</p>
@@ -111,7 +110,7 @@
             </div>
 
             <!-- container WEB MANAJEMEN UMUM Diskon -->
-            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
+            <div class="tab-content rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center hidden">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">Social Media Links</h2>
                     <p class="text-sm text-gray-400">Connect your social media accounts</p>
@@ -141,5 +140,7 @@
             </div>
         </main>
     </div>
+    
+    <script src="/public/assets/js/main.js" defer></script>
 </body>
 </html>
