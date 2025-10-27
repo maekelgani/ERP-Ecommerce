@@ -26,9 +26,9 @@
                     <h1 class="text-2xl font-bold"> Product </h1>
                     <p class="text-gray-400">Kelola produk-produk yang tersediadi penyimpanan</p>
                 </div>
-                <div>
-                    <a class="openForm px-5 py-2 bg-gray-800 text-white rounded-lg"> Add Product</a>
-                </div>
+                <button  class="openForm px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">
+                    Tambah produk
+                </button>
             </div>
 
             <!-- container TABEL PRODUCT -->
@@ -116,7 +116,12 @@
                                         <div class=" text-center px-2 font-semibold bg-red-500 w-[50%] rounded-lg hidden">Out of Stock</div> <!--Buat Status nya-->
                                     </td> <!--Status-->
 
-                                    <td class="p-3">Edit | Delete</td> <!--actions-->
+                                    <td class="p-3">
+                                        <div>
+                                            <button class="editForm cursor-pointer text-blue-500 font-semibold">Edit</button> |
+                                            <button class="cursor-pointer text-red-500 font-semibold">Hapus</button>
+                                        </div>
+                                    </td> <!--actions-->
                                 </tr>
                             </tbody>
                         </table>
@@ -142,14 +147,21 @@
         </div>
     </div>
 
-    <!-- Modal Form -->
-    <div id="lightbox" class="fixed inset-0 z-50 items-center justify-center p-6">
-        <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75"></div>
+    <!-- Modal Form tambah/edit barang -->
+    <div id="form-product" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+        <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75 transition-opacity duration-300"></div>
         
-        <div class="relative max-w-[95vw] max-h-[95vh] rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
-            <div id="" class="mb-4"> <!--ini header-->
-                <h2 class="text-lg font-semibold">Add Product</h2>
-                <p class="text-sm text-gray-400">Masukkan detail produk kedalam persediaan</p>
+        <div id="modal-card" class="relative z-10 max-w-lg w-full rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center
+                opacity-0 scale-95 translate-y-4
+                transition-all duration-300 ease-out">
+            <div class="mb-4 flex justify-between"> <!--ini header-->
+                <div>
+                    <h2 class="text-lg font-semibold">Add Product</h2>
+                    <p class="text-sm text-gray-400">Masukkan detail produk kedalam persediaan</p>
+                </div>
+                <button class="cancel cursor-pointer">
+                    <span class="material-symbols-outlined">close</span> <!--Close/Cancel Button-->
+                </button>
             </div>
             <form action="">
                 <!-- Imput ID Produk/ dibuat Otomatis paling -->
@@ -204,9 +216,9 @@
 
                 <div class="mb-4"">
                     <label for="" class="text-sm font-semibold">Gambar Produk</label>
-                    <input type="file" id="file-upload" name="file-upload" class="block w-[35%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg"/>
+                    <input type="file" id="file-upload" name="file-upload" class="block w-[80%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg"/>
                 </div>
-                <button class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
+                <button type="submit" class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
             </form>
         </div>
     </div>

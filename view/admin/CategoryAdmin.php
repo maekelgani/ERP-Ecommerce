@@ -27,9 +27,9 @@
                     <h1 class="text-2xl font-bold"> Category </h1>
                     <p class="text-gray-400">Kelola berbagai kategori yang ada pada tokomu</p>
                 </div>
-                <div>
-                    <a class="px-5 py-2 bg-gray-800 text-white rounded-lg" href=""> Add Category</a>
-                </div>
+                <button  class="px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">
+                    Tambah Kategori
+                </button>
             </div>
 
             <!-- container TABEL CATEGORY -->
