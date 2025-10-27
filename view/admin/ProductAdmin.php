@@ -143,7 +143,7 @@
         <img id="lb-image"
             src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/111/MTA-165688338/asus_pc_build_asus_rog_strix_i9-14900kf_32gb_ram_1tb_ssd_rtx_4080_super_16gb_gddr6x_full01_dazv7u7t.jpg" 
             alt=""
-            class="max-w-full max-h-[88vh] rounded-md shadow-lg opacity-0 transition-opacity duration-200" /> <!--bagian gambar di sini-->
+            class="max-w-full max-h-[88vh] rounded-md shadow-lg opacity-0 transition-opacity duration-200" /> <!--bagian gambar ketika di klik di sini-->
         </div>
     </div>
 
