@@ -116,7 +116,7 @@
                                         <div class=" text-center px-2 font-semibold bg-red-500 w-[50%] rounded-lg hidden">Out of Stock</div> <!--Buat Status nya-->
                                     </td> 
 
-                                    <td class="p-3"> <!--actions-->
+                                    <td class="p-3 gap-3"> <!--actions-->
                                         <div>
                                             <button class="editForm cursor-pointer text-blue-500 font-semibold">Edit</button> |
                                             <button class="cursor-pointer text-red-500 font-semibold">Hapus</button>

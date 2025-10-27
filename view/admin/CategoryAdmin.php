@@ -66,7 +66,7 @@
                                     <td class="p-3 pl-10">
                                         <div class="text-center border w-15 rounded-md bg-gray-50 border-gray-200 text-shadow-gray-950">14</div>
                                     </td> <!-- jumlah produk di kategori -->
-                                    <td class="p-3">
+                                    <td class="p-3 gap-3">
                                         <div>
                                             <button class="editCategory cursor-pointer text-blue-500 font-semibold">Edit</button> |
                                             <button class="cursor-pointer text-red-500 font-semibold">Hapus</button>

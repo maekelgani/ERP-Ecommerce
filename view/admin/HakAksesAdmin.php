@@ -28,9 +28,14 @@
 
         <!-- Main Contet -->
         <main class="p-6">
-            <div class="mb-4">
-                <h1 class="text-2xl font-bold"> Kelola Akses </h1>
-                <p class="text-gray-400">Kelola peran dan hak akses ERP</p>
+            <div class="flex justify-between items-center mb-4">
+                <div class="mb-4">
+                    <h1 class="text-2xl font-bold"> Kelola Akses </h1>
+                    <p class="text-gray-400">Kelola peran dan hak akses ERP</p>
+                </div>
+                <button  class="openUsers px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">
+                    Tambah produk
+                </button>
             </div>
         
         <!-- Stsats Card -->
@@ -89,7 +94,7 @@
             <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
                 <div id="container-header" class="mb-6 flex justify-between">
                     <h2 class="text-2xl font-bold">List Users</h2>
-                    <!-- Filter cari produk -->
+                    <!-- Filter cari USERS -->
                     <div id="filter-field" class="mb-2 flex flex-wrap items-center gap-4 pb-3 pt-0">
                         <input type="text" placeholder="Cari Users..." class="border border-gray-300 rounded-lg px-3 w-xl py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
                         <button class="bg-gray-800 text-white px-6 py-2 rounded-lg">Cari</button>
@@ -131,7 +136,10 @@
                                                 <div class="px-2 text-gray-500 border border-gray-400 rounded-lg bg-gray-100 hidden ">Inactive</div>
                                             </div>
                                         </td>
-                                        <td class="p-3">Apa aja</td>
+                                        <td class="p-3 gap-2">
+                                            <button class="editUsers cursor-pointer text-blue-500 font-semibold">Edit</button> |
+                                            <button class="cursor-pointer text-red-500 font-semibold">Hapus</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -142,8 +150,81 @@
         </main>
     </div>
 
-    <!-- CHART JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Modal form tambah Hak Akses / Users -->
+    <div id="form-users" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+        <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75 transition-opacity duration-300"></div>
+            <div id="modal-card" class="relative z-10 max-w-lg w-full rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center
+                transition-all duration-300 ease-out opacity-0 scale-95 translate-y-4"> 
+
+            <div class="mb-4 flex justify-between"> <!--ini header-->
+                <div>
+                    <h2 class="text-lg font-semibold">Tambah Users</h2>
+                    <p class="text-sm text-gray-400">Masukkan Detail data diri users</p>
+                </div>
+                <button class="cancel cursor-pointer">
+                    <span class="material-symbols-outlined">close</span> <!--Close/Cancel Button-->
+                </button>
+            </div>
+
+            <form action="">
+                <!-- Imput ID Produk/ dibuat Otomatis paling -->
+                <div class="mb-4">
+                    <label for="" class="font-semibold text-sm">ID Users</label>
+                    <input type="text" disabled
+                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-200 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                </div>
+
+                <!-- Input nama Users -->
+                <div class="mb-4">
+                    <label for="" class="font-semibold text-sm">Nama</label>
+                    <input type="text" required 
+                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                
+                <!-- Input Email Users -->
+                <div class="mb-4">
+                    <label for="" class="font-semibold text-sm">Email</label>
+                    <input type="text" required 
+                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- No Telepon -->
+                <div class="mb-4">
+                    <label for="" class="font-semibold text-sm">No Telepon</label>
+                    <input type="text" required 
+                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Jabatan / Posisi -->
+                <div class="flex gap-2 mb-4">
+                    <div class="w-[50%]">
+                        <label for="" class="font-semibold text-sm">Role</label>
+                        <select name="" id="" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                            <option value="" class="value:text-gray">Pilih Role</option>
+                            <option value="">Admin</option>
+                            <option value="">Manajer</option>
+                            <option value="">Staff</option>
+                            <option value="">Viewer</option>
+                        </select>
+                    </div>
+
+                    <!-- Status Users -->
+                    <div class="w-[50%]">
+                        <label for="" class="font-semibold text-sm">Status</label>
+                        <select name="" id="" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                            <option value="" class="value:text-gray">Pilih Status</option>
+                            <option value="">Active</option>
+                            <option value="">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS -->
     <script src="/src/js/main.js"></script>
 </body>
 </html>

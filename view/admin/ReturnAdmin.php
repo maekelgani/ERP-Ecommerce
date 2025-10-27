@@ -90,7 +90,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <button class="text-blue-800 cursor-pointer">Lihat Detail</button>
+                                        <button class="text-blue-800 cursor-pointer font-semibold">Lihat Detail</button>
                                     </td>
                                 </tr>
                             </tbody>
