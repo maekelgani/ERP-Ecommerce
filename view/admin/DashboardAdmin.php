@@ -75,12 +75,10 @@
                 <!-- Card 4. ??? -->
                 <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600"> Total ??</h2>
+                        <h2 class="text-base text-gray-600"> Permintaan Pengembalian</h2>
                     </div>
                     <div id="card-content">
-                        <p class="font-bold text-2xl">99999</p>
-                        <p class="text-sm text-green-600 hidden"> ??? naik dari bulan lalu</p> <!--Kalo User terdaftar naik-->
-                        <p class="text-sm text-red-600"> ??? dari bulan lalu</p> <!--Kalo User terdaftar turun-->
+                        <p class="font-bold text-2xl">21</p>
                     </div>
                 </div>
             </div>
