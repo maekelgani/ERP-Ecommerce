@@ -29,7 +29,7 @@
         <!-- Main Contet -->
         <main class="p-6">
             <div class="mb-4">
-                <h1 class="text-2xl font-bold"> Dashboard </h1>
+                <h1 class="text-3xl font-bold"> Dashboard </h1>
                 <p class="text-gray-400">Selamat Datang kembali, bagaimana penjualan hari ini?</p>
             </div>
             
@@ -42,8 +42,8 @@
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">Rp. 129,412,224</p>
-                        <p class="text-sm text-green-600"> pendapatan naik dari {100} dari bulan lalu</p> <!--Kalo pendapatan naik-->
-                        <p class="text-sm text-red-600 hidden"> pendapatan turun dari {100} dari bulan lalu</p> <!--Kalo pendapatan turun-->
+                        <p class="text-sm text-green-600"> pendapatan naik {100} dari bulan lalu</p> <!--Kalo pendapatan naik-->
+                        <p class="text-sm text-red-600 hidden"> pendapatan turun {100} dari bulan lalu</p> <!--Kalo pendapatan turun-->
                     </div>
                 </div>
 
@@ -54,8 +54,8 @@
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">1092</p>
-                        <p class="text-sm text-green-600 hidden"> User terdaftar naik dari {100} dari bulan lalu</p> <!--Kalo User terdaftar naik-->
-                        <p class="text-sm text-red-600"> User terdaftar dari {100} dari bulan lalu</p> <!--Kalo User terdaftar turun-->
+                        <p class="text-sm text-green-600 hidden"> User terdaftar naik {100} dari bulan lalu</p> <!--Kalo User terdaftar naik-->
+                        <p class="text-sm text-red-600"> User terdaftar {100} dari bulan lalu</p> <!--Kalo User terdaftar turun-->
                     </div>
                 </div>
 
@@ -68,19 +68,17 @@
                     <div id="card-content">
                         <p class="font-bold text-2xl">12029</p>
                         <p class="text-sm text-green-600"> Pembelian naik dari bulan lalu</p> <!--Kalo User terdaftar naik-->
-                        <p class="text-sm text-red-600 hidden"> Pembelian dari bulan lalu</p> <!--Kalo User terdaftar turun-->
+                        <p class="text-sm text-red-600 hidden"> Pembelian turun dari bulan lalu</p> <!--Kalo User terdaftar turun-->
                     </div>
                 </div>
 
                 <!-- Card 4. ??? -->
                 <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600"> Total ??</h2>
+                        <h2 class="text-base text-gray-600"> Permintaan Pengembalian</h2>
                     </div>
                     <div id="card-content">
-                        <p class="font-bold text-2xl">99999</p>
-                        <p class="text-sm text-green-600 hidden"> ??? naik dari bulan lalu</p> <!--Kalo User terdaftar naik-->
-                        <p class="text-sm text-red-600"> ??? dari bulan lalu</p> <!--Kalo User terdaftar turun-->
+                        <p class="font-bold text-2xl">21</p>
                     </div>
                 </div>
             </div>

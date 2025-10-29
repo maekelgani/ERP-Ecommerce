@@ -29,7 +29,7 @@
         <!-- Main Contet -->
         <main class="p-6">
             <div class="mb-4">
-                <h1 class="text-2xl font-bold"> Reports </h1>
+                <h1 class="text-3xl font-bold"> Reports </h1>
                 <p class="text-gray-400">Buat dan Unduh laporan hari ini.</p>
             </div>
             

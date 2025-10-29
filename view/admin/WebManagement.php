@@ -24,20 +24,20 @@
         <main class="p-6">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
-                    <h1 class="text-2xl font-bold"> Web Management</h1>
+                    <h1 class="text-3xl font-bold"> Web Management</h1>
                     <p class="text-gray-400">Kelola pengaturan dan informasi mengenai website anda</p>
                 </div>  
             </div>
             <div class="flex flex-wrap mb-4">
                 <nav class="bg-gray-100 rounded-lg p-1 font-semibold text-sm gap-4 flex">
-                    <button class="tab-btn p-1 px-2 rounded-lg text-gray-400">Umum</button>
-                    <button class="tab-btn p-1 px-2 rounded-lg text-gray-400">Kontak</button>
-                    <button class="tab-btn p-1 px-2 rounded-lg text-gray-400">Sosial Media</button>
+                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400">Umum</button>
+                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400">Kontak</button>
+                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400">Sosial Media</button>
                 </nav>
             </div>
 
             <!-- container WEB MANAJEMEN UMUM Diskon -->
-            <div class="tab-content rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
+            <div class="tab-content-managementweb rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">General Settings</h2>
                     <p class="text-sm text-gray-400">Basic website information</p>
@@ -62,13 +62,12 @@
                                 <input type="file" id="file-upload" name="file-upload" class="block w-[35%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg"/>
                         </div>
                         <button class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Save</button>
-
                     </form>
                 </div>
             </div>
 
             <!-- container WEB MANAJEMEN KONTAK -->
-            <div class="tab-content rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center hidden">
+            <div class="tab-content-managementweb rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center hidden">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">Contact Settings</h2>
                     <p class="text-sm text-gray-400">Your business contact details</p>
@@ -110,7 +109,7 @@
             </div>
 
             <!-- container WEB MANAJEMEN UMUM Diskon -->
-            <div class="tab-content rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center hidden">
+            <div class="tab-content-managementweb rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center hidden">
                 <div id="container-header" class="mb-2 justify-between">
                     <h2 class="text-2xl font-bold">Social Media Links</h2>
                     <p class="text-sm text-gray-400">Connect your social media accounts</p>

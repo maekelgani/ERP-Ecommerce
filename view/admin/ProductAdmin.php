@@ -34,7 +34,7 @@
             <!-- container TABEL PRODUCT -->
             <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
                 <div id="container-header" class="mb-6">
-                    <h2 class="text-2xl font-bold">Product List</h2>
+                    <h2 class="text-3xl font-bold">Product List</h2>
                 </div>
 
                 <!-- buat filter -->
@@ -85,6 +85,7 @@
                         <table class="w-full caption-bottom text-sm">
                             <thead class="border-b uppercase">
                                 <tr class="border-b bg-gray-50 rounded-lg">
+                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600 w-3">Rating</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600 w-3">Gambar</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Nama Produk</th>
                                     <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Brand</th>
@@ -98,25 +99,26 @@
                             <tbody class="text-sm">
                                 <!-- Dummy 1 -->
                                 <tr class="border-t">
-                                    <td class="p-3"> <img class="lightbox-trigger w-10 object-cover rounded-sm cursor-pointer transition-transform transform hover:scale-105"
+                                    <td class="p-4">Rating</td> <!--Rating-->
+                                    <td class="p-4"> <img class="lightbox-trigger w-10 object-cover rounded-sm cursor-pointer transition-transform transform hover:scale-105"
                                     src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/111/MTA-165688338/asus_pc_build_asus_rog_strix_i9-14900kf_32gb_ram_1tb_ssd_rtx_4080_super_16gb_gddr6x_full01_dazv7u7t.jpg" alt=""></td> <!--product-->
-                                    <td class="p-3">Gaming PC RTX 4080</td> <!--product-->
-                                    <td class="p-3">ROG</td> <!--product-->
-                                    <td class="p-3">Pc Bundling</td> <!--Kategori-->
-                                    <td class="p-3">Rp 25.000.000</td> <!--Price-->
+                                    <td class="p-4">Gaming PC RTX 4080</td> <!--product-->
+                                    <td class="p-4">ROG</td> <!--product-->
+                                    <td class="p-4">Pc Bundling</td> <!--Kategori-->
+                                    <td class="p-4">Rp 25.000.000</td> <!--Price-->
                                     <td class="flex pt-3 gap-2">
                                         <input type="number" disabled value="2" class="w-7 ">
                                         <button class="w-5 pt-0 border rounded-md hover:bg-gray-100 cursor-pointer"> + </button>
                                         <button class="w-5 pt-0 border rounded-md hover:bg-gray-100 cursor-pointer"> - </button>
                                     </td> <!--Stock-->
                                     
-                                    <td class="p-3"> <!--Status-->
+                                    <td class="p-4"> <!--Status-->
                                         <div class=" text-center px-2 font-semibold bg-green-400 w-[50%] rounded-lg hidden">Active</div> <!--Buat Status nya-->
                                         <div class=" text-center px-2 font-semibold bg-orange-300 w-[50%] rounded-lg ">Low Stock</div> <!--Buat Status nya-->
                                         <div class=" text-center px-2 font-semibold bg-red-500 w-[50%] rounded-lg hidden">Out of Stock</div> <!--Buat Status nya-->
                                     </td> 
 
-                                    <td class="p-3 gap-3"> <!--actions-->
+                                    <td class="p-4 gap-3"> <!--actions-->
                                         <div>
                                             <button class="editForm cursor-pointer text-blue-500 font-semibold">Edit</button> |
                                             <button class="cursor-pointer text-red-500 font-semibold">Hapus</button>

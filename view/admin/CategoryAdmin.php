@@ -24,7 +24,7 @@
         <main class="p-6">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
-                    <h1 class="text-2xl font-bold"> Category </h1>
+                    <h1 class="text-3xl font-bold"> Category </h1>
                     <p class="text-gray-400">Kelola berbagai kategori yang ada pada tokomu</p>
                 </div>
                 <button class="openCategory px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">

@@ -30,7 +30,7 @@
         <main class="p-6">
             <div class="flex justify-between items-center mb-4">
                 <div class="mb-4">
-                    <h1 class="text-2xl font-bold"> Kelola Akses </h1>
+                    <h1 class="text-3xl font-bold"> Kelola Akses </h1>
                     <p class="text-gray-400">Kelola peran dan hak akses ERP</p>
                 </div>
                 <button  class="openUsers px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">

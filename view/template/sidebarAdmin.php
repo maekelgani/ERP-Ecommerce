@@ -31,6 +31,14 @@
                     <span class="material-symbols-outlined">home</span> <!-- icon by google brok-->
                     <span>Dashboard</span>
                 </a>
+                
+                <!-- MENU ANALITIK -->
+                <a class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground 
+                hover:bg-gray-100 hover:text-gray-800" href="/view/admin/AnalitikAdmin.php">
+                    <!-- GAMBAR LOGO Analitik-->
+                    <span class="material-symbols-outlined">analytics</span> <!-- icon by google brok-->
+                    <span>Analitik</span>
+                </a>
 
                 <!-- PRODUCTS SECTION -->
                 <div class="dropdown-section">
