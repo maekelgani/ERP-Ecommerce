@@ -23,7 +23,7 @@
         <main class="p-6">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
-                    <h1 class="text-2xl font-bold"> Incoming Orders </h1>
+                    <h1 class="text-3xl font-bold"> Incoming Orders </h1>
                     <p class="text-gray-400">Kelola order yang masuk dan ubah status pengiriman</p>
                 </div>
             </div>

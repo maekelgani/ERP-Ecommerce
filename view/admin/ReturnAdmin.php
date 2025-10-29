@@ -24,7 +24,7 @@
         <main class="p-6">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
-                    <h1 class="text-2xl font-bold"> Return Management </h1>
+                    <h1 class="text-3xl font-bold"> Return Management </h1>
                     <p class="text-gray-400">Kelola pengembalian produk dari pelanggan</p>
                 </div>
             </div>
