@@ -21,7 +21,7 @@
         </header>
 
         <!-- main kontent -->
-        <main class="p-6">
+        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
                     <h1 class="text-3xl font-bold"> Return Management </h1>

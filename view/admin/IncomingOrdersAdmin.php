@@ -20,7 +20,7 @@
             <?php include '../template/NavbarAdmin.php' ;?>
         </header>
         <!-- main kontent -->
-        <main class="p-6">
+        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
                     <h1 class="text-3xl font-bold"> Incoming Orders </h1>
@@ -97,19 +97,9 @@
                                             <option value="dikirim">Dikirim</option>
                                         </select>
                                     </td>
-                                    <td class="p-3">Tandai Selesai</td>
+                                    <td class="p-3">Tugaskan Kurir</td>
                                     <td class="p-3">
-                                        <button class="detailOrder px-2 font-semibold cursor-pointer text-blue-900 hover:brightness-100"
-                                            data-order-id="#ORD69"
-    data-order-id="#ORD69"
-    data-name="Juan Kamil"
-    data-address="Jl. Kucing No. 99"
-    data-items="Laptop|1|24425000;Mouse|1|150000"
-    data-date="23-10-2025"
-    data-payment="Sudah membayar"
-    data-method="Bank Transfer"
-    data-status="dikirim"
-    data-total="Rp 24,425,000">Lihat Detail</button>
+                                        <button class="px-2 font-semibold cursor-pointer text-blue-900 hover:brightness-100">Lihat Detail</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -119,75 +109,5 @@
             </div>
         </main>
     </div>
-
-    <!-- Modal lihat detail pesanan -->
-    <div id="order-details" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
-        <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75 transition-opacity duration-300"></div>
-        <div id="modal-card" class="relative z-10 max-w-lg w-full bg-white rounded-lg shadow-md p-6 
-            transition-all duration-300 ease-out opacity-0 scale-95 translate-y-4">
-
-            <div class="mb-4 flex justify-between">
-                <div>
-                    <h2 class="text-lg font-semibold">Detail Pesanan</h2>
-                    <p class="text-sm text-gray-400">Informasi lengkap pemesanan</p>
-                </div>
-                <button class="cancel cursor-pointer">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-
-            <div class="space-y-2 text-sm">
-                <p><strong>ID Pesanan:</strong> <span id="d-order-id"></span></p>
-                <p><strong>Nama Pembeli:</strong> <span id="d-name"></span></p>
-                <p><strong>Alamat:</strong> <span id="d-address"></span></p>
-                <p><strong>Tanggal Pesan:</strong> <span id="d-date"></span></p>
-                <p><strong>Status Pembayaran:</strong> <span id="d-payment"></span></p>
-                <p><strong>Metode Pembayaran:</strong> <span id="d-method"></span></p>
-                <p><strong>Status Pemesanan:</strong> <span id="d-status"></span></p>
-                <!-- STATUS PENGIRIMAN (Progress Bar) -->
-                <div class="mb-4">
-                    <label class="font-semibold text-sm">Status Pengiriman</label>
-                    <div class="flex items-center mt-2">
-                        <!-- Step 1 -->
-                        <div class="flex flex-col items-center">
-                            <div id="step-packed" 
-                                class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
-                            <span class="text-xs mt-1">Dikemas</span>
-                        </div>
-
-                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
-
-                        <!-- Step 2 -->
-                        <div class="flex flex-col items-center">
-                            <div id="step-shipped" 
-                                class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
-                            <span class="text-xs mt-1">Dikirim</span>
-                        </div>
-
-                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
-
-                        <!-- Step 3 -->
-                        <div class="flex flex-col items-center">
-                            <div id="step-done" 
-                                class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
-                            <span class="text-xs mt-1">Selesai</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="mt-4">
-                <strong>Item Pesanan:</strong>
-                <ul id="d-items" class="list-disc pl-5 text-sm"></ul>
-            </div>
-
-            <div class="mt-3 font-semibold text-right">
-                Total: Rp <span id="d-total"></span>
-            </div>
-        </div>
-    </div>
-
-
 </body>
 </html>

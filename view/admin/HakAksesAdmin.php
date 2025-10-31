@@ -27,7 +27,7 @@
         </header>
 
         <!-- Main Contet -->
-        <main class="p-6">
+        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div class="flex justify-between items-center mb-4">
                 <div class="mb-4">
                     <h1 class="text-3xl font-bold"> Kelola Akses </h1>

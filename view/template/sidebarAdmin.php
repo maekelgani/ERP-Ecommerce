@@ -93,6 +93,14 @@
                     <span>Retrun Product</span>
                 </a>
 
+                <!-- CRM SECTION -->
+                <a class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground 
+                hover:bg-gray-100 hover:text-gray-800" href="/view/admin/CrmAdmin.php">
+                    <!-- GAMBAR LOGO PENGEMBALIAN NANTI -->
+                    <span class="material-symbols-outlined">support_agent</span><!-- icon by google brok-->
+                    <span>CRM</span>
+                </a>
+
                 <!-- HALAMAN HAK AKSES -->
                 <a class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground 
                 hover:bg-gray-100 hover:text-gray-800" href="/view/admin/HakAksesAdmin.php">

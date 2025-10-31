@@ -27,7 +27,7 @@
         </header>
 
         <!-- Main Contet -->
-        <main class="p-6">
+        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div class="mb-4">
                 <h1 class="text-3xl font-bold"> Dashboard </h1>
                 <p class="text-gray-400">Selamat Datang kembali, bagaimana penjualan hari ini?</p>
@@ -75,7 +75,7 @@
                 <!-- Card 4. ??? -->
                 <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600"> Permintaan Pengembalian</h2>
+                        <h2 class="text-base text-gray-600">Pesanan Pending</h2>
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">21</p>

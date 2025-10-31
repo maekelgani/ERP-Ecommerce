@@ -27,7 +27,7 @@
         </header>
 
         <!-- Main Contet -->
-        <main class="p-6">
+        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div class="mb-4">
                 <h1 class="text-3xl font-bold"> Reports </h1>
                 <p class="text-gray-400">Buat dan Unduh laporan hari ini.</p>

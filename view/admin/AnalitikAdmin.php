@@ -27,7 +27,7 @@
         </header>
 
         <!-- Main Contet -->
-        <main class="p-6">
+        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div class="mb-4 flex justify-between items-center">
                 <div>
                     <h1 class="text-3xl font-bold"> Analitik </h1>
@@ -44,7 +44,7 @@
             </div>
             
             <!-- Stsats Card -->
-            <div class="grid grid-row-1 grid-cols-3 gap-4 mb-4">
+            <div class="grid grid-row-1 grid-cols-4 gap-4 mb-4">
                 <!-- Card-1 -->
                 <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
@@ -66,6 +66,16 @@
                 </div>
 
                 <!-- Card-3 -->
+                <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
+                    <div id="card-header" class="mb-3"">
+                        <h2 class="text-base text-gray-600">Produk terjual</h2>
+                    </div>
+                    <div id="card-content">
+                        <p class="font-bold text-2xl">23</p>
+                    </div>
+                </div>
+
+                <!-- Card-4 -->
                 <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
                         <h2 class="text-base text-gray-600">Rata-rata Rating Produk</h2>

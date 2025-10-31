@@ -21,7 +21,7 @@
         </header>
 
         <!-- main content -->
-        <main class="p-6">
+        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
                     <h1 class="text-3xl font-bold"> Category </h1>
@@ -51,11 +51,11 @@
                         <table class="w-full caption-bottom text-sm">
                             <thead class="border-b uppercase">
                                 <tr class="border-b bg-gray-50 rounded-lg ">
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">ID kategori</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Nama Kategori</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Deskripsi</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Jumlah Produk</th>
-                                    <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Action</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">ID kategori</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Nama Kategori</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Deskripsi</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Jumlah Produk</th>
+                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="text-sm">
