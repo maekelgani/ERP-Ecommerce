@@ -1,49 +1,87 @@
-<br># NOTE!!
-<br>
-<br>## == Cara berkolaborasi di GitHub ========
-<br>
-<br>### 0. SetupAwal
-<br>buat folder baru, lalu buka terminal di vscode atau terminal bawaan
-<br>
-<br>### 1. Lakukan Clone repositori
-<br>`git clone <url repositori>`
-<br>Perintah "git clone" digunakan untuk mengunduh code yang ada pada repository.
-<br>
-<br>### 2. Lakukan PULL
-<br>`git pull / git pull origin master` 
-<br>perintah untuk mengambil update/perubahan terbaru dari repositori, 
-<br> jika menambahkan `origin master` artinya kalian mengambil update terbaru dari cabang tertentu
-<br>
-<br>### 3. Buat Branch baru 
-<br>`git checkout -b <nama-branch>`
-<br>perintah ini akan membuatkan branch baru, dengan flag -b yang artinya _buat branch baru lalu langsung pindah ke sana._
-<br>****
-<br>### 4. Ngedit file nya
-<br>otak atik aja, tambah file baru
-<br>
-<br>=================================
-<br>jangan lupa build ulang tailwindnya:
-<br>
-<br> _npx tailwindcss -i ./src/input.css -o ./src/output.css --watch_
-<br>
-<br>### 5. simpan perubahan
-<br>Setiap perubahan lakuin commit dengan command:
-<br>`git add .`
-<br>`git commit -m "menambahkan halaman login`
-<br>
-<br>perintah tsb membuat snapshot perubahan
-<br>
-<br>### 6. kirim ke github
-<br>Agar yang lain bisa melihat dan di gabungkan 
-`git push origin (nama branch)`
-<br>
-<br>### 7. buat Pull Request (PR)
+# Cara berkolaborasi
+Panduan melakukan kolaborasi menggunakan git dari clone hingga push ke repositori. Ikuti langkah demi langkah.
 
-<br>Masuk ke halaman repo → akan muncul tombol “Compare & pull request”.
-Klik itu untuk mengajukan agar perubahanmu digabung ke branch utama `(master)`
+---
 
+## Langkah 0 – Persiapan Awal
 
+1. Buat **folder baru** di komputer kamu.  
+2. **Buka terminal** di dalam folder tersebut (pastikan path-nya benar).  
+3. Pastikan sudah menginstal:
+   - **Git**
+   - **Node.js** dan **npm**  
+     (dibutuhkan agar Tailwind CSS bisa dijalankan)
 
+---
 
+## Langkah 1 – Clone Repositori
 
+Gunakan perintah berikut untuk menyalin seluruh isi repositori ke folder lokal:
 
+```bash
+git clone <url-repo> .
+```
+
+---
+
+## Langkah 2 – Install Dependencies
+
+Setelah proses clone selesai, jalankan perintah:
+
+```bash
+npm install
+```
+Perintah ini akan menginstal semua paket yang diperlukan untuk menjalankan proyek (termasuk konfigurasi Tailwind CSS).
+
+---
+
+## Langkah 3 – Install Dependencies
+
+Sebelum mulai mengedit file, buat branch baru agar perubahanmu tidak langsung mengubah branch utama (main atau master):
+
+```bash
+git checkout -b <nama-branch-baru>
+```
+Atau, jika branch sudah ada dan kamu ingin memperbarui isinya:
+```bash
+git pull origin master
+```
+Note: default repo biasanya main, namun kasus di repo ini menggunakan master
+
+---
+
+## Langkah 4 – Edit File Proyek
+
+Langkah ini silahkan mulai mengedit atau menambahkan file, bebas. Tetap hati hati jika menghapus file penting.
+Karna proyek ini menggunakan Tailwind CSS, jalankan perintah berikut agar perubahan CSS langsung diterapkan:
+
+```bash
+npx tailwindcss -i ./src/input.css -o ./src/output.css --watch
+```
+Biarkan terminal tetap terbuka selama kamu mengedit agar Tailwind terus memantau perubahan.
+
+---
+
+## Langkah 5 – Simpan Perubahan (Commit)
+
+Setelah selesai melakukan perubahan:
+1. Tambahkan semua file yang diubah dengan perintah:
+   ```bash
+    git add .
+   ```
+2. Buat commit dengan pesan yang menjelaskan perubahan:
+   ```bash
+   git commit -m "deskripsi singkat perubahan"
+   ```
+Misalnya seperti `hit commit -m "menambahkan module pembayaran"`
+
+---
+
+## Langkah 6 – Push ke Repository
+
+Kirim (push) perubahanmu ke branch yang sudah kamu buat:
+```bash
+git push origin <nama-branch-kamu>
+```
+
+---
