@@ -82,7 +82,7 @@
                             </thead>
                             <tbody class="text-sm">
                                 <tr class="border-t">
-                                    <td class="p-3">#ORD69</td>
+                                    <td class="p-3 text-xs text-gray-500"># ORD69</td>
                                     <td class="p-3">Juan Kamil</td>
                                     <td class="p-3">2</td>
                                     <td class="p-3">Rp. 24,425,000</td>

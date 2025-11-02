@@ -148,7 +148,7 @@
                             <textarea class="w-full border border-gray-300 rounded-lg p-2 text-sm" disabled name="" id=""> WEB MANTAP </textarea>
                         </div>
                         <div class="p-4 pt-0 justify-end w-full">
-                            <button class="p-2 px-4 rounded-lg bg-gray-800 text-white transform transition-transform duration-300 hover:scale-110 cursor-pointer">Kirim email</button>
+                            <button class="p-2 px-4 rounded-lg bg-gray-800 text-white hover:bg-gray-600 duration-150 cursor-pointer">Kirim email</button>
                             <button class="p-2 px-4 rounded-lg font-base transform transition-transform duration-300 hover:scale-110 cursor-pointer">Hapus</button>
                         </div>
                     </div>
@@ -168,7 +168,7 @@
                             <textarea class="w-full border border-gray-300 rounded-lg p-2 text-sm" disabled name="" id=""> WEB MANTAP </textarea>
                         </div>
                         <div class="p-4 pt-0 justify-end w-full">
-                            <button class="p-2 px-4 rounded-lg bg-gray-800 text-white transform transition-transform duration-300 hover:scale-110 cursor-pointer">Kirim email</button>
+                            <button class="p-2 px-4 rounded-lg bg-gray-800 text-white hover:bg-gray-600 duration-150 cursor-pointer">Kirim email</button>
                             <button class="p-2 px-4 rounded-lg font-base transform transition-transform duration-300 hover:scale-110 cursor-pointer">Hapus</button>
                         </div>
                     </div>

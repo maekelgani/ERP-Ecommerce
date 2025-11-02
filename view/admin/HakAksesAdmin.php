@@ -118,7 +118,7 @@
                                 </thead>
                                 <tbody class="text-sm">
                                     <tr class="border-t">
-                                        <td class="p-3"># USR102</td>
+                                        <td class="p-3 text-xs text-gray-500"># USR102</td>
                                         <td class="p-3">Jojo Joestar</td>
                                         <td class="p-3">joe.star@gmail.com</td>
                                         <td class="p-3">081234567890</td>

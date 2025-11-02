@@ -30,9 +30,9 @@
             </div>
             <div class="flex flex-wrap mb-4">
                 <nav class="bg-gray-100 rounded-lg p-1 font-semibold text-sm gap-4 flex">
-                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400">Umum</button>
-                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400">Kontak</button>
-                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400">Sosial Media</button>
+                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400 cursor-pointer">Umum</button>
+                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400 cursor-pointer">Kontak</button>
+                    <button class="tab-btn-managementweb p-1 px-2 rounded-lg text-gray-400 cursor-pointer">Sosial Media</button>
                 </nav>
             </div>
 

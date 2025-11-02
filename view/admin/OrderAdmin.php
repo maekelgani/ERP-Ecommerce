@@ -81,7 +81,7 @@
                             </thead>
                             <tbody class="text-sm">
                                 <tr class="border-t">
-                                    <td class="p-3">ORD69</td>
+                                    <td class="p-3 text-xs text-gray-500"># ORD69</td>
                                     <td class="p-3">Juan Kamil</td>
                                     <td class="p-3">2</td>
                                     <td class="p-3">Monitor ZOWIE xl2546x, CPU i9 14th 14900k</td>
@@ -89,9 +89,9 @@
                                     <td class="p-3">-</td>
                                     <td class="p-3">Bank Transfer</td>
                                     <td class="p-3">
-                                        <div class=" text-center px-2 font-semibold bg-green-400 w-full rounded-lg hidden">Selesai</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-amber-300 w-full rounded-lg ">Pengiriman</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-red-500 w-full rounded-lg hidden">Batal/dikembalikan</div> <!--Buat Status nya-->
+                                        <div class=" text-center text-green-800 bg-green-500/10 border border-green-800 rounded-lg">Selesai</div> <!--Buat Status nya-->
+                                        <div class=" text-center text-amber-600 bg-amber-50 border border-amber-600  rounded-lg hidden">Pengiriman</div> <!--Buat Status nya-->
+                                        <div class=" text-center text-red-800 bg-amber-500/10 border border-red-800 rounded-lg hidden">Batal/Dikembalikan</div> <!--Buat Status nya-->
                                     </td>
                                     <td class="p-3">
                                         <button class="detailOrder px-2 font-semibold cursor-pointer text-blue-900 hover:brightness-100"> Lihat Detail</button>

@@ -69,7 +69,7 @@
                             </thead>
                             <tbody class="text-sm">
                                 <tr class="border-t">
-                                    <td class="p-3"># RTN01</td>
+                                    <td class="p-3 text-xs text-gray-500"># RTN01</td>
                                     <td class="p-3"># ORD24</td>
                                     <td class="p-3">Jojon Satoru</td>
                                     <td class="p-3 text-sm text-gray-400">Ada yang ga ada</td>

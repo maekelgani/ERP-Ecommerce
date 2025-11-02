@@ -88,8 +88,8 @@
             
             <div class="flex flex-wrap mb-4">
             <nav class="bg-gray-100 rounded-lg p-1 font-semibold text-sm gap-4 flex">
-                    <button class="tab-btn-analitik p-1 px-2 rounded-lg text-gray-400">Pendapatan</button>
-                    <button class="tab-btn-analitik p-1 px-2 rounded-lg text-gray-400">Analisi Produk</button>
+                    <button class="tab-btn-analitik p-1 px-2 rounded-lg text-gray-400 cursor-pointer">Pendapatan</button>
+                    <button class="tab-btn-analitik p-1 px-2 rounded-lg text-gray-400 cursor-pointer">Analisi Produk</button>
                 </nav>
             </div>
 

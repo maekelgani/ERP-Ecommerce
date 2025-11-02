@@ -60,7 +60,7 @@
                             </thead>
                             <tbody class="text-sm">
                                 <tr class="border-t">
-                                    <td class="p-3"># CAT01</td> <!-- ID kategori -->
+                                    <td class="p-3 text-xs text-gray-500"># CAT01</td> <!-- ID kategori -->
                                     <td class="p-3">PC Bundling</td> <!-- NAMA kategori -->
                                     <td class="p-3 text-gray-500">Kategori untuk pc jadi</td> <!-- Deskripsi kategori -->
                                     <td class="p-3 pl-10">
