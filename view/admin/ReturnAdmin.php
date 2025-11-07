@@ -10,14 +10,14 @@
 
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../template/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php' ;?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../template/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php' ;?>
         </header>
 
         <!-- main kontent -->
