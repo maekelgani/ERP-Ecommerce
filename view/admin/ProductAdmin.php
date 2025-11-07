@@ -224,6 +224,6 @@
             </form>
         </div>
     </div>
-    <script src="/public/assets/js/main.js" defer></script>
+    <script src="/assets/js/admin/product.js" defer></script>
 </body>
 </html>

@@ -28,7 +28,7 @@
                     <p class="text-gray-400">Kelola Diskon</p>
                 </div>
                 <div>
-                    <a class="px-5 py-2 bg-gray-800 text-white rounded-lg" href=""> Add Discount</a>
+                    <a class="px-5 py-2 bg-gray-800 text-white rounded-lg" href=""> Tambah Discount</a>
                 </div>
             </div>
 

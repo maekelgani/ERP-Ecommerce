@@ -128,5 +128,5 @@
         </div>
     </aside>
 </body>
-<script src="/public/assets/js/main.js"></script>
+<script src="/assets/js/admin/sidebar.js"></script>
 </html>

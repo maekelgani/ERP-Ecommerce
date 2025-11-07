@@ -125,6 +125,5 @@
 
     <!-- CHART JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/src/js/main.js"></script>
 </body>
 </html>

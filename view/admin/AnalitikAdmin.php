@@ -190,6 +190,7 @@
 
     <!-- CHART JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/public/assets/js/chart.js" defer></script>
+    <script src="/assets/js/chart.js" defer></script>
+    <script src="/assets/js/main.js"></script>
 </body>
 </html>

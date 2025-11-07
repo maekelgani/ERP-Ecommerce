@@ -120,5 +120,6 @@
             </form>
         </div>
     </div>
+    <script src="/assets/js/admin/category.js" defer></script>
 </body>
 </html>

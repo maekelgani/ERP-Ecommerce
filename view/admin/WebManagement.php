@@ -140,6 +140,6 @@
         </main>
     </div>
     
-    <script src="/public/assets/js/main.js" defer></script>
+    <script src="/assets/js/main.js" defer></script>
 </body>
 </html>
