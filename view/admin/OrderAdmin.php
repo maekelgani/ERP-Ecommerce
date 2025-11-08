@@ -10,15 +10,16 @@
 
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../template/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php' ;?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../template/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php' ;?>
         </header>
+
         <!-- main kontent -->
         <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div id="main-header" class="flex justify-between items-center mb-4">
@@ -172,5 +173,6 @@
             </div>
         </div>
     </div>
+    <script src="/assets/js/admin/order.js" defer></script>
 </body>
 </html>

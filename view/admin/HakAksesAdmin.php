@@ -16,14 +16,14 @@
     
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../template/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php' ;?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../template/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php' ;?>
         </header>
 
         <!-- Main Contet -->
@@ -34,7 +34,7 @@
                     <p class="text-gray-400">Kelola peran dan hak akses ERP</p>
                 </div>
                 <button  class="openUsers px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">
-                    Tambah produk
+                    Tambah Users
                 </button>
             </div>
         
@@ -225,6 +225,6 @@
     </div>
 
     <!-- JS -->
-    <script src="/src/js/main.js"></script>
+    <script src="/assets/js/admin/addUsers.js"></script>
 </body>
 </html>
