@@ -145,4 +145,35 @@ document.addEventListener("DOMContentLoaded", () => {
         lbBackdrop.addEventListener('click', closeLightbox);
         lbClose.addEventListener('click', closeLightbox);
     })();
+
+    // FUNGSI: Increment dan Decrement stok produk
+    (function () {
+        const plusButtons = document.querySelectorAll('.btn-plus');
+        const minusButtons = document.querySelectorAll('.btn-minus');
+
+        if (!plusButtons.length && !minusButtons.length) return;
+
+        function changeStock(inputEl, delta) {
+            if (!inputEl) return;
+            let cur = parseInt(inputEl.value, 10) || 0;
+            let next = cur + delta;
+            if (next < 0) next = 0;
+            inputEl.value = next;
+        }
+
+        plusButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+            const input = btn.closest('td')?.querySelector('.produkstok');
+            changeStock(input, 1);
+            });
+        });
+
+        minusButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+            const input = btn.closest('td')?.querySelector('.produkstok');
+            changeStock(input, -1);
+            });
+        });
+    })();
+
 })

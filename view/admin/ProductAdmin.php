@@ -107,11 +107,11 @@
                                     <td class="p-4">ROG</td> <!--product-->
                                     <td class="p-4">Pc Bundling</td> <!--Kategori-->
                                     <td class="p-4">Rp 25.000.000</td> <!--Price-->
-                                    <td class="flex pt-3 gap-2">
-                                        <input type="number" disabled value="2" class="w-7 ">
-                                        <button class="w-5 pt-0 border rounded-md hover:bg-gray-100 cursor-pointer"> + </button>
-                                        <button class="w-5 pt-0 border rounded-md hover:bg-gray-100 cursor-pointer"> - </button>
-                                    </td> <!--Stock-->
+                                    <td class="flex pt-6 gap-2 items-center">
+                                        <input type="number" readonly value="3" min="0" class="produkstok w-12 text-center rounded">
+                                        <button type="button" class="btn-plus w-6 h-6 border rounded-md hover:bg-gray-100 cursor-pointer flex justify-center items-center">+</button>
+                                        <button type="button" class="btn-minus w-6 h-6 border rounded-md hover:bg-gray-100 cursor-pointer flex justify-center items-center">−</button>
+                                    </td> <!--Buat Stok -->
                                     
                                     <td class="p-4"> <!--Status-->
                                         <div class=" text-center px-2 font-semibold bg-green-400 w-[50%] rounded-lg hidden">Active</div> <!--Buat Status nya-->
@@ -216,6 +216,9 @@
                         class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
+                
+                <label for="deskripsiProduk" class="font-semibold text-sm">Deskripsi Produk</label>
+                <textarea name="deskripsiProduk" id="" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500"></textarea>
 
                 <div class="mb-4"">
                     <label for="" class="text-sm font-semibold">Gambar Produk</label>
