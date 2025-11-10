@@ -102,8 +102,8 @@ if (isset($_POST['masuk'])) {
     <title>Nano Komputer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="icon" href="../../assets/img/Nanocomp.png">
-    <link rel="stylesheet" href="/../src/portal-login.css">
+    <link rel="icon" href="../assets/img/Nanocomp.png">
+    <link rel="stylesheet" href="../src/portal-login.css">
 </head>
 
 <body>
@@ -159,12 +159,12 @@ if (isset($_POST['masuk'])) {
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
-                    <img src="../../assets/img/logo_nano.png" alt="Nano Komputer Logo" class="logo-img">
+                    <img src="../assets/img/logo_nano.png" alt="Nano Komputer Logo" class="logo-img">
                     <p>Daftarkan akun Anda <br> Nikmati berbagai promo menarik dari Nano Komputer.</p>
                     <button class="hidden" id="login">Masuk</button>
                 </div>
                 <div class="toggle-panel toggle-right">
-                    <img src="../../assets/img/logo_nano.png" alt="Nano Komputer Logo" class="logo-img">
+                    <img src="../assets/img/logo_nano.png" alt="Nano Komputer Logo" class="logo-img">
                     <p>Masuk sekarang dan nikmati <br>berbagai penawaran menarik di Nano Komputer.</p>
                     <button class="hidden" id="register">Daftar Sekarang</button>
                 </div>
@@ -172,6 +172,6 @@ if (isset($_POST['masuk'])) {
         </div>
     </div>
 
-    <script src="../../assets/js/main.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>
