@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-//Login toogle
+//Login & Register toogle
 document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById('container');
     const registerBtn = document.getElementById('register');
