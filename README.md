@@ -33,9 +33,13 @@ npm install
 ```
 Perintah ini akan menginstal semua paket yang diperlukan untuk menjalankan proyek (termasuk konfigurasi Tailwind CSS).
 
+```bash
+composer require google/apiclient
+```
+perintah ini akan menginstall paket yang diperlukan untuk menjalankan proyek (google OAuth API)
 ---
 
-## Langkah 3 – Install Dependencies
+## Langkah 3 – Setup Branch
 
 Sebelum mulai mengedit file, buat branch baru agar perubahanmu tidak langsung mengubah branch utama (main atau master):
 

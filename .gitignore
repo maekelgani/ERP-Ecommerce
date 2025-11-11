@@ -1,0 +1,7 @@
+node_modules
+node_modules
+
+# Google OAuth Credentials
+google-credentials.json
+client_secret.json
+oauth-credentials.json

@@ -152,3 +152,45 @@ document.addEventListener("DOMContentLoaded", () => {
     })();
 
 });
+
+
+//Login & Register toogle
+document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById('container');
+    const registerBtn = document.getElementById('register');
+    const loginBtn = document.getElementById('login');
+
+    registerBtn.addEventListener('click', () => {
+        container.classList.add("active");
+    });
+
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove("active");
+    });
+
+    // Sign In Toggle
+    const toggleSigninPassword = document.getElementById("toggleSigninPassword");
+    const signinPassword = document.getElementById("signinPassword");
+
+    if (toggleSigninPassword && signinPassword) {
+        toggleSigninPassword.addEventListener("click", function () {
+            const type = signinPassword.getAttribute("type") === "password" ? "text" : "password";
+            signinPassword.setAttribute("type", type);
+            this.classList.toggle("fa-eye-slash");
+            this.classList.toggle("fa-eye");
+        });
+    }
+
+    // Sign Up Toggle
+    const toggleSignupPassword = document.getElementById("toggleSignupPassword");
+    const signupPassword = document.getElementById("signupPassword");
+
+    if (toggleSignupPassword && signupPassword) {
+        toggleSignupPassword.addEventListener("click", function () {
+            const type = signupPassword.getAttribute("type") === "password" ? "text" : "password";
+            signupPassword.setAttribute("type", type);
+            this.classList.toggle("fa-eye-slash");
+            this.classList.toggle("fa-eye");
+        });
+    }
+});
