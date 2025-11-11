@@ -65,7 +65,7 @@
         <!-- Action btn (login dan register) -->
         <div class="flex items-center gap-4">
             <div class="sm:flex sm:gap-4">
-            <a href="#" 
+            <a href="../../view/login.php"
             class="rounded-md bg-red-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-800/75">
                 Masuk
             </a>
