@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category - Admin</title>
     <link rel="icon" href="../assets/img/Nanocomp.png">
-    <link rel="icon" href="../../assets/img/Nanocomp.png">
+    <link rel="stylesheet" href="../../src/output.css">
 </head>
 <body class="bg-no-repeat h-screen flex">
 

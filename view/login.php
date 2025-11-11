@@ -117,7 +117,7 @@ if (isset($_POST['masuk'])) {
                 <span>atau</span>
                 <input type="text" name="name" placeholder="Nama" required>
                 <input type="email" name="email" placeholder="Email" required>
-                <input type="tel" name="no_telp" placeholder="Nomor Telepon" maxlength="15" required>
+                <input type="number" name="no_telp" placeholder="Nomor Telepon" maxlength="15" required>
                 <div class="password-wrapper">
                     <input type="password" name="password" id="signupPassword" placeholder="Password" required>
                     <i class="fa-solid fa-eye-slash" id="toggleSignupPassword"></i>
