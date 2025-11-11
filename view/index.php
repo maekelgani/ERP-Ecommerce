@@ -1,4 +1,4 @@
 <?php
-    header("Location: ./users/dashboardCust.php");
+    header("Location: ./users/landingPage.php");
     exit;
 ?>

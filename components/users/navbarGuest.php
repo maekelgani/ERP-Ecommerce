@@ -12,7 +12,7 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-1">
         <div class="flex h-16 items-center justify-between">
         <div class="md:flex md:items-center md:gap-12">
-            <a class="block rounded-lg" href="#">
+            <a class="block rounded-lg" href="/view/users/landingPage.php">
             <span class="sr-only">Home</span>
                 <!-- Logo -->
                 <img src="/assets/img/favicon.png" alt="" width="40px" class="p-1">
@@ -80,7 +80,7 @@
 
             <!-- humberger menu -->
             <div class="block md:hidden">
-            <button class="rounded-sm bg-gray-200 p-2 text-gray-600 transition hover:text-gray-600/75">
+            <button class="toggle-menu rounded-sm bg-gray-200 p-2 text-gray-600 transition hover:text-gray-600/75">
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
