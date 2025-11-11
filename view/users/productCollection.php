@@ -22,7 +22,7 @@
         </div>
 
         <!-- Navigasi breadcrumb / PATH -->
-        <section class="mt-5 px-6 md:px-8 lg:px-20 w-full flex justify-center">
+        <section class="mt-5 px-6 md:px-8 lg:px-20 w-full flex justify-center"> 
             <div class="w-full md:px-10">
             <nav aria-label="Breadcrumb">   
                 <ol class="flex items-center gap-1 text-sm text-gray-700">
@@ -58,12 +58,12 @@
         </section>
         
         <!-- banner promosi slider -->
-        <section class="w-full h-40 md:h-56 lg:h-72">
-            <div class="relative mx-6 md:mx-18 lg:mx-30 h-full bg-cover bg-center 
+        <section class="w-full h-40 md:h-56 lg:h-72 ">
+            <div class="relative mx-6 md:mx-18 lg:mx-30 h-full bg-cover bg-center rounded-2xl
             [background-image:url('https://images.unsplash.com/photo-1504237111663-37d6094bec09?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170')]">
                 
                 <!-- overlay hitam transparan -->
-                <div class="absolute inset-0 bg-black/55"></div>
+                <div class="absolute inset-0 bg-black/55 rounded-2xl"></div>
 
                 <!-- teks di atas overlay -->
                 <span class="absolute inset-0 flex items-center justify-center text-white text-2xl lg:text-3xl xl:text-4xl font-bold">
@@ -254,9 +254,10 @@
                     <ul class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 border border-dashed border-gray-300 rounded-lg p-6 min-h-[300px]">
                         
                         <!-- Dummy product cards 1 -->
-                        <li
+                        <li 
                             class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
                             >
+                            <a href="/view/users/productDetail.php"> 
                             <div class="relative">
                                 <!-- Product Image -->
                                 <img
@@ -300,12 +301,14 @@
                                     </button>
                                 </div>
                             </div>
+                            </a>
                         </li>
                         
                         <!-- Dummy product cards 2 -->
-                        <li
+                        <li 
                             class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
                             >
+                            <a href="/view/users/productDetail.php"> 
                             <div class="relative">
                                 <!-- Product Image -->
                                 <img
@@ -349,12 +352,14 @@
                                     </button>
                                 </div>
                             </div>
+                            </a>
                         </li>
                         
                         <!-- Dummy product cards 3 -->
-                        <li
+                        <li 
                             class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
                             >
+                            <a href="/view/users/productDetail.php"> 
                             <div class="relative">
                                 <!-- Product Image -->
                                 <img
@@ -398,12 +403,14 @@
                                     </button>
                                 </div>
                             </div>
+                            </a>
                         </li>
                         
                         <!-- Dummy product cards 4 -->
-                        <li
+                        <li 
                             class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
                             >
+                            <a href="/view/users/productDetail.php"> 
                             <div class="relative">
                                 <!-- Product Image -->
                                 <img
@@ -447,8 +454,9 @@
                                     </button>
                                 </div>
                             </div>
+                            </a>
                         </li>
-
+                        
                     </ul>
                 </div>
 

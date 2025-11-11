@@ -12,7 +12,7 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-1">
         <div class="flex h-16 items-center justify-between">
         <div class="md:flex md:items-center md:gap-12">
-            <a class="block rounded-lg" href="#">
+            <a class="block rounded-lg" href="/view/users/landingPage.php">
             <span class="sr-only">Home</span>
                 <!-- Logo -->
                 <img src="/assets/img/favicon.png" alt="" width="40px" class="p-1">

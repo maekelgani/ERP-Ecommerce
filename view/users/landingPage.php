@@ -737,6 +737,7 @@
                     <li
                         class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
                         >
+                        <a href="/view/users/productDetail.php"> 
                         <div class="relative">
                             <!-- Product Image -->
                             <img
@@ -780,6 +781,7 @@
                                 </button>
                             </div>
                         </div>
+                        </a>
                     </li>
                         
                     <!-- Produk 2 mulai dari sini -->
