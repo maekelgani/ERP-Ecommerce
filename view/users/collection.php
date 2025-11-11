@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/../../src/output.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body class="w-full bg-no-repeat h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     <header class="sticky top-0 z-10">
@@ -57,19 +56,13 @@
             </div>
         </section>
         
-        <!-- banner promosi slider -->
-        <section class="w-full h-40 md:h-56 lg:h-72">
-            <div class="relative mx-6 md:mx-18 lg:mx-30 h-full bg-cover bg-center 
-            [background-image:url('https://images.unsplash.com/photo-1504237111663-37d6094bec09?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170')]">
-                
-                <!-- overlay hitam transparan -->
-                <div class="absolute inset-0 bg-black/55"></div>
-
-                <!-- teks di atas overlay -->
-                <span class="absolute inset-0 flex items-center justify-center text-white text-2xl lg:text-3xl xl:text-4xl font-bold">
-                Collection
-                </span>
-
+        <!-- img -->
+        <section class="w-full md:px-8 lg:px-20 flex">
+            <div class=" p-4 md:px-10 rounded-lg w-full">
+                <div>
+                    <span class="absolute inset-0 text-white text-xl font-bold mb-2">Collection</span>
+                    <div class="max-w-full h-18 md:h-25 rounded-lg bg-[#563232] text-white justify-center text-center align-middle"></div>
+                </div>    
             </div>
         </section>
         
@@ -79,7 +72,7 @@
 
                 <!-- Header -->
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900">Product Collection</h2>
+                    <h2 class="text-2xl font-bold text-gray-900">Product Collection</h2>
 
                     <div class="flex items-center gap-3">
                         <!-- Sort Dropdown icon (UNTUK MOBILE) -->
@@ -245,211 +238,17 @@
                                     </div>
                                 </div>
                             </details>
-
-                            <button class="p-2 px-5 mt-4 bg-[#563232] text-sm rounded-lg text-white font-semibold hover:bg-[#563232]/75 cursor-pointer">Terapkan Filter</button>
                         </div>
                     </aside>
 
                     <!-- Product Grid -->
-                    <ul class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 border border-dashed border-gray-300 rounded-lg p-6 min-h-[300px]">
-                        
-                        <!-- Dummy product cards 1 -->
-                        <li
-                            class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
-                            >
-                            <div class="relative">
-                                <!-- Product Image -->
-                                <img
-                                src="https://images.unsplash.com/photo-1628202926206-c63a34b1618f?auto=format&fit=crop&q=80&w=1160"
-                                alt="Wireless Headphones"
-                                class="w-full h-auto aspect-[4/3] object-cover rounded-t-lg"
-                                />
-                            </div>
-
-                            <!-- Product Details -->
-                            <div class="p-4 sm:p-5 flex flex-col justify-between flex-grow">
-                                <!-- Konten teks -->
-                                <div class="flex-grow">
-                                    <p class="text-gray-700 text-sm sm:text-base">
-                                        $49.99
-                                        <span class="text-gray-400 line-through text-xs sm:text-sm">$80</span>
-                                    </p>
-
-                                    <h3 class="mt-1.5 text-base sm:text-lg font-medium text-gray-900">
-                                    Wireless Headphones
-                                    </h3>
-
-                                    <p class="mt-1 text-gray-600 text-sm sm:text-base line-clamp-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nobis iure obcaecati pariatur.
-                                    </p>
-                                </div>
-
-                                <!-- Tombol -->
-                                <div class="mt-4 flex flex-col sm:flex-row gap-3">
-                                    <button
-                                        class="w-full rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 transition hover:scale-105 hover:bg-gray-200"
-                                    >
-                                        Add to Cart
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:scale-105 hover:bg-gray-800"
-                                    >
-                                        Buy Now
-                                    </button>
-                                </div>
-                            </div>
-                        </li>
-                        
-                        <!-- Dummy product cards 2 -->
-                        <li
-                            class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
-                            >
-                            <div class="relative">
-                                <!-- Product Image -->
-                                <img
-                                src="https://images.unsplash.com/photo-1628202926206-c63a34b1618f?auto=format&fit=crop&q=80&w=1160"
-                                alt="Wireless Headphones"
-                                class="w-full h-auto aspect-[4/3] object-cover rounded-t-lg"
-                                />
-                            </div>
-
-                            <!-- Product Details -->
-                            <div class="p-4 sm:p-5 flex flex-col justify-between flex-grow">
-                                <!-- Konten teks -->
-                                <div class="flex-grow">
-                                    <p class="text-gray-700 text-sm sm:text-base">
-                                        $49.99
-                                        <span class="text-gray-400 line-through text-xs sm:text-sm">$80</span>
-                                    </p>
-
-                                    <h3 class="mt-1.5 text-base sm:text-lg font-medium text-gray-900">
-                                    Wireless Headphones
-                                    </h3>
-
-                                    <p class="mt-1 text-gray-600 text-sm sm:text-base line-clamp-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nobis iure obcaecati pariatur.
-                                    </p>
-                                </div>
-
-                                <!-- Tombol -->
-                                <div class="mt-4 flex flex-col sm:flex-row gap-3">
-                                    <button
-                                        class="w-full rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 transition hover:scale-105 hover:bg-gray-200"
-                                    >
-                                        Add to Cart
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:scale-105 hover:bg-gray-800"
-                                    >
-                                        Buy Now
-                                    </button>
-                                </div>
-                            </div>
-                        </li>
-                        
-                        <!-- Dummy product cards 3 -->
-                        <li
-                            class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
-                            >
-                            <div class="relative">
-                                <!-- Product Image -->
-                                <img
-                                src="https://images.unsplash.com/photo-1628202926206-c63a34b1618f?auto=format&fit=crop&q=80&w=1160"
-                                alt="Wireless Headphones"
-                                class="w-full h-auto aspect-[4/3] object-cover rounded-t-lg"
-                                />
-                            </div>
-
-                            <!-- Product Details -->
-                            <div class="p-4 sm:p-5 flex flex-col justify-between flex-grow">
-                                <!-- Konten teks -->
-                                <div class="flex-grow">
-                                    <p class="text-gray-700 text-sm sm:text-base">
-                                        $49.99
-                                        <span class="text-gray-400 line-through text-xs sm:text-sm">$80</span>
-                                    </p>
-
-                                    <h3 class="mt-1.5 text-base sm:text-lg font-medium text-gray-900">
-                                    Wireless Headphones
-                                    </h3>
-
-                                    <p class="mt-1 text-gray-600 text-sm sm:text-base line-clamp-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nobis iure obcaecati pariatur.
-                                    </p>
-                                </div>
-
-                                <!-- Tombol -->
-                                <div class="mt-4 flex flex-col sm:flex-row gap-3">
-                                    <button
-                                        class="w-full rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 transition hover:scale-105 hover:bg-gray-200"
-                                    >
-                                        Add to Cart
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:scale-105 hover:bg-gray-800"
-                                    >
-                                        Buy Now
-                                    </button>
-                                </div>
-                            </div>
-                        </li>
-                        
-                        <!-- Dummy product cards 4 -->
-                        <li
-                            class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
-                            >
-                            <div class="relative">
-                                <!-- Product Image -->
-                                <img
-                                src="https://images.unsplash.com/photo-1628202926206-c63a34b1618f?auto=format&fit=crop&q=80&w=1160"
-                                alt="Wireless Headphones"
-                                class="w-full h-auto aspect-[4/3] object-cover rounded-t-lg"
-                                />
-                            </div>
-
-                            <!-- Product Details -->
-                            <div class="p-4 sm:p-5 flex flex-col justify-between flex-grow">
-                                <!-- Konten teks -->
-                                <div class="flex-grow">
-                                    <p class="text-gray-700 text-sm sm:text-base">
-                                        $49.99
-                                        <span class="text-gray-400 line-through text-xs sm:text-sm">$80</span>
-                                    </p>
-
-                                    <h3 class="mt-1.5 text-base sm:text-lg font-medium text-gray-900">
-                                    Wireless Headphones
-                                    </h3>
-
-                                    <p class="mt-1 text-gray-600 text-sm sm:text-base line-clamp-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nobis iure obcaecati pariatur.
-                                    </p>
-                                </div>
-
-                                <!-- Tombol -->
-                                <div class="mt-4 flex flex-col sm:flex-row gap-3">
-                                    <button
-                                        class="w-full rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 transition hover:scale-105 hover:bg-gray-200"
-                                    >
-                                        Add to Cart
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:scale-105 hover:bg-gray-800"
-                                    >
-                                        Buy Now
-                                    </button>
-                                </div>
-                            </div>
-                        </li>
-
-                    </ul>
+                    <div class="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 border border-dashed border-gray-300 rounded-lg p-6 min-h-[300px]">
+                    <!-- Dummy product cards -->
+                    <div class="aspect-square bg-gray-100 rounded-lg animate-pulse"></div>
+                    <div class="aspect-square bg-gray-100 rounded-lg animate-pulse"></div>
+                    <div class="aspect-square bg-gray-100 rounded-lg animate-pulse"></div>
+                    <div class="aspect-square bg-gray-100 rounded-lg animate-pulse"></div>
+                    </div>
                 </div>
 
                 <!-- Mobile Filter Drawer -->
@@ -470,7 +269,6 @@
         </section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> 
     <Script src="/assets/js/users/productCollection.js" defer></Script>
 </body>
 </html>

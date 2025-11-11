@@ -980,10 +980,10 @@
 
                     </ul>
                     <div class="flex justify-center mt-6">
-                        <button
+                        <a href="/./view/users/productCollection.php"
                             class="p-2 px-5 bg-[#563232] text-sm rounded-lg text-white font-semibold hover:bg-[#563232]/75 cursor-pointer">
                             Lihat Semua
-                        </button>
+                        </a>
                     </div>
                     
                 </div>
