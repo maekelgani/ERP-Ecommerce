@@ -13,7 +13,7 @@
     <header class="sticky top-0 z-10">
         <?php include '../../components/users/navbarGuest.php' ;?>
     </header>
-    <main class="max-w-full">
+    <main class="max-w-full mb-10">
         <div class="border-b border-gray-200 bg-gray-100 px-4 py-2 text-gray-900">
             <p class="text-center font-medium">
                 Lorem, ipsum dolor
@@ -477,6 +477,10 @@
             </div>
         </section>
     </main>
+
+    <footer class="">
+        <?php include '../../components/users/footer.php' ;?>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> 
     <Script src="/assets/js/users/productCollection.js" defer></Script>
