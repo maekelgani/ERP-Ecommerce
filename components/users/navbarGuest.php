@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navbar - Guest</title>
+    <link rel="icon" href="../../assets/img/Nanocomp.png">
     <link rel="stylesheet" href="/../../src/output.css">
 </head>
 
@@ -66,16 +67,16 @@
         <div class="flex items-center gap-4">
             <div class="sm:flex sm:gap-4">
             <a href="../../view/login.php"
-            class="rounded-md bg-red-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-800/75">
+            class="rounded-md bg-red-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-800/75 transition-all duration-200 transform active:scale-[0.8]">
                 Masuk
             </a>
 
-            <div class="hidden sm:flex">
+            <!-- <div class="hidden sm:flex">
                 <a href="#"
                 class="rounded-md bg-gray-50 shadow-sm inset-ring  px-5 py-2.5 text-sm font-medium text-red-900 hover:bg-gray-50/75 hover:text-red-800/75" >
                 Daftar
                 </a>
-            </div>
+            </div> -->
             </div>
 
             <!-- humberger menu -->

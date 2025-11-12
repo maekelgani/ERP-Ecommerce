@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Customer</title>
     <link rel="stylesheet" href="/../../src/output.css">
+    <link rel="icon" href="../assets/img/Nanocomp.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -50,7 +51,7 @@
 
                     <!-- Path 3 (jika ada) -->
                     <li>
-                    <a href="#" class="block transition-colors hover:text-gray-900"> ... </a>
+                    <a href="#" class="block transition-colors hover:text-gray-900"> Product Collection </a>
                     </li>
                 </ol>
             </nav>
