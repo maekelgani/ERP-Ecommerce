@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // Grafik untuk pendapatan toko
     (function(){
         const orderChartLabels = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"];
         const orderChartData = [10, 25, 18, 32, 22, 40];
@@ -21,6 +20,42 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             options: {
                 responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    })();
+    
+    // Grafik untuk pendapatan toko
+    (function () {
+        const ctx = document.getElementById("revenueChart");
+        console.log("Chart data:", window.chartData);
+        if (!ctx || !window.chartData) return;
+
+
+        const chartLabels = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+        const chartData = window.chartData;
+
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: "Pendapatan (Rp)",
+                    data: chartData,
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    tension: 0.4,
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true }
+                },
                 scales: {
                     y: { beginAtZero: true }
                 }

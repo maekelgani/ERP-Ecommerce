@@ -113,69 +113,153 @@
     </div>
 
     <!-- Modal lihat detail pesanan -->
-    <div id="order-details" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
+    <div id="order-details" class="fixed inset-0 z-50 hidden">
         <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75 transition-opacity duration-300"></div>
-        <div id="modal-card" class="relative z-10 max-w-lg w-full bg-white rounded-lg shadow-md p-6 
-            transition-all duration-300 ease-out opacity-0 scale-95 translate-y-4">
 
-            <div class="mb-4 flex justify-between">
-                <div>
-                    <h2 class="text-lg font-semibold">Detail Pesanan</h2>
-                    <p class="text-sm text-gray-400">Informasi lengkap pemesanan</p>
+        <!-- Gunakan flex-col dan overflow-y-auto di sini -->
+        <div class="relative z-10 flex justify-center items-start p-4 overflow-y-auto h-full">
+            <div
+            id="modal-card"
+            class="w-[50%] md:w-1/2 bg-white rounded-lg shadow-md p-6 mt-10 mb-10 max-h-[90vh] overflow-y-auto transition-all duration-300 ease-out opacity-0 scale-95 translate-y-4"
+            >
+
+                <div class="mb-4 flex justify-between">
+                    <div>
+                        <h2 class="tracking-wide text-2xl font-bold">Detail Pesanan</h2>
+                        <p class="text-sm text-gray-400">Informasi lengkap pemesanan</p>
+                    </div>
+                    <button class="cancel cursor-pointer">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
                 </div>
-                <button class="cancel cursor-pointer">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
 
-            <div class="space-y-2 text-sm">
-                <p><strong>ID Pesanan:</strong> <span id="d-order-id"></span></p>
-                <p><strong>Nama Pembeli:</strong> <span id="d-name"></span></p>
-                <p><strong>Alamat:</strong> <span id="d-address"></span></p>
-                <p><strong>Tanggal Pesan:</strong> <span id="d-date"></span></p>
-                <p><strong>Status Pembayaran:</strong> <span id="d-payment"></span></p>
-                <p><strong>Metode Pembayaran:</strong> <span id="d-method"></span></p>
-                <p><strong>Status Pemesanan:</strong> <span id="d-status"></span></p>
-                <!-- STATUS PENGIRIMAN (Progress Bar) -->
-                <div class="mb-4">
-                    <label class="font-semibold text-sm">Status Pengiriman</label>
-                    <div class="flex items-center mt-2">
-                        <!-- Step 1 -->
-                        <div class="flex flex-col items-center">
-                            <div id="step-packed" 
-                                class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
-                            <span class="text-xs mt-1">Dikemas</span>
+                <div class="space-y-4">
+                    <!-- informasi pemesanan -->
+                    <div class="space-y-4">
+                        <h2 class="text-lg font-semibold flex items-center gap-2">
+                            <!-- gambar disiini -->Informasi Pemesanan
+                        </h2>
+                        <!-- ISI INFORMASINYA -->
+                        <div class="grid grid-cols-2 gap-4 p-4 rounded-lg">
+                            <!-- order id -->
+                            <div>
+                                <p class="text-sm text-gray-400">Order ID</p>
+                                <span id="d-order-id" class="font-semibold"></span>
+                            </div>
+                            <!-- Nama Pemesan -->
+                            <div>
+                                <p class="text-sm text-gray-400">Nama Pemesanan</p>
+                                <span id="d-name" class="font-semibold"></span>
+                            </div>
+                            <!-- Tanggal Pemesanan -->
+                            <div>
+                                <p class="text-sm text-gray-400">Tanggal Pemesanan</p>
+                                <span id="d-date" class="font-semibold">
+                            </div>
+                            <!-- tanggal Diterima -->
+                            <div>
+                                <p class="text-sm text-gray-400">Tanggal Diterima</p>
+                                <span id="d-recieveDate" class="font-semibold"></span>
+                            </div>
+                            <!-- Alamat -->
+                            <div class="col-span-2">
+                                <p class="text-sm text-gray-400">Alamat</p>
+                                <span id="d-address" class="font-semibold"></span>
+                            </div>
                         </div>
-
-                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
-
-                        <!-- Step 2 -->
-                        <div class="flex flex-col items-center">
-                            <div id="step-shipped" 
-                                class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
-                            <span class="text-xs mt-1">Dikirim</span>
+                        <!-- Bagian pemesanan -->
+                        <div class="gap-4 space-y-4 p-4">
+                            <!-- Status Pemesanan -->
+                            <div class="col-span-2">
+                                <p class="text-sm text-gray-400">Status Pemesanan</p>
+                                <span id="d-status"></span>
+                            </div>
+                            <!-- Bar status -->
+                            <div class="col-span-2">
+                                <div class="mb-4">
+                                    <label class="font-semibold text-sm">Status Pengiriman</label>
+                                    <div class="flex items-center mt-2">
+                                        <!-- Step 1 -->
+                                        <div class="flex flex-col items-center">
+                                            <div id="step-packed" class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
+                                            <span class="text-xs mt-1">Dikemas</span>
+                                        </div>
+                                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                                        <!-- Step 2 -->
+                                        <div class="flex flex-col items-center">
+                                            <div id="step-shipped" class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
+                                            <span class="text-xs mt-1">Dikirim</span>
+                                        </div>
+                                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                                        <!-- Step 3 -->
+                                        <div class="flex flex-col items-center">
+                                            <div id="step-done" class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
+                                            <span class="text-xs mt-1">Selesai</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
-
-                        <!-- Step 3 -->
-                        <div class="flex flex-col items-center">
-                            <div id="step-done" 
-                                class="w-4 h-4 rounded-full bg-gray-300 border border-gray-500 transition-all"></div>
-                            <span class="text-xs mt-1">Selesai</span>
+                    </div>
+                    <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-200 h-px w-full"></div>
+                    <!-- informasi Detail Produk-->
+                    <div class="space-y-4">
+                        <h2 class="text-lg font-semibold flex items-center gap-2">
+                            <!-- gambar disini --> Daftar produk (<span id=""></span>items) 
+                        </h2>
+                        <!-- List produknya di sini -->
+                        <div class="space-y-3"> 
+                            <div class="flex items-center justify-between p-4 rounded-lg">
+                                <!-- Nama produk dan Quantity nya -->
+                                <div class="flex-1">
+                                    <p class="font-semibold"><span id=""></span></p>
+                                    <p class="text-sm text-gray-400"><span id=""></span></p>
+                                </div>
+                                <!-- Subtotal -->
+                                <div class="text-right"><span id=""> </span></div>
+                            </div>
+                        </div>
+                        <!-- Total Harga -->
+                        <div class="flex items-center justify-between p-4 rounded-lg">
+                            <p class="text-lg font-bold">Total Harga:</p>
+                            <p class="text-xl font-bold text-blue-500">Rp <span id="d-total"></span></p>
+                        </div>
+                    </div>
+                    <div data-orientation="horizontal" role="none" class="shrink-0 bg-gray-200 h-px w-full"></div>
+                    <!-- informasi Detail Pembayaran -->
+                    <div class="space-y-4">
+                        <h2 class="text-lg font-semibold flex items-center gap-2">
+                        <!--gambar disini--> Detail Pembayaran</h2>
+                        <div class="grid grid-cols-2 gap-4 bg-muted/30 p-4 rounded-lg">
+                            <!-- ID Pembayaran -->
+                            <div>
+                                <p class="text-sm text-gray-400">ID Pembayaran</p>
+                                <span id="" class="font-semibold"></span>
+                            </div>
+                            <!-- Metode Pembayaran -->
+                            <div>
+                                <p class="text-sm text-gray-400">Metode Pembayaran</p>
+                                <span id="" class="font-semibold"></span>
+                            </div>
+                            <!-- Tanggal Pembayaran -->
+                            <div>
+                                <p class="text-sm text-gray-400">Tanggal Pembayaran</p>
+                                <span id="" class="font-semibold">
+                            </div>
+                            <!-- Status Pembayaran -->
+                            <div>
+                                <p class="text-sm text-gray-400">Status Pembayaran</p>
+                                <span id="" class="font-semibold"></span>
+                            </div>
+                            <!-- Bukti Pembayaran -->
+                            <div class="col-span-2">
+                                <p class="text-sm text-gray-400">Bukti Pembayaran</p>
+                                <a class="inline-flex items-center gap-2 text-blue-500 hover:underline" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text h-4 w-4"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>Lihat bukti pembayaran</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
-
-            <div class="mt-4">
-                <strong>Item Pesanan:</strong>
-                <ul id="d-items" class="list-disc pl-5 text-sm"></ul>
-            </div>
-
-            <div class="mt-3 font-semibold text-right">
-                Total: Rp <span id="d-total"></span>
             </div>
         </div>
     </div>

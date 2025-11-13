@@ -17,12 +17,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const elOrderId = modal.querySelector("#d-order-id");
         const elName = modal.querySelector("#d-name");
         const elAddress = modal.querySelector("#d-address");
-        const elItems = modal.querySelector("#d-items");
+        const elItemsList = modal.querySelector("#d-items-list"); // Diubah ke #d-items-list untuk div dinamis
+        const elItemCount = modal.querySelector("#d-item-count"); // Tambahan untuk jumlah items
         const elDate = modal.querySelector("#d-date");
+        const elRecieveDate = modal.querySelector("#d-recieveDate");
         const elPayment = modal.querySelector("#d-payment");
         const elMethod = modal.querySelector("#d-method");
         const elStatus = modal.querySelector("#d-status");
         const elTotal = modal.querySelector("#d-total");
+        // Tambahan elemen pembayaran
+        const elPaymentId = modal.querySelector("#d-payment-id");
+        const elPaymentDate = modal.querySelector("#d-payment-date");
+        const elPaymentStatus = modal.querySelector("#d-payment-status");
 
         // Elemen Progress Bar
         const stepPacked = modal.querySelector("#step-packed");
@@ -40,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
             resetProgress();
             if (status === "dikemas") {
                 stepPacked.classList.replace("bg-gray-300", "bg-green-600");
-            } else if (status === "dikirim") {
+            } else if (status === "dikirim") { // Sesuai kode Anda (pengiriman -> dikirim)
                 stepPacked.classList.replace("bg-gray-300", "bg-green-600");
                 stepShipped.classList.replace("bg-gray-300", "bg-green-600");
             } else if (status === "selesai") {
@@ -56,44 +62,56 @@ document.addEventListener("DOMContentLoaded", () => {
                 backdrop.classList.remove("opacity-0");
                 modalCard.classList.remove("opacity-0", "scale-95", "translate-y-4");
             });
-            document.documentElement.style.overflow = "hidden";
-            document.body.style.overflow = "hidden";
         }
 
         function closeModal() {
             backdrop.classList.add("opacity-0");
             modalCard.classList.add("opacity-0", "scale-95", "translate-y-4");
             setTimeout(() => modal.classList.add("hidden"), 300);
-            document.documentElement.style.overflow = "";
-            document.body.style.overflow = "";
         }
 
         detailBtns.forEach((btn) => {
             btn.addEventListener("click", () => {
                 openModal();
 
+                // Isi daftar items secara dinamis (diubah dari <li> ke div untuk konsistensi HTML)
                 const itemsRaw = btn.getAttribute("data-items") || "";
                 const itemsArr = itemsRaw.split(";").filter(item => item.trim());
-                elItems.innerHTML = "";
+                elItemsList.innerHTML = ""; // Kosongkan sebelumnya
+                elItemCount.textContent = itemsArr.length; // Update jumlah items
                 itemsArr.forEach((item) => {
                     const [name, qty, price] = item.split("|");
-                    const li = document.createElement("li");
-                    li.textContent = `${name} — ${qty} pcs — Rp ${price}`;
-                    elItems.appendChild(li);
+                    const itemDiv = document.createElement("div");
+                    itemDiv.className = "flex items-center justify-between p-4 rounded-lg"; // Styling sederhana
+                    itemDiv.innerHTML = `
+                        <div class="flex-1">
+                            <p class="font-semibold">${name || 'N/A'}</p>
+                            <p class="text-sm text-gray-400">Qty: ${qty || 0}</p>
+                        </div>
+                        <div class="text-right">Rp ${(parseInt(price) || 0).toLocaleString('id-ID')}</div>
+                    `;
+                    elItemsList.appendChild(itemDiv);
                 });
 
                 const status = btn.dataset.status;
 
-                elOrderId.textContent = btn.dataset.orderId;
-                elName.textContent = btn.dataset.name;
-                elAddress.textContent = btn.dataset.address;
-                elDate.textContent = btn.dataset.date;
-                elPayment.textContent = btn.dataset.payment;
-                elMethod.textContent = btn.dataset.method;
-                elStatus.textContent = status;
-                elTotal.textContent = btn.dataset.total;
+                // Isi elemen utama
+                elOrderId.textContent = btn.dataset.orderId || '';
+                elName.textContent = btn.dataset.name || '';
+                elAddress.textContent = btn.dataset.address || '';
+                elDate.textContent = btn.dataset.date || '';
+                elRecieveDate.textContent = btn.dataset.recievedate || ''; // Sesuai kode Anda
+                elPayment.textContent = btn.dataset.payment || '';
+                elMethod.textContent = btn.dataset.method || '';
+                elStatus.textContent = status || '';
+                elTotal.textContent = (parseInt(btn.dataset.total) || 0).toLocaleString('id-ID');
 
-                // Biar keupdate
+                // Isi elemen pembayaran (tambahan)
+                elPaymentId.textContent = btn.dataset.paymentId || '';
+                elPaymentDate.textContent = btn.dataset.paymentDate || '';
+                elPaymentStatus.textContent = btn.dataset.payment || ''; // Asumsi sama dengan payment
+
+                // Update progress bar
                 updateShippingProgress(status);
             });
         });
@@ -104,4 +122,4 @@ document.addEventListener("DOMContentLoaded", () => {
             if (e.key === "Escape") closeModal();
         });
     })();
-})
+});
