@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/src/output.css">
+    <link rel="icon" href="../assets/img/Nanocomp.png">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 <body>
@@ -53,13 +54,17 @@
 
                     <div class="dropdown-menu ml-8 mt-1 space-y-1 hidden">
                         <a href="/view/admin/ProductAdmin.php" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-800">
-                            <span class="material-symbols-outlined">box_add</span> Product List
+                            <span class="material-symbols-outlined">box_add</span> Invenotri
                         </a>
                         <a href="/view/admin/CategoryAdmin.php" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-800">
-                            <span class="material-symbols-outlined">category</span> Categories
+                            <span class="material-symbols-outlined">category</span> Kategori
+                        </a>
+                        </a>
+                        <a href="/view/admin/BrandAdmin.php" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-800">
+                            <span class="material-symbols-outlined">handshake</span> Brand
                         </a>
                         <a href="/view/admin/DiscountAdmin.php" class="menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-800">
-                            <span class="material-symbols-outlined">loyalty</span> Discount
+                            <span class="material-symbols-outlined">loyalty</span> Diskon
                         </a>
                     </div>
                 </div>
