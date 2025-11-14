@@ -223,9 +223,11 @@
 
                 <div class="mb-4"">
                     <label for="" class="text-sm font-semibold">Gambar Produk</label>
-                    <input type="file" id="file-upload" name="file-upload" class="block w-[80%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg"/>
+                    <input type="file" id="file-upload" name="file-upload" class="block w-[10   0%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg"/>
                 </div>
-                <button type="submit" class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
+                <div class="flex justify-end">
+                    <button type="submit" class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
+                </div>
             </form>
         </div>
     </div>

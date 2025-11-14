@@ -25,19 +25,19 @@
             <div class="swiper banner-swiper w-full h-full">
                 <div class="swiper-wrapper">
                     <!-- Slide 1 -->
-                    <div class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
-                        style="background-color:#ADADAD">
-                    </div>
+                    <img alt=""
+                    class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
+                    src="https://p16-images-common-sign-sg.tokopedia-static.net/tos-alisg-i-6i2l32qzxu-sg/img/BgtCLw/2025/4/5/bfdaa23c-a114-4350-a37e-bcf365afb79b.jpg~tplv-6i2l32qzxu-resize-jpeg:1200:0.webp?lk3s=7a10017b&x-expires=1763113699&x-signature=ZE3RLdQgCsi3pfk%2FIhxdr%2FATy10%3D&x-signature-webp=ZE3RLdQgCsi3pfk%2FIhxdr%2FATy10%3D&ect=3g">
 
                     <!-- Slide 2 -->
-                    <div class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
-                        style="background-color:#f0f0f0">
-                    </div>
+                    <img alt=""
+                    class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
+                    src="https://p16-images-common-sign-sg.tokopedia-static.net/tos-alisg-i-6i2l32qzxu-sg/img/BgtCLw/2025/11/12/260b1324-7932-4a69-9a5b-368f12fa641b.jpg~tplv-6i2l32qzxu-resize-jpeg:1200:0.webp?lk3s=7a10017b&x-expires=1763114285&x-signature=bFES3FYf7%2FYkqym3tZY1kv9xlOY%3D&x-signature-webp=bFES3FYf7%2FYkqym3tZY1kv9xlOY%3D&ect=4g">
 
                     <!-- Slide 3 -->
-                    <div class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
-                        style="background-color:#d4d4d4">
-                    </div>
+                    <img alt=""
+                    class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
+                    src="https://p16-images-common-sign-sg.tokopedia-static.net/tos-alisg-i-6i2l32qzxu-sg/img/BgtCLw/2025/11/12/835f3be7-99d7-4e85-9506-446ebda460de.jpg~tplv-6i2l32qzxu-resize-jpeg:1200:0.webp?lk3s=7a10017b&x-expires=1763114285&x-signature=nPegBZHAbGhKVqTDUUyCTEpGuo0%3D&x-signature-webp=nPegBZHAbGhKVqTDUUyCTEpGuo0%3D&ect=4g">
                 </div>
 
                 <!-- Navigasi dan Pagination -->
@@ -56,17 +56,17 @@
                 <!-- Cards -->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://via.placeholder.com/300x300" alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img src="https://images.unsplash.com/photo-1591238372338-22d30c883a86?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGN8ZW58MHx8MHx8fDA%3D" alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">PC Bundling</span>
                 </a>
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://via.placeholder.com/300x300" alt="Processor" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBjfGVufDB8fDB8fHww" alt="Processor" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Processor</span>
                 </a>
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://via.placeholder.com/300x300" alt="Motherboard" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img src="https://images.unsplash.com/photo-1712701815718-29f5fe510c0e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bW90aGVyYm9hcmR8ZW58MHx8MHx8fDA%3D" alt="Motherboard" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Motherboard</span>
                 </a>
                 <a href="#"
@@ -76,22 +76,22 @@
                 </a>
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://via.placeholder.com/300x300" alt="SSD" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img src="https://images.unsplash.com/photo-1669480380758-4b163a33f6f9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8c3NkfGVufDB8fDB8fHww" alt="SSD" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">SSD</span>
                 </a>
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://via.placeholder.com/300x300" alt="RAM" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img src="https://images.unsplash.com/photo-1699796990049-3406a9991baa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fFJBTXxlbnwwfHwwfHx8MA%3D%3D" alt="RAM" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">RAM</span>
                 </a>
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://via.placeholder.com/300x300" alt="PSU" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img src="https://images.unsplash.com/photo-1716062890647-60feae0609d0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHN1fGVufDB8fDB8fHww" alt="PSU" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">PSU</span>
                 </a>
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://via.placeholder.com/300x300" alt="Casing" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img src="https://i.ytimg.com/vi/BltqLS0yJTc/maxresdefault.jpg" alt="Casing" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Casing</span>
                 </a>
                 </div>
@@ -121,7 +121,7 @@
             <!-- Bawah di kiri -->
             <a href="#"
                 class="relative group bg-gray-400/75 rounded-lg overflow-hidden h-60 flex items-center justify-center text-3xl font-bold text-gray-700">
-                <img src="" alt="ROG x Miku"
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkeVIs2kFlC9Evpvc0exds51V8tjp7TfX3_Q&s" alt="ROG x Miku"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 <div
                 class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-center items-center text-center">
@@ -133,7 +133,7 @@
             <!-- Bawah di kanan -->
             <a href="#"
                 class="relative group bg-gray-400/75 rounded-lg overflow-hidden h-60 flex items-center justify-center text-3xl font-bold text-gray-700">
-                <img src="" alt="ASUS x Evangelion"
+                <img src="https://rog.asus.com/microsite/ROGxEVANGELION-02/v1/img/share.jpg" alt="ASUS x Evangelion"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 <div
                 class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-center items-center text-center">
@@ -687,27 +687,27 @@
                     class="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide scroll-smooth justify-start sm:justify-center py-2"
                 >
                     <!-- Brand Items -->
-                    <div
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Intel_logo_%282006-2020%29.svg"
                     class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
-                    ></div>
-                    <div
+                    ></img>
+                    <img src="https://logos-world.net/wp-content/uploads/2020/03/AMD-Logo.png"
                     class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
-                    ></div>
-                    <div
+                    ></img>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL5WbtWJ0MQzfxZCr0y-zHn44-WzF_293KWA&s"
                     class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
-                    ></div>
-                    <div
+                    ></img>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSln9EzYFPXEF7aBAxsVhUjkgRvqeTd0rk78Q&s"
                     class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
-                    ></div>
-                    <div
+                    ></img>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPgtNHcrqqPMRKaj7fRfsf4_u2L6GTc_j6mg&s"
                     class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
-                    ></div>
-                    <div
+                    ></img>
+                    <img src=""
                     class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
-                    ></div>
-                    <div
+                    ></img>
+                    <img src=""
                     class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
-                    ></div>
+                    ></img>
                 </div>
 
                 <!-- Button Next -->

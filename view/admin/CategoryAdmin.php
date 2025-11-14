@@ -116,8 +116,9 @@
                     <label for="" class="font-semibold text-sm">Deskripsi</label>
                     <textarea name="" id="" placeholder="Jelaskan mengenai kategori ini..." class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500"></textarea>
                 </div>
-
-                <button type="submit" class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
+                <div class="div flex justify-end">
+                    <button type="submit" class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
+                </div>
             </form>
         </div>
     </div>
