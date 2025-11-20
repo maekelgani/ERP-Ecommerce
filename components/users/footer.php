@@ -160,7 +160,7 @@
                         <input type="email" placeholder="email.anda@gmail.com" 
                         class="w-full p-1 bg-white text-black shadow-xs border border-gray-200 rounded-lg focus:outline focus:outline-red-nano" >
                         <button
-                        class="bg-primary text-white w-full py-2 mt-2 font-semibold rounded-lg hover:btn-primary-hover">Berlangganan</button>
+                        class="bg-primary text-white w-full py-2 mt-2 font-semibold rounded-lg hover:bg-[#A14646]/75 transition duration-200">Berlangganan</button>
                     </form>
                 </ul>
                 </div>

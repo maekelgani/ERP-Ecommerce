@@ -26,18 +26,18 @@
                 <div class="swiper-wrapper">
                     <!-- Slide 1 -->
                     <img alt=""
-                    class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
-                    src="https://p16-images-common-sign-sg.tokopedia-static.net/tos-alisg-i-6i2l32qzxu-sg/img/BgtCLw/2025/4/5/bfdaa23c-a114-4350-a37e-bcf365afb79b.jpg~tplv-6i2l32qzxu-resize-jpeg:1200:0.webp?lk3s=7a10017b&x-expires=1763113699&x-signature=ZE3RLdQgCsi3pfk%2FIhxdr%2FATy10%3D&x-signature-webp=ZE3RLdQgCsi3pfk%2FIhxdr%2FATy10%3D&ect=3g">
+                    class="swiper-slide bg-center object-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
+                    src="/../../assets/img/banner/slider-1.png">
 
                     <!-- Slide 2 -->
                     <img alt=""
-                    class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
-                    src="https://p16-images-common-sign-sg.tokopedia-static.net/tos-alisg-i-6i2l32qzxu-sg/img/BgtCLw/2025/11/12/260b1324-7932-4a69-9a5b-368f12fa641b.jpg~tplv-6i2l32qzxu-resize-jpeg:1200:0.webp?lk3s=7a10017b&x-expires=1763114285&x-signature=bFES3FYf7%2FYkqym3tZY1kv9xlOY%3D&x-signature-webp=bFES3FYf7%2FYkqym3tZY1kv9xlOY%3D&ect=4g">
+                    class="swiper-slide bg-center object-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
+                    src="/../../assets/img/banner/slider-2.png">
 
                     <!-- Slide 3 -->
                     <img alt=""
-                    class="swiper-slide bg-center bg-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
-                    src="https://p16-images-common-sign-sg.tokopedia-static.net/tos-alisg-i-6i2l32qzxu-sg/img/BgtCLw/2025/11/12/835f3be7-99d7-4e85-9506-446ebda460de.jpg~tplv-6i2l32qzxu-resize-jpeg:1200:0.webp?lk3s=7a10017b&x-expires=1763114285&x-signature=nPegBZHAbGhKVqTDUUyCTEpGuo0%3D&x-signature-webp=nPegBZHAbGhKVqTDUUyCTEpGuo0%3D&ect=4g">
+                    class="swiper-slide bg-center object-cover flex items-center justify-center text-red-900 text-3xl font-semibold"
+                    src="/../../assets/img/banner/slider-3.png">
                 </div>
 
                 <!-- Navigasi dan Pagination -->
@@ -53,47 +53,85 @@
                 <h2 class="font-bold text-xl md:text-2xl lg:text-4xl mb-5 "> Shop by Category</h2>
                 <!-- Slider Container -->
                 <div class="flex gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 p-2">
-                <!-- Cards -->
+                <!-- Card Content 
+                1. PC Ready-->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://images.unsplash.com/photo-1591238372338-22d30c883a86?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGN8ZW58MHx8MHx8fDA%3D" alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">PC Bundling</span>
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-pcReady.png" >
+                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">PC Ready</span>
                 </a>
+                <!-- 2. Processor -->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBjfGVufDB8fDB8fHww" alt="Processor" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-processor.png" >
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Processor</span>
                 </a>
+                <!-- 3. Motherboard -->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://images.unsplash.com/photo-1712701815718-29f5fe510c0e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bW90aGVyYm9hcmR8ZW58MHx8MHx8fDA%3D" alt="Motherboard" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Motherboard</span>
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-motherBoard.png" >
+                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Motherboard   </span>
                 </a>
+                <!-- 4. Graphic Card -->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z3B1fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500" alt="VGA" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">VGA</span>
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-graphicCard.png" >
+                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Graphics Card</span>
                 </a>
+                <!-- 5. Storage -->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://images.unsplash.com/photo-1669480380758-4b163a33f6f9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8c3NkfGVufDB8fDB8fHww" alt="SSD" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
-                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">SSD</span>
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-storage.png" >
+                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Storage</span>
                 </a>
+                <!-- 6. RAM-->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://images.unsplash.com/photo-1699796990049-3406a9991baa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fFJBTXxlbnwwfHwwfHx8MA%3D%3D" alt="RAM" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-ram.png" >
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">RAM</span>
                 </a>
+                <!-- 7. PSU -->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://images.unsplash.com/photo-1716062890647-60feae0609d0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHN1fGVufDB8fDB8fHww" alt="PSU" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-psu.png" >
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">PSU</span>
                 </a>
+                <!-- 8. Casing -->
                 <a href="#"
                     class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
-                    <img src="https://i.ytimg.com/vi/BltqLS0yJTc/maxresdefault.jpg" alt="Casing" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-casing.png" >
                     <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Casing</span>
                 </a>
+                <!-- 9. Cooler -->
+                <a href="#"
+                    class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-cooler.png" >
+                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Cooler</span>
+                </a>
+                <!-- 10. Fan -->
+                <a href="#"
+                    class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-fan.png" >
+                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Fan</span>
+                </a>
+                <!-- 11. Motherboard -->
+                <a href="#"
+                    class="flex-shrink-0 category-card bg-gray-400/75 w-24 sm:w-48 md:w-52 h-24 sm:h-48 md:h-52 rounded-lg overflow-hidden relative transition-transform duration-300 hover:scale-105">
+                    <img alt="PC Bundling" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    src="/../../assets/img/category/cat-monitor.png" >
+                    <span class="absolute bottom-2 left-2 text-white font-semibold text-sm bg-black/50 px-2 py-1 rounded">Monitor</span>
+                </a>
+                
                 </div>
             </div>
         </section>
@@ -109,7 +147,7 @@
             <!-- Yang atas ini -->
             <a href="#"
                 class="relative group lg:col-span-2 bg-gray-400/75 rounded-lg overflow-hidden h-100 flex items-center justify-center text-3xl font-bold text-gray-700">
-                <img src="https://rog.asus.com/media/175456150960.jpg" alt="ROG x Miku"
+                <img src="/../../assets/img/banner/collab-mikuXrog.png" alt="ROG x Miku"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 <div
                 class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-center items-center text-center">
@@ -121,19 +159,19 @@
             <!-- Bawah di kiri -->
             <a href="#"
                 class="relative group bg-gray-400/75 rounded-lg overflow-hidden h-60 flex items-center justify-center text-3xl font-bold text-gray-700">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkeVIs2kFlC9Evpvc0exds51V8tjp7TfX3_Q&s" alt="ROG x Miku"
+                <img src="/../../assets/img/banner/collab-sflXrog.png" alt="ROG x Miku"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 <div
                 class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-center items-center text-center">
-                <h3 class="text-white text-xl font-bold mb-2">MSI × Battlefield 6</h3>
-                <p class="text-gray-200 text-sm">Limited Edition Motherboard Collaboration</p>
+                <h3 class="text-white text-xl font-bold mb-2">ROG × Street Fighter League</h3>
+                <p class="text-gray-200 text-sm">Limited Edition Monitor Collaboration</p>
                 </div>
             </a>
 
             <!-- Bawah di kanan -->
             <a href="#"
                 class="relative group bg-gray-400/75 rounded-lg overflow-hidden h-60 flex items-center justify-center text-3xl font-bold text-gray-700">
-                <img src="https://rog.asus.com/microsite/ROGxEVANGELION-02/v1/img/share.jpg" alt="ASUS x Evangelion"
+                <img src="/../../assets/img/banner/collab-evaXrog.png" alt="ASUS x Evangelion"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 <div
                 class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-center items-center text-center">
@@ -407,7 +445,7 @@
         <section class="w-full md:px-8 lg:px-20 flex">
             <div class=" p-4 md:p-10 rounded-lg w-full">
                 <a href="" class="max-w-full justify-center">
-                    <div class="max-w-full h-18 md:h-25 rounded-lg bg-[#563232] text-white justify-center text-center align-middle">Buat Banner promosi</div>
+                    <div class="max-w-full h-18 md:h-25 rounded-lg bg-primary text-white justify-center text-center align-middle">Buat Banner promosi</div>
                     <!-- <img src="" alt="promosibanner" class=""> -->
                 </a>
             </div>
@@ -984,7 +1022,7 @@
                     </ul>
                     <div class="flex justify-center mt-6">
                         <a href="/./view/users/productCollection.php"
-                            class="p-2 px-5 bg-primary text-sm rounded-lg text-white font-semibold hover:bg-[#563232]/75 cursor-pointer">
+                            class="p-2 px-5 bg-primary text-sm rounded-lg text-white font-semibold hover:bg-[#A14646]/75 cursor-pointer transition-all duration-200">
                             Lihat Semua
                         </a>
                     </div>
