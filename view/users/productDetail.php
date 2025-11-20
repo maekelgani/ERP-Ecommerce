@@ -129,7 +129,7 @@
                     <p class="text-3xl tracking-tight text-gray-900">$192</p>
 
                     <!-- Reviews  BINTANG -->
-                    <div class="mt-6">
+                    <div class="mt-3">
                     <h3 class="sr-only">Reviews</h3>
                     <div class="flex items-center">
                         <div class="flex items-center">
@@ -175,10 +175,10 @@
                         </fieldset>
                     </div>
 
-                    <!-- TYPE -->
+                    <!-- Variant -->
                     <div class="mt-10">
                         <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-medium text-gray-900">TYPE</h3>
+                        <h3 class="text-sm font-medium text-gray-900">Variant</h3>
                         </div>
 
                         <fieldset aria-label="Choose a size" class="mt-4">
@@ -200,12 +200,16 @@
                         </fieldset>
                     </div>
 
-                    <button type="submit" class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-red-nano px-8 py-3 text-base font-medium text-white hover:bg-red-nano/75 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Add to bag</button>
+                    <h2 class="mt-1 text-sm font-semibold">Stok tersedia: 15</h2>
+
+                    <button type="submit" class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium outline-1 outline-red-nano hover:bg-gray-100/50 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Masukkan Keranjang</button>
+                    
+                    <button type="submit" class="mt-2 flex w-full items-center justify-center rounded-md border border-transparent bg-red-nano px-8 py-3 text-base font-medium text-white hover:bg-red-nano/75 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Beli Sekarang</button>
                     </form>
                 </div>
 
+                <!-- Description and details -->
                 <div class="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pt-6 lg:pr-8 lg:pb-16">
-                    <!-- Description and details -->
                     <div>
                     <h3 class="text-sm font-medium text-gray-900">Description</h3>
 
@@ -235,9 +239,99 @@
                     </div>
                     </div>
                 </div>
+
+            </div>
+        </section>
+
+        <!-- Review Product -->
+        <section class="w-full bg-[#563232] py-6 px-4 sm:px-6 md:px-8 lg:px-20">
+            <div class="w-full relative rounded-lg">
+                <h2
+                    class="font-bold text-sm sm:text-base lg:text-xl mb-4 sm:mb-6 text-white tracking-wide text-center sm:text-left">
+                    ULASAN PEMBELI
+                </h2>
+
+                <!-- Wrapper -->
+                <div class="relative">
+
+                    <!-- Scroll Container -->
+                    <div
+                        id="reviewScroll"
+                        class="flex space-x-4 overflow-x-auto scrollbar-hide scroll-smooth py-2"
+                    >
+
+                        <!-- Review Card -->
+                        <div class="min-w-[260px] sm:min-w-[300px] bg-white rounded-lg shadow-md p-4 flex-shrink-0">
+                            
+                            <!-- Header: Profile & Name -->
+                            <div class="flex items-center gap-3 mb-2">
+                                <img src="https://i.pravatar.cc/60" class="w-10 h-10 rounded-full object-cover">
+                                <p class="font-semibold text-gray-900 text-sm">Andi Pratama</p>
+                            </div>
+
+                            <!-- Rating -->
+                            <div class="flex items-center text-yellow-400 text-sm mb-2">
+                                <span class="material-symbols-outlined">star</span>
+                                <span class="material-symbols-outlined">star</span>
+                                <span class="material-symbols-outlined">star</span>
+                                <span class="material-symbols-outlined">star</span>
+                                <span class="material-symbols-outlined text-gray-300">star</span>
+                            </div>
+
+                            <!-- Comment -->
+                            <p class="text-sm text-gray-700 mb-3 line-clamp-3">
+                                Produk sesuai deskripsi. Kualitas mantap, pengiriman cepat, sangat recommended!
+                            </p>
+
+                            <!-- Optional Image -->
+                            <img 
+                                src="https://images.unsplash.com/photo-1580894894514-7d89fa67e6f0?q=80&w=800&auto=format&fit=crop" 
+                                class="w-full h-36 rounded-md object-cover"
+                            >
+                        </div>
+
+                        <!-- Duplicate More Cards -->
+                        <div class="min-w-[260px] sm:min-w-[300px] bg-white rounded-lg shadow-md p-4 flex-shrink-0">
+                            <div class="flex items-center gap-3 mb-2">
+                                <img src="https://i.pravatar.cc/62" class="w-10 h-10 rounded-full object-cover">
+                                <p class="font-semibold text-gray-900 text-sm">Siti Nurhaliza</p>
+                            </div>
+
+                            <div class="flex items-center text-yellow-400 text-sm mb-2">
+                                <span class="material-symbols-outlined">star</span>
+                                <span class="material-symbols-outlined">star</span>
+                                <span class="material-symbols-outlined">star</span>
+                                <span class="material-symbols-outlined">star_half</span>
+                                <span class="material-symbols-outlined text-gray-300">star</span>
+                            </div>
+
+                            <p class="text-sm text-gray-700 mb-3 line-clamp-3">
+                                Warna sesuai foto. Bagus banget dipakai kerja. Pasti beli lagi kalo diskon.
+                            </p>
+
+                            <img 
+                                src="https://images.unsplash.com/photo-1592878904946-b3cd5e5d43df?q=80&w=800&auto=format&fit=crop" 
+                                class="w-full h-36 rounded-md object-cover"
+                            >
+                        </div>
+
+                        <!-- Tambahkan card lain sesuka hati -->
+                    </div>
+
+                    <!-- Button Next -->
+                    <button
+                        id="reviewNext"
+                        class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-sm p-2 hover:bg-gray-100 transition"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+
                 </div>
             </div>
         </section>
+
     </main>
 
     <footer>

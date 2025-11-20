@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- Main Content -->
-                <div class="flex flex-col lg:flex-row gap-6">
+                <div class="flex flex-col lg:flex-row gap-6 items-start">
                     <!-- 
                     Filter Sidebar 
                     -->
@@ -130,7 +130,7 @@
                         </div>
 
                         <!-- Filters -->
-                        <div class="mt-6">
+                        <div class="mt-6 space-y-2">
                             <p class="font-semibold text-gray-900 mb-3">Filters</p>
 
                             <!-- Filter Card 
@@ -235,12 +235,12 @@
                                             <!-- SET MINIMUM -->
                                             <label for="" class="flex items-center gap-2">
                                                 <span></span>
-                                                <input type="number" placeholder="from" min="0" class="w-full rounded-md border-gray-200 shadow-xs sm:text-sm">
+                                                <input type="number" placeholder="From" min="0" class="w-full rounded-md border border-gray-200 shadow-xs sm:text-sm p-1">
                                             </label>
                                             <!-- SET MAKSIMUM -->
                                             <label for="" class="flex items-center gap-2">
                                                 <span></span>
-                                                <input type="number" placeholder="from" min="999999999" class="w-full rounded-md border-gray-200 shadow-xs sm:text-sm">
+                                                <input type="number" placeholder="To" min="999999999" class="w-full rounded-md border border-gray-200 shadow-xs sm:text-sm p-1">
                                             </label>
                                         </div>
                                     </div>
@@ -252,11 +252,11 @@
                     </aside>
 
                     <!-- Product Grid -->
-                    <ul class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 border border-dashed border-gray-300 rounded-lg p-6 min-h-[300px]">
+                    <ul class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 border border-dashed border-gray-300 rounded-lg p-6 min-h-[300px] h-auto">
                         
                         <!-- Dummy product cards 1 -->
                         <li 
-                            class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
+                            class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col duration-300"
                             >
                             <a href="/view/users/productDetail.php"> 
                             <div class="relative">

@@ -67,7 +67,7 @@
         <div class="flex items-center gap-4">
             <div class="sm:flex sm:gap-4">
             <a href="../../view/login.php"
-            class="rounded-md bg-red-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-800/75 transition-all duration-200 transform active:scale-[0.8]">
+            class="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-800/75 transition-all duration-200 transform active:scale-[0.8]">
                 Masuk
             </a>
 

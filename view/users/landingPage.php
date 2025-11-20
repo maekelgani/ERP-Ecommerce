@@ -672,7 +672,7 @@
         </section>
 
         <!-- Brand Pilihan -->
-        <section class="w-full bg-[#563232] py-6 px-4 sm:px-6 md:px-8 lg:px-20">
+        <section class="w-full bg-primary py-6 px-4 sm:px-6 md:px-8 lg:px-20">
             <div class="w-full relative rounded-lg">
                 <h2
                 class="font-bold text-sm sm:text-base lg:text-xl mb-4 sm:mb-6 text-white tracking-wide text-center sm:text-left">
@@ -984,7 +984,7 @@
                     </ul>
                     <div class="flex justify-center mt-6">
                         <a href="/./view/users/productCollection.php"
-                            class="p-2 px-5 bg-[#563232] text-sm rounded-lg text-white font-semibold hover:bg-[#563232]/75 cursor-pointer">
+                            class="p-2 px-5 bg-primary text-sm rounded-lg text-white font-semibold hover:bg-[#563232]/75 cursor-pointer">
                             Lihat Semua
                         </a>
                     </div>

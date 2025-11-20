@@ -20,7 +20,7 @@
                     <div class="lg:col-span-1">
 
                         <!-- warpper card order Summary -->
-                        <div class="rounded-lg border bg-white shadow-sm p-6 sticky top-24">
+                        <div class="rounded-lg bg-white shadow-sm p-6 sticky top-24">
                             <h2 class="text-xl font-bold mb-4">Order Summary</h2>
                             
                             <!-- warpper barang-barang -->
@@ -88,7 +88,7 @@
                     <div class="lg:col-span-2 space-y-6">
 
                         <!-- Form Alamat -->
-                        <div class="rounded-lg border bg-white shadow-sm p-6">
+                        <div class="rounded-lg bg-white shadow-sm p-6">
                             <h2 class="text-xl font-bold mb-4">Alamat Tujuan</h2>
                             <!-- From Alamat -->
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -146,7 +146,7 @@
                         </div>
 
                         <!-- Form Payment Method-->
-                        <div class="rounded-lg border bg-white shadow-sm p-6">
+                        <div class="rounded-lg bg-white shadow-sm p-6">
                             <h2 class="text-xl font-bold mb-4">Metode Pembayaran</h2>
                             <div class="space-y-4">
                                 <div>
@@ -226,7 +226,15 @@
                             
                         </div>
 
-                        <div class="rounded-lg border bg-white shadow-sm p-6"></div>
+                        <div class="rounded-lg  bg-white shadow-sm p-6">
+                            <h2 class="text-xl font-bold mb-4 text-card-foreground">Voucer Code</h2>
+                            <div class="flex gap-2">
+                                <input type="text"
+                                class="w-full outline-1 outline-gray-400 shadow rounded-md px-1 py-1.5 focus:outline-red-nano focus:outline-2 text-sm bg-gray-50">
+                                <button type="submit"
+                                class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background h-10 px-4 py-2 bg-gray-50 outline-1 outline-gray-400 hover:bg-gray-200 transition-all duration-300 ">Apply</button>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
