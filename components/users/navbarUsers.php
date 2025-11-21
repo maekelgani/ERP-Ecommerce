@@ -25,7 +25,7 @@
                 <nav aria-label="Global">
                 <ul class="flex items-center gap-6 text-sm">
                     <li>
-                    <a class="transition hover:text-red-800/75" href="#">
+                    <a class="transition hover:text-red-800/75" href="/../../view/users/productCollection.php">
                         Product
                     </a>
                     </li>
@@ -68,13 +68,13 @@
                 <!-- Btn Cart (Keranjang) -->
                 <button class="relative inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
                     <span class="material-symbols-outlined">shopping_cart</span>
-                    <span class="absolute -top-1 -right-1 bg-[#563232] text-white text-[10px] font-bold rounded-full p-1">2</span>
+                    <span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full p-1">2</span>
                 </button>
 
                 <!-- Btn Notifications -->
                 <button class="relative inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
                     <span class="material-symbols-outlined">notifications</span>
-                    <span class="absolute -top-1 -right-1 bg-[#563232] text-white text-[10px] font-bold rounded-full p-1">2</span>
+                    <span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full p-1">2</span>
                 </button>
 
                 <!-- Btn Account -->
@@ -102,24 +102,24 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-
-            <!-- humberger menu -->
-            <div class="block md:hidden">
-                <button class="toggle-menu rounded-sm bg-gray-200 p-2 text-gray-600 transition hover:text-gray-600/75">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-                <!-- menu di sini -->
-                <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-gray-50 border-t border-gray-200 transform transition-all duration-300 ease-in-out md:static md:flex md:gap-6 md:w-auto md:border-none">
-                    <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Beranda</a>
-                    <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Produk</a>
-                    <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Tentang</a>
-                    <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Kontak</a>
+                <!-- humberger menu -->
+                <div class="block md:hidden">
+                    <button class="toggle-menu rounded-sm bg-gray-200 p-2 text-gray-600 transition hover:text-gray-600/75">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <!-- menu di sini -->
+                    <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-gray-50 border-t border-gray-200 transform transition-all duration-300 ease-in-out md:static md:flex md:gap-6 md:w-auto md:border-none">
+                        <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Beranda</a>
+                        <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Produk</a>
+                        <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Tentang</a>
+                        <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Kontak</a>
+                    </div>
                 </div>
             </div>
+
 
         </div>
     </header>

@@ -12,7 +12,7 @@
 </head>
 <body class="w-full bg-no-repeat h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     <header class="sticky top-0 z-10">
-        <?php include '../../components/users/navbarGuest.php' ;?>
+        <?php include '../../components/users/navbarUsers.php' ;?>
     </header>
     <main class="max-w-full mb-10">
         <div class="border-b border-gray-200 bg-gray-100 px-4 py-2 text-gray-900">
@@ -151,7 +151,7 @@
                         </svg>
                         </div>
                         <p class="sr-only">4 out of 5 stars</p>
-                        <a href="#" class="ml-3 text-sm font-medium text-red-nano hover:text-red-nano/50">117 reviews</a>
+                        <a href="#" class="ml-3 text-sm font-medium text-primary hover:text-primary/50">117 reviews</a>
                     </div>
                     </div>
 
@@ -183,15 +183,15 @@
 
                         <fieldset aria-label="Choose a size" class="mt-4">
                         <div class="grid grid-cols-4 gap-3">
-                            <label aria-label="XXS" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-red-nano has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
+                            <label aria-label="XXS" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
                             <input type="radio" name="size" disabled class="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed" />
                             <span class="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">XXS</span>
                             </label>
-                            <label aria-label="XS" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-red-nano has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
+                            <label aria-label="XS" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
                             <input type="radio" name="size" class="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed" />
                             <span class="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">XS</span>
                             </label>
-                            <label aria-label="S" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-red-nano has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
+                            <label aria-label="S" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
                             <input type="radio" name="size" checked class="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed" />
                             <span class="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">S</span>
                             </label>
@@ -204,7 +204,7 @@
 
                     <button type="submit" class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium outline-1 outline-red-nano hover:bg-gray-100/50 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Masukkan Keranjang</button>
                     
-                    <button type="submit" class="mt-2 flex w-full items-center justify-center rounded-md border border-transparent bg-red-nano px-8 py-3 text-base font-medium text-white hover:bg-red-nano/75 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Beli Sekarang</button>
+                    <button type="submit" class="mt-2 flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-red-nano/75 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Beli Sekarang</button>
                     </form>
                 </div>
 
@@ -244,7 +244,7 @@
         </section>
 
         <!-- Review Product -->
-        <section class="w-full bg-[#563232] py-6 px-4 sm:px-6 md:px-8 lg:px-20">
+        <section class="w-full bg-primary py-6 px-4 sm:px-6 md:px-8 lg:px-20">
             <div class="w-full relative rounded-lg">
                 <h2
                     class="font-bold text-sm sm:text-base lg:text-xl mb-4 sm:mb-6 text-white tracking-wide text-center sm:text-left">

@@ -6,6 +6,7 @@
     <title>Navbar - Guest</title>
     <link rel="icon" href="../../assets/img/Nanocomp.png">
     <link rel="stylesheet" href="/../../src/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 
 <body>
@@ -25,7 +26,7 @@
             <nav aria-label="Global">
             <ul class="flex items-center gap-6 text-sm">
                 <li>
-                <a class="transition hover:text-red-800/75" href="#">
+                <a class="transition hover:text-red-800/75" href="/../../view/users/productCollection.php">
                     Product
                 </a>
                 </li>
@@ -65,34 +66,43 @@
 
         <!-- Action btn (login dan register) -->
         <div class="flex items-center gap-4">
-            <div class="sm:flex sm:gap-4">
-            <a href="../../view/login.php"
-            class="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-800/75 transition-all duration-200 transform active:scale-[0.8]">
-                Masuk
-            </a>
-
-            <!-- <div class="hidden sm:flex">
-                <a href="#"
-                class="rounded-md bg-gray-50 shadow-sm inset-ring  px-5 py-2.5 text-sm font-medium text-red-900 hover:bg-gray-50/75 hover:text-red-800/75" >
-                Daftar
+            <div class="flex gap-4 items-center">
+                <!-- BTN Masuk di sini -->
+                <a href="../../view/login.php"
+                class="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-red-800/75 transition-all duration-200 transform active:scale-[0.8]
+                items-center align-middle justify-center hidden md:block">
+                    Masuk
                 </a>
-            </div> -->
+
+                <!-- Btn masuk/account untuk mobile -->
+                <a id="userDropdownButton1"
+                    class="inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90
+                    md:hidden">
+                    <span class="material-symbols-outlined">account_circle</span>
+                </a>
+
+                <!-- Btn Keranjang -->
+                <a href=""
+                class="relative inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    <span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full p-1">2</span>
+                </a>
             </div>
 
             <!-- humberger menu -->
             <div class="block md:hidden">
-            <button class="toggle-menu rounded-sm bg-gray-200 p-2 text-gray-600 transition hover:text-gray-600/75">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
+                <button class="toggle-menu rounded-sm bg-gray-200 p-2 text-gray-600 transition hover:text-gray-600/75">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             <!-- menu di sini -->
-            <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-gray-50 border-t border-gray-200 transform transition-all duration-300 ease-in-out md:static md:flex md:gap-6 md:w-auto md:border-none">
-                <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Beranda</a>
-                <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Produk</a>
-                <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Tentang</a>
-                <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Kontak</a>
-            </div>
+                <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-gray-50 border-t border-gray-200 transform transition-all duration-300 ease-in-out md:static md:flex md:gap-6 md:w-auto md:border-none">
+                    <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Beranda</a>
+                    <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Produk</a>
+                    <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Tentang</a>
+                    <a href="#" class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100 md:hover:bg-transparent">Kontak</a>
+                </div>
             </div>
         </div>
         </div>
