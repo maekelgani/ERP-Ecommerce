@@ -1,30 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Admin</title>
-    <link rel="stylesheet" href="../../src/output.css">
-    <link rel="icon" href="../assets/img/Nanocomp.png">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-</head>
+<?php
+// Definisikan title untuk halaman ini
+$pageTitle = "Kelola Hak Akses";
+// Include file head.php dari components/admin
+include '../../components/admin/head.php';
+?>
 
 <!-- NOTE!!! perlu diingat bahwa semuanya belum ada javascriptnya jadi belum interaktif dan responsive
 -->
 
 <body class="bg-no-repeat h-screen flex">
 
-    
+
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../../components/admin/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php'; ?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../../components/admin/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
         <!-- Main Contet -->
@@ -34,12 +30,12 @@
                     <h1 class="text-3xl font-bold"> Kelola Akses </h1>
                     <p class="text-gray-400">Kelola peran dan hak akses ERP</p>
                 </div>
-                <button  class="openUsers px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">
+                <button class="openUsers px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">
                     Tambah Users
                 </button>
             </div>
-        
-        <!-- Stsats Card -->
+
+            <!-- Stsats Card -->
             <div id="card" class="grid gap-4 grid-cols-4 mb-4">
                 <!-- Card 1.Admin -->
                 <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
@@ -65,7 +61,7 @@
                     <p class="text-sm pl-9 text-green-600">Limited Access</p>
                 </div>
 
-                
+
                 <!-- Card 3. Staff -->
                 <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3 flex gap-3 items-center">
@@ -90,7 +86,7 @@
                     <p class="text-sm pl-9 text-red-600">Read Only</p>
                 </div>
             </div>
-            
+
             <!--  Tabel Users  -->
             <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
                 <div id="container-header" class="mb-6 flex justify-between">
@@ -154,8 +150,8 @@
     <!-- Modal form tambah Hak Akses / Users -->
     <div id="form-users" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
         <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75 transition-opacity duration-300"></div>
-            <div id="modal-card" class="relative z-10 max-w-lg w-full rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center
-                transition-all duration-300 ease-out opacity-0 scale-95 translate-y-4"> 
+        <div id="modal-card" class="relative z-10 max-w-lg w-full rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center
+                transition-all duration-300 ease-out opacity-0 scale-95 translate-y-4">
 
             <div class="mb-4 flex justify-between"> <!--ini header-->
                 <div>
@@ -172,28 +168,28 @@
                 <div class="mb-4">
                     <label for="" class="font-semibold text-sm">ID Users</label>
                     <input type="text" disabled
-                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-200 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-200 text-base focus:ring-blue-500 focus:border-blue-500 ">
                 </div>
 
                 <!-- Input nama Users -->
                 <div class="mb-4">
                     <label for="" class="font-semibold text-sm">Nama</label>
-                    <input type="text" required 
-                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" required
+                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                 </div>
-                
+
                 <!-- Input Email Users -->
                 <div class="mb-4">
                     <label for="" class="font-semibold text-sm">Email</label>
-                    <input type="text" required 
-                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" required
+                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
                 <!-- No Telepon -->
                 <div class="mb-4">
                     <label for="" class="font-semibold text-sm">No Telepon</label>
-                    <input type="text" required 
-                    class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
+                    <input type="text" required
+                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
                 <!-- Jabatan / Posisi -->
@@ -228,4 +224,5 @@
     <!-- JS -->
     <script src="/assets/js/admin/addUsers.js"></script>
 </body>
+
 </html>

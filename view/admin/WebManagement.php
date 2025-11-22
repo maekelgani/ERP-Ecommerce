@@ -1,24 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category - Admin</title>
-    <link rel="icon" href="../assets/img/Nanocomp.png">
-    <link rel="stylesheet" href="../../src/output.css">
-</head>
+<?php
+// Definisikan title untuk halaman ini
+$pageTitle = "Web Management";
+// Include file head.php dari components/admin
+include '../../components/admin/head.php';
+?>
+
 <body class="bg-no-repeat h-screen flex">
 
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../../components/admin/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php'; ?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../../components/admin/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
         <!-- main content -->
@@ -27,7 +25,7 @@
                 <div class="mb-4">
                     <h1 class="text-3xl font-bold"> Web Management</h1>
                     <p class="text-gray-400">Kelola pengaturan dan informasi mengenai website anda</p>
-                </div>  
+                </div>
             </div>
             <div class="flex flex-wrap mb-4">
                 <nav class="bg-gray-100 rounded-lg p-1 font-semibold text-sm gap-4 flex">
@@ -48,7 +46,7 @@
                         <div class="mt-4">
                             <label for="" class="text-sm font-semibold">Nama Website</label>
                             <input type="text"
-                            class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                                class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
                         </div>
                         <div class="mt-4">
                             <label for="" class="text-sm font-semibold">Tag line Website</label>
@@ -59,8 +57,8 @@
                             <input type="text" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="mt-4 mb-4"">
-                                <label for="" class="text-sm font-semibold">Fav icon</label>
-                                <input type="file" id="file-upload" name="file-upload" class="block w-[35%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg"/>
+                                <label for="" class=" text-sm font-semibold">Fav icon</label>
+                            <input type="file" id="file-upload" name="file-upload" class="block w-[35%] text-sm file:mr-4 file:rounded-sm file:border-0 file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700 file:cursor-pointer border border-gray-300 rounded-lg" />
                         </div>
                         <button class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Save</button>
                     </form>
@@ -81,7 +79,7 @@
                                 <label for="" class="text-sm font-semibold">Email</label>
                             </div>
                             <input type="text"
-                            class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                                class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
                         </div>
                         <div class="mt-4">
                             <div class="flex item-center gap-2">
@@ -120,7 +118,7 @@
                         <div class="mt-4">
                             <label for="" class="text-sm font-semibold">Facebook</label>
                             <input type="text"
-                            class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
+                                class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
                         </div>
                         <div class="mt-4">
                             <label for="" class="text-sm font-semibold">Instagram</label>
@@ -140,7 +138,8 @@
             </div>
         </main>
     </div>
-    
+
     <script src="/assets/js/main.js" defer></script>
 </body>
+
 </html>
