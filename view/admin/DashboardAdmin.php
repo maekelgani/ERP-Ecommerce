@@ -1,9 +1,15 @@
     <?php
+    // Definisikan title untuk halaman ini
+    $pageTitle = "Dashboard";
+    // Include file head.php dari components/admin
+    include '../../components/admin/head.php';
     // Class OOP untuk mengambil data dari JSON
-    class DashboardData {
+    class DashboardData
+    {
         private $data;
 
-        public function __construct($jsonFilePath) {
+        public function __construct($jsonFilePath)
+        {
             if (file_exists($jsonFilePath)) {
                 $this->data = json_decode(file_get_contents($jsonFilePath), true);
             } else {
@@ -28,19 +34,23 @@
             }
         }
 
-        public function getStats() {
+        public function getStats()
+        {
             return $this->data['stats'];
         }
 
-        public function getChartData() {
+        public function getChartData()
+        {
             return $this->data['chartData'];
         }
 
-        public function getLowStock() {
+        public function getLowStock()
+        {
             return $this->data['lowStock'];
         }
 
-        public function getRecentOrders() {
+        public function getRecentOrders()
+        {
             return $this->data['recentOrders'];
         }
     }
@@ -52,17 +62,6 @@
     $lowStock = $dashboard->getLowStock();
     $recentOrders = $dashboard->getRecentOrders();
     ?>
-
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard - Admin</title>
-        <link rel="stylesheet" href="../../src/output.css">
-        <link rel="icon" href="../assets/img/Nanocomp.png">
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    </head>
 
     <body class="bg-no-repeat h-screen flex">
         <!-- Leftside: Sidebar (Responsive: Collapsible di mobile) -->
@@ -135,17 +134,17 @@
                         <p class="text-gray-400 text-sm mb-5">Jumlah Stok sudah semakin menipis, buruan isi</p>
                         <div class="space-y-2">
                             <?php foreach ($lowStock as $item): ?>
-                                <?php 
-                                    // Logika pewarnaan stok otomatis
-                                    if ($item['percentage'] < 30) {
-                                        $barColor = 'bg-red-500';
-                                    } elseif ($item['percentage'] < 60) {
-                                        $barColor = 'bg-yellow-400';
-                                    } else {
-                                        $barColor = 'bg-green-500';
-                                    }
+                                <?php
+                                // Logika pewarnaan stok otomatis
+                                if ($item['percentage'] < 30) {
+                                    $barColor = 'bg-red-500';
+                                } elseif ($item['percentage'] < 60) {
+                                    $barColor = 'bg-yellow-400';
+                                } else {
+                                    $barColor = 'bg-green-500';
+                                }
                                 ?>
-                                
+
                                 <div class="flex items-center justify-between bg-white p-3 rounded-xl shadow-sm mb-2">
                                     <div class="flex items-center gap-3">
                                         <img src="<?= $item['image'] ?>" class="w-12 h-12 rounded-full object-cover" alt="Product">
@@ -168,63 +167,64 @@
                 </div>
 
 
-        <!--  Tabel pembelian terbaru -->
-            <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
-                <div id="container-header" class="mb-6">
-                    <h2 class="text-2xl font-bold">Pembelian Terbaru</h2>
-                    <p class="text-gray-400">Menampilkan 5 pembelian yang baru saja terjadi</p>
-                </div>
-                <div id="container-content" class="pt-0">
-                    <div class="relative w-full overflow-auto">
-                        <!-- TABEL NYA DI SINI -->
-                        <table class="w-full caption-bottom text-sm">
-                            <thead class="border-b uppercase">
-                                <tr class="border-b bg-gray-50 rounded-lg ">
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Order ID</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Items</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Payment Status</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Payment Method</th>
-                                    <th class="h-12 px-3 text-center align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Status</th>
-                                    <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th> 
-                                </tr>
-                            </thead>
-                            <tbody class="text-sm">
-                                <tr class="border-t">
-                                    <td class="p-3 text-xs text-gray-500"># ORD69</td>
-                                    <td class="p-3">Juan Kamil</td>
-                                    <td class="p-3">2</td>
-                                    <td class="p-3">Monitor ZOWIE xl2546x, CPU i9 14th 14900k</td>
-                                    <td class="p-3">
-                                        <div class="px-2 text-green-800 border border-green-500 rounded-lg bg-green-200 ">Sudah Membayar</div>
-                                        <div class="px-2 text-gray-500 border border-gray-400 rounded-lg bg-gray-100 hidden">Belum Membayar</div>
-                                    </td>
-                                    <td class="p-3">Bank Transfer</td>
-                                    <td class="p-3">
-                                        <div class=" text-center px-2 font-semibold bg-green-400 w-full rounded-lg hidden">Selesai</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-amber-300 w-full rounded-lg ">Pengiriman</div> <!--Buat Status nya-->
-                                        <div class=" text-center px-2 font-semibold bg-red-500 w-full rounded-lg hidden">Batal/dikembalikan</div> <!--Buat Status nya-->
-                                    </td>
-                                    <td class="p-3">
-                                        <button class="px-2 font-semibold cursor-pointer text-blue-900 hover:brightness-100"> Lihat Detail</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <!--  Tabel pembelian terbaru -->
+                <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
+                    <div id="container-header" class="mb-6">
+                        <h2 class="text-2xl font-bold">Pembelian Terbaru</h2>
+                        <p class="text-gray-400">Menampilkan 5 pembelian yang baru saja terjadi</p>
+                    </div>
+                    <div id="container-content" class="pt-0">
+                        <div class="relative w-full overflow-auto">
+                            <!-- TABEL NYA DI SINI -->
+                            <table class="w-full caption-bottom text-sm">
+                                <thead class="border-b uppercase">
+                                    <tr class="border-b bg-gray-50 rounded-lg ">
+                                        <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Order ID</th>
+                                        <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Customer</th>
+                                        <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Amount</th>
+                                        <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Items</th>
+                                        <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Payment Status</th>
+                                        <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Payment Method</th>
+                                        <th class="h-12 px-3 text-center align-middle font-bold text-muted-foreground text-gray-600 w-[10%]">Status</th>
+                                        <th class="h-12 px-3 text-left align-middle font-bold text-muted-foreground text-gray-600">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm">
+                                    <tr class="border-t">
+                                        <td class="p-3 text-xs text-gray-500"># ORD69</td>
+                                        <td class="p-3">Juan Kamil</td>
+                                        <td class="p-3">2</td>
+                                        <td class="p-3">Monitor ZOWIE xl2546x, CPU i9 14th 14900k</td>
+                                        <td class="p-3">
+                                            <div class="px-2 text-green-800 border border-green-500 rounded-lg bg-green-200 ">Sudah Membayar</div>
+                                            <div class="px-2 text-gray-500 border border-gray-400 rounded-lg bg-gray-100 hidden">Belum Membayar</div>
+                                        </td>
+                                        <td class="p-3">Bank Transfer</td>
+                                        <td class="p-3">
+                                            <div class=" text-center px-2 font-semibold bg-green-400 w-full rounded-lg hidden">Selesai</div> <!--Buat Status nya-->
+                                            <div class=" text-center px-2 font-semibold bg-amber-300 w-full rounded-lg ">Pengiriman</div> <!--Buat Status nya-->
+                                            <div class=" text-center px-2 font-semibold bg-red-500 w-full rounded-lg hidden">Batal/dikembalikan</div> <!--Buat Status nya-->
+                                        </td>
+                                        <td class="p-3">
+                                            <button class="px-2 font-semibold cursor-pointer text-blue-900 hover:brightness-100"> Lihat Detail</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
-    </div>
+            </main>
+        </div>
 
-    <!-- CHART JS -->
-    <!-- JavaScript untuk Interaktivitas -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        window.chartData = <?= json_encode($chartData) ?>;
-    </script>
-    <script src="/assets/js/chart.js"></script> 
+        <!-- CHART JS -->
+        <!-- JavaScript untuk Interaktivitas -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            window.chartData = <?= json_encode($chartData) ?>;
+        </script>
+        <script src="/assets/js/chart.js"></script>
 
-</body>
-</html>
+    </body>
+
+    </html>

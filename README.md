@@ -77,7 +77,7 @@ Setelah selesai melakukan perubahan:
    ```bash
    git commit -m "deskripsi singkat perubahan"
    ```
-Misalnya seperti `hit commit -m "menambahkan module pembayaran"`
+Misalnya seperti `git commit -m "menambahkan module pembayaran"`
 
 ---
 

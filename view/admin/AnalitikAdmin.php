@@ -1,30 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analitik - Admin</title>
-    <link rel="icon" href="../assets/img/Nanocomp.png">
-    <link rel="stylesheet" href="../../src/output.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-</head>
-
+<?php
+// Definisikan title untuk halaman ini
+$pageTitle = "Analitik";
+// Include file head.php dari components/admin
+include '../../components/admin/head.php';
+?>
 <!-- NOTE!!! perlu diingat bahwa semuanya belum ada javascriptnya jadi belum interaktif dan responsive
 -->
 
 <body class="bg-no-repeat h-screen flex">
 
-    
+
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../../components/admin/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php'; ?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../../components/admin/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
         <!-- Main Contet -->
@@ -43,23 +38,23 @@
                     </select>
                 </div>
             </div>
-            
+
             <!-- Stsats Card -->
             <div class="grid grid-row-1 grid-cols-4 gap-4 mb-4">
                 <!-- Card-1 -->
                 <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600">Total Pendapatan</h2>
+                        <h2 class=" text-base text-gray-600">Total Pendapatan</h2>
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">Rp. 124,250,000</p>
                     </div>
                 </div>
-                
+
                 <!-- Card-2 -->
                 <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600">Rata-rata Harga Pembelian</h2>
+                        <h2 class=" text-base text-gray-600">Rata-rata Harga Pembelian</h2>
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">Rp. 9,500,000</p>
@@ -69,7 +64,7 @@
                 <!-- Card-3 -->
                 <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600">Produk terjual</h2>
+                        <h2 class=" text-base text-gray-600">Produk terjual</h2>
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">23</p>
@@ -79,22 +74,22 @@
                 <!-- Card-4 -->
                 <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600">Rata-rata Rating Produk</h2>
+                        <h2 class=" text-base text-gray-600">Rata-rata Rating Produk</h2>
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">4.4 / 5</p>
                     </div>
                 </div>
             </div>
-            
+
             <div class="flex flex-wrap mb-4">
-            <nav class="bg-gray-100 rounded-lg p-1 font-semibold text-sm gap-4 flex">
+                <nav class="bg-gray-100 rounded-lg p-1 font-semibold text-sm gap-4 flex">
                     <button class="tab-btn-analitik p-1 px-2 rounded-lg text-gray-400 cursor-pointer">Pendapatan</button>
                     <button class="tab-btn-analitik p-1 px-2 rounded-lg text-gray-400 cursor-pointer">Analisi Produk</button>
                 </nav>
             </div>
 
-<!-- Content analitik 1 -->
+            <!-- Content analitik 1 -->
             <div class="tab-content-analitik grid grid-row-1 grid-cols-2 gap-4 mb-4">
                 <!-- Card 1 -->
                 <div class="cols-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
@@ -126,8 +121,8 @@
                     </div>
                 </div>
             </div>
-            
-<!-- Content analitik 2 -->
+
+            <!-- Content analitik 2 -->
             <div class="tab-content-analitik grid grid-row-1 grid-cols-2 gap-4 mb-4">
                 <!-- Card 1 -->
                 <div class="cols-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
@@ -189,9 +184,10 @@
         </main>
 
 
-    <!-- CHART JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/assets/js/chart.js" defer></script>
-    <script src="/assets/js/main.js"></script>
+        <!-- CHART JS -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="/assets/js/chart.js" defer></script>
+        <script src="/assets/js/main.js"></script>
 </body>
+
 </html>
