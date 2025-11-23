@@ -10,7 +10,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/src/output.css">
-    <link rel="icon" href="../assets/img/Nanocomp.png">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 
@@ -20,7 +19,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <!-- PASANG LOGO -->
             <div class="flex items-center justify-between p-4.5 border-b">
                 <div class="flex items-center gap-2">
-                    <img class="h-6 w-6 text-sidebar-primary bg-amber-50 rounded-4xl" src="../../assets/img/logo-sidebar.png" alt="">
+                    <img class="h-6 w-6 text-sidebar-primary bg-gray-800 rounded-4xl" src="../../assets/img/logo-nano-transparant.png" alt="">
                     <span class="font-bold text-sm text-white">NANO KOMPUTER</span>
                 </div>
             </div>

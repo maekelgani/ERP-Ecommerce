@@ -16,7 +16,7 @@
                 <div>
                     <div class="flex justify-center text-xl gap-2 items-center text-red-nano font-bold sm:justify-start">
                         <img alt=""
-                            src="../../assets/img/Nanocomp.png"
+                            src="../../assets/img/logo-nano-transparant.png"
                             class="w-8 h-8">
                         <h2>Nano Komputer</h2>
                     </div>

@@ -2,54 +2,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 
 @theme {
-    --font-jost: "Jost", sans-serif;
-    --font-poppins: "Poppins" sans-serif;
-    --color-navbar: rgba(237, 237, 237, 0.9);
-    --color-red-nano: #512E2E;
+  --font-jost: "Jost", sans-serif;
+  --font-poppins: "Poppins" sans-serif;
+  --color-navbar: rgba(237, 237, 237, 0.9);
+  --color-red-nano: #512E2E;
 
-      /* Brand */
-    --color-main: #512E2E;
+  /* Brand */
+  --color-main: #512E2E;
 
-      /* Primary */
-    --color-primary: #8B3A3A;
-    --color-primary-light: #B45B5B;
-    --color-primary-dark: #3A1F1F;
-    
-    /* Secondary */
-    --color-secondary: #E5D0C7;
-    --color-secondary-dark: #C4B1AA;
-    --color-secondary-light: #F4E9E6;
-    
-    /* Neutrals */
-    --color-text-primary: #1A1A1A;
-    --color-text-secondary: #4A4A4A;
-    --color-border: #D9D9D9;
-    --color-bg: #FAFAFA;
-    --color-surface: #FFFFFF;
-    
-    /* Buttons - Primary */
-    --btn-primary-default: #8B3A3A;
-    --btn-primary-hover: #A14646;
-    --btn-primary-active: #6E2D2D;
-    --btn-primary-disabled: #C7A8A8;
-    
-    /* Buttons - Secondary */
-    --btn-secondary-default: #E5D0C7;
-    --btn-secondary-hover: #D6C1B9;
-    --btn-secondary-active: #BDAAA2;
-    --btn-secondary-disabled: #EDE4E2;
-    
-    /* Status */
-    --color-success: #4CAF50;
-    --color-warning: #FFC107;
-    --color-error: #D32F2F;
-    --color-info: #1976D2;
-    
-    /* Shadows */
-    --shadow-soft: 0px 2px 4px rgba(0,0,0,0.05);
-    --shadow-medium: 0px 4px 10px rgba(0,0,0,0.1);
-    --shadow-strong: 0px 8px 20px rgba(0,0,0,0.15);
-};  
-    
-    
-    
+  /* Primary */
+  --color-primary: #8B3A3A;
+  --color-primary-light: #B45B5B;
+  --color-primary-dark: #3A1F1F;
+
+  /* Secondary */
+  --color-secondary: #E5D0C7;
+  --color-secondary-dark: #C4B1AA;
+  --color-secondary-light: #F4E9E6;
+
+  /* Neutrals */
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #4A4A4A;
+  --color-border: #D9D9D9;
+  --color-bg: #FAFAFA;
+  --color-surface: #FFFFFF;
+
+  /* Buttons - Primary */
+  --btn-primary-default: #8B3A3A;
+  --btn-primary-hover: #A14646;
+  --btn-primary-active: #6E2D2D;
+  --btn-primary-disabled: #C7A8A8;
+
+  /* Buttons - Secondary */
+  --btn-secondary-default: #E5D0C7;
+  --btn-secondary-hover: #D6C1B9;
+  --btn-secondary-active: #BDAAA2;
+  --btn-secondary-disabled: #EDE4E2;
+
+  /* Status */
+  --color-success: #4CAF50;
+  --color-warning: #FFC107;
+  --color-error: #D32F2F;
+  --color-info: #1976D2;
+
+  /* Shadows */
+  --shadow-soft: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  --shadow-strong: 0px 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+;

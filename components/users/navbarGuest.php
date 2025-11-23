@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navbar - Guest</title>
-    <link rel="icon" href="../../assets/img/Nanocomp.png">
     <link rel="stylesheet" href="/../../src/output.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
@@ -18,7 +17,7 @@
                     <a class="block rounded-lg" href="/../../view/users/landingPage.php">
                         <span class="sr-only">Home</span>
                         <!-- Logo -->
-                        <img src="../../assets/img/logo-navbar.png" alt="" width="40px" class="p-1">
+                        <img src="../../assets/img/logo-nano-transparant.png" alt="" width="40px" class="p-1">
                     </a>
                 </div>
 

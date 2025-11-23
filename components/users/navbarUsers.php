@@ -17,7 +17,7 @@
                 <div class="md:flex md:items-center md:gap-12">
                     <a class="block rounded-lg" href="/../../view/users/landingPage.php">
                         <span class="sr-only">Home</span>
-                        <img src="../../assets/img/logo-navbar.png" alt="" width="40px" class="p-1">
+                        <img src="../../assets/img/logo-nano-transparant.png" alt="" width="40px" class="p-1">
                     </a>
                 </div>
 
