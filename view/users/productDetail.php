@@ -62,7 +62,7 @@
 
                     <!-- Path 4 (jika ada) -->
                     <li>
-                    <a href="#" class="block transition-colors hover:text-gray-900"> ASUS ROG Strix GeForce RTX 3070 Ti OC Edition 8GB GDDR6X </a>
+                    <a href="#" class="block transition-colors hover:text-gray-900"> Logitech G304 Lightspeed Wireless Gaming Mouse </a>
                     </li>
                 </ol>
             </nav>
@@ -75,7 +75,7 @@
                 <!-- Gambar besar -->
                 <div class="rounded-lg overflow-hidden">
                 <img 
-                    src="https://images.unsplash.com/photo-1624701928517-44c8ac49d93c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" 
+                    src="https://resource.logitechg.com/w_1600,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g305/2025-update/g305-lightspeed-mouse-profile-left-angle-black-gallery-4.png" 
                     alt="Gambar Utama" 
                     class="w-full h-80 md:h-96 object-cover"
                 >
@@ -83,34 +83,34 @@
 
                 <!-- 4 gambar kecil di bawah -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="rounded-lg overflow-hidden">
-                    <img 
-                    src="https://images.unsplash.com/photo-1624701928517-44c8ac49d93c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" 
-                    alt="Gambar 2" 
-                    class="w-full h-40 object-cover"
-                    >
-                </div>
-                <div class="rounded-lg overflow-hidden">
-                    <img 
-                    src="https://images.unsplash.com/photo-1624701928517-44c8ac49d93c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" 
-                    alt="Gambar 3" 
-                    class="w-full h-40 object-cover"
-                    >
-                </div>
-                <div class="rounded-lg overflow-hidden">
-                    <img 
-                    src="https://images.unsplash.com/photo-1624701928517-44c8ac49d93c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" 
-                    alt="Gambar 4" 
-                    class="w-full h-40 object-cover"
-                    >
-                </div>
-                <div class="rounded-lg overflow-hidden">
-                    <img 
-                    src="https://images.unsplash.com/photo-1624701928517-44c8ac49d93c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" 
-                    alt="Gambar 5" 
-                    class="w-full h-40 object-cover"
-                    >
-                </div>
+                    <div class="rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img 
+                        src="https://resource.logitechg.com/w_572,c_lpad,ar_4:3,q_auto,f_auto,dpr_2.0/d_transparent.gif/content/dam/gaming/en/products/g305/2025-update/g305-lightspeed-mouse-3qtr-high-back-angle-black-gallery-7.png" 
+                        alt="Gambar 2" 
+                        class="w-full h-40 object-cover"
+                        >
+                    </div>
+                    <div class="rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img 
+                        src="https://resource.logitechg.com/w_572,c_lpad,ar_4:3,q_auto,f_auto,dpr_2.0/d_transparent.gif/content/dam/gaming/en/products/g305/2025-update/g305-lightspeed-mouse-3qtr-high-back-angle-black-gallery-7.png" 
+                        alt="Gambar 3" 
+                        class="w-full h-40 object-cover"
+                        >
+                    </div>
+                    <div class="rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img 
+                        src="https://resource.logitechg.com/w_572,c_lpad,ar_4:3,q_auto,f_auto,dpr_2.0/d_transparent.gif/content/dam/gaming/en/products/g305/2025-update/g305-lightspeed-mouse-3qtr-high-back-angle-black-gallery-7.png" 
+                        alt="Gambar 4" 
+                        class="w-full h-40 object-cover"
+                        >
+                    </div>
+                    <div class="rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                        <img 
+                        src="https://resource.logitechg.com/w_572,c_lpad,ar_4:3,q_auto,f_auto,dpr_2.0/d_transparent.gif/content/dam/gaming/en/products/g305/2025-update/g305-lightspeed-mouse-3qtr-high-back-angle-black-gallery-7.png" 
+                        alt="Gambar 5" 
+                        class="w-full h-40 object-cover"
+                        >
+                    </div>
                 </div>
             </div>
         </section>
@@ -120,13 +120,14 @@
         <section class="w-full mt-5 px-6 md:px-8 lg:px-20 sm:px-6 lg:grid lg:grid-cols-3 lg:grid-rows-[auto_auto_1fr] lg:gap-x-8 lg:pt-16 lg:pb-24">
             <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <h1 id="" 
-                class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">ASUS ROG Strix GeForce RTX 3070 Ti OC Edition 8GB GDDR6X</h1> <!--NAMA PRODUCT DI SINI CUY-->
+                class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Logitech G304 Lightspeed Wireless Gaming Mouse</h1> <!--NAMA PRODUCT DI SINI CUY-->
             </div>
 
                 <!-- Options -->
                 <div class="mt-4 lg:row-span-3 lg:mt-0">
                     <h2 class="sr-only">Product information</h2>
-                    <p class="text-3xl tracking-tight text-gray-900">$192</p>
+                    <p class="text-3xl tracking-tight text-gray-900">Rp 499.000</p> <!--Harga-->
+                    <p class="text-gray-400 line-through text-xs sm:text-sm">Rp 630.000</p>
 
                     <!-- Reviews  BINTANG -->
                     <div class="mt-3">
@@ -166,9 +167,6 @@
                             <input type="radio" name="color" value="white" checked aria-label="White" class="size-8 appearance-none rounded-full bg-white forced-color-adjust-none checked:outline-2 checked:outline-offset-2 checked:outline-gray-400 focus-visible:outline-3 focus-visible:outline-offset-3" />
                             </div>
                             <div class="flex rounded-full outline -outline-offset-1 outline-black/10">
-                            <input type="radio" name="color" value="gray" aria-label="Gray" class="size-8 appearance-none rounded-full bg-gray-200 forced-color-adjust-none checked:outline-2 checked:outline-offset-2 checked:outline-gray-400 focus-visible:outline-3 focus-visible:outline-offset-3" />
-                            </div>
-                            <div class="flex rounded-full outline -outline-offset-1 outline-black/10">
                             <input type="radio" name="color" value="black" aria-label="Black" class="size-8 appearance-none rounded-full bg-gray-900 forced-color-adjust-none checked:outline-2 checked:outline-offset-2 checked:outline-gray-900 focus-visible:outline-3 focus-visible:outline-offset-3" />
                             </div>
                         </div>
@@ -181,21 +179,23 @@
                         <h3 class="text-sm font-medium text-gray-900">Variant</h3>
                         </div>
 
+                        <!-- ini gw matiin dulu -->
                         <fieldset aria-label="Choose a size" class="mt-4">
                         <div class="grid grid-cols-4 gap-3">
                             <label aria-label="XXS" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
                             <input type="radio" name="size" disabled class="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed" />
-                            <span class="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">XXS</span>
+                            <span class="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">Wireless</span>
                             </label>
+<!-- 
                             <label aria-label="XS" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
                             <input type="radio" name="size" class="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed" />
                             <span class="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">XS</span>
                             </label>
+
                             <label aria-label="S" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
                             <input type="radio" name="size" checked class="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed" />
                             <span class="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">S</span>
-                            </label>
-
+                            </label> -->
                         </div>
                         </fieldset>
                     </div>
@@ -204,7 +204,8 @@
 
                     <button type="submit" class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium outline-1 outline-red-nano hover:bg-gray-100/50 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Masukkan Keranjang</button>
                     
-                    <button type="submit" class="mt-2 flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-red-nano/75 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Beli Sekarang</button>
+                    <a href=""></a>
+                        <button type="submit" class="mt-2 flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-red-nano/75 focus:ring-2 focus:ring-red-nano focus:ring-offset-2 focus:outline-hidden transition duration-200">Beli Sekarang</button>
                     </form>
                 </div>
 
@@ -214,7 +215,9 @@
                     <h3 class="text-sm font-medium text-gray-900">Description</h3>
 
                     <div class="space-y-6">
-                        <p class="text-base text-gray-900">The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: &quot;Black&quot;. Need to add an extra pop of color to your outfit? Our white tee has you covered.</p>
+                        <p class="text-base text-gray-900">
+                            LIGHTSPEED wireless gaming mouse designed for serious performance with latest technology innovations. Impressive 250-hour battery life. Now in a variety of vibrant colors.
+                        </p>
                     </div>
                     </div>
 
@@ -223,10 +226,21 @@
 
                     <div class="mt-4">
                         <ul role="list" class="list-disc space-y-2 pl-4 text-sm">
-                        <li class="text-gray-400"><span class="text-gray-600">Hand cut and sewn locally</span></li>
-                        <li class="text-gray-400"><span class="text-gray-600">Dyed with our proprietary colors</span></li>
-                        <li class="text-gray-400"><span class="text-gray-600">Pre-washed &amp; pre-shrunk</span></li>
-                        <li class="text-gray-400"><span class="text-gray-600">Ultra-soft 100% cotton</span></li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Sensor: HERO</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Resolution: 200 – 12,000 DPI</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Max. acceleration: 40 G </span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Max. speed: 400 IPS; 1000Hz rate</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Battery life: 250 hours </span>
+                            </li>
                         </ul>
                     </div>
                     </div>
@@ -234,8 +248,22 @@
                     <div class="mt-10">
                     <h2 class="text-sm font-medium text-gray-900">Details</h2>
 
-                    <div class="mt-4 space-y-6">
-                        <p class="text-sm text-gray-600">The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming &quot;Charcoal Gray&quot; limited release.</p>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-600">Dimension:</p>
+                        <ul role="list" class="list-disc pl-4 text-sm">
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Height: 38.2 mm</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Width: 62.1 mm</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Length: 116.6 mm</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Weight: 99 g</span>
+                            </li>
+                        </ul>
                     </div>
                     </div>
                 </div>
