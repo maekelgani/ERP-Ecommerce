@@ -1,6 +1,11 @@
 <?php
+$pageTitle = "Product Collection";
+$metaDescription = "Koleksi lengkap produk gaming: PC Gaming, Monitor Gaming, Keyboard Mechanical, Mouse Gaming dengan harga terbaik.";
+// atau bisa tidak perlu set, biarkan default
+include '../../components/users/head.php';
 
-class Product {
+class Product
+{
     public function __construct(
         public string $image,
         public string $name,
@@ -97,21 +102,11 @@ $collectionProducts = [
 
 ?>
 
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Customer</title>
-    <link rel="stylesheet" href="/../../src/output.css">
-    <link rel="icon" href="../assets/img/Nanocomp.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-</head>
+
 <body class="w-full bg-no-repeat h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     <header class="sticky top-0 z-10">
-        <?php include '../../components/users/navbarUsers.php' ;?>
+        <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
     <main class="max-w-full mb-10">
         <div class="border-b border-gray-200 bg-gray-100 px-4 py-2 text-gray-900">
@@ -122,57 +117,57 @@ $collectionProducts = [
         </div>
 
         <!-- Navigasi breadcrumb / PATH -->
-        <section class="mt-5 px-6 md:px-8 lg:px-20 w-full flex justify-center"> 
+        <section class="mt-5 px-6 md:px-8 lg:px-20 w-full flex justify-center">
             <div class="w-full md:px-10">
-            <nav aria-label="Breadcrumb">   
-                <ol class="flex items-center gap-1 text-sm text-gray-700">
-                    <li>
-                    <a href="#" class="block transition-colors hover:text-gray-900"> Home </a>
-                    </li>
+                <nav aria-label="Breadcrumb">
+                    <ol class="flex items-center gap-1 text-sm text-gray-700">
+                        <li>
+                            <a href="#" class="block transition-colors hover:text-gray-900"> Home </a>
+                        </li>
 
-                    <!-- Path 1 -->
-                    <li class="rtl:rotate-180">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 20.247 6-16.5"></path>
-                    </svg>
-                    </li>
+                        <!-- Path 1 -->
+                        <li class="rtl:rotate-180">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9 20.247 6-16.5"></path>
+                            </svg>
+                        </li>
 
-                    <!-- Path 2 -->
-                    <li>
-                    <a href="#" class="block transition-colors hover:text-gray-900"> Collection </a>
-                    </li>
+                        <!-- Path 2 -->
+                        <li>
+                            <a href="#" class="block transition-colors hover:text-gray-900"> Collection </a>
+                        </li>
 
-                    <li class="rtl:rotate-180">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 20.247 6-16.5"></path>
-                    </svg>
-                    </li>
+                        <li class="rtl:rotate-180">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9 20.247 6-16.5"></path>
+                            </svg>
+                        </li>
 
-                    <!-- Path 3 (jika ada) -->
-                    <li>
-                    <a href="#" class="block transition-colors hover:text-gray-900"> Product Collection </a>
-                    </li>
-                </ol>
-            </nav>
+                        <!-- Path 3 (jika ada) -->
+                        <li>
+                            <a href="#" class="block transition-colors hover:text-gray-900"> Product Collection </a>
+                        </li>
+                    </ol>
+                </nav>
             </div>
         </section>
-        
+
         <!-- banner promosi slider -->
         <section class="w-full h-40 md:h-56 lg:h-72 ">
             <div class="relative mx-6 md:mx-18 lg:mx-30 h-full bg-cover bg-center rounded-2xl
             [background-image:url('https://images.unsplash.com/photo-1504237111663-37d6094bec09?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170')]">
-                
+
                 <!-- overlay hitam transparan -->
                 <div class="absolute inset-0 bg-black/55 rounded-2xl"></div>
 
                 <!-- teks di atas overlay -->
                 <span class="absolute inset-0 flex items-center justify-center text-white text-2xl lg:text-3xl xl:text-4xl font-bold">
-                Collection
+                    Collection
                 </span>
 
             </div>
         </section>
-        
+
         <!-- Product Collection List -->
         <section class="px-3 w-full md:px-8 lg:px-20 flex justify-center">
             <div class="px-2 md:px-10 pt-4 rounded-lg w-full">
@@ -220,11 +215,11 @@ $collectionProducts = [
                         <div class="space-y-1 text-gray-700">
                             <p class="font-semibold">Brand Terbaik</p>
                             <ul class="space-y-1">
-                            <li><a href="#" class="block hover:text-gray-900">Intel</a></li>
-                            <li><a href="#" class="block hover:text-gray-900">MSI</a></li>
-                            <li><a href="#" class="block hover:text-gray-900">Asus</a></li>
-                            <li><a href="#" class="block hover:text-gray-900">AMD</a></li>
-                            <li><a href="#" class="block hover:text-gray-900">GIGABYTE</a></li>
+                                <li><a href="#" class="block hover:text-gray-900">Intel</a></li>
+                                <li><a href="#" class="block hover:text-gray-900">MSI</a></li>
+                                <li><a href="#" class="block hover:text-gray-900">Asus</a></li>
+                                <li><a href="#" class="block hover:text-gray-900">AMD</a></li>
+                                <li><a href="#" class="block hover:text-gray-900">GIGABYTE</a></li>
                             </ul>
                         </div>
 
@@ -247,7 +242,7 @@ $collectionProducts = [
                                             In Stock
                                         </label>
                                     </li>
-                                    
+
                                     <li>
                                         <label class="flex items-center gap-2">
                                             <input type="checkbox" class="size-5 rounded-sm border-gray-300 shadow-sm">
@@ -272,14 +267,14 @@ $collectionProducts = [
                                             Motherboard
                                         </label>
                                     </li>
-                                    
+
                                     <li>
                                         <label class="flex items-center gap-2">
                                             <input type="checkbox" class="size-5 rounded-sm border-gray-300 shadow-sm">
                                             Processor
                                         </label>
                                     </li>
-                                    
+
                                     <li>
                                         <label class="flex items-center gap-2">
                                             <input type="checkbox" class="size-5 rounded-sm border-gray-300 shadow-sm">
@@ -304,14 +299,14 @@ $collectionProducts = [
                                             AMD
                                         </label>
                                     </li>
-                                    
+
                                     <li>
                                         <label class="flex items-center gap-2">
                                             <input type="checkbox" class="size-5 rounded-sm border-gray-300 shadow-sm">
                                             Intel
                                         </label>
                                     </li>
-                                    
+
                                     <li>
                                         <label class="flex items-center gap-2">
                                             <input type="checkbox" class="size-5 rounded-sm border-gray-300 shadow-sm">
@@ -355,58 +350,54 @@ $collectionProducts = [
                             border border-dashed border-gray-300 rounded-lg p-6 min-h-[300px] h-auto">
 
                         <?php foreach ($collectionProducts as $p): ?>
-                        <li
-                            class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300"
-                        >
-                            <div class="relative">
-                                <a href="/view/users/productDetail.php">
-                                    <img
-                                        src="<?= $p->image ?>"
-                                        alt="<?= htmlspecialchars($p->name) ?>"
-                                        class="w-full h-auto aspect-[4/3] object-cover rounded-t-lg"
-                                    />
-                                </a>
-                            </div>
-
-                            <div class="p-4 sm:p-5 flex flex-col flex-grow">
-
-                                <div class="flex-grow">
-                                    <p class="text-gray-700 text-sm sm:text-base">
-                                        <?= $p->price ?>
-                                        <span class="text-gray-400 line-through text-xs sm:text-sm"><?= $p->oldPrice ?></span>
-                                    </p>
-
+                            <li
+                                class="group bg-white border border-gray-200 rounded-lg shadow-sm transition transform hover:scale-105 hover:shadow-lg flex flex-col h-full duration-300">
+                                <div class="relative">
                                     <a href="/view/users/productDetail.php">
-                                        <h3 class="mt-1.5 text-base sm:text-lg font-medium text-gray-900">
-                                            <?= $p->name ?>
-                                        </h3>
+                                        <img
+                                            src="<?= $p->image ?>"
+                                            alt="<?= htmlspecialchars($p->name) ?>"
+                                            class="w-full h-auto aspect-[4/3] object-cover rounded-t-lg" />
                                     </a>
-
-                                    <p class="mt-1 text-gray-600 text-sm sm:text-base line-clamp-3">
-                                        <?= $p->description ?>
-                                    </p>
                                 </div>
 
-                                <!-- Tombol SELALU di bawah -->
-                                <div class="mt-4 flex flex-col sm:flex-row gap-3">
-                                    <button
-                                        class="w-full rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900
-                                            transition hover:scale-105 hover:bg-gray-200"
-                                    >
-                                        Add to Cart
-                                    </button>
+                                <div class="p-4 sm:p-5 flex flex-col flex-grow">
 
-                                    <button
-                                        type="button"
-                                        class="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-white
-                                            transition hover:scale-105 hover:bg-[#A14646]/75"
-                                    >
-                                        Buy Now
-                                    </button>
+                                    <div class="flex-grow">
+                                        <p class="text-gray-700 text-sm sm:text-base">
+                                            <?= $p->price ?>
+                                            <span class="text-gray-400 line-through text-xs sm:text-sm"><?= $p->oldPrice ?></span>
+                                        </p>
+
+                                        <a href="/view/users/productDetail.php">
+                                            <h3 class="mt-1.5 text-base sm:text-lg font-medium text-gray-900">
+                                                <?= $p->name ?>
+                                            </h3>
+                                        </a>
+
+                                        <p class="mt-1 text-gray-600 text-sm sm:text-base line-clamp-3">
+                                            <?= $p->description ?>
+                                        </p>
+                                    </div>
+
+                                    <!-- Tombol SELALU di bawah -->
+                                    <div class="mt-4 flex flex-col sm:flex-row gap-3">
+                                        <button
+                                            class="w-full rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900
+                                            transition hover:scale-105 hover:bg-gray-200">
+                                            Add to Cart
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-white
+                                            transition hover:scale-105 hover:bg-[#A14646]/75">
+                                            Buy Now
+                                        </button>
+                                    </div>
+
                                 </div>
-
-                            </div>
-                        </li>
+                            </li>
                         <?php endforeach; ?>
 
                     </ul>
@@ -416,15 +407,15 @@ $collectionProducts = [
                 <!-- Mobile Filter Drawer -->
                 <div id="filterDrawer" class="fixed inset-0 bg-black/40 hidden z-40">
                     <div class="absolute bottom-0 w-full bg-white rounded-t-2xl p-6 shadow-lg">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold text-lg">Filters</h3>
-                        <button id="closeFilter" class="text-gray-500 hover:text-gray-700">
-                        <span class="material-symbols-outlined">close</span>
-                        </button>
-                    </div>
-                    <div class="space-y-3 text-sm text-gray-700">
-                        <p>Filter options (same as sidebar)</p>
-                    </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-semibold text-lg">Filters</h3>
+                            <button id="closeFilter" class="text-gray-500 hover:text-gray-700">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div class="space-y-3 text-sm text-gray-700">
+                            <p>Filter options (same as sidebar)</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -432,10 +423,11 @@ $collectionProducts = [
     </main>
 
     <footer class="">
-        <?php include '../../components/users/footer.php' ;?>
+        <?php include '../../components/users/footer.php'; ?>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <Script src="/assets/js/users/productCollection.js" defer></Script>
 </body>
+
 </html>

@@ -1,24 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Returns - Admin</title>
-    <link rel="icon" href="../assets/img/Nanocomp.png">
-    <link rel="stylesheet" href="../../src/output.css">
-</head>
+<?php
+// Definisikan title untuk halaman ini
+$pageTitle = "Return";
+// Include file head.php dari components/admin
+include '../../components/admin/head.php';
+?>
+
 <body class="bg-no-repeat h-screen flex">
 
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../../components/admin/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php'; ?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../../components/admin/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
         <!-- main kontent -->
@@ -39,7 +37,7 @@
                     </div>
                     <div id="filter-field" class="mb-2 flex flex-wrap items-center gap-4 pb-3 pt-0">
                         <input type="text" placeholder="Cari Pengembalian..." class="border border-gray-300 rounded-lg px-3 w-sm py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-                            <div class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <div class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                             <select name="" id="">
                                 <option value="">Pilih Status</option>
                                 <option value="">Diterima</option>
@@ -102,4 +100,5 @@
         </main>
     </div>
 </body>
+
 </html>

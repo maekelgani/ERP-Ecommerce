@@ -1,30 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analitik - Admin</title>
-    <link rel="stylesheet" href="../../src/output.css">
-    <link rel="icon" href="../assets/img/Nanocomp.png">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-</head>
+<?php
+// Definisikan title untuk halaman ini
+$pageTitle = "Customer Relationship Management";
+// Include file head.php dari components/admin
+include '../../components/admin/head.php';
+?>
 
 <!-- NOTE!!! perlu diingat bahwa semuanya belum ada javascriptnya jadi belum interaktif dan responsive
 -->
 
 <body class="bg-no-repeat h-screen flex">
 
-    
+
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../../components/admin/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php'; ?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../../components/admin/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
         <!-- Main Contet -->
@@ -35,23 +31,23 @@
                     <p class="text-gray-400">Laporan komprehensif tentang performa website dan penjualan</p>
                 </div>
             </div>
-            
+
             <!-- Stsats Card -->
             <div class="grid grid-row-1 grid-cols-2 gap-4 mb-4">
                 <!-- Card-1 -->
                 <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600">Total Pelanggan Terdaftar</h2>
+                        <h2 class=" text-base text-gray-600">Total Pelanggan Terdaftar</h2>
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">1092</p>
                     </div>
                 </div>
-                
+
                 <!-- Card-2 -->
                 <div class="col-span-1 rounded-lg border border-gray-200 bg-white shadow-md p-4">
                     <div id="card-header" class="mb-3"">
-                        <h2 class="text-base text-gray-600">Jumlah pelanggan Aktif</h2>
+                        <h2 class=" text-base text-gray-600">Jumlah pelanggan Aktif</h2>
                     </div>
                     <div id="card-content">
                         <p class="font-bold text-2xl">20</p>
@@ -81,13 +77,13 @@
                                 <tbody class="text-sm">
                                     <tr class="border-t">
                                         <!-- Nama -->
-                                        <td class="p-3">Jojon Saturo</td> 
+                                        <td class="p-3">Jojon Saturo</td>
                                         <!-- Email -->
-                                        <td class="p-3">jo.saturn@gmail.com</td> 
+                                        <td class="p-3">jo.saturn@gmail.com</td>
                                         <!-- total Transaksi -->
                                         <td class="p-3 text-gray-500">18x transaksi</td>
                                         <!-- transaksi terakhir -->
-                                        <td class="p-3 pl-10 text-gray-500">3 Hari yang lalu</td>  
+                                        <td class="p-3 pl-10 text-gray-500">3 Hari yang lalu</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -112,9 +108,9 @@
                                 <tbody class="text-sm">
                                     <tr class="border-t">
                                         <!-- Nama -->
-                                        <td class="p-3">Keyboard Razer V3</td> 
+                                        <td class="p-3">Keyboard Razer V3</td>
                                         <!-- Rating -->
-                                        <td class="p-3 text-center font-semibold">4 / 5</td>   
+                                        <td class="p-3 text-center font-semibold">4 / 5</td>
                                         <td class="p-3">
                                             <button class="openReview text-blue-600 cursor-pointer hover:text-blue-400">Lihat Detail</button>
                                         </td>
@@ -134,17 +130,17 @@
                 </div>
                 <div class="grid grid-cols-3 gap-4 px-4">
 
-                <!-- Dummy 2 -->
+                    <!-- Dummy 2 -->
                     <div class="relative flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-full">
                         <div class="px-4 mb-0 border-b bg-gray-800 border-slate-200 pt-3 pb-2 rounded-t-lg">
                             <span class="text-xl text-white font-semibold">
-                            Saran dan Masukkan
+                                Saran dan Masukkan
                             </span>
                         </div>
-                        
+
                         <div class="p-4">
-                            <p class="font-semibold mb-1">User               : <span id=""></span></p>
-                            <p class="text-gray-400 mb-1">Tanggal          : <span id=""></span></p>
+                            <p class="font-semibold mb-1">User : <span id=""></span></p>
+                            <p class="text-gray-400 mb-1">Tanggal : <span id=""></span></p>
                             <p class="text-gray-400 mb-1">Saran & Masukkan : <span id=""></span></p>
                             <textarea class="w-full border border-gray-300 rounded-lg p-2 text-sm" disabled name="" id=""> WEB MANTAP </textarea>
                         </div>
@@ -158,13 +154,13 @@
                     <div class="relative flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-full">
                         <div class="px-4 mb-0 border-b bg-gray-800 border-slate-200 pt-3 pb-2 rounded-t-lg">
                             <span class="text-xl text-white font-semibold">
-                            Saran dan Masukkan
+                                Saran dan Masukkan
                             </span>
                         </div>
-                        
+
                         <div class="p-4">
-                            <p class="font-semibold mb-1">User               : <span id=""></span></p>
-                            <p class="text-gray-400 mb-1">Tanggal          : <span id=""></span></p>
+                            <p class="font-semibold mb-1">User : <span id=""></span></p>
+                            <p class="text-gray-400 mb-1">Tanggal : <span id=""></span></p>
                             <p class="text-gray-400 mb-1">Saran & Masukkan : <span id=""></span></p>
                             <textarea class="w-full border border-gray-300 rounded-lg p-2 text-sm" disabled name="" id=""> WEB MANTAP </textarea>
                         </div>
@@ -183,7 +179,7 @@
         <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75 transition-opacity duration-300"></div>
         <div id="modal-card" class="relative z-10 max-w-lg w-full rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center
                 opacity-0 scale-95 translate-y-4 transition-all duration-300 ease-out">
-            
+
             <!-- Header -->
             <div class="mb-4 flex justify-between items-center">
                 <h2 class="text-2xl border-b border-gray-400 font-semibold">Detail Review Produk</h2>
@@ -224,4 +220,5 @@
         </div>
     </div>
 </body>
+
 </html>

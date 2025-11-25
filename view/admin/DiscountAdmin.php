@@ -1,24 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category - Admin</title>
-    <link rel="stylesheet" href="../../src/output.css">
-    <link rel="icon" href="../assets/img/Nanocomp.png">
-</head>
+<?php
+// Definisikan title untuk halaman ini
+$pageTitle = "Discount";
+// Include file head.php dari components/admin
+include '../../components/admin/head.php';
+?>
+
 <body class="bg-no-repeat h-screen flex">
 
     <!-- Leftside: Sidebar -->
     <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../../components/admin/sidebarAdmin.php' ;?>
+        <?php include '../../components/admin/sidebarAdmin.php'; ?>
     </aside>
 
     <!-- Rightside:-->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <!-- navbar kawan -->
         <header class="h-[60px] sticky top-0 z-10">
-            <?php include '../../components/admin/NavbarAdmin.php' ;?>
+            <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
         <!-- main content -->
@@ -41,7 +39,7 @@
                 </div>
                 <div class="grid grid-cols-3 gap-4 px-4">
 
-                <!-- Dummy 2 -->
+                    <!-- Dummy 2 -->
                     <div class="relative flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-full">
                         <div class="px-4 mb-0 border-b bg-gray-800 border-slate-200 pt-3 pb-2 rounded-t-lg flex items-center justify-between ">
                             <div class="flex gap-4 items-center">
@@ -53,7 +51,7 @@
                             </div>
                             <span class="px-2 py-1 rounded text-xs font-medium ml-2 bg-green-500/10 text-green-500">Active</span>
                         </div>
-                        
+
                         <div class="p-4">
                             <p class="text-2xl font-bold mb-3">Diskon <span>80%</span></p>
                             <p class="text-xs text-gray-400">Tersisa 123 dari 500</p>
@@ -72,4 +70,5 @@
         </main>
     </div>
 </body>
+
 </html>
