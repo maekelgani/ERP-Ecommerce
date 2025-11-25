@@ -187,7 +187,7 @@ $regularProducts = [
 
 <body class="w-full bg-no-repeat h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     <header class="sticky top-0 z-10">
-        <?php include '../../components/users/navbarUsers.php'; ?>
+        <?php include '../../components/users/navbarGuest.php' ;?>
     </header>
     <main class="max-w-full mb-10">
         <div class="border-b border-gray-200 bg-gray-100 px-4 py-2 text-gray-900">
@@ -226,7 +226,7 @@ $regularProducts = [
 
         <!-- CATEGORY -->
         <section class="mt-4 p-5 w-full md:px-8 lg:px-20 flex justify-center">
-            <div class=" p-4 md:p-10  pt-4 rounded-lg shadow-sm w-full">
+            <div class=" p-4 md:p-10 pt-4 rounded-lg shadow-sm w-full">
                 <h2 class="font-bold text-xl md:text-2xl lg:text-4xl mb-5 "> Shop by Category</h2>
                 <!-- Slider Container -->
                 <div class="flex gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 p-2">
@@ -481,44 +481,32 @@ $regularProducts = [
         </section>
 
         <!-- Brand Pilihan -->
-        <section class="w-full bg-primary py-6 px-4 sm:px-6 md:px-8 lg:px-20">
-            <div class="w-full relative rounded-lg">
-                <h2
-                    class="font-bold text-sm sm:text-base lg:text-xl mb-4 sm:mb-6 text-white tracking-wide text-center sm:text-left">
-                    BRAND PILIHAN
-                </h2>
-
-                <!-- Wrapper -->
-                <div class="relative">
-                    <!-- Scroll Container -->
-                    <div
-                        id="brandScroll"
-                        class="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide scroll-smooth justify-start sm:justify-center py-2">
-                        <!-- Brand Items -->
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Intel_logo_%282006-2020%29.svg"
-                            class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"></img>
-                        <img src="https://logos-world.net/wp-content/uploads/2020/03/AMD-Logo.png"
-                            class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"></img>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL5WbtWJ0MQzfxZCr0y-zHn44-WzF_293KWA&s"
-                            class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"></img>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSln9EzYFPXEF7aBAxsVhUjkgRvqeTd0rk78Q&s"
-                            class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"></img>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPgtNHcrqqPMRKaj7fRfsf4_u2L6GTc_j6mg&s"
-                            class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"></img>
-                        <img src=""
-                            class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"></img>
-                        <img src=""
-                            class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"></img>
-                    </div>
-
-                    <!-- Button Next -->
-                    <button
-                        id="scrollNext"
-                        class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-sm p-2 hover:bg-gray-100 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
+        <section class="mt-4 p-5 w-full md:px-8 lg:px-20 flex justify-center bg-primary">
+            <div class="p-4 md:p-10  pt-4 rounded-lg w-full">
+                <h2 class="font-bold text-sm sm:text-base text-white lg:text-xl mb-5 ">Brand Pilihan</h2>
+                <div class="flex gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 p-2">
+                    <!-- Brand Items -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Intel_logo_%282006-2020%29.svg"
+                    class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                    ></img>
+                    <img src="https://logos-world.net/wp-content/uploads/2020/03/AMD-Logo.png"
+                    class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                    ></img>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL5WbtWJ0MQzfxZCr0y-zHn44-WzF_293KWA&s"
+                    class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                    ></img>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSln9EzYFPXEF7aBAxsVhUjkgRvqeTd0rk78Q&s"
+                    class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                    ></img>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPgtNHcrqqPMRKaj7fRfsf4_u2L6GTc_j6mg&s"
+                    class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                    ></img>
+                    <img src=""
+                    class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                    ></img>
+                    <img src=""
+                    class="min-w-[100px] h-[70px] sm:min-w-[140px] sm:h-[90px] md:min-w-[180px] md:h-[110px] lg:min-w-[220px] lg:h-[140px] bg-white rounded-md flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                    ></img>
                 </div>
             </div>
         </section>

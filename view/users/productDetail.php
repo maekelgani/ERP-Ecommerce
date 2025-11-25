@@ -172,6 +172,7 @@ include '../../components/users/head.php';
                             <h3 class="text-sm font-medium text-gray-900">Variant</h3>
                         </div>
 
+                        <!-- ini gw matiin dulu -->
                         <fieldset aria-label="Choose a size" class="mt-4">
                             <div class="grid grid-cols-4 gap-3">
                                 <label aria-label="XXS" class="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-red-nano has-checked:bg-primary has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-red-nano has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25">
@@ -205,7 +206,9 @@ include '../../components/users/head.php';
                     <h3 class="text-sm font-medium text-gray-900">Description</h3>
 
                     <div class="space-y-6">
-                        <p class="text-base text-gray-900">The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: &quot;Black&quot;. Need to add an extra pop of color to your outfit? Our white tee has you covered.</p>
+                        <p class="text-base text-gray-900">
+                            LIGHTSPEED wireless gaming mouse designed for serious performance with latest technology innovations. Impressive 250-hour battery life. Now in a variety of vibrant colors.
+                        </p>
                     </div>
                 </div>
 
@@ -225,8 +228,22 @@ include '../../components/users/head.php';
                 <div class="mt-10">
                     <h2 class="text-sm font-medium text-gray-900">Details</h2>
 
-                    <div class="mt-4 space-y-6">
-                        <p class="text-sm text-gray-600">The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming &quot;Charcoal Gray&quot; limited release.</p>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-600">Dimension:</p>
+                        <ul role="list" class="list-disc pl-4 text-sm">
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Height: 38.2 mm</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Width: 62.1 mm</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Length: 116.6 mm</span>
+                            </li>
+                            <li class="text-gray-400">
+                                <span class="text-gray-600">Weight: 99 g</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

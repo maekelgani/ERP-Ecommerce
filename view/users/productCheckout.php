@@ -9,7 +9,7 @@
 </head>
 <body class="w-full bg-no-repeat h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     <header class="sticky top-0 z-10">
-        <?php include '../../components/users/navbarGuest.php' ;?>
+        <?php include '../../components/users/navbarUsers.php' ;?>
     </header>
 
     <main class="max-w-full mb-10">
@@ -29,26 +29,13 @@
                                 <div id="itemCheckout"
                                 class="flex gap-3">
                                     <img alt="Gaming Laptop ROG Strix G15" 
-                                    src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400"
+                                    src="https://resource.logitechg.com/w_1600,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g305/2025-update/g305-lightspeed-mouse-profile-left-angle-black-gallery-4.png"
                                     class="w-16 h-16 object-cover rounded">
                                     
                                     <div class="flex-1">
-                                        <p class="text-sm font-medium">ASUS ROG Strix GeForce RTX 3070 Ti OC Edition 8GB GDDR6X</p>
+                                        <p class="text-sm font-medium">Logitech G304 Lightspeed Wireless Gaming Mouse</p>
                                         <p class="text-sm text-gray-400">Jumlah: 1</p>
-                                        <p class="text-sm font-bold text-blue-500">Rp 15.000.000</p>
-                                    </div>
-                                </div>
-                                <!-- barang ke 2 -->
-                                <div id="itemCheckout"
-                                class="flex gap-3">
-                                    <img alt="Gaming Laptop ROG Strix G15" 
-                                    src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400"
-                                    class="w-16 h-16 object-cover rounded">
-                                    
-                                    <div class="flex-1">
-                                        <p class="text-sm font-medium">ASUS ROG Strix GeForce RTX 3070 Ti OC Edition 8GB GDDR6X</p>
-                                        <p class="text-sm text-gray-400">Jumlah: 1</p>
-                                        <p class="text-sm font-bold text-blue-500">Rp 15.000.000</p>
+                                        <p class="text-sm font-bold text-primary">Rp 499.000</p>
                                     </div>
                                 </div>
                             </div>
@@ -58,11 +45,11 @@
                             <div class="space-y-3">
                                 <div class="flex justify-between text-gray-500">
                                     <span>Subtotal</span>
-                                    <span>Rp 15.000.000</span>
+                                    <span>Rp 499.000</span>
                                 </div>
                                 <div class="flex justify-between text-gray-500">
                                     <span>Pajak (11%)</span>
-                                    <span>Rp 1.650.000</span>
+                                    <span>Rp 50.000</span>
                                 </div>
                                 <div class="flex justify-between text-gray-500">
                                     <span>Pemgemasan</span>
@@ -72,7 +59,7 @@
                                 <div class="shrink-0 bg-gray-200 h-px w-full my-4"></div>
                                 <div class="flex justify-between text-lg font-bold">
                                     <span>Total</span>
-                                    <span class="text-blue-500">Rp 16.655.000</span>
+                                    <span class="text-primary">Rp 694.000</span>
                                 </div>
                             </div>
 
