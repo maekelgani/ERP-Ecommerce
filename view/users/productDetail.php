@@ -23,7 +23,7 @@
         </div>
         
         <!-- Navigasi breadcrumb / PATH -->
-        <section class="mt-5 px-6 md:px-8 lg:px-20 w-full flex justify-center"> 
+        <section class="mt-5 px-6 md:px-8 lg:px-20 w-full flex justify-center mb-2"> 
             <div class="w-full md:px-10">
             <nav aria-label="Breadcrumb">   
                 <ol class="flex items-center gap-1 text-sm text-gray-700">
@@ -117,7 +117,7 @@
 
         
         <!-- Product info -->
-        <section class="w-full mt-5 px-6 md:px-8 lg:px-20 sm:px-6 lg:grid lg:grid-cols-3 lg:grid-rows-[auto_auto_1fr] lg:gap-x-8 lg:pt-16 lg:pb-24">
+        <section class="w-full mt-5 md:px-18 lg:px-30 lg:grid lg:grid-cols-3 lg:grid-rows-[auto_auto_1fr]  px-4 lg:gap-x-8 lg:pt-16 lg:pb-24">
             <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <h1 id="" 
                 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Logitech G304 Lightspeed Wireless Gaming Mouse</h1> <!--NAMA PRODUCT DI SINI CUY-->
@@ -272,7 +272,7 @@
         </section>
 
         <!-- Review Product -->
-        <section class="w-full bg-primary py-6 px-4 sm:px-6 md:px-8 lg:px-20">
+        <section class="w-full bg-primary py-6 px-4 md:px-18 lg:px-30">
             <div class="w-full relative rounded-lg">
                 <h2
                     class="font-bold text-sm sm:text-base lg:text-xl mb-4 sm:mb-6 text-white tracking-wide text-center sm:text-left">

@@ -13,7 +13,7 @@
     </header>
 
     <main class="max-w-full mb-10">
-        <div class="mt-10 p-5 py-1 w-full md:px-8 lg:px-20">
+        <div class="mt-10 p-5 py-1 w-full px-4 md:px-18 lg:px-30">
             <h2 class="text-3xl font-bold mb-8 ">Checkout</h2>
             <form>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

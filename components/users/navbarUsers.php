@@ -9,59 +9,45 @@
 </head>
 
 <body>
-    <header class="bg-white">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-1">
-        <div class="flex h-16 items-center justify-between">
-            <!-- Logo -->
-            <div class="md:flex md:items-center md:gap-12">
-                <a class="block rounded-lg" href="#">
-                <span class="sr-only">Home</span>
-                    <img src="/assets/img/favicon.png" alt="" width="40px" class="p-1">
-                </a>
-            </div>
+    <header class="bg-white shadow-sm"">
+    <div class="mx-auto px-4 p-px md:px-18 lg:px-30">
 
-            <!-- navbar (desktop) di sini -->
+    <!-- WRAPPER UTAMA NAVBAR -->
+    <div class="flex h-16 items-center justify-between gap-2 md:gap-4 lg:gap-8 xl:gap-15">
+
+        <!-- KIRI: LOGO + NAV MENU -->
+        <div class="flex items-center gap-2 md:gap-4 lg:gap-8 xl:gap-15">
+            <a class="block rounded-lg" href="/view/users/landingPage.php">
+                <span class="sr-only">Home</span>
+                <!-- Logo -->
+                <img src="/assets/img/favicon.png" alt="" width="40px" class="p-1">
+            </a>
+            <!-- navbar di sini -->
             <div class="hidden md:block">
                 <nav aria-label="Global">
-                <ul class="flex items-center gap-6 text-sm">
-                    <li>
-                    <a class="transition hover:text-red-800/75" href="/../../view/users/productCollection.php">
-                        Product
-                    </a>
-                    </li>
-
-                    <li>
-                    <a class="transition hover:text-red-800/75" href="#">
-                        About Us
-                    </a>
-                    </li>
-
-                    <li>
-                    <a class="transition hover:text-red-800/75" href="#">
-                        Promo
-                    </a>
-                    </li>
-
-                    <li>
-                    <a class="transition hover:text-red-800/75" href="#">
-                        Blog
-                    </a>
-                    </li>
-
-                </ul>
+                    <ul class="flex items-center md:gap-4 lg:gap-8  text-sm">
+                        <li><a class="transition hover:text-red-800/75" href="/../../view/users/productCollection.php">Product</a></li>
+                        <li><a class="transition hover:text-red-800/75" href="#">About Us</a></li>
+                        <li><a class="transition hover:text-red-800/75" href="#">Promo</a></li>
+                        <li><a class="transition hover:text-red-800/75" href="#">Blog</a></li>
+                        <li><a class="transition hover:text-red-800/75" href="#">...</a></li>
+                    </ul>
                 </nav>
             </div>
-
-            <!-- search bar -->
-            <div>
-                <label for="Search" class="relative">
-                <input type="text" id="Search" placeholder="" class="peer mt-0.5 rounded-lg border border-gray-200 shadow-sm sm:text-sm p-2 lg:w-[50vh] md:w-[25vh]">
-
-                <span class="absolute inset-y-0 start-3 -translate-y-5 bg-white px-0.5 text-sm font-medium text-gray-700 transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5">
-                    Cari Produk
-                </span>
-                </label>
-            </div>
+        </div>
+        <!-- TENGAH: SEARCH BAR (TIDAK DIUBAH SAMA SEKALI) -->
+        <div class="flex-1">
+            <label for="Search" class="relative">
+            <input type="text" id="Search" placeholder=""
+                class="peer mt-0.5 rounded-lg border border-gray-200 shadow-sm sm:text-sm p-2  
+                w-full md:max-w-[28rem] lg:max-w-[36rem] xl:max-w-[44rem]">
+            <span
+                class="absolute inset-y-0 start-3 -translate-y-5 bg-white px-0.5 text-sm font-medium text-gray-700
+                transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5">
+                Cari Produk
+            </span>
+            </label>
+        </div>
 
             <!-- Action Btn -->
             <div class="flex items-center lg:space-x-4 relative space-x-2">
@@ -120,8 +106,9 @@
                 </div>
             </div>
 
-
-        </div>
+    </div>
+    
+    </div>
     </header>
 
     <script src="/assets/js/users/navbar.js"></script>
