@@ -55,6 +55,10 @@
                                     <span>Pemgemasan</span>
                                     <span>Rp 5.000</span>
                                 </div>
+                                <div class="flex justify-between text-gray-500">
+                                    <span>Admin</span>
+                                    <span>Rp 0</span>
+                                </div>
 
                                 <div class="shrink-0 bg-gray-200 h-px w-full my-4"></div>
                                 <div class="flex justify-between text-lg font-bold">

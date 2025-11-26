@@ -14,10 +14,10 @@
     <div class="mx-auto px-4 p-px md:px-18 lg:px-30">
         
         <!-- WRAPPER UTAMA NAVBAR -->
-        <div class="flex h-16 items-center justify-between gap-25">
+        <div class="flex h-16 items-center justify-between gap-2 md:gap-4 lg:gap-8 xl:gap-15">
 
             <!-- KIRI: LOGO + NAV MENU -->
-            <div class="flex items-center gap-25">
+            <div class="flex items-center gap-2 md:gap-4 lg:gap-8 xl:gap-15">
                 <a class="block rounded-lg" href="/view/users/landingPage.php">
                     <span class="sr-only">Home</span>
                     <!-- Logo -->
@@ -27,7 +27,7 @@
                 <!-- navbar di sini -->
                 <div class="hidden md:block">
                     <nav aria-label="Global">
-                        <ul class="flex items-center gap-12 text-sm">
+                        <ul class="flex items-center md:gap-4 lg:gap-8 xl:gap-12 text-sm">
                             <li><a class="transition hover:text-red-800/75" href="/../../view/users/productCollection.php">Product</a></li>
                             <li><a class="transition hover:text-red-800/75" href="#">About Us</a></li>
                             <li><a class="transition hover:text-red-800/75" href="#">Promo</a></li>
