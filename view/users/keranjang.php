@@ -161,10 +161,6 @@
                             <span>Pajak (11%)</span>
                             <span class="font-semibold text-gray-900">Rp 11.000</span>
                         </div>
-                        <div class="justify-between text-gray-600 flex ">
-                            <span>Discount</span>
-                            <span class="font-semibold text-red-600">-$50.00</span>
-                        </div>
                         <div class="pt-4 border-t border-gray-200 ">
                             <div class="justify-between items-center flex">
                                 <span class="text-lg font-bold text-gray-900">Total</span>
@@ -173,16 +169,18 @@
                         </div>
                     </div>
 
-                    <!-- action btn -->
-                    <button type="submit" 
+                    <!-- action btn 
+                    1. BTN CHECKOUT-->
+                    <a href="/../../view/users/productCheckout.php" type="submit" 
                     class="bg-primary transition duration-200 flex space-x-2 w-full text-white font-semibold py-2 rounded-lg mb-3 items-center justify-center">
                         <span>Lanjut Checkout</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="Windframe_R53B5VT6A">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                         </svg>
-                    </button>
-                    <button type="submit" class="bg-secondary text-primary outline outline-primary transition duration-200 flex space-x-2 w-full font-semibold py-2 rounded-lg mb-3 items-center justify-center">
-                        Jelajah Katalog</button>
+                    </a>
+                    <!-- 2. BTN Jelajah KATALOG -->
+                    <a href="/../../view/users/productCollection.php" type="submit" class="bg-secondary text-primary outline outline-primary transition duration-200 flex space-x-2 w-full font-semibold py-2 rounded-lg mb-3 items-center justify-center">
+                        Jelajah Katalog</a>
 
                     <!-- Keterangan yang ada dibawah Continue Shopping -->
                     <div class="space-y-3">

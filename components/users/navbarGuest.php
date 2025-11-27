@@ -64,13 +64,13 @@
                         Masuk
                     </a>
 
-                    <a id="userDropdownButton1"
+                    <a id="userDropdownButton1" href=""
                         class="inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90
                         md:hidden">
                         <span class="material-symbols-outlined">account_circle</span>
                     </a>
 
-                    <a href=""
+                    <a href="/../../view/users/keranjang.php"
                     class="relative inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         <span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full p-1">2</span>

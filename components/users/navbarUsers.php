@@ -52,23 +52,28 @@
             <!-- Action Btn -->
             <div class="flex items-center lg:space-x-4 relative space-x-2">
                 <!-- Btn Cart (Keranjang) -->
-                <button class="relative inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
+                <a href="/../../view/users/keranjang.php" 
+                class="relative inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
                     <span class="material-symbols-outlined">shopping_cart</span>
                     <span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full p-1">2</span>
-                </button>
+                </a>
 
                 <!-- Btn Notifications -->
-                <button class="relative inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
+                <a class="relative inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
                     <span class="material-symbols-outlined">notifications</span>
                     <span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full p-1">2</span>
-                </button>
+                </a>
 
                 <!-- Btn Account -->
                 <div class="relative">
                     <button id="userDropdownButton1"
                         class="inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
-                        <span class="material-symbols-outlined">account_circle</span>
-                        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+                        <a href="">
+                            <span class="material-symbols-outlined">account_circle</span>
+                        </a>
+                        <a href="">
+                            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+                        </a>
                     </button>
 
                     <!-- Dropdown Account -->
