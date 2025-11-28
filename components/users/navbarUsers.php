@@ -68,19 +68,15 @@
                 <div class="relative">
                     <button id="userDropdownButton1"
                         class="inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 text-sm font-medium leading-none text-gray-90">
-                        <a href="">
-                            <span class="material-symbols-outlined">account_circle</span>
-                        </a>
-                        <a href="">
-                            <span class="material-symbols-outlined">keyboard_arrow_down</span>
-                        </a>
+                        <span class="material-symbols-outlined">account_circle</span>
+                        <span class="material-symbols-outlined">keyboard_arrow_down</span>
                     </button>
 
                     <!-- Dropdown Account -->
                     <div id="userDropdown1"
                         class="hidden absolute right-0 mt-2 z-50 w-56 divide-y divide-gray-100 overflow-hidden rounded-lg bg-white antialiased shadow transition-all duration-200 ease-in-out">
                         <ul class="p-2 text-start text-sm font-medium text-gray-900">
-                            <li><a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">My Account</a></li>
+                            <li><a href="/../../view/users/usersSetting.php" class="block rounded-md px-3 py-2 hover:bg-gray-100">My Account</a></li>
                             <li><a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">My Orders</a></li>
                             <li><a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Settings</a></li>
                         </ul>
