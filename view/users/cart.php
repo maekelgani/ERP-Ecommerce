@@ -64,6 +64,10 @@
                                     <p class="text-xl font-bold text-primary">Rp 124.353.535</p>
                                     </div>
                                 </div>
+                                <div class="mt-3 items-center flex space-x-2">
+                                    <span class="items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100
+                                        text-green-800 inline-flex">In Stock</span>
+                                </div>
                                 <div class="items-center pt-2 flex gap-4 border-t border-gray-100 ">
                                     <button type="submit" class=" hover:text-red-600 transition flex
                                         gap-1 text-sm text-gray-600 items-center">
@@ -126,6 +130,10 @@
                                     <p class="text-xl font-bold text-primary">Rp 10.000.000</p>
                                     <p class="text-xs text-gray-500 ">Rp 5.000.000</p>
                                     </div>
+                                </div>
+                                <div class="mt-3 items-center flex space-x-2">
+                                    <span class="items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100
+                                        text-yellow-800 inline-flex">Low Stock</span>
                                 </div>
                                 <div class="items-center pt-2 flex gap-4 border-t border-gray-100 ">
                                     <button type="submit" class=" hover:text-red-600 transition flex

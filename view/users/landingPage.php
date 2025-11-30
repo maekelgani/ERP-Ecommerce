@@ -175,6 +175,31 @@ $regularProducts = [
 
 ];
 
+// DATA DUMMY ARTIKEL (BARU)
+$articles = [
+    [
+        "image" => "https://images.unsplash.com/photo-1751374156944-aa91dee48408?q=80&w=2070&auto=format&fit=crop",
+        "category" => "Tips & Trick",
+        "date" => "28 Nov 2025",
+        "title" => "Cara Merakit PC Gaming untuk Pemula 2025",
+        "excerpt" => "Panduan langkah demi langkah merakit PC impianmu, mulai dari pemasangan CPU hingga manajemen kabel yang rapi."
+    ],
+    [
+        "image" => "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop",
+        "category" => "News",
+        "date" => "25 Nov 2025",
+        "title" => "NVIDIA GeForce RTX 50 Series Resmi Diumumkan",
+        "excerpt" => "Peningkatan performa hingga 40% dan efisiensi daya yang lebih baik. Simak spesifikasi lengkap dan harganya di sini."
+    ],
+    [
+        "image" => "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=2042&auto=format&fit=crop",
+        "category" => "Review",
+        "date" => "20 Nov 2025",
+        "title" => "Review Montech XR: Casing Budget Rasa Premium",
+        "excerpt" => "Apakah casing dengan harga di bawah 1 juta ini layak untuk build high-end? Kita uji airflow dan build quality-nya."
+    ]
+];
+
 
 ?>
 
@@ -587,6 +612,68 @@ $regularProducts = [
                         </a>
                     </div>
                     
+                </div>
+            </div>
+        </section>
+
+        <!-- ARTICLES SECTION (BARU) -->
+        <section class="p-5 w-full md:px-8 lg:px-20 flex justify-center mb-10">
+            <div class="p-4 md:p-10 pt-4 rounded-lg w-full">
+                <div class="mx-auto">
+                    
+                    <div class="flex justify-between items-end mb-8">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">Artikel Terbaru</h2>
+                            <p class="text-gray-500 mt-2 text-sm sm:text-base">Wawasan, tips, dan berita terkini seputar teknologi.</p>
+                        </div>
+                        <a href="#" class="hidden sm:block text-primary font-semibold hover:text-[#A14646] transition-colors text-sm">Lihat Artikel Lainnya &rarr;</a>
+                    </div>
+
+                    <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        <?php foreach ($articles as $article): ?>
+                        <article class="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-lg hover:-translate-y-1 duration-300">
+                            <!-- Image -->
+                            <div class="h-48 w-full overflow-hidden bg-gray-100">
+                                <img 
+                                    alt="<?= htmlspecialchars($article['title']) ?>" 
+                                    src="<?= $article['image'] ?>" 
+                                    class="h-full w-full object-cover transition duration-500 hover:scale-110" 
+                                />
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex flex-1 flex-col justify-between p-6">
+                                <div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                                        <span class="font-medium text-primary bg-orange-50 px-2 py-0.5 rounded-full"><?= $article['category'] ?></span>
+                                        <span>&bull;</span>
+                                        <time datetime="2025-11-28"><?= $article['date'] ?></time>
+                                    </div>
+
+                                    <h3 class="text-lg font-bold text-gray-900">
+                                        <a href="#" class="hover:text-primary transition-colors">
+                                            <?= $article['title'] ?>
+                                        </a>
+                                    </h3>
+
+                                    <p class="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
+                                        <?= $article['excerpt'] ?>
+                                    </p>
+                                </div>
+
+                                <a href="#" class="group mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-[#A14646]">
+                                    Baca Selengkapnya
+                                    <span aria-hidden="true" class="block transition-all group-hover:translate-x-0.5">&rarr;</span>
+                                </a>
+                            </div>
+                        </article>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <div class="flex justify-center mt-6 sm:hidden">
+                        <a href="#" class="text-primary font-semibold hover:text-[#A14646] transition-colors text-sm">Lihat Artikel Lainnya &rarr;</a>
+                    </div>
+
                 </div>
             </div>
         </section>
