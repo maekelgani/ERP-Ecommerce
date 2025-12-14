@@ -1,228 +1,230 @@
 <?php
-// Definisikan title untuk halaman ini
-$pageTitle = "Kelola Hak Akses";
-// Include file head.php dari components/admin
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../app/Repository/RoleRepository.php';
+
+use App\Auth\AuthMiddleware;
+use App\Auth\AdminRepository;
+use App\Auth\PermissionHelper;
+use App\Repository\RoleRepository;
+
+AuthMiddleware::requireAdminLoginFromView();
+AuthMiddleware::requireAnyPermissionFromView(['manage_admin_users', 'manage_roles', 'assign_role_permissions']);
+
+$adminRepo = new AdminRepository();
+$roleRepo = new RoleRepository();
+
+$stats = $adminRepo->getAdminCountByRole();
+$users = $adminRepo->getAllAdminsWithRoles();
+$roles = $roleRepo->getAllRolesWithUserCount();
+
+$totalUsers = $adminRepo->getTotalAdminCount();
+$totalRoles = $roleRepo->getRoleCount();
+$totalPermissions = $roleRepo->getPermissionCount();
+
+$canManageUsers = PermissionHelper::canManageUsers();
+$canManageRoles = PermissionHelper::canManageRoles();
+$canAssignPermissions = PermissionHelper::canAssignRolePermissions();
+
+$pageTitle = "Kelola Akses";
 include '../../components/admin/head.php';
 ?>
 
-<!-- NOTE!!! perlu diingat bahwa semuanya belum ada javascriptnya jadi belum interaktif dan responsive
--->
+<body class="bg-gray-50 h-screen flex">
+    <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
-<body class="bg-no-repeat h-screen flex">
-
-
-    <!-- Leftside: Sidebar -->
-    <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../../components/admin/sidebarAdmin.php'; ?>
-    </aside>
-
-    <!-- Rightside:-->
-    <div class="flex-1 flex flex-col overflow-y-auto">
-        <!-- navbar kawan -->
+    <div class="flex-1 flex flex-col overflow-hidden min-w-0">
         <header class="h-[60px] sticky top-0 z-10">
             <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
-        <!-- Main Contet -->
-        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <main class="flex-1 overflow-y-auto p-4 md:p-6">
+            <?php include '../../components/admin/breadcrumb.php'; ?>
+
             <div class="flex justify-between items-center mb-4">
                 <div class="mb-4">
-                    <h1 class="text-3xl font-bold"> Kelola Akses </h1>
-                    <p class="text-gray-400">Kelola peran dan hak akses ERP</p>
-                </div>
-                <button class="openUsers px-5 py-2 bg-gray-800 text-white rounded-lg cursor-pointer transition duration-200 hover:bg-gray-600">
-                    Tambah Users
-                </button>
-            </div>
-
-            <!-- Stsats Card -->
-            <div id="card" class="grid gap-4 grid-cols-4 mb-4">
-                <!-- Card 1.Admin -->
-                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
-                    <div id="card-header" class="mb-3 flex gap-3 items-center">
-                        <span class="material-symbols-outlined">shield</span> <!--Icon wak-->
-                        <div>
-                            <h2 class="text-base font-semibold">Admin</h2>
-                            <p class="text-sm text-gray-400 ">Jumlah Users: 1</p>
-                        </div>
-                    </div>
-                    <p class="text-sm pl-9 text-blue-800"> Full Access</p>
-                </div>
-
-                <!-- Card 2. Manager -->
-                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
-                    <div id="card-header" class="mb-3 flex gap-3 items-center">
-                        <span class="material-symbols-outlined">shield</span> <!--Icon wak-->
-                        <div>
-                            <h2 class="text-base font-semibold">Manager</h2>
-                            <p class="text-sm text-gray-400 ">Jumlah Users: 2</p>
-                        </div>
-                    </div>
-                    <p class="text-sm pl-9 text-green-600">Limited Access</p>
-                </div>
-
-
-                <!-- Card 3. Staff -->
-                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
-                    <div id="card-header" class="mb-3 flex gap-3 items-center">
-                        <span class="material-symbols-outlined">shield</span> <!--Icon wak-->
-                        <div>
-                            <h2 class="text-base font-semibold">Staff</h2>
-                            <p class="text-sm text-gray-400 ">Jumlah Users: 2</p>
-                        </div>
-                    </div>
-                    <p class="text-sm pl-9 text-amber-400">Limited Access</p>
-                </div>
-
-                <!-- Card 4. ??? -->
-                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
-                    <div id="card-header" class="mb-3 flex gap-3 items-center">
-                        <span class="material-symbols-outlined">shield</span> <!--Icon wak-->
-                        <div>
-                            <h2 class="text-base font-semibold">Viewer</h2>
-                            <p class="text-sm text-gray-400 ">Jumlah Users: 1</p>
-                        </div>
-                    </div>
-                    <p class="text-sm pl-9 text-red-600">Read Only</p>
+                    <h1 class="text-3xl font-bold">Kelola Akses</h1>
+                    <p class="text-gray-400">Kelola peran dan hak akses sistem administrator</p>
                 </div>
             </div>
 
-            <!--  Tabel Users  -->
-            <div id="list-container" class="rounded-lg border border-gray-200 bg-white shadow-md p-4 justify-center">
-                <div id="container-header" class="mb-6 flex justify-between">
-                    <h2 class="text-2xl font-bold">List Users</h2>
-                    <!-- Filter cari USERS -->
-                    <div id="filter-field" class="mb-2 flex flex-wrap items-center gap-4 pb-3 pt-0">
-                        <input type="text" placeholder="Cari Users..." class="border border-gray-300 rounded-lg px-3 w-xl py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-                        <button class="bg-gray-800 text-white px-6 py-2 rounded-lg">Cari</button>
-                    </div>
-                </div>
-                <div id="container-content">
-                    <div class="">
-                        <div class="relative w-full overflow-auto">
-                            <!-- TABEL NYA DI SINI -->
-                            <table class="w-full caption-bottom text-sm">
-                                <thead class="border-b uppercase">
-                                    <tr class="border-b bg-gray-50">
-                                        <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Id</th>
-                                        <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Nama</th>
-                                        <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Email</th>
-                                        <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">No. Telepon</th>
-                                        <th class="h-12 px-4 text-center align-center font-bold text-muted-foreground text-gray-600">Role</th>
-                                        <th class="h-12 px-4 text-center align-center font-bold text-muted-foreground text-gray-600">Status</th>
-                                        <th class="h-12 px-4 text-left align-middle font-bold text-muted-foreground text-gray-600">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-sm">
-                                    <tr class="border-t">
-                                        <td class="p-3 text-xs text-gray-500"># USR102</td>
-                                        <td class="p-3">Jojo Joestar</td>
-                                        <td class="p-3">joe.star@gmail.com</td>
-                                        <td class="p-3">081234567890</td>
-                                        <td class="p-3 w-1.5 text-center">
-                                            <div class="">
-                                                <div class="px-2 text-blue-800 border border-blue-500 rounded-lg bg-blue-200 ">Admin</div>
-                                                <div class="px-2 text-green-800 border border-green-500 rounded-lg bg-green-200 hidden">Manager</div>
-                                                <div class="px-2 text-yellow-800 border border-yellow-500 rounded-lg bg-amber-200 hidden">Staff</div>
-                                                <div class="px-2 text-red-950 border border-red-500 rounded-lg bg-red-200 hidden">viewer</div>
-                                            </div>
-                                        </td>
-                                        <td class="p-3 text-center w-2">
-                                            <div class="">
-                                                <div class="px-2 text-green-800 border border-green-500 rounded-lg bg-green-200">Active</div>
-                                                <div class="px-2 text-gray-500 border border-gray-400 rounded-lg bg-gray-100 hidden ">Inactive</div>
-                                            </div>
-                                        </td>
-                                        <td class="p-3 gap-2">
-                                            <button class="editUsers cursor-pointer text-blue-500 font-semibold">Edit</button> |
-                                            <button class="cursor-pointer text-red-500 font-semibold">Hapus</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+            <div class="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">
+                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-5">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-blue-100 rounded-full">
+                            <span class="material-symbols-outlined text-blue-600 text-2xl">people</span>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold"><?= $totalUsers ?></h3>
+                            <p class="text-gray-500 text-sm">Total Pengguna</p>
                         </div>
                     </div>
                 </div>
+                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-5">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-green-100 rounded-full">
+                            <span class="material-symbols-outlined text-green-600 text-2xl">security</span>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold"><?= $totalRoles ?></h3>
+                            <p class="text-gray-500 text-sm">Total Role</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-5">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-purple-100 rounded-full">
+                            <span class="material-symbols-outlined text-purple-600 text-2xl">key</span>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold"><?= $totalPermissions ?></h3>
+                            <p class="text-gray-500 text-sm">Total Permission</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid gap-6 lg:grid-cols-2 mb-6">
+                <?php if ($canManageUsers): ?>
+                    <a href="UserManagementAdmin.php" class="rounded-lg border border-gray-200 bg-white shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+                                <span class="material-symbols-outlined text-blue-600 text-3xl">manage_accounts</span>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold">Manajemen User</h2>
+                                <p class="text-gray-500 text-sm">Kelola pengguna administrator</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400"><?= $totalUsers ?> pengguna terdaftar</span>
+                            <span class="material-symbols-outlined text-gray-400 group-hover:text-blue-600 transition-colors">arrow_forward</span>
+                        </div>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($canManageRoles || $canAssignPermissions): ?>
+                    <a href="RoleManagementAdmin.php" class="rounded-lg border border-gray-200 bg-white shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer group">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="p-3 bg-green-50 rounded-lg group-hover:bg-green-100 transition-colors">
+                                <span class="material-symbols-outlined text-green-600 text-3xl">admin_panel_settings</span>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold">Role & Permission</h2>
+                                <p class="text-gray-500 text-sm">Kelola role dan hak akses</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400"><?= $totalRoles ?> role, <?= $totalPermissions ?> permission</span>
+                            <span class="material-symbols-outlined text-gray-400 group-hover:text-green-600 transition-colors">arrow_forward</span>
+                        </div>
+                    </a>
+                <?php endif; ?>
+            </div>
+
+            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 mb-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined">shield</span>
+                    Statistik Role
+                </h2>
+                <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+                    <?php foreach ($stats as $stat): ?>
+                        <div class="border rounded-lg p-4 <?= $stat['role_name'] === 'super_admin' ? 'border-blue-300 bg-blue-50' : '' ?>">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="material-symbols-outlined text-gray-600">
+                                    <?= $stat['role_name'] === 'super_admin' ? 'verified_user' : 'person' ?>
+                                </span>
+                                <div>
+                                    <h3 class="font-semibold capitalize"><?= htmlspecialchars(str_replace('_', ' ', $stat['role_name'])) ?></h3>
+                                    <p class="text-sm text-gray-500"><?= $stat['user_count'] ?> pengguna</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400 pl-9">
+                                <?= $stat['role_name'] === 'super_admin' ? 'Akses penuh ke semua fitur' : ($stat['role_description'] ?? 'Akses terbatas sesuai permission') ?>
+                            </p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined">history</span>
+                        Aktivitas Terakhir
+                    </h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="border-b bg-gray-50">
+                            <tr>
+                                <th class="h-10 px-4 text-left font-semibold text-gray-600">Pengguna</th>
+                                <th class="h-10 px-4 text-left font-semibold text-gray-600">Role</th>
+                                <th class="h-10 px-4 text-left font-semibold text-gray-600">Status</th>
+                                <th class="h-10 px-4 text-left font-semibold text-gray-600">Login Terakhir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $recentUsers = array_slice($users, 0, 5);
+                            foreach ($recentUsers as $user):
+                            ?>
+                                <tr class="border-t hover:bg-gray-50">
+                                    <td class="p-3">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                                                <span class="text-gray-600 text-sm font-medium">
+                                                    <?= strtoupper(substr($user['nama_lengkap'], 0, 1)) ?>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium"><?= htmlspecialchars($user['nama_lengkap']) ?></p>
+                                                <p class="text-xs text-gray-400"><?= htmlspecialchars($user['email']) ?></p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-3">
+                                        <?php
+                                        $roleClass = match ($user['role_name'] ?? '') {
+                                            'super_admin' => 'text-blue-800 border-blue-500 bg-blue-100',
+                                            'admin' => 'text-green-800 border-green-500 bg-green-100',
+                                            default => 'text-gray-800 border-gray-500 bg-gray-100'
+                                        };
+                                        ?>
+                                        <span class="px-2 py-1 text-xs border rounded-lg <?= $roleClass ?>">
+                                            <?= htmlspecialchars(ucfirst(str_replace('_', ' ', $user['role_name'] ?? 'N/A'))) ?>
+                                        </span>
+                                    </td>
+                                    <td class="p-3">
+                                        <?php if ($user['is_active']): ?>
+                                            <span class="flex items-center gap-1 text-green-600">
+                                                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                                Aktif
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="flex items-center gap-1 text-gray-400">
+                                                <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                                Nonaktif
+                                            </span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="p-3 text-gray-500 text-sm">
+                                        <?= $user['last_login'] ? date('d M Y, H:i', strtotime($user['last_login'])) : 'Belum pernah login' ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php if ($canManageUsers && count($users) > 5): ?>
+                    <div class="mt-4 text-center">
+                        <a href="UserManagementAdmin.php" class="text-blue-600 hover:text-blue-800 text-sm">
+                            Lihat semua pengguna &rarr;
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
         </main>
     </div>
-
-    <!-- Modal form tambah Hak Akses / Users -->
-    <div id="form-users" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden">
-        <div id="lb-backdrop" class="absolute inset-0 bg-black opacity-75 transition-opacity duration-300"></div>
-        <div id="modal-card" class="relative z-10 max-w-lg w-full rounded-lg border border-gray-200 bg-white shadow-md p-4 px-8 justify-center
-                transition-all duration-300 ease-out opacity-0 scale-95 translate-y-4">
-
-            <div class="mb-4 flex justify-between"> <!--ini header-->
-                <div>
-                    <h2 class="text-lg font-semibold">Tambah Users</h2>
-                    <p class="text-sm text-gray-400">Masukkan Detail data diri users</p>
-                </div>
-                <button class="cancel cursor-pointer">
-                    <span class="material-symbols-outlined">close</span> <!--Close/Cancel Button-->
-                </button>
-            </div>
-
-            <form action="">
-                <!-- Imput ID Produk/ dibuat Otomatis paling -->
-                <div class="mb-4">
-                    <label for="" class="font-semibold text-sm">ID Users</label>
-                    <input type="text" disabled
-                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-200 text-base focus:ring-blue-500 focus:border-blue-500 ">
-                </div>
-
-                <!-- Input nama Users -->
-                <div class="mb-4">
-                    <label for="" class="font-semibold text-sm">Nama</label>
-                    <input type="text" required
-                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <!-- Input Email Users -->
-                <div class="mb-4">
-                    <label for="" class="font-semibold text-sm">Email</label>
-                    <input type="text" required
-                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <!-- No Telepon -->
-                <div class="mb-4">
-                    <label for="" class="font-semibold text-sm">No Telepon</label>
-                    <input type="text" required
-                        class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500">
-                </div>
-
-                <!-- Jabatan / Posisi -->
-                <div class="flex gap-2 mb-4">
-                    <div class="w-[50%]">
-                        <label for="" class="font-semibold text-sm">Role</label>
-                        <select name="" id="" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
-                            <option value="" class="value:text-gray">Pilih Role</option>
-                            <option value="">Admin</option>
-                            <option value="">Manajer</option>
-                            <option value="">Staff</option>
-                            <option value="">Viewer</option>
-                        </select>
-                    </div>
-
-                    <!-- Status Users -->
-                    <div class="w-[50%]">
-                        <label for="" class="font-semibold text-sm">Status</label>
-                        <select name="" id="" class="w-full p-1 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 ">
-                            <option value="" class="value:text-gray">Pilih Status</option>
-                            <option value="">Active</option>
-                            <option value="">Inactive</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button type="submit" class="p-2 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Tambah</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- JS -->
-    <script src="/assets/js/admin/addUsers.js"></script>
 </body>
 
 </html>

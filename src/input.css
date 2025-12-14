@@ -1,54 +1,54 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap");
 
 @theme {
   --font-jost: "Jost", sans-serif;
   --font-poppins: "Poppins" sans-serif;
+
+  /* Updated primary color to burgundy (#882426) and refined all related colors */
   --color-navbar: rgba(237, 237, 237, 0.9);
-  --color-red-nano: #512E2E;
+  --color-red-nano: #882426;
 
   /* Brand */
-  --color-main: #512E2E;
+  --color-main: #882426;
 
-  /* Primary */
-  --color-primary: #8B3A3A;
-  --color-primary-light: #B45B5B;
-  --color-primary-dark: #3A1F1F;
+  /* Primary - Burgundy Palette */
+  --color-primary: #882426;
+  --color-primary-light: #c7545a;
+  --color-primary-dark: #5f1517;
 
-  /* Secondary */
-  --color-secondary: #E5D0C7;
-  --color-secondary-dark: #C4B1AA;
-  --color-secondary-light: #F4E9E6;
+  /* Secondary - Gold Accent */
+  --color-secondary: #d4af37;
+  --color-secondary-dark: #b8941f;
+  --color-secondary-light: #e8c76e;
 
-  /* Neutrals */
-  --color-text-primary: #1A1A1A;
-  --color-text-secondary: #4A4A4A;
-  --color-border: #D9D9D9;
-  --color-bg: #FAFAFA;
-  --color-surface: #FFFFFF;
+  /* Neutrals - Warm Beige Palette */
+  --color-text-primary: #2a2420;
+  --color-text-secondary: #5c5651;
+  --color-border: #e8ddd7;
+  --color-bg: #f8f6f3;
+  --color-surface: #ffffff;
 
-  /* Buttons - Primary */
-  --btn-primary-default: #8B3A3A;
-  --btn-primary-hover: #A14646;
-  --btn-primary-active: #6E2D2D;
-  --btn-primary-disabled: #C7A8A8;
+  /* Buttons - Primary Burgundy */
+  --btn-primary-default: #882426;
+  --btn-primary-hover: #a94f52;
+  --btn-primary-active: #6e1d1f;
+  --btn-primary-disabled: #d4a5a7;
 
-  /* Buttons - Secondary */
-  --btn-secondary-default: #E5D0C7;
-  --btn-secondary-hover: #D6C1B9;
-  --btn-secondary-active: #BDAAA2;
-  --btn-secondary-disabled: #EDE4E2;
+  /* Buttons - Secondary Gold */
+  --btn-secondary-default: #d4af37;
+  --btn-secondary-hover: #e8c76e;
+  --btn-secondary-active: #b8941f;
+  --btn-secondary-disabled: #e8d9b8;
 
   /* Status */
-  --color-success: #4CAF50;
-  --color-warning: #FFC107;
-  --color-error: #D32F2F;
-  --color-info: #1976D2;
+  --color-success: #4caf50;
+  --color-warning: #ffc107;
+  --color-error: #d32f2f;
+  --color-info: #1976d2;
 
   /* Shadows */
-  --shadow-soft: 0px 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-medium: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  --shadow-strong: 0px 8px 20px rgba(0, 0, 0, 0.15);
+  --shadow-soft: 0px 2px 4px rgba(136, 36, 38, 0.08);
+  --shadow-medium: 0px 4px 10px rgba(136, 36, 38, 0.12);
+  --shadow-strong: 0px 8px 20px rgba(136, 36, 38, 0.15);
 }
-
-;

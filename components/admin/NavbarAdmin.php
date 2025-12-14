@@ -1,78 +1,301 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/src/output.css">
-</head>
-<body>
-        <header class="bg-gray-300/30 p-2 flex items-center backdrop-blur-2xl justify-between">
-            <div class="flex items-center gap-4 pl-5 ">
-                <p class="font-base text-lg">Selamat Datang, <strong>{nama}</strong> di Admin Panel</p>
+<?php
+require_once __DIR__ . '/../../config/config.php';
+
+use App\Auth\SessionManager;
+use App\Auth\AdminRepository;
+
+$currentAdmin = SessionManager::getCurrentAdmin();
+
+// Jika admin tidak login, redirect ke login page
+if (!$currentAdmin) {
+    header('Location: ../../view/login-admin.php');
+    exit;
+}
+
+// Ambil data admin lengkap dengan foto dari database
+$adminRepo = new AdminRepository();
+$adminData = $adminRepo->getAdminWithPhoto($currentAdmin['id_admin']);
+
+// Logika ini memastikan foto_url sudah valid sebelum dikirim ke frontend
+$adminPhoto = $adminData['photo_url'] ?? '../../assets/img/profil/default-profil.png';
+$adminName = $adminData['nama_lengkap'] ?? 'Admin';
+// Gunakan role_name dari session yang sudah di-fetch dari database saat login
+$adminRole = $currentAdmin['role_name'] ?? 'admin';
+
+// Validasi akhir: Jika foto tidak ada di server, gunakan default
+if (!file_exists(__DIR__ . '../../' . ltrim($adminPhoto, '/'))) {
+    $adminPhoto = '../../assets/img/profil/default-profil.png';
+}
+?>
+
+<header class="sticky top-0 z-30 bg-gradient-to-r from-white to-gray-50 border-b border-gray-200 shadow-sm">
+    <nav class="flex items-center justify-between px-4 md:px-6 py-2 h-full">
+        <!-- Left Section - Burger Menu -->
+        <div class="flex items-center gap-4">
+            <!-- Burger Button for Desktop Collapse -->
+            <button
+                id="toggleSidebarBtn"
+                class="hidden lg:block p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                aria-label="Toggle sidebar">
+                <span class="material-symbols-outlined text-gray-700">menu</span>
+            </button>
+
+            <!-- Burger Button for Mobile Drawer -->
+            <button
+                id="openDrawerBtn"
+                class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                aria-label="Open menu">
+                <span class="material-symbols-outlined text-gray-700">menu</span>
+            </button>
+
+            <div class="hidden md:block">
+                <h1 class="text-xl font-semibold text-gray-800">
+                    Selamat Datang <span class="text-[#882426]"><?= htmlspecialchars($adminName); ?></span>
+                </h1>
+                <p class="text-sm text-gray-500">Kelola data dan kontrol sistem dari sini</p>
             </div>
-            <!-- Bagian Navbar action Menu -->
-            <!-- Notification ICON -->
-            <nav class="relative flex items-center gap-4 mr-12">
-                <button class="relative p-2 rounded-md hover:bg-gray-100 outline-0 hover:outline-2 hover:outline-blue-500
-                focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <span class="material-symbols-outlined">notifications_active</span>
+        </div>
+
+        <!-- Center Section - Time Display -->
+        <div class="hidden md:flex flex-col items-center">
+            <div class="text-lg font-semibold text-gray-800" id="currentTime">--:--:--</div>
+            <div class="text-xs text-gray-400" id="currentDate">-- -- ----</div>
+        </div>
+
+        <!-- Right Section: Icons and Profile -->
+        <nav class="flex items-center gap-4 navbar-right">
+            <!-- Notification Button -->
+            <div class="relative">
+                <button class="icon-button" id="notification-btn" title="Notifikasi">
+                    <span class="material-symbols-outlined">notifications_active</span>
+                    <span class="notification-badge" id="notification-badge">3</span>
                 </button>
-            <!-- Dropdown Notification -->
-                <div id="notifications-dropdown" class="dropdown-content hidden"> <!--Masih gw buat Hidden aja-->
-                    <div class="px-4 py-2 text-sm font-medium text-gray-900 border-b border-gray-200">Notifications</div>
-                    <div class="py-1">
-                        <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                            <div class="flex flex-col gap-1">
-                                <p class="text-sm font-medium">New order received</p>
-                                <p class="text-xs text-gray-500">Order #12345 - 5 minutes ago</p>
+                <!-- Notification Dropdown -->
+                <div id="notification-dropdown" class="dropdown-menu hidden">
+                    <div class="px-4 py-3 font-semibold text-sm border-b border-gray-200">
+                        Notifikasi (3)
+                    </div>
+                    <div class="max-h-64 overflow-y-auto">
+                        <div class="dropdown-item">
+                            <span class="material-symbols-outlined text-orange-500">shopping_cart</span>
+                            <div>
+                                <p class="text-sm font-medium">Pesanan Baru</p>
+                                <p class="text-xs text-gray-500">5 menit yang lalu</p>
                             </div>
                         </div>
-                        <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                            <div class="flex flex-col gap-1">
-                                <p class="text-sm font-medium">Low stock alert</p>
-                                <p class="text-xs text-gray-500">Product ABC - 15 minutes ago</p>
+                        <div class="dropdown-item">
+                            <span class="material-symbols-outlined text-red-500">warning</span>
+                            <div>
+                                <p class="text-sm font-medium">Stok Rendah</p>
+                                <p class="text-xs text-gray-500">15 menit yang lalu</p>
+                            </div>
+                        </div>
+                        <div class="dropdown-item">
+                            <span class="material-symbols-outlined text-blue-500">info</span>
+                            <div>
+                                <p class="text-sm font-medium">Update Sistem</p>
+                                <p class="text-xs text-gray-500">1 jam yang lalu</p>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-            <!-- Settings ICON -->
-                <button class="relative p-2 rounded-md hover:bg-gray-100 outline-0 hover:outline-2 hover:outline-blue-500
-                focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <span class="material-symbols-outlined">settings</span>
+            <!-- Settings Button -->
+            <div class="relative">
+                <button class="icon-button" id="settings-btn" title="Pengaturan">
+                    <span class="material-symbols-outlined">settings</span>
                 </button>
-                <!-- Dropdown Settings -->
-                <div id="settings-dropdown" class="dropdown-content hidden"> <!--Masih gw buat Hidden aja-->
-                    <div class="px-4 py-6 text-sm font-medium text-gray-900 border-b border-gray-200">Settings</div>
-                    <div class="py-1">
-                        <ul>
-                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                <a class="" href="/">Store Settings</a></li>
-                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                <a class="" href="/">Preferences</a></li>
-                        </ul>
+                <!-- Settings Dropdown -->
+                <div id="settings-dropdown" class="dropdown-menu hidden">
+                    <div class="px-4 py-3 font-semibold text-sm border-b border-gray-200">
+                        Pengaturan
                     </div>
+                    <a href="../../view/admin/WebManagement.php" class="dropdown-item">
+                        <span class="material-symbols-outlined">tune</span>
+                        <span>Pengaturan Website</span>
+                    </a>
+                    <a href="../../view/admin/WebManagement.php" class="dropdown-item">
+                        <span class="material-symbols-outlined">palette</span>
+                        <span>Preferensi Tampilan</span>
+                    </a>
                 </div>
+            </div>
 
-                <!-- Users Icons -->
-                <button class="relative p-2 rounded-md hover:bg-gray-100 outline-0 hover:outline-2 hover:outline-blue-500
-                focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <span class="material-symbols-outlined">contacts_product</span>
+            <!-- Profile Section with Photo -->
+            <div class="relative">
+                <button class="icon-button" id="profile-btn" title="<?= htmlspecialchars($adminName); ?>">
+                    <img
+                        src="<?= htmlspecialchars($adminPhoto); ?>"
+                        alt="<?= htmlspecialchars($adminName); ?>"
+                        class="profile-photo" />
                 </button>
-                <div id="settings-dropdown" class="dropdown-content hidden"> <!--Masih gw buat Hidden aja-->
-                    <div class="px-4 py-6 text-sm font-medium text-gray-900 border-b border-gray-200">Settings</div>
-                    <div class="py-1">
-                        <ul>
-                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                <a class="" href="/">Profile</a></li>
-                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                <a class="" href="/">Logout</a></li>
-                        </ul>
+
+                <!-- Profile Dropdown -->
+                <div id="profile-dropdown" class="dropdown-menu hidden">
+                    <!-- Header dengan nama, email, dan role -->
+                    <div class="dropdown-header">
+                        <div class="dropdown-header-name"><?= htmlspecialchars($adminName); ?></div>
+                        <div class="dropdown-header-email"><?= htmlspecialchars($currentAdmin['email']); ?></div>
+                        <span class="role-badge <?= htmlspecialchars($adminRole); ?> mt-2 inline-block">
+                            <?= ucfirst(str_replace('_', ' ', $adminRole)); ?>
+                        </span>
                     </div>
+
+                    <!-- Menu Items -->
+                    <a href="../../view/admin/ProfileAdmin.php" class="dropdown-item">
+                        <span class="material-symbols-outlined">visibility</span>
+                        <span>Lihat Profil</span>
+                    </a>
+                    <a href="../../view/admin/ProfileEditAdmin.php" class="dropdown-item">
+                        <span class="material-symbols-outlined">edit</span>
+                        <span>Edit Profil</span>
+                    </a>
+                    <a href="../../view/admin/ProfilePasswordAdmin.php" class="dropdown-item">
+                        <span class="material-symbols-outlined">lock</span>
+                        <span>Ubah Password</span>
+                    </a>
+                    <button id="logout-btn" class="dropdown-item logout">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span>Keluar</span>
+                    </button>
                 </div>
-            </nav>
-        </header>
-</body>
-</html>
-        
+            </div>
+        </nav>
+    </nav>
+</header>
+
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <span class="material-symbols-outlined" style="font-size: 3.5rem;">logout</span>
+        </div>
+        <h2 class="modal-title">Keluar dari Sistem?</h2>
+        <p class="modal-description">Anda akan keluar dari akun admin. Pastikan semua pekerjaan Anda sudah tersimpan dengan baik sebelum melanjutkan.</p>
+        <div class="modal-buttons">
+            <button id="cancelLogoutBtn" class="modal-btn modal-btn-cancel">
+                <span class="material-symbols-outlined" style="font-size: 1rem;">close</span>
+                Batal
+            </button>
+            <button id="confirmLogoutBtn" class="modal-btn modal-btn-logout">
+                <span class="material-symbols-outlined" style="font-size: 1rem;">logout</span>
+                Keluar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('id-ID', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        const dateString = now.toLocaleDateString('id-ID', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const timeElement = document.getElementById('currentTime');
+        const dateElement = document.getElementById('currentDate');
+        if (timeElement) timeElement.textContent = timeString;
+        if (dateElement) dateElement.textContent = dateString;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationBtn = document.getElementById('notification-btn');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsDropdown = document.getElementById('settings-dropdown');
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        function closeAllDropdowns() {
+            if (notificationDropdown) notificationDropdown.classList.add('hidden');
+            if (settingsDropdown) settingsDropdown.classList.add('hidden');
+            if (profileDropdown) profileDropdown.classList.add('hidden');
+        }
+
+        function toggleDropdown(dropdown) {
+            const isHidden = dropdown.classList.contains('hidden');
+            closeAllDropdowns();
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        if (notificationBtn && notificationDropdown) {
+            notificationBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleDropdown(notificationDropdown);
+            });
+        }
+
+        if (settingsBtn && settingsDropdown) {
+            settingsBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleDropdown(settingsDropdown);
+            });
+        }
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleDropdown(profileDropdown);
+            });
+        }
+
+        document.addEventListener('click', function(e) {
+            const isClickInsideDropdown = e.target.closest('.dropdown-menu');
+            if (!isClickInsideDropdown) {
+                closeAllDropdowns();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAllDropdowns();
+            }
+        });
+
+        const logoutBtn = document.getElementById('logout-btn');
+        const logoutModal = document.getElementById('logoutModal');
+        const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+        const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+
+        if (logoutBtn && logoutModal) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                logoutModal.classList.add('show');
+                if (profileDropdown) profileDropdown.classList.add('hidden');
+            });
+        }
+
+        if (cancelLogoutBtn && logoutModal) {
+            cancelLogoutBtn.addEventListener('click', function() {
+                logoutModal.classList.remove('show');
+            });
+        }
+
+        if (confirmLogoutBtn) {
+            confirmLogoutBtn.addEventListener('click', function() {
+                window.location.href = '../../app/handlers/LogoutHandler.php';
+            });
+        }
+
+        if (logoutModal) {
+            logoutModal.addEventListener('click', function(e) {
+                if (e.target === logoutModal) {
+                    logoutModal.classList.remove('show');
+                }
+            });
+        }
+    });
+</script>

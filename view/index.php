@@ -1,4 +1,3 @@
 <?php
-    header("Location: ./users/landingPage.php");
-    exit;
-?>
+header("Location: ./users/landingPage.php");
+exit;

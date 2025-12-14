@@ -1,65 +1,111 @@
-//Redirect Url: Google API login
 <?php
-require '../config/function.php';
-require '../config/config.php';
-require __DIR__ . '/../vendor/autoload.php';
 
-$client = new Google\Client;
-$client->setClientId(GOOGLE_CLIENT_ID);
-$client->setClientSecret(GOOGLE_CLIENT_SECRET);
-$client->setRedirecturi(GOOGLE_REDIRECT_URI);
+/**
+ * Google OAuth Redirect Handler
+ * Menangani callback dari Google OAuth dan membuat/update customer
+ * Mendukung pengambilan foto profil dari Google
+ */
 
-if (!isset($_GET["code"])) {
-    exit("Login failed: no code returned");
+require_once __DIR__ . '/../config/config.php';
+
+use App\Auth\CustomerRepository;
+use App\Auth\GoogleOAuthHandler;
+use App\Auth\SessionManager;
+
+if (isset($_GET['error'])) {
+    $errorMsg = htmlspecialchars($_GET['error']);
+    $errorDesc = isset($_GET['error_description']) ? htmlspecialchars($_GET['error_description']) : '';
+    $_SESSION['oauth_error'] = "Google OAuth Error: $errorMsg. $errorDesc";
+    header('Location: login.php');
+    exit;
 }
 
-$token = $client->fetchAccessTokenWithAuthCode($_GET["code"]);
-
-if (isset($token['error'])) {
-    exit('Gagal mengambil access token: ' . htmlspecialchars($token['error']));
+if (!isset($_GET['code'])) {
+    $_SESSION['oauth_error'] = 'Kode otorisasi tidak diterima dari Google.';
+    header('Location: login.php');
+    exit;
 }
 
-$client->setAccessToken($token['access_token']);
+$customerRepo = new CustomerRepository();
+$googleOAuth = new GoogleOAuthHandler(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI);
 
-$oauth = new Google\Service\Oauth2($client);
-$userinfo = $oauth->userinfo->get();
+$authCode = $_GET['code'];
 
-//menambahkan data user register ke db
-$email = $userinfo->email;
-$name = $userinfo->name;
+try {
+    $tokenData = $googleOAuth->getAccessToken($authCode);
 
-// Cek apakah user sudah ada di database
-$cek = mysqli_query($conn, "SELECT * FROM pengguna_user WHERE email='$email'");
-if (mysqli_num_rows($cek) == 0) {
-
-     // Hitung total user Google biar bisa generate ID unik
-    $result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM pengguna_user WHERE id_pengguna LIKE 'google%'");
-    $row = mysqli_fetch_assoc($result);
-    $totalGoogleUsers = $row['total'] + 1;
-
-    //UIDGENERARTOR
-    $query_id = mysqli_query($conn, "SELECT MAX(id_pengguna) AS maxID FROM pengguna_user");
-    $data = mysqli_fetch_assoc($query_id);
-    $lastID = $data['maxID'] ?? null;
-
-    if ($lastID && preg_match('/USR(\d+)/', $lastID, $matches)) {
-        $num = (int)$matches[1] + 1;
-    } else {
-        $num = 1;
+    if (!$tokenData || !isset($tokenData['access_token'])) {
+        throw new \Exception('Gagal mendapatkan access token dari Google.');
     }
-    $newID = "USR" . str_pad($num, 3, "0", STR_PAD_LEFT); //GENERATE UNIQUE ID
 
-     // Password dummy (karena OAuth)
-    $fakePassword = md5('google_oauth');
-    
-     // Insert ke database
-    mysqli_query($conn, "INSERT INTO pengguna_user (id_pengguna, nama_pengguna, no_telp, email, password_pengguna) VALUES ('$newID', '$name', '', '$email', '$fakePassword')"); 
+    $accessToken = $tokenData['access_token'];
+
+    $googleUserData = $googleOAuth->getCompleteUserData($accessToken);
+
+    if (!$googleUserData) {
+        throw new \Exception('Gagal mengambil informasi pengguna dari Google.');
+    }
+
+    if (!isset($googleUserData['id']) || !isset($googleUserData['email'])) {
+        throw new \Exception('Data pengguna dari Google tidak lengkap.');
+    }
+
+    $result = $customerRepo->upsertGoogleCustomer([
+        'id' => $googleUserData['id'],
+        'email' => $googleUserData['email'],
+        'name' => $googleUserData['name'],
+        'profile_image' => $googleUserData['profile_image'],
+        'phone' => $googleUserData['phone']
+    ]);
+
+    $customerId = $result['id'];
+    $isNewUser = $result['is_new'] ?? false;
+    $needsPhone = $result['needs_phone'] ?? false;
+    $wasLinked = $result['linked'] ?? false;
+
+    $customer = $customerRepo->getById($customerId);
+
+    if (!$customer) {
+        throw new \Exception('Gagal mengambil data customer.');
+    }
+
+    if (!$customer['is_active']) {
+        $_SESSION['deactivated_account'] = true;
+        $_SESSION['oauth_error'] = 'Akun Anda telah dinonaktifkan. Anda tidak dapat login sampai akun diaktifkan kembali. Hubungi tim support kami di support@nanokomputer.com atau WhatsApp 0812-3456-7890 untuk informasi lebih lanjut.';
+        header('Location: login.php');
+        exit;
+    }
+
+    SessionManager::createCustomerSession($customer, true);
+
+    SessionManager::setCustomerRememberMe($customerId, $customerRepo);
+
+    if ($isNewUser) {
+        $_SESSION['google_welcome'] = true;
+        $_SESSION['google_welcome_name'] = $googleUserData['name'];
+        $_SESSION['toast_success'] = 'Selamat datang, ' . htmlspecialchars($googleUserData['name']) . '! Akun Anda berhasil dibuat.';
+    } elseif ($wasLinked) {
+        $_SESSION['google_linked'] = true;
+        $_SESSION['toast_success'] = 'Akun Google berhasil dihubungkan dengan akun Anda!';
+    } else {
+        $_SESSION['toast_success'] = 'Selamat datang kembali, ' . htmlspecialchars($googleUserData['name']) . '!';
+    }
+
+    if ($needsPhone) {
+        $_SESSION['needs_phone_completion'] = true;
+        header('Location: users/completeProfile.php');
+        exit;
+    }
+
+    header('Location: users/landingPage.php');
+    exit;
+} catch (\Exception $e) {
+    error_log('Google OAuth Error: ' . $e->getMessage());
+
+    $_SESSION['oauth_error'] = APP_DEBUG
+        ? 'Error: ' . htmlspecialchars($e->getMessage())
+        : 'Terjadi kesalahan saat autentikasi dengan Google. Silakan coba lagi.';
+
+    header('Location: login.php');
+    exit;
 }
-
-// Set session untuk user Google
-$_SESSION['loggedin'] = true;
-$_SESSION['email'] = $userinfo->email;
-$_SESSION['name'] = $userinfo->name;
-
-header('Location: index.php');
-exit;

@@ -1,26 +1,30 @@
 <?php
+require_once __DIR__ . '/../../config/config.php';
+
+use App\Auth\AuthMiddleware;
+
+// Check admin authentication and session expiration
+AuthMiddleware::requireAdminLoginFromView();
+
 // Definisikan title untuk halaman ini
 $pageTitle = "Return";
 // Include file head.php dari components/admin
 include '../../components/admin/head.php';
 ?>
 
-<body class="bg-no-repeat h-screen flex">
+<body class="bg-gray-50 h-screen flex">
+    <!-- Sidebar Component -->
+    <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
-    <!-- Leftside: Sidebar -->
-    <aside class="w-[250px] flex items-center sticky top-0 h-screen">
-        <?php include '../../components/admin/sidebarAdmin.php'; ?>
-    </aside>
-
-    <!-- Rightside:-->
-    <div class="flex-1 flex flex-col overflow-y-auto">
-        <!-- navbar kawan -->
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden min-w-0">
+        <!-- Navbar -->
         <header class="h-[60px] sticky top-0 z-10">
             <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
-        <!-- main kontent -->
-        <main class="flex-1 overflow-y-auto p-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-6">
             <div id="main-header" class="flex justify-between items-center mb-4">
                 <div class="mb-4">
                     <h1 class="text-3xl font-bold"> Return Management </h1>
