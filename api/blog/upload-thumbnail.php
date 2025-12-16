@@ -41,7 +41,7 @@ try {
         exit;
     }
 
-    $uploadDir = __DIR__ . '/../../assets/uploads/blog/';
+    $uploadDir = __DIR__ . '/../../uploads/blog/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
     }
@@ -60,7 +60,7 @@ try {
         'success' => true,
         'message' => 'Thumbnail berhasil diupload',
         'filename' => $filename,
-        'url' => '../../assets/uploads/blog/' . $filename
+        'url' => '../../uploads/blog/' . $filename
     ]);
 } catch (Exception $e) {
     http_response_code(500);

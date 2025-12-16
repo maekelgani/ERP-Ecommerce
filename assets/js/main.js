@@ -13,9 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function setActiveTab(index) {
             tabBtns.forEach((btn, i) => {
-                btn.classList.toggle("bg-white", i === index);
-                btn.classList.toggle("text-black", i === index);
-                btn.classList.toggle("text-gray-400", i !== index);
+                if (i === index) {
+                    btn.style.background = 'linear-gradient(135deg, #882426 0%, #6d1a1c 100%)';
+                    btn.style.color = 'white';
+                    btn.style.boxShadow = '0 4px 6px -1px rgba(136, 36, 38, 0.3)';
+                } else {
+                    btn.style.background = '';
+                    btn.style.color = '';
+                    btn.style.boxShadow = '';
+                }
+                btn.classList.toggle("text-gray-500", i !== index);
             });
 
             tabContents.forEach((content, i) => {
@@ -45,9 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function setActiveTab(index) {
             tabBtns.forEach((btn, i) => {
-                btn.classList.toggle("bg-white", i === index);
-                btn.classList.toggle("text-black", i === index);
-                btn.classList.toggle("text-gray-400", i !== index);
+                if (i === index) {
+                    btn.style.background = 'linear-gradient(135deg, #882426 0%, #6d1a1c 100%)';
+                    btn.style.color = 'white';
+                    btn.style.boxShadow = '0 4px 6px -1px rgba(136, 36, 38, 0.3)';
+                } else {
+                    btn.style.background = '';
+                    btn.style.color = '';
+                    btn.style.boxShadow = '';
+                }
+                btn.classList.toggle("text-gray-500", i !== index);
             });
 
             tabContents.forEach((content, i) => {

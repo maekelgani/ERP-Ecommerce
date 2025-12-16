@@ -32,11 +32,15 @@ require_once __DIR__ . '/../app/Repository/AnalyticsRepository.php';
 require_once __DIR__ . '/../app/Repository/DiskonRepository.php';
 require_once __DIR__ . '/../app/Repository/PromoCampaignRepository.php';
 require_once __DIR__ . '/../app/Repository/CampaignProductRepository.php';
+require_once __DIR__ . '/../app/Repository/VoucherRepository.php';
+require_once __DIR__ . '/../app/Repository/VoucherUsageRepository.php';
 require_once __DIR__ . '/../app/Repository/StoreLocationRepository.php';
 require_once __DIR__ . '/../app/Helper/AdminProfileHelper.php';
 require_once __DIR__ . '/../app/Helper/CategoryLandingHelper.php';
 require_once __DIR__ . '/../app/Helper/ProductLandingHelper.php';
 require_once __DIR__ . '/../app/Helper/BrandLandingHelper.php';
+require_once __DIR__ . '/../app/Repository/BlogCategoryRepository.php';
+require_once __DIR__ . '/../app/Repository/BlogPostRepository.php';
 
 // Google OAuth Configuration
 define('GOOGLE_CLIENT_ID', $_ENV['GOOGLE_CLIENT_ID'] ?? '');

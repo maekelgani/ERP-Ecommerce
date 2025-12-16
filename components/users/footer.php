@@ -104,21 +104,62 @@
                     </div>
 
                     <div class="text-center sm:text-left">
-                        <p class="text-lg font-medium text-gray-900">Jasa Pengiriman</p>
+                        <p class="text-lg font-medium text-gray-900 mb-4">Pengiriman</p>
 
-                        <div class="mt-8 space-y-4 text-sm flex gap-2 justify-center sm:justify-start">
-                            <img alt=""
-                                class="w-12 h-10 bg-cover rounded"
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Logo_J%26T_Merah_Square.jpg/1024px-Logo_J%26T_Merah_Square.jpg">
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="AnterAja"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="../../assets/img/payment/anteraja.png">
+                            </div>
 
-                            <img alt=""
-                                class="w-12 h-10 bg-cover rounded"
-                                src="https://upload.wikimedia.org/wikipedia/commons/9/92/New_Logo_JNE.png">
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="Grab Express"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="../../assets/img/payment/grab-express.png">
+                            </div>
 
-                            <img alt=""
-                                class="w-12 h-10 bg-cover rounded"
-                                src="https://www.barantum.com/assets/img/successstory/casestudy/sicepat/sicepat.png">
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="GoSend"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="../../assets/img/payment/gosend-gojek.png">
+                            </div>
 
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="SiCepat Express"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="../../assets/img/payment/sicepat_merah.svg">
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="ID Express"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="../../assets/img/payment/id-express.png">
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="JNE"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/9/92/New_Logo_JNE.png">
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="J&T Express"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/0/01/J%26T_Express_logo.svg">
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="Ninja Xpress"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="../../assets/img/payment/ninja-xpress.png">
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
+                                <img alt="Sicepat Halu"
+                                    class="w-full h-auto object-contain max-h-10"
+                                    src="../../assets/img/payment/sap-express-courier.png">
+                            </div>
                         </div>
                     </div>
 

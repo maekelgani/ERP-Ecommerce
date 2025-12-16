@@ -411,7 +411,7 @@ $articles = [
                         <h2 class="font-bold text-xl sm:text-2xl lg:text-3xl text-white">Brand Pilihan</h2>
                         <p class="text-white/70 text-sm mt-1">Partner terpercaya untuk kebutuhan PC Anda</p>
                     </div>
-                    <a href="brands.php" class="hidden sm:flex items-center gap-2 text-white/90 hover:text-white font-medium text-sm transition-colors">
+                    <a href="brandCollection.php" class="hidden sm:flex items-center gap-2 text-white/90 hover:text-white font-medium text-sm transition-colors">
                         Lihat Semua Brand
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

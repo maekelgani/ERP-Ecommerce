@@ -1,4 +1,6 @@
 <?php
+$pageTitle = "Promo & Diskon";
+
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../app/Services/PromoService.php';
 
@@ -9,6 +11,7 @@ use App\Services\PromoService;
 
 $promoService = new PromoService();
 $promoData = $promoService->getPromoLandingData();
+include '../../components/users/head.php';
 ?>
 
 <!DOCTYPE html>
@@ -76,7 +79,10 @@ $promoData = $promoService->getPromoLandingData();
 </head>
 
 <body class="bg-gray-50">
-    <?php include_once '../../components/customer/navbarCustomer.php'; ?>
+    <header>
+        <?php include '../../components/users/navbarUsers.php'; ?>
+    </header>
+
 
     <main class="max-w-7xl mx-auto px-4 py-8">
         <div class="text-center mb-10">
@@ -159,12 +165,12 @@ $promoData = $promoService->getPromoLandingData();
                             <?php if (!empty($products)): ?>
                                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                     <?php foreach ($products as $product): ?>
-                                        <a href="../../view/customer/detailProduct.php?id=<?= urlencode($product['id_produk']) ?>" class="product-card bg-white border border-gray-100 rounded-xl overflow-hidden">
+                                        <a href="../../view/users/productDetail.php?id=<?= urlencode($product['id_produk']) ?>" class="product-card bg-white border border-gray-100 rounded-xl overflow-hidden">
                                             <div class="relative aspect-square bg-gray-100">
-                                                <img src="../../uploads/produk/<?= htmlspecialchars($product['gambar'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($product['nama_product']) ?>" class="w-full h-full object-cover">
-                                                <?php if ($product['diskon_nilai']): ?>
+                                                <img src="../../uploads/products/<?= htmlspecialchars($product['gambar'] ?? 'default.png') ?>" alt="<?= htmlspecialchars($product['nama_product']) ?>" class="w-full h-full object-cover">
+                                                <?php if ($product['nilai_diskon']): ?>
                                                     <span class="badge-discount">
-                                                        <?= $product['diskon_jenis'] === 'persen' ? $product['diskon_nilai'] . '%' : 'Hemat ' . number_format($product['diskon_nilai'], 0, ',', '.') ?>
+                                                        <?= $product['diskon_jenis'] === 'persen' ? $product['nilai_diskon'] . '%' : 'Hemat ' . number_format($product['nilai_diskon'], 0, ',', '.') ?>
                                                     </span>
                                                 <?php endif; ?>
                                             </div>
@@ -183,7 +189,7 @@ $promoData = $promoService->getPromoLandingData();
 
                                 <?php if ($promo['total_products'] > 8): ?>
                                     <div class="text-center mt-6">
-                                        <a href="../../view/customer/promoCampaign.php?slug=<?= urlencode($campaign['slug']) ?>" class="inline-flex items-center gap-2 text-[#882426] font-medium hover:underline">
+                                        <a href="../../view/users/promoCampaign.php?slug=<?= urlencode($campaign['slug']) ?>" class="inline-flex items-center gap-2 text-[#882426] font-medium hover:underline">
                                             Lihat semua <?= $promo['total_products'] ?> produk
                                             <span class="material-symbols-outlined text-lg">arrow_forward</span>
                                         </a>
@@ -213,9 +219,6 @@ $promoData = $promoService->getPromoLandingData();
             </div>
         </section>
     </main>
-
-    <?php include_once '../../components/customer/footerCustomer.php'; ?>
-
     <script>
         document.querySelectorAll('[data-countdown]').forEach(el => {
             let seconds = parseInt(el.dataset.countdown);
@@ -307,6 +310,7 @@ $promoData = $promoService->getPromoLandingData();
     </script>
 
     <?php include '../../components/users/loginRequiredModal.php'; ?>
+    <?php include '../../components/users/footer.php'; ?>
 </body>
 
 </html>

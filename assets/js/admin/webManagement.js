@@ -1,26 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
     const API_BASE = '../../api/admin/';
     const WILAYAH_API = 'https://www.emsifa.com/api-wilayah-indonesia/api';
-    
+
     let currentDeleteId = null;
     let currentDeleteType = null;
     let storeEditMode = false;
     let debounceTimer = null;
-    
+
     initSelect2();
     loadStores();
     loadTickets();
-    
+
     document.getElementById('btnAddStore').addEventListener('click', () => openStoreModal());
     document.getElementById('closeStoreModal').addEventListener('click', closeStoreModal);
     document.getElementById('cancelStoreBtn').addEventListener('click', closeStoreModal);
     document.getElementById('storeForm').addEventListener('submit', handleStoreSubmit);
-    
+
     document.getElementById('cancelDeleteBtn').addEventListener('click', closeDeleteModal);
     document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
-    
+
     document.getElementById('closeTicketModal').addEventListener('click', closeTicketModal);
-    
+
     document.getElementById('ticketSearch').addEventListener('input', function() {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(loadTickets, 300);
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('filterKategori').addEventListener('change', loadTickets);
     document.getElementById('filterDateFrom').addEventListener('change', loadTickets);
     document.getElementById('filterDateTo').addEventListener('change', loadTickets);
-    
+
     document.getElementById('storeModal').addEventListener('click', function(e) {
         if (e.target === this) closeStoreModal();
     });
@@ -47,21 +47,21 @@ document.addEventListener('DOMContentLoaded', function() {
             dropdownParent: $('#storeModal'),
             width: '100%'
         });
-        
+
         $('.select2-kota').select2({
             placeholder: 'Pilih Kota/Kabupaten',
             allowClear: true,
             dropdownParent: $('#storeModal'),
             width: '100%'
         });
-        
+
         $('.select2-kecamatan').select2({
             placeholder: 'Pilih Kecamatan',
             allowClear: true,
             dropdownParent: $('#storeModal'),
             width: '100%'
         });
-        
+
         $('.select2-kelurahan').select2({
             placeholder: 'Pilih Kelurahan',
             allowClear: true,
@@ -94,10 +94,10 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch(`${WILAYAH_API}/provinces.json`);
             const provinces = await response.json();
-            
+
             const select = document.getElementById('provinsiToko');
             select.innerHTML = '<option value="">Pilih Provinsi</option>';
-            
+
             provinces.forEach(province => {
                 const option = document.createElement('option');
                 option.value = province.id;
@@ -112,14 +112,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadCities(provinceId) {
         if (!provinceId) return;
-        
+
         try {
             const response = await fetch(`${WILAYAH_API}/regencies/${provinceId}.json`);
             const cities = await response.json();
-            
+
             const select = document.getElementById('kotaToko');
             select.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
-            
+
             cities.forEach(city => {
                 const option = document.createElement('option');
                 option.value = city.id;
@@ -134,14 +134,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadDistricts(cityId) {
         if (!cityId) return;
-        
+
         try {
             const response = await fetch(`${WILAYAH_API}/districts/${cityId}.json`);
             const districts = await response.json();
-            
+
             const select = document.getElementById('kecamatanToko');
             select.innerHTML = '<option value="">Pilih Kecamatan</option>';
-            
+
             districts.forEach(district => {
                 const option = document.createElement('option');
                 option.value = district.id;
@@ -156,14 +156,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadVillages(districtId) {
         if (!districtId) return;
-        
+
         try {
             const response = await fetch(`${WILAYAH_API}/villages/${districtId}.json`);
             const villages = await response.json();
-            
+
             const select = document.getElementById('kelurahanToko');
             select.innerHTML = '<option value="">Pilih Kelurahan</option>';
-            
+
             villages.forEach(village => {
                 const option = document.createElement('option');
                 option.value = village.id;
@@ -178,16 +178,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadStores() {
         const container = document.getElementById('storeList');
-        
+
         try {
             const response = await fetch(`${API_BASE}store-location.php?action=list`);
             const result = await response.json();
-            
+
             if (!result.success || !result.data || result.data.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-full text-center py-12">
-                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="material-symbols-outlined text-gray-400 text-3xl">store</span>
+                        <div class="w-10 h-10 bg-[#882426] backdrop-blur rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white">store</span>
                         </div>
                         <p class="text-gray-500">Belum ada lokasi toko</p>
                         <p class="text-sm text-gray-400">Klik tombol "Tambah Toko" untuk menambahkan</p>
@@ -195,12 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 return;
             }
-            
+
             container.innerHTML = result.data.map(store => `
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 hover:shadow-md transition-all">
                     <div class="flex items-start justify-between mb-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">
+                            <div class="w-10 h-10 bg-[#882426] backdrop-blur rounded-xl flex items-center justify-center">
                                 <span class="material-symbols-outlined text-white">store</span>
                             </div>
                             <div>
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         storeEditMode = !!storeData;
         document.getElementById('storeModalTitle').textContent = storeEditMode ? 'Edit Lokasi Toko' : 'Tambah Lokasi Toko';
         document.getElementById('storeForm').reset();
-        
+
         if (storeData) {
             document.getElementById('storeId').value = storeData.id_toko;
             document.getElementById('namaToko').value = storeData.nama_toko || '';
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('jamTutup').value = storeData.jam_tutup || '';
             document.getElementById('isActive').checked = storeData.is_active == 1;
         }
-        
+
         document.getElementById('storeModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
@@ -273,17 +273,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function handleStoreSubmit(e) {
         e.preventDefault();
-        
+
         const formData = new FormData();
         const storeId = document.getElementById('storeId').value;
-        
+
         if (storeId) {
             formData.append('id_toko', storeId);
             formData.append('action', 'update');
         } else {
             formData.append('action', 'add');
         }
-        
+
         formData.append('nama_toko', document.getElementById('namaToko').value);
         formData.append('no_telepon', document.getElementById('noTelepon').value);
         formData.append('alamat', document.getElementById('alamatToko').value);
@@ -291,31 +291,31 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('jam_buka', document.getElementById('jamBuka').value);
         formData.append('jam_tutup', document.getElementById('jamTutup').value);
         formData.append('is_active', document.getElementById('isActive').checked ? 1 : 0);
-        
+
         const provinsiSelect = document.getElementById('provinsiToko');
         const kotaSelect = document.getElementById('kotaToko');
         const kecamatanSelect = document.getElementById('kecamatanToko');
         const kelurahanSelect = document.getElementById('kelurahanToko');
-        
+
         const provinsiOption = provinsiSelect.options[provinsiSelect.selectedIndex];
         const kotaOption = kotaSelect.options[kotaSelect.selectedIndex];
         const kecamatanOption = kecamatanSelect.options[kecamatanSelect.selectedIndex];
         const kelurahanOption = kelurahanSelect.options[kelurahanSelect.selectedIndex];
-        
+
         formData.append('provinsi', provinsiOption?.dataset?.name || provinsiOption?.text || '');
         formData.append('kota_kabupaten', kotaOption?.dataset?.name || kotaOption?.text || '');
         formData.append('kecamatan', kecamatanOption?.dataset?.name || kecamatanOption?.text || '');
         formData.append('kelurahan', kelurahanOption?.dataset?.name || kelurahanOption?.text || '');
-        
+
         try {
             const action = storeId ? 'update' : 'add';
             const response = await fetch(`${API_BASE}store-location.php?action=${action}`, {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.json();
-            
+
             if (result.success) {
                 closeStoreModal();
                 loadStores();
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch(`${API_BASE}store-location.php?action=get&id=${id}`);
             const result = await response.json();
-            
+
             if (result.success && result.data) {
                 openStoreModal(result.data);
             } else {
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function confirmDelete() {
         if (!currentDeleteId || !currentDeleteType) return;
-        
+
         try {
             let url = '';
             if (currentDeleteType === 'store') {
@@ -370,10 +370,10 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (currentDeleteType === 'ticket') {
                 url = `${API_BASE}support-ticket.php?action=delete&id=${currentDeleteId}`;
             }
-            
+
             const response = await fetch(url);
             const result = await response.json();
-            
+
             if (result.success) {
                 closeDeleteModal();
                 if (currentDeleteType === 'store') {
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadTickets() {
         const tbody = document.getElementById('ticketTableBody');
-        
+
         const params = new URLSearchParams({
             action: 'list',
             search: document.getElementById('ticketSearch').value,
@@ -402,18 +402,18 @@ document.addEventListener('DOMContentLoaded', function() {
             date_from: document.getElementById('filterDateFrom').value,
             date_to: document.getElementById('filterDateTo').value
         });
-        
+
         try {
             const response = await fetch(`${API_BASE}support-ticket.php?${params}`);
             const result = await response.json();
-            
+
             if (result.statistics) {
                 document.getElementById('statTotal').textContent = result.statistics.total || 0;
                 document.getElementById('statOpen').textContent = result.statistics.open || 0;
                 document.getElementById('statInProgress').textContent = result.statistics.in_progress || 0;
                 document.getElementById('statResolved').textContent = result.statistics.resolved || 0;
             }
-            
+
             if (!result.success || !result.data || result.data.length === 0) {
                 tbody.innerHTML = `
                     <tr>
@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 return;
             }
-            
+
             tbody.innerHTML = result.data.map(ticket => `
                 <tr class="hover:bg-gray-50">
                     <td class="px-4 py-3 font-mono text-sm font-medium text-gray-900">${ticket.id_ticket}</td>
@@ -468,13 +468,13 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch(`${API_BASE}support-ticket.php?action=get&id=${id}`);
             const result = await response.json();
-            
+
             if (result.success && result.data) {
                 const ticket = result.data;
                 const replies = result.replies || [];
-                
+
                 document.getElementById('ticketIdDisplay').textContent = ticket.id_ticket;
-                
+
                 const content = document.getElementById('ticketDetailContent');
                 content.innerHTML = `
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                                 ` : ''}
                             </div>
-                            
+
                             <div>
                                 <h4 class="font-semibold text-gray-900 mb-4">Riwayat Balasan</h4>
                                 <div class="space-y-4" id="repliesList">
@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     `).join('')}
                                 </div>
                             </div>
-                            
+
                             <div class="bg-white border border-gray-200 rounded-xl p-5">
                                 <h4 class="font-semibold text-gray-900 mb-4">Kirim Balasan</h4>
                                 <form id="replyForm" onsubmit="submitReply(event, '${ticket.id_ticket}')">
@@ -543,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </form>
                             </div>
                         </div>
-                        
+
                         <div class="space-y-4">
                             <div class="bg-white border border-gray-200 rounded-xl p-5">
                                 <h4 class="font-semibold text-gray-900 mb-4">Informasi Tiket</h4>
@@ -570,7 +570,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="bg-white border border-gray-200 rounded-xl p-5">
                                 <h4 class="font-semibold text-gray-900 mb-4">Update Status</h4>
                                 <select id="ticketStatusUpdate" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-gray-800">
@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     Update Status
                                 </button>
                             </div>
-                            
+
                             <div class="bg-white border border-gray-200 rounded-xl p-5">
                                 <h4 class="font-semibold text-gray-900 mb-4">Kontak</h4>
                                 <div class="space-y-3 text-sm">
@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                 `;
-                
+
                 document.getElementById('ticketModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
             } else {
@@ -620,21 +620,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.submitReply = async function(e, ticketId) {
         e.preventDefault();
-        
+
         const formData = new FormData();
         formData.append('id_ticket', ticketId);
         formData.append('message', document.getElementById('replyMessage').value);
         formData.append('is_internal_note', document.getElementById('internalNote').checked ? 1 : 0);
         formData.append('update_status', document.getElementById('updateStatusOnReply').value);
-        
+
         try {
             const response = await fetch(`${API_BASE}support-ticket.php?action=reply`, {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.json();
-            
+
             if (result.success) {
                 showToast(result.message, 'success');
                 viewTicket(ticketId);
@@ -650,19 +650,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.updateTicketStatus = async function(ticketId) {
         const status = document.getElementById('ticketStatusUpdate').value;
-        
+
         const formData = new FormData();
         formData.append('id_ticket', ticketId);
         formData.append('status', status);
-        
+
         try {
             const response = await fetch(`${API_BASE}support-ticket.php?action=updateStatus`, {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.json();
-            
+
             if (result.success) {
                 showToast(result.message, 'success');
                 viewTicket(ticketId);
@@ -747,10 +747,482 @@ document.addEventListener('DOMContentLoaded', function() {
         }`;
         toast.textContent = message;
         document.body.appendChild(toast);
-        
+
         setTimeout(() => {
             toast.classList.add('opacity-0', 'translate-y-2');
             setTimeout(() => toast.remove(), 300);
         }, 3000);
+    }
+
+    const BLOG_API = '../../api/blog/';
+    let articleEditMode = false;
+    let currentDeleteArticleId = null;
+    let articleCategories = [];
+    let articleDebounceTimer = null;
+
+    loadArticles();
+    loadArticleCategories();
+    loadArticleCategories();
+    initDragDropThumbnail(); // ← Tambahkan baris ini
+
+    document.getElementById('btnAddArticle')?.addEventListener('click', () => openArticleModal());
+    document.getElementById('closeArticleModal')?.addEventListener('click', closeArticleModal);
+    document.getElementById('cancelArticleBtn')?.addEventListener('click', closeArticleModal);
+    document.getElementById('articleForm')?.addEventListener('submit', handleArticleSubmit);
+    document.getElementById('btnUploadThumbnail')?.addEventListener('click', () => document.getElementById('thumbnailInput').click());
+    // document.getElementById('thumbnailDropZone')?.addEventListener('click', () => document.getElementById('thumbnailInput').click());
+    // document.getElementById('thumbnailInput')?.addEventListener('change', handleThumbnailUpload);
+    document.getElementById('btnRemoveThumbnail')?.addEventListener('click', removeThumbnail);
+
+    document.getElementById('cancelDeleteArticleBtn')?.addEventListener('click', closeDeleteArticleModal);
+    document.getElementById('confirmDeleteArticleBtn')?.addEventListener('click', confirmDeleteArticle);
+
+    document.getElementById('articleSearch')?.addEventListener('input', function() {
+        clearTimeout(articleDebounceTimer);
+        articleDebounceTimer = setTimeout(loadArticles, 300);
+    });
+    document.getElementById('filterArticleCategory')?.addEventListener('change', loadArticles);
+    document.getElementById('filterArticleStatus')?.addEventListener('change', loadArticles);
+
+    document.getElementById('articleModal')?.addEventListener('click', function(e) {
+        if (e.target === this) closeArticleModal();
+    });
+    document.getElementById('deleteArticleModal')?.addEventListener('click', function(e) {
+        if (e.target === this) closeDeleteArticleModal();
+    });
+
+    async function loadArticleCategories() {
+        try {
+            const response = await fetch(`${BLOG_API}categories.php?active=1`);
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                articleCategories = result.data;
+
+                const filterSelect = document.getElementById('filterArticleCategory');
+                const formSelect = document.getElementById('articleCategory');
+
+                if (filterSelect) {
+                    filterSelect.innerHTML = '<option value="">Semua Kategori</option>';
+                    result.data.forEach(cat => {
+                        filterSelect.innerHTML += `<option value="${cat.id_category}">${escapeHtml(cat.nama_kategori)}</option>`;
+                    });
+                }
+
+                if (formSelect) {
+                    formSelect.innerHTML = '<option value="">Pilih Kategori</option>';
+                    result.data.forEach(cat => {
+                        formSelect.innerHTML += `<option value="${cat.id_category}">${escapeHtml(cat.nama_kategori)}</option>`;
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error loading categories:', error);
+        }
+    }
+
+    async function loadArticles() {
+        const tbody = document.getElementById('articleTableBody');
+        if (!tbody) return;
+
+        const params = new URLSearchParams({
+            search: document.getElementById('articleSearch')?.value || '',
+            category: document.getElementById('filterArticleCategory')?.value || '',
+            status: document.getElementById('filterArticleStatus')?.value || ''
+        });
+
+        try {
+            const response = await fetch(`${BLOG_API}list.php?${params}`);
+            const result = await response.json();
+
+            let totalViews = 0;
+            let publishCount = 0;
+            let draftCount = 0;
+
+            if (result.data) {
+                result.data.forEach(a => {
+                    totalViews += parseInt(a.views) || 0;
+                    if (a.status === 'publish') publishCount++;
+                    else draftCount++;
+                });
+            }
+
+            document.getElementById('statTotalArticles').textContent = result.total || 0;
+            document.getElementById('statPublished').textContent = publishCount;
+            document.getElementById('statDraft').textContent = draftCount;
+            document.getElementById('statTotalViews').textContent = totalViews;
+
+            if (!result.success || !result.data || result.data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="px-4 py-12 text-center text-gray-500">
+                            Tidak ada artikel ditemukan
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = result.data.map(article => `
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-4 py-4">
+                        <div class="relative group cursor-pointer" ${article.thumbnail ? `onclick="openLightbox('../../uploads/blog/${article.thumbnail}')"` : ''}>
+                            <div class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden shadow-sm border border-gray-100">
+                                ${article.thumbnail 
+                                    ? `<img src="../../uploads/blog/${article.thumbnail}" class="w-full h-full object-cover transition-transform group-hover:scale-105" alt="" onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\'><span class=\\'material-symbols-outlined text-gray-300 text-2xl\\'>image</span></div>'">` 
+                                    : `<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-gray-300 text-2xl">image</span></div>`
+                                }
+                            </div>
+                            ${article.thumbnail ? `<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center"><span class="material-symbols-outlined text-white">zoom_in</span></div>` : ''}
+                        </div>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="min-w-0">
+                            <p class="font-semibold text-gray-800 text-sm truncate max-w-[200px]">${escapeHtml(article.judul)}</p>
+                            <p class="text-xs text-gray-400 font-mono">${escapeHtml(article.slug)}</p>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4 hidden lg:table-cell">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">${escapeHtml(article.nama_kategori || '-')}</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${article.status === 'publish' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'}">
+                            <span class="w-1.5 h-1.5 rounded-full ${article.status === 'publish' ? 'bg-emerald-500' : 'bg-gray-400'} mr-1.5"></span>
+                            ${article.status === 'publish' ? 'Published' : 'Draft'}
+                        </span>
+                    </td>
+                    <td class="px-4 py-4 text-gray-600 hidden md:table-cell">${escapeHtml(article.author_name || '-')}</td>
+                    <td class="px-4 py-4 text-gray-500 text-sm hidden sm:table-cell">${formatDate(article.created_at)}</td>
+                    <td class="px-4 py-4">
+                        <span class="font-semibold text-gray-800">${article.views || 0}</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="editArticle(${article.id_post})" class="inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors" title="Edit">
+                                <span class="material-symbols-outlined text-lg">edit</span>
+                            </button>
+                            <button onclick="deleteArticle(${article.id_post}, '${escapeHtml(article.judul).replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-red-600 bg-red-50 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors" title="Hapus">
+                                <span class="material-symbols-outlined text-lg">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Error loading articles:', error);
+            tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-12 text-center text-red-500">Error memuat data artikel</td></tr>`;
+        }
+    }
+
+    function openArticleModal(articleData = null) {
+        articleEditMode = !!articleData;
+        thumbnailRemoved = false;
+        originalThumbnail = null;
+
+        document.getElementById('articleModalTitle').textContent = articleEditMode ? 'Edit Artikel' : 'Tambah Artikel';
+        document.getElementById('articleForm').reset();
+        
+        document.getElementById('articleId').value = '';
+        document.getElementById('articleTitle').value = '';
+        document.getElementById('articleCategory').value = '';
+        document.getElementById('articleStatus').value = 'draft';
+        document.getElementById('articleExcerpt').value = '';
+        document.getElementById('articleContent').value = '';
+        document.getElementById('thumbnailFilename').value = '';
+
+        resetThumbnailPreview();
+
+        if (articleData) {
+            document.getElementById('articleId').value = articleData.id_post;
+            document.getElementById('articleTitle').value = articleData.judul || '';
+            document.getElementById('articleCategory').value = articleData.id_category || '';
+            document.getElementById('articleStatus').value = articleData.status || 'draft';
+            document.getElementById('articleExcerpt').value = articleData.excerpt || '';
+            document.getElementById('articleContent').value = articleData.konten || '';
+
+            if (articleData.thumbnail) {
+                originalThumbnail = articleData.thumbnail;
+                showThumbnailPreview(`../../uploads/blog/${articleData.thumbnail}`, articleData.thumbnail);
+            }
+        }
+
+        document.getElementById('articleModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeArticleModal() {
+        document.getElementById('articleModal').classList.add('hidden');
+        document.body.style.overflow = '';
+        document.getElementById('articleForm').reset();
+        
+        document.getElementById('articleId').value = '';
+        document.getElementById('thumbnailFilename').value = '';
+        thumbnailRemoved = false;
+        originalThumbnail = null;
+        resetThumbnailPreview();
+    }
+
+    let thumbnailRemoved = false;
+    let originalThumbnail = null;
+
+    async function handleThumbnailUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('thumbnail', file);
+
+        try {
+            const response = await fetch(`${BLOG_API}upload-thumbnail.php`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showThumbnailPreview(result.url, result.filename);
+                thumbnailRemoved = false;
+                showToast('Thumbnail berhasil diupload', 'success');
+            } else {
+                showToast(result.message || 'Gagal upload thumbnail', 'error');
+            }
+        } catch (error) {
+            console.error('Error uploading thumbnail:', error);
+            showToast('Terjadi kesalahan saat upload', 'error');
+        }
+
+        e.target.value = '';
+    }
+
+    function showThumbnailPreview(url, filename) {
+        const thumbnailImage = document.getElementById('thumbnailImage');
+        const uploadBtn = document.getElementById('uploadThumbnailBtn');
+        const previewContainer = document.getElementById('thumbnailPreviewContainer');
+        const fileNameEl = document.getElementById('thumbnailFileName');
+
+        document.getElementById('thumbnailFilename').value = filename;
+
+        let imgUrl = url;
+        if (filename && !url.startsWith('http') && !url.startsWith('data:') && !url.startsWith('../../')) {
+            imgUrl = `../../uploads/blog/${filename}`;
+        }
+
+        thumbnailImage.src = imgUrl;
+        thumbnailImage.onerror = function() {
+            this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150"%3E%3Crect fill="%23f3f4f6" width="200" height="150"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-family="sans-serif" font-size="14"%3EPreview%3C/text%3E%3C/svg%3E';
+        };
+        uploadBtn.classList.add('hidden');
+        previewContainer.classList.remove('hidden');
+        fileNameEl.textContent = filename;
+    }
+
+    function resetThumbnailPreview() {
+        const thumbnailImage = document.getElementById('thumbnailImage');
+        const uploadBtn = document.getElementById('uploadThumbnailBtn');
+        const previewContainer = document.getElementById('thumbnailPreviewContainer');
+        const thumbnailInput = document.getElementById('thumbnailInput');
+
+        document.getElementById('thumbnailFilename').value = '';
+        if (thumbnailInput) thumbnailInput.value = '';
+        thumbnailImage.src = '';
+        uploadBtn.classList.remove('hidden');
+        previewContainer.classList.add('hidden');
+    }
+
+    function removeThumbnail() {
+        thumbnailRemoved = true;
+        resetThumbnailPreview();
+        showToast('Thumbnail dihapus. Simpan artikel untuk menyimpan perubahan.', 'info');
+    }
+
+    async function handleArticleSubmit(e) {
+        e.preventDefault();
+
+        const articleId = document.getElementById('articleId').value;
+        const currentThumbnail = document.getElementById('thumbnailFilename').value;
+
+        const data = {
+            id_post: articleId || undefined,
+            id_category: document.getElementById('articleCategory').value,
+            judul: document.getElementById('articleTitle').value,
+            excerpt: document.getElementById('articleExcerpt').value,
+            konten: document.getElementById('articleContent').value,
+            thumbnail: thumbnailRemoved ? null : (currentThumbnail || null),
+            remove_thumbnail: thumbnailRemoved && originalThumbnail ? true : false,
+            status: document.getElementById('articleStatus').value
+        };
+
+        try {
+            const url = articleId ? `${BLOG_API}update.php` : `${BLOG_API}create.php`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+                credentials: 'include'
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                closeArticleModal();
+                loadArticles();
+                showToast(result.message, 'success');
+            } else {
+                showToast(result.message || 'Gagal menyimpan artikel', 'error');
+            }
+        } catch (error) {
+            console.error('Error saving article:', error);
+            showToast('Terjadi kesalahan saat menyimpan', 'error');
+        }
+    }
+
+    window.editArticle = async function(id) {
+        try {
+            const response = await fetch(`${BLOG_API}get.php?id=${id}`);
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                openArticleModal(result.data);
+            } else {
+                showToast('Artikel tidak ditemukan', 'error');
+            }
+        } catch (error) {
+            console.error('Error fetching article:', error);
+            showToast('Gagal memuat data artikel', 'error');
+        }
+    };
+
+    window.deleteArticle = function(id, title) {
+        currentDeleteArticleId = id;
+        document.getElementById('deleteArticleMessage').textContent = `Apakah Anda yakin ingin menghapus artikel "${title}"? Tindakan ini tidak dapat dibatalkan.`;
+        document.getElementById('deleteArticleModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    };
+
+    function closeDeleteArticleModal() {
+        document.getElementById('deleteArticleModal').classList.add('hidden');
+        document.body.style.overflow = '';
+        currentDeleteArticleId = null;
+    }
+
+    async function confirmDeleteArticle() {
+        if (!currentDeleteArticleId) return;
+
+        try {
+            const response = await fetch(`${BLOG_API}delete.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_post: currentDeleteArticleId }),
+                credentials: 'include'
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                closeDeleteArticleModal();
+                loadArticles();
+                showToast(result.message, 'success');
+            } else {
+                showToast(result.message || 'Gagal menghapus artikel', 'error');
+            }
+        } catch (error) {
+            console.error('Error deleting article:', error);
+            showToast('Terjadi kesalahan saat menghapus', 'error');
+        }
+    }
+
+    function initDragDropThumbnail() {
+        const dropZone = document.getElementById('thumbnailDropZone');
+        const fileInput = document.getElementById('thumbnailInput');
+
+        if (!dropZone || !fileInput) return;
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('border-[#882426]', 'bg-[#882426]/5', 'scale-[1.02]');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('border-[#882426]', 'bg-[#882426]/5', 'scale-[1.02]');
+            });
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) handleThumbnailFiles(files);
+        });
+
+        // dropZone.addEventListener('click', (e) => {
+        //     if (!e.target.closest('#thumbnailPreviewContainer')) {
+        //         fileInput.click();
+        //     }
+        // });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleThumbnailFiles(e.target.files);
+            }
+        });
+    }
+
+    async function handleThumbnailFiles(files) {
+        const file = files[0];
+        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        const maxSize = 5 * 1024 * 1024;
+
+        if (!validTypes.includes(file.type)) {
+            showToast('Format tidak valid. Gunakan JPG, PNG, atau WebP', 'error');
+            return;
+        }
+
+        if (file.size > maxSize) {
+            showToast('Ukuran file terlalu besar. Maksimal 5MB', 'error');
+            return;
+        }
+
+        const uploadBtn = document.getElementById('btnUploadThumbnail');
+        const originalHTML = uploadBtn.innerHTML;
+        uploadBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">refresh</span> Uploading...';
+        uploadBtn.disabled = true;
+
+        const formData = new FormData();
+        formData.append('thumbnail', file);
+
+        try {
+            const response = await fetch(`${BLOG_API}upload-thumbnail.php`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showThumbnailPreview(result.url, result.filename);
+                thumbnailRemoved = false;
+                showToast('Thumbnail berhasil diupload', 'success');
+            } else {
+                showToast(result.message || 'Gagal upload thumbnail', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Terjadi kesalahan saat upload', 'error');
+        } finally {
+            uploadBtn.innerHTML = originalHTML;
+            uploadBtn.disabled = false;
+        }
+
+        document.getElementById('thumbnailInput').value = '';
     }
 });

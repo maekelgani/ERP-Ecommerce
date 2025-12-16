@@ -25,6 +25,7 @@ if (!$campaignData) {
 $campaign = $campaignData['campaign'];
 $products = $campaignData['products'];
 $countdown = $campaignData['countdown_seconds'];
+include '../../components/users/head.php';
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +86,9 @@ $countdown = $campaignData['countdown_seconds'];
 </head>
 
 <body class="bg-gray-50" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
-    <?php include_once '../../components/customer/navbarCustomer.php'; ?>
+    <header>
+        <?php include '../../components/users/navbarUsers.php'; ?>
+    </header>
 
     <?php
     $tipeGradients = [
@@ -191,9 +194,9 @@ $countdown = $campaignData['countdown_seconds'];
                     <div class="product-card bg-white border border-gray-100 rounded-xl overflow-hidden"
                         data-price="<?= $discountedPrice ?>"
                         data-discount="<?= $discountPercent ?>">
-                        <a href="../../view/customer/detailProduct.php?id=<?= urlencode($product['id_produk']) ?>">
+                        <a href="../../view/users/productDetail.php?id=<?= urlencode($product['id_produk']) ?>">
                             <div class="relative aspect-square bg-gray-100">
-                                <img src="../../uploads/produk/<?= htmlspecialchars($product['gambar'] ?? 'default.png') ?>"
+                                <img src="../../uploads/products/<?= htmlspecialchars($product['gambar'] ?? 'default.png') ?>"
                                     alt="<?= htmlspecialchars($product['nama_product']) ?>"
                                     class="w-full h-full object-cover">
 
@@ -298,6 +301,7 @@ $countdown = $campaignData['countdown_seconds'];
     </script>
 
     <?php include '../../components/users/loginRequiredModal.php'; ?>
+    <?php include '../../components/users/footer.php'; ?>
 </body>
 
 </html>
