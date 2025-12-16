@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 12, 2025 at 03:21 PM
+-- Generation Time: Dec 16, 2025 at 10:33 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `address_book` (
-  `id_alamat` varchar(10) NOT NULL,
+  `id_alamat` int NOT NULL,
   `id_customer` int NOT NULL,
   `label_alamat` varchar(50) DEFAULT NULL,
   `nama_penerima` varchar(100) NOT NULL,
@@ -47,8 +47,11 @@ CREATE TABLE `address_book` (
 --
 
 INSERT INTO `address_book` (`id_alamat`, `id_customer`, `label_alamat`, `nama_penerima`, `nomor_hp`, `alamat_lengkap`, `kelurahan`, `kecamatan`, `kota`, `provinsi`, `kode_pos`, `default_alamat`) VALUES
-('ADR0000001', 8, 'Rumah', 'Faizal Ardi', '081239230945', 'Perumahan Bukit Waringin Blok G6 No. 04 RT 04/RW 014', 'CIMANGGIS', 'BOJONG GEDE', 'KABUPATEN BOGOR', 'JAWA BARAT', '16920', 1),
-('ADR0000103', 1, 'Kantor', 'Fauzan Eldianzah', '081234567890', 'PT Maju Jaya Sejahtera, Jl. Teknologi Raya No. 88, Gedung Inovasi Lantai 3', 'CIPINANG MUARA', 'JATINEGARA', 'KOTA JAKARTA TIMUR', 'DKI JAKARTA', '13420', 1);
+(1, 1, 'Rumah', 'Fauzan Eldianzah', '081234567890', 'Perumahan Bukit Waringin Blok H4 No. 10 RT 08/RW 014', 'CIMANGGIS', 'BOJONG GEDE', 'KABUPATEN BOGOR', 'JAWA BARAT', '16920', 1),
+(2, 1, 'Kantor', 'Fauzan Eldianzah', '081234567890', 'PT Maju Jaya Sejahtera\nJl. Teknologi Raya No. 88, Gedung Inovasi Lantai 3', 'CIPINANG MUARA', 'JATINEGARA', 'KOTA JAKARTA TIMUR', 'DKI JAKARTA', '13420', 0),
+(3, 2, 'Rumah', 'Akmal Dwi Saputra', '089576893421', 'Jalan Gg. Noble Blok J4 no.05 RT 13/RW 02', 'KARADENAN', 'CIBINONG', 'KABUPATEN BOGOR', 'JAWA BARAT', '16920', 1),
+(4, 7, 'Rumah', 'Faizal Ardi', '081239230945', 'Perumahan Bukit Waringin Blok G6 No. 04 RT 04/RW 014', 'CIMANGGIS', 'BOJONG GEDE', 'KABUPATEN BOGOR', 'JAWA BARAT', '16920', 0),
+(5, 7, 'Kantor', 'Faizal Ardi', '081290413082', 'PT Digital Solu Filantropi\nJl. Teknologi Raya No. 88, Gedung Inovasi Lantai 3', 'SENAYAN', 'KEBAYORAN BARU', 'KOTA JAKARTA SELATAN', 'DKI JAKARTA', '13420', 1);
 
 -- --------------------------------------------------------
 
@@ -79,7 +82,7 @@ CREATE TABLE `administrators` (
 --
 
 INSERT INTO `administrators` (`id_admin`, `id_role`, `nama_lengkap`, `email`, `password_hash`, `photo`, `remember_token`, `remember_expires`, `is_active`, `last_login`, `created_at`, `updated_at`, `username`, `phone`, `password_updated_at`) VALUES
-(1, 1, 'Fajar Nano Komputer', 'fajarnanokomp@gmail.com', '$2y$10$astJh04o3V9LU2jtOsDKhuDoKu.JptPrj8KPZkRnCdnKY5.pgR6r6', NULL, 'bc79ea0da18910fb039f80dd4021460c8e2ea4ee89ebc147d6c76b2ddb20f1ba', '2026-01-10 20:13:17', 1, '2025-12-12 03:13:17', '2025-11-25 08:38:19', '2025-12-12 03:13:17', 'nanocomp', '081234567890', '2025-12-01 01:42:22'),
+(1, 1, 'Fajar Nano Komputer', 'fajarnanokomp@gmail.com', '$2y$10$astJh04o3V9LU2jtOsDKhuDoKu.JptPrj8KPZkRnCdnKY5.pgR6r6', NULL, 'a79549f890ecd930f5ad480e061e80451222cb9ee059300fc010cf43767aa4ea', '2026-01-14 14:28:29', 1, '2025-12-14 21:36:05', '2025-11-25 08:38:19', '2025-12-15 21:28:29', 'nanocomp', '081234567890', '2025-12-01 01:42:22'),
 (2, 2, 'Faizal Ardi', 'faizalardi@gmail.com', '$2y$10$g55WWArkauw.WR2wyA5.rOdS3KS/HGCxN3CbYzM6onKijcgcH19jC', NULL, NULL, NULL, 1, '2025-11-30 18:54:35', '2025-11-25 08:38:19', '2025-11-30 18:54:35', NULL, NULL, NULL),
 (3, 2, 'Maekel Gani', 'maekelgani@gmail.com', '$2y$10$CF0hB8G7NMEemnjWpFeQpuhGzOaW4fzuZNvj5Moqwd5r2id6Wzve2', NULL, NULL, NULL, 1, '2025-11-25 16:51:00', '2025-11-25 08:38:19', '2025-11-29 12:11:41', NULL, NULL, NULL),
 (4, 2, 'Isfahan Kaefal', 'isfahankaefal@gmail.com', '$2y$10$MxnS65hsh9C8iTxSZhLYWuSqyERCIukMTqHIczUq.EBj4x1bEW4Pu', NULL, NULL, NULL, 1, '2025-11-25 16:59:25', '2025-11-25 08:38:19', '2025-11-30 18:16:02', NULL, '', NULL);
@@ -151,6 +154,62 @@ INSERT INTO `admin_roles` (`id_role`, `role_name`, `role_description`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `blog_categories`
+--
+
+CREATE TABLE `blog_categories` (
+  `id_category` int NOT NULL,
+  `nama_kategori` varchar(50) NOT NULL,
+  `slug` varchar(50) NOT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `blog_categories`
+--
+
+INSERT INTO `blog_categories` (`id_category`, `nama_kategori`, `slug`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'Hardware', 'hardware', 1, '2025-12-15 00:24:34', '2025-12-15 00:24:34'),
+(2, 'Tips & Tutorial', 'tips-tutorial', 1, '2025-12-15 00:24:34', '2025-12-15 00:24:34'),
+(3, 'Berita', 'berita', 1, '2025-12-15 00:24:34', '2025-12-15 00:24:34'),
+(4, 'Review', 'review', 1, '2025-12-15 00:24:34', '2025-12-15 00:24:34'),
+(5, 'Promo', 'promo', 1, '2025-12-15 00:24:34', '2025-12-15 00:24:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `blog_posts`
+--
+
+CREATE TABLE `blog_posts` (
+  `id_post` int NOT NULL,
+  `id_admin` int NOT NULL,
+  `id_category` int NOT NULL,
+  `judul` varchar(200) NOT NULL,
+  `slug` varchar(200) NOT NULL,
+  `excerpt` text,
+  `konten` longtext NOT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
+  `status` enum('draft','publish') DEFAULT 'draft',
+  `views` int DEFAULT '0',
+  `published_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `blog_posts`
+--
+
+INSERT INTO `blog_posts` (`id_post`, `id_admin`, `id_category`, `judul`, `slug`, `excerpt`, `konten`, `thumbnail`, `status`, `views`, `published_at`, `created_at`, `updated_at`) VALUES
+(4, 1, 1, 'Perbedaan GPU RTX dan GTX untuk Gaming', 'perbedaan-gpu-rtx-dan-gtx-untuk-gaming', 'Mengenal Perbedaan GPU RTX dan GTX untuk Kebutuhan Gaming Modern: Dalam dunia gaming modern, GPU (Graphics Processing Unit) menjadi komponen kunci yang sangat menentukan kualitas visual dan performa permainan. NVIDIA sebagai salah satu produsen GPU terbesar di dunia memiliki dua lini populer yang sering dibandingkan oleh gamer, yaitu GTX dan RTX. Artikel ini akan membahas secara lengkap perbedaan GPU RTX dan GTX, serta membantu Anda menentukan pilihan terbaik sesuai kebutuhan gaming saat ini.', 'Apa Itu GPU NVIDIA GTX?\n\nSeri NVIDIA GeForce GTX merupakan lini GPU yang telah hadir lebih dulu sebelum RTX. GPU GTX berfokus pada rasterization tradisional, yaitu teknik rendering grafis konvensional yang digunakan oleh sebagian besar game sebelum era ray tracing.', 'blog_137d5c46139947c3_1765871172.jpg', 'publish', 2, '2025-12-16 07:46:15', '2025-12-16 14:46:15', '2025-12-16 14:50:59'),
+(5, 1, 2, 'Cara Merakit PC Gaming untuk Pemula 2025', 'cara-merakit-pc-gaming-untuk-pemula-2025', 'Merakit PC gaming sendiri di tahun 2025 menjadi pilihan populer bagi banyak gamer, terutama pemula yang ingin mendapatkan performa maksimal sesuai budget. Selain lebih hemat, merakit PC juga memberi fleksibilitas dalam memilih komponen dan memudahkan upgrade di masa depan. Artikel ini akan membahas panduan lengkap dan mudah dipahami tentang cara merakit PC gaming untuk pemula di tahun 2025.', 'Mengapa Merakit PC Gaming Sendiri?\n\nSebelum masuk ke tahap perakitan, penting untuk mengetahui keuntungannya:\n- Lebih hemat biaya dibanding PC rakitan pabrikan\n-  Bebas memilih spesifikasi sesuai kebutuhan\n- Mudah di-upgrade ke depannya\n- Menambah pengetahuan hardware komputer', 'blog_6e94a3fcd73a81db_1765871514.jpg', 'publish', 0, '2025-12-16 07:52:22', '2025-12-16 14:52:22', '2025-12-16 14:52:22');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `brand`
 --
 
@@ -202,11 +261,11 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id_cart`, `id_customer`, `id_product`, `jumlah`, `harga_satuan`, `tanggal_ditambahkan`, `tgl_diubah`) VALUES
-('CRT0000005', 7, 'PRD005', 6, 57429000.00, '2025-12-08 13:42:36', '2025-12-08 13:56:19'),
+('CRT0000005', 7, 'PRD005', 1, 57429000.00, '2025-12-08 13:42:36', '2025-12-14 14:04:57'),
 ('CRT0000006', 1, 'PRD010', 1, 3888900.00, '2025-12-11 09:46:12', '2025-12-11 09:46:12'),
-('CRT0000007', 1, 'PRD003', 1, 1799000.00, '2025-12-11 10:25:32', '2025-12-11 10:25:32'),
-('CRT0000008', 1, 'PRD006', 2, 5179000.00, '2025-12-11 18:32:15', '2025-12-12 12:06:56'),
-('CRT0000009', 8, 'PRD011', 1, 1689000.00, '2025-12-11 22:49:30', '2025-12-11 22:49:30');
+('CRT0000007', 1, 'PRD005', 1, 57429000.00, '2025-12-13 14:21:35', '2025-12-13 14:21:35'),
+('CRT0000008', 7, 'PRD012', 1, 89349000.00, '2025-12-14 14:06:18', '2025-12-14 14:06:18'),
+('CRT0000009', 1, 'PRD001', 1, 5789000.00, '2025-12-16 13:57:43', '2025-12-16 13:57:43');
 
 -- --------------------------------------------------------
 
@@ -239,11 +298,11 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id_customer`, `nama_lengkap`, `email`, `no_telp`, `password_hash`, `google_id`, `google_email`, `google_name`, `login_type`, `remember_token`, `remember_expires`, `is_active`, `email_verified`, `email_verified_at`, `profile_image`, `created_at`, `updated_at`) VALUES
-(1, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567810', '$2y$10$QArwIUUQKH9XeT/2YAszdONm1kkz75Dwaj0udRsB1y7tNwpSU0HIm', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, 'customer_1_1765483816_67e8ac5a.jpg', '2025-11-28 18:18:48', '2025-12-12 11:48:33'),
+(1, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567810', '$2y$10$QArwIUUQKH9XeT/2YAszdONm1kkz75Dwaj0udRsB1y7tNwpSU0HIm', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, 'customer_1_1765615083_906cac87.jpg', '2025-11-28 18:18:48', '2025-12-13 15:38:03'),
 (2, 'Akmal Dwi Saputra', 'akmal.customer@gmail.com', '089577658894', '$2y$10$14VOQUECTKXo7NE6DeVn5Od5.ho5aJir2iRxVm3Kzl16FG9KupSK6', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, NULL, '2025-11-30 16:27:34', '2025-11-30 16:27:34'),
 (3, 'Jason Susanto', 'susanto.customer@gmail.com', '081246379958', '$2y$10$E0Z/97QeW3WFUwFuexZ8D.W6O09hmW7EB/gCV9A5JP.I1TZ6yuZS.', NULL, NULL, NULL, 'regular', NULL, NULL, 0, 0, NULL, NULL, '2025-11-30 16:41:05', '2025-11-30 16:41:57'),
-(7, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '81290413082', '$2y$10$GWEapgVfFWPdLGlDsSb.xuDr7IlSdbYG0SDhjEUcMI6J5AWOVNpxy', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-04 19:07:59', 'google_profile_6931799f1b454_1764850079.jpg', '2025-12-04 19:07:59', '2025-12-11 19:14:24'),
-(8, '0728_Muhamad Faizal Ardiansyah', 'mhmdfaizalardi@gmail.com', NULL, NULL, '114145390091505445484', 'mhmdfaizalardi@gmail.com', '0728_Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-10 13:37:29', 'google_profile_69391529751f4_1765348649.jpg', '2025-12-10 13:37:29', '2025-12-12 00:49:58');
+(7, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '81290413082', '$2y$10$5VwN0M9pZCy/a0NLowhinOyq/rwaLC/GOwp00RE6nNoBbvh2ARQlu', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-04 19:07:59', 'google_profile_6931799f1b454_1764850079.jpg', '2025-12-04 19:07:59', '2025-12-14 21:17:54'),
+(8, '0728_Muhamad Faizal Ardiansyah', 'mhmdfaizalardi@gmail.com', NULL, NULL, '114145390091505445484', 'mhmdfaizalardi@gmail.com', '0728_Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-10 13:37:29', 'google_profile_69391529751f4_1765348649.jpg', '2025-12-10 13:37:29', '2025-12-14 21:15:35');
 
 -- --------------------------------------------------------
 
@@ -284,7 +343,8 @@ CREATE TABLE `kampanye_produk` (
 
 INSERT INTO `kampanye_produk` (`id`, `id_kampanye`, `id_produk`, `id_diskon`, `prioritas`, `dibuat_pada`) VALUES
 (5, 'CMP0000000002', 'PRD003', NULL, 1, '2025-12-01 09:39:02'),
-(6, 'CMP0000000001', 'PRD005', NULL, 1, '2025-12-01 09:39:06');
+(6, 'CMP0000000001', 'PRD005', NULL, 1, '2025-12-01 09:39:06'),
+(7, 'CMP0000000001', 'PRD012', NULL, 1, '2025-12-14 13:52:39');
 
 -- --------------------------------------------------------
 
@@ -318,6 +378,21 @@ INSERT INTO `kategori` (`id_kategori`, `nama_kategori`, `deskripsi_kategori`, `i
 ('KTG012', 'PC Ready', 'PC Ready adalah komputer rakitan yang sudah dirakit, dites, dan dioptimalkan sehingga langsung siap digunakan tanpa perlu konfigurasi tambahan. Setiap komponen dipilih untuk memberikan performa yang stabil baik untuk gaming, editing, desain, pekerjaan kantor, hingga multitasking harian. Setiap unit telah melalui proses pengecekan hardware, pemasangan sistem operasi (opsional), serta pengujian suhu dan performa untuk memastikan kualitas terbaik. Dengan PC Ready, Anda cukup buka kotak, nyalakan, dan langsung pakai.', 'cat_icon_692ed7f56d0bb.png'),
 ('KTG013', 'Networking', 'Networking adalah proses menghubungkan berbagai perangkat—seperti komputer, server, router, switch, dan perangkat IoT ke dalam satu jaringan agar dapat saling berkomunikasi dan bertukar data. Dengan sistem networking yang baik, transfer informasi menjadi lebih cepat, aman, dan efisien, baik untuk kebutuhan rumah, kantor, bisnis, maupun data center.', 'cat_icon_692ef0831545d.png'),
 ('KTG014', 'Gaming Gear', 'Gaming Gear adalah perlengkapan khusus yang dirancang untuk meningkatkan pengalaman bermain game dengan kenyamanan, presisi, dan performa maksimal. Mulai dari keyboard mekanikal, mouse gaming berpresisi tinggi, headset dengan suara jernih, hingga mousepad, kursi gaming, dan aksesoris pendukung lainnya setiap perangkat dibuat untuk memberikan respon cepat, kontrol lebih akurat, serta kenyamanan saat bermain dalam durasi panjang.', 'cat_icon_692ef776cefe7.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_blog`
+--
+
+CREATE TABLE `log_blog` (
+  `id` bigint NOT NULL,
+  `aksi` varchar(50) DEFAULT NULL,
+  `id_post` int DEFAULT NULL,
+  `id_admin` int DEFAULT NULL,
+  `pesan` text,
+  `dibuat_pada` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -591,17 +666,17 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id_product`, `nama_product`, `deskripsi_speksifikasi`, `harga`, `stok`, `id_kategori`, `id_brand`, `gambar`, `berat_gram`, `status_produk`, `tanggal_ditambahkan`) VALUES
-('PRD001', 'AMD Ryzen 7 9700X | Ryzen 7 9000 Series 8 Core AM5 - Box', '𝗦𝗽𝗲𝗰𝗶𝗳𝗶𝗰𝗮𝘁𝗶𝗼𝗻𝘀 :\r\nFamily\r\n- Ryzen\r\nSeries\r\n- Ryzen 9000 Series\r\nForm Factor\r\n- Desktops , Boxed Processor\r\nMarket Segment\r\n- Enthusiast Desktop\r\n\r\nAMD PRO Technologies\r\n- No\r\nRegional Availability\r\n- Global\r\nFormer Codename\r\n- Granite Ridge AM5\r\nArchitecture\r\n- Zen 5\r\n# of CPU Cores\r\n- 8\r\nMultithreading (SMT)\r\n- Yes\r\n# of Threads\r\n- 16\r\nMax. Boost Clock\r\n- Up to 5.5 GHz\r\nBase Clock\r\n- 3.8 GHz\r\nL1 Cache\r\n- 640 KB\r\nL2 Cache\r\n- 8 MB\r\nL3 Cache\r\n- 32 MB\r\nDefault TDP\r\n- 65W\r\nProcessor Technology for CPU Cores\r\n- TSMC 4nm FinFET\r\nProcessor Technology for I/O Die\r\n- TSMC 6nm FinFET\r\nPackage Die Count\r\n- 2\r\nUnlocked for Overclocking\r\n- Yes\r\nAMD EXPO Memory Overclocking Technology\r\n- Yes\r\nPrecision Boost Overdrive\r\n- Yes\r\nCurve Optimizer Voltage Offsets\r\n- Yes\r\nAMD Ryzen Master Support\r\n- Yes\r\nSystem Memory Type\r\n- DDR5\r\nMemory Channels\r\n- 2\r\nMax. Memory\r\n- 192 GB\r\nCPU Socket\r\n- AM5\r\nThermal Solution (PIB)\r\n- Not Included\r\nMax. Operating Temperature (Tjmax)\r\n- 95C\r\n*OS Support\r\n- Windows 11 - 64-Bit Edition , Windows 10 - 64-Bit Edition , RHEL x86 64-Bit , Ubuntu x86 64-Bit\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 5789000.00, 8, 'KTG003', 'BRD001', 'product_25777e9054ca3413_1764333318.jpeg', 0, 'tersedia', '2025-11-28 18:18:48'),
+('PRD001', 'AMD Ryzen 7 9700X | Ryzen 7 9000 Series 8 Core AM5 - Box', '𝗦𝗽𝗲𝗰𝗶𝗳𝗶𝗰𝗮𝘁𝗶𝗼𝗻𝘀 :\r\nFamily\r\n- Ryzen\r\nSeries\r\n- Ryzen 9000 Series\r\nForm Factor\r\n- Desktops , Boxed Processor\r\nMarket Segment\r\n- Enthusiast Desktop\r\n\r\nAMD PRO Technologies\r\n- No\r\nRegional Availability\r\n- Global\r\nFormer Codename\r\n- Granite Ridge AM5\r\nArchitecture\r\n- Zen 5\r\n# of CPU Cores\r\n- 8\r\nMultithreading (SMT)\r\n- Yes\r\n# of Threads\r\n- 16\r\nMax. Boost Clock\r\n- Up to 5.5 GHz\r\nBase Clock\r\n- 3.8 GHz\r\nL1 Cache\r\n- 640 KB\r\nL2 Cache\r\n- 8 MB\r\nL3 Cache\r\n- 32 MB\r\nDefault TDP\r\n- 65W\r\nProcessor Technology for CPU Cores\r\n- TSMC 4nm FinFET\r\nProcessor Technology for I/O Die\r\n- TSMC 6nm FinFET\r\nPackage Die Count\r\n- 2\r\nUnlocked for Overclocking\r\n- Yes\r\nAMD EXPO Memory Overclocking Technology\r\n- Yes\r\nPrecision Boost Overdrive\r\n- Yes\r\nCurve Optimizer Voltage Offsets\r\n- Yes\r\nAMD Ryzen Master Support\r\n- Yes\r\nSystem Memory Type\r\n- DDR5\r\nMemory Channels\r\n- 2\r\nMax. Memory\r\n- 192 GB\r\nCPU Socket\r\n- AM5\r\nThermal Solution (PIB)\r\n- Not Included\r\nMax. Operating Temperature (Tjmax)\r\n- 95C\r\n*OS Support\r\n- Windows 11 - 64-Bit Edition , Windows 10 - 64-Bit Edition , RHEL x86 64-Bit , Ubuntu x86 64-Bit\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 5789000.00, 18, 'KTG003', 'BRD001', 'product_25777e9054ca3413_1764333318.jpeg', 200, 'tersedia', '2025-11-28 18:18:48'),
 ('PRD002', 'Corsair CX Series™ CX550 – 550 Watt 80 PLUS Bronze ATX Power Supply', 'Specifications :\r\nATX12V Version\r\n- v2.31\r\nCable Type\r\n- Type 4\r\nContinuous Power W\r\n- 550 Watts\r\nATX Connector\r\n- 1\r\nEPS Connector\r\n- 1\r\nSATA Connector\r\n- 3\r\nPCIe Connector\r\n- 2\r\nPSU Form Factor\r\n- ATX\r\nFan Bearing Technology\r\n- Sleeve', 919000.00, 36, 'KTG004', 'BRD003', 'product_70d3119869c5938c_1764333308.jpg', 2280, 'tersedia', '2025-11-28 19:35:08'),
 ('PRD003', 'SKYWORTH Gaming Monitor 24 INCH H24G30F FAST IPS FHD 1080P 1MS 180HZ', '- 24-inch IPS flat panel\r\n- Full HD 1920x1080 resolution\r\n- 16:9 aspect ratio\r\n- Brightness: 300 cd/m²\r\n- Refresh rate: up to 200Hz overclocked\r\n- Response time: 5ms\r\n- HDR10 support\r\n- 8-bit color depth\r\n- 99% sRGB color gamut coverage\r\n- No built-in speaker\r\n- 3.5mm audio out port\r\n- Connectivity: HDMI 2.0 x2, DisplayPort 1.4 x1\r\n- VESA mount compatible: 100x100 mm\r\n- Non-ergonomic stand\r\n- Power consumption: not specified\r\n- Net product weight: 2.9kg\r\n- Packaging dimensions: 61 × 10.5 × 40.5 cm\r\n- Volume weight: 5kg\r\n \r\n- Package includes:\r\n- Skyworth H24G30F monitor\r\n- Power adapter and cable\r\n- DisplayPort cable', 1799000.00, 11, 'KTG002', 'BRD002', 'product_3cd44ebcd958c755_1764333680.png', 4400, 'tersedia', '2025-11-28 19:41:20'),
-('PRD004', 'MSI GeForce RTX 5070 Ti 16G GAMING TRIO OC', 'Specifications :\r\nModel Name\r\n- G507T-16GTC\r\n\r\nGraphics Processing Unit\r\n- NVIDIA GeForce RTX 5070 Ti\r\n\r\nInterface\r\n- PCI Express Gen 5\r\n\r\nCore Clocks\r\n- Extreme Performance: 2580 MHz (MSI Center)\r\n- Boost: 2572 MHz (GAMING & SILENT Mode)\r\n\r\nCUDA CORES\r\n- 8960 Units\r\n\r\nMemory Speed\r\n- 28 Gbps\r\n\r\nMemory\r\n- 16GB GDDR7\r\n\r\nMemory Bus\r\n- 256-bit\r\n\r\nOutput\r\n- DisplayPort x 3 (v2.1b)\r\n- HDMI x 1 (As specified in HDMI 2.1b: up to 4K 480Hz or 8K 120Hz with DSC, Gaming VRR, HDR)\r\n\r\nHDCP Support\r\n- Y\r\n\r\nPower consumption\r\n- 300W\r\n\r\nPower connectors\r\n- 16-pin x 1 (ATX 3.1 PSU recommended)\r\n\r\nRecommended PSU\r\n- 750W\r\n\r\nCard Dimension (mm)\r\n- 338 x 140 x 50 mm\r\n\r\nDirectX Version Support\r\n- 12 Ultimate\r\n\r\nOpenGL Version Support\r\n- 4.6\r\n\r\nMaximum Displays\r\n- 4\r\n\r\nG-SYNC technology\r\n- Y\r\n\r\nDigital Maximum Resolution\r\n- 7680 x 4320\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 18099000.00, 6, 'KTG005', 'BRD004', 'product_6f1e210dea8b29cf_1764414158.jpeg', 1833, 'tersedia', '2025-11-29 18:01:51'),
+('PRD004', 'MSI GeForce RTX 5070 Ti 16G GAMING TRIO OC', 'Specifications :\r\nModel Name\r\n- G507T-16GTC\r\n\r\nGraphics Processing Unit\r\n- NVIDIA GeForce RTX 5070 Ti\r\n\r\nInterface\r\n- PCI Express Gen 5\r\n\r\nCore Clocks\r\n- Extreme Performance: 2580 MHz (MSI Center)\r\n- Boost: 2572 MHz (GAMING & SILENT Mode)\r\n\r\nCUDA CORES\r\n- 8960 Units\r\n\r\nMemory Speed\r\n- 28 Gbps\r\n\r\nMemory\r\n- 16GB GDDR7\r\n\r\nMemory Bus\r\n- 256-bit\r\n\r\nOutput\r\n- DisplayPort x 3 (v2.1b)\r\n- HDMI x 1 (As specified in HDMI 2.1b: up to 4K 480Hz or 8K 120Hz with DSC, Gaming VRR, HDR)\r\n\r\nHDCP Support\r\n- Y\r\n\r\nPower consumption\r\n- 300W\r\n\r\nPower connectors\r\n- 16-pin x 1 (ATX 3.1 PSU recommended)\r\n\r\nRecommended PSU\r\n- 750W\r\n\r\nCard Dimension (mm)\r\n- 338 x 140 x 50 mm\r\n\r\nDirectX Version Support\r\n- 12 Ultimate\r\n\r\nOpenGL Version Support\r\n- 4.6\r\n\r\nMaximum Displays\r\n- 4\r\n\r\nG-SYNC technology\r\n- Y\r\n\r\nDigital Maximum Resolution\r\n- 7680 x 4320\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 18099000.00, 16, 'KTG005', 'BRD004', 'product_6f1e210dea8b29cf_1764414158.jpeg', 1833, 'tersedia', '2025-11-29 18:01:51'),
 ('PRD005', 'ASUS ROG Astral GeForce RTX 5090 32GB GDDR7 OC Edition', 'Specifications :\r\nGraphic Engine\r\n- NVIDIA GeForce RTX 5090\r\nAI Performance\r\n- 3593 TOPs\r\nBus Standard\r\n- PCI Express 5.0\r\nOpenGL\r\n- OpenGL4.6\r\nVideo Memory\r\n- 32GB GDDR7\r\nEngine Clock\r\n- OC mode: 2610 MHz\r\n- Default mode: 2580 MHz(Boost clock)\r\nCUDA Core\r\n- 21760\r\nMemory Speed\r\n- 28 Gbps\r\nMemory Interface\r\n- 512-bit\r\nResolution\r\n- Digital Max Resolution 7680 x 4320\r\nInterface\r\n- Yes x 2 (Native HDMI 2.1b)\r\n- Yes x 3 (Native DisplayPort 2.1b)\r\n- HDCP Support Yes (2.3)\r\nMaximum Display Support\r\n- 4\r\nNVlink/ Crossfire Support\r\n- No\r\nAccessories\r\n- 1 x Speedsetup Manual\r\n- 1 x ROG Graphics Card Holder\r\n- 1 x ROG Velcro Hook & Loop\r\n- 1 x ROG Magnet\r\n- 1 x ROG Graphics Card Keycap\r\n- 1 x ROG PCB Ruler\r\n- 1 x Thank You Card\r\n- 1 x Adapter Cable (1 to 4)​\r\nSoftware\r\n- ASUS GPU Tweak III & MuseTree & GeForce Game Ready Driver & Studio Driver: please download all software from the support site.\r\nDimensions\r\n- 357.6 x 149.3 x 76 mm\r\n- 14.1 x 5.9 x 3 inch\r\nRecommended PSU\r\n- 1000W\r\nPower Connectors\r\n- 1 x 16-pin\r\nSlot\r\n- 3.8 Slot\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 57429000.00, 54, 'KTG005', 'BRD006', 'product_58c5846ec3856138_1764419222.jpeg', 3038, 'tersedia', '2025-11-29 19:20:37'),
 ('PRD006', 'MSI GeForce RTX 3060 VENTUS 2X 12G OC  GeForce RTX 3060 12GB GDDR6', '𝗦𝗽𝗲𝗰𝗶𝗳𝗶𝗰𝗮𝘁𝗶𝗼𝗻𝘀 :\r\n\r\nGPU Engine Specs:\r\nCUDA Cores : 3584\r\nBoost Clock (MHz) : 1807\r\n\r\nMemory Specs:\r\nMemory Clock : 15Gbps\r\nStandard Memory Config : 12GB\r\nMemory Interface : GDDR6\r\nMemory Interface Width : 192-bit\r\nMemory Bandwidth (GB/sec) : 360\r\n\r\nDisplay Support:\r\nMulti Monitor : Yes\r\nMaxmium Digital Resolution : 7680x4320\r\nHDCP : 2.3\r\nStandard Display Connectors : 1x HDMI 2.1, 3x DisplayPort 1.4a\r\nInternalAudio Input for HDMI : Internal\r\n\r\nStandard Graphics Card Dimensions:\r\nLength : 235mm\r\nHeight : 124mm\r\nWidth : 42mm\r\n\r\nThermal and Power Spec:\r\nMinimum System Power Requirement (W) : 550\r\nSupplementary Power Connectors : 8-pin x1\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 5179000.00, 14, 'KTG005', 'BRD007', 'product_f9bdb2a270e3074c_1764419600.jpeg', 675, 'tersedia', '2025-11-29 19:33:20'),
-('PRD007', 'MONTECH XR', 'Spefications :\r\nColor\r\n- Black\r\n- White\r\n\r\nDimensions(L*M*H)\r\n- 435*230*450mm(Case)/525*290*510mm(Carton)\r\n\r\nMB Support\r\n- ATX,Micro-ATX,Mini-ITX\r\n\r\nFront I/O\r\n- Type-C*1/USB3.0*2/Mic*1/Audio*1/Reset Button/Power Button\r\n\r\nPCI Slots\r\n- 7\r\n\r\nCompatibility/Maximum\r\n- CPU Cooler : 175mm\r\n- GPU : 420mm\r\n- PSU : 230mm ATX\r\n\r\nDrive Bay\r\n- 3.5HDD : 2\r\n- 2.5SSD : 2\r\n\r\nPre-installed Fan(s)\r\n- Side : 120mm*2\r\n- rear : 120mm*1\r\n\r\nFan Support\r\n- Top : 120mm*3/140mm*2\r\n- Side : 120mm*2\r\n- PSU shroud : 120mm*3\r\n- Rear : 120mm*1/140mm*1\r\n\r\nRadiator Support\r\n- Top : 360/240/140/120mm\r\n\r\nDust Filters\r\n- Side, Bottom, Top\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 859000.00, 7, 'KTG001', 'BRD008', 'product_72cf6284c8ef1d08_1764420245.jpg', 12000, 'tersedia', '2025-11-29 19:44:05'),
-('PRD008', 'KingBank Sharp Blade RGB DDR5 32GB Kit (2 x 16GB) 6400 MT/s CL30 White A-Die', '𝗦𝗽𝗲𝗰𝗶𝗳𝗶𝗰𝗮𝘁𝗶𝗼𝗻𝘀 :\r\n\r\nModule Spec\r\n- DDR5 288 pin U DIMM\'\r\n\r\nCapacity\r\n- 32GB(16GBx2)\r\n\r\nFrequency\r\n- 6400MHz\r\n\r\nVoltage\r\n- 1.4V\r\n\r\nCAS latency\r\n- 32-39-39-80\r\n\r\nHeatsink material\r\n- Aluminum Alloy\r\n\r\nSupported System\'\r\n- Intel XMP 3.0\r\n\r\nProduct Size\r\n- 133.8mmx41.8mmx8mm\r\n\r\nChip\r\n- SK Hynix A-die', 4339000.00, 0, 'KTG006', 'BRD009', 'product_7a470c9afeec921a_1764420855.jpeg', 400, 'habis', '2025-11-29 19:54:15'),
+('PRD007', 'MONTECH XR', 'Spefications :\r\nColor\r\n- Black\r\n- White\r\n\r\nDimensions(L*M*H)\r\n- 435*230*450mm(Case)/525*290*510mm(Carton)\r\n\r\nMB Support\r\n- ATX,Micro-ATX,Mini-ITX\r\n\r\nFront I/O\r\n- Type-C*1/USB3.0*2/Mic*1/Audio*1/Reset Button/Power Button\r\n\r\nPCI Slots\r\n- 7\r\n\r\nCompatibility/Maximum\r\n- CPU Cooler : 175mm\r\n- GPU : 420mm\r\n- PSU : 230mm ATX\r\n\r\nDrive Bay\r\n- 3.5HDD : 2\r\n- 2.5SSD : 2\r\n\r\nPre-installed Fan(s)\r\n- Side : 120mm*2\r\n- rear : 120mm*1\r\n\r\nFan Support\r\n- Top : 120mm*3/140mm*2\r\n- Side : 120mm*2\r\n- PSU shroud : 120mm*3\r\n- Rear : 120mm*1/140mm*1\r\n\r\nRadiator Support\r\n- Top : 360/240/140/120mm\r\n\r\nDust Filters\r\n- Side, Bottom, Top\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 859000.00, 25, 'KTG001', 'BRD008', 'product_72cf6284c8ef1d08_1764420245.jpg', 12000, 'tersedia', '2025-11-29 19:44:05'),
+('PRD008', 'KingBank Sharp Blade RGB DDR5 32GB Kit (2 x 16GB) 6400 MT/s CL30 White A-Die', '𝗦𝗽𝗲𝗰𝗶𝗳𝗶𝗰𝗮𝘁𝗶𝗼𝗻𝘀 :\r\n\r\nModule Spec\r\n- DDR5 288 pin U DIMM\'\r\n\r\nCapacity\r\n- 32GB(16GBx2)\r\n\r\nFrequency\r\n- 6400MHz\r\n\r\nVoltage\r\n- 1.4V\r\n\r\nCAS latency\r\n- 32-39-39-80\r\n\r\nHeatsink material\r\n- Aluminum Alloy\r\n\r\nSupported System\'\r\n- Intel XMP 3.0\r\n\r\nProduct Size\r\n- 133.8mmx41.8mmx8mm\r\n\r\nChip\r\n- SK Hynix A-die', 4339000.00, 22, 'KTG006', 'BRD009', 'product_7a470c9afeec921a_1764420855.jpeg', 400, 'tersedia', '2025-11-29 19:54:15'),
 ('PRD009', 'KingBank Sharp Blade RGB DDR5 32GB Kit (2 x 16GB) 6000 MT/s CL28 White A-Die', '𝗦𝗽𝗲𝗰𝗶𝗳𝗶𝗰𝗮𝘁𝗶𝗼𝗻𝘀 :\r\nModule Spec\r\n\r\n- DDR5 288 pin U DIMM\r\nCapacity\r\n\r\n- 32GB(16GBx2)\r\nFrequency\r\n\r\n- 6000MHz\r\nCAS latency\r\n\r\n- 28\r\nHeatsink material\r\n\r\n- Aluminum Alloy\r\nSupported System\'\r\n\r\n- Intel XMP 3.0 / AMD EXPO\r\nProduct Size\r\n\r\n- 133.8mmx41.8mmx8mm', 4559000.00, 22, 'KTG006', 'BRD009', 'product_4a816e634068837b_1764420931.jpeg', 400, 'tersedia', '2025-11-29 19:55:31'),
-('PRD010', 'KINGBANK SoarBlade RGB 32GB (16GBx2) DDR5 6000MHz CL36 Memory Kit - White', 'Specifications :\r\n\r\nPrice\r\nRp1.769.000\r\n\r\nModule Spec\r\n- DDR5 288 pin U DIMM\r\n\r\nCapacity\r\n- 32GB (16GBx2)\r\n\r\nFrequency\r\n- 6000\r\n\r\nVoltage\r\n- 1.35V\r\n\r\nCAS latency\r\n- CL36\r\n\r\nHeatsink Material\r\n- Aluminum Alloy\r\n\r\nSupported System\r\n- Intel XMP 3.0/AMD EXPO\r\n\r\nProduct Size\r\n- 133.3mmx41.8mmx8.1mm\r\n\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 3888900.00, 0, 'KTG006', 'BRD009', 'product_9af7b52afd65217a_1764421067.jpeg', 400, 'habis', '2025-11-29 19:57:47'),
-('PRD011', 'AMD Ryzen 5 5600 - AM4 BOX', 'Specifications :\r\n\r\nPlatform\r\n- Desktop\r\n\r\nMarket Segment\r\n- Mainstream Desktop\r\n\r\nProduct Family\r\n- AMD Ryzen Processors\r\n\r\nProduct Line\r\n- AMD Ryzen 5 Desktop Processors\r\n\r\nConsumer Use\r\n- Yes\r\n\r\nRegional Availability\r\n- Global, China, NA, EMEA, APJ, LATAM\r\n\r\nFormer Codename\r\n- \"Vermeer\"\r\n\r\nArchitecture\r\n- \"Zen 3\"\r\n\r\n# of CPU Cores\r\n- 6\r\n\r\nMultithreading (SMT)\r\n- Yes\r\n\r\n# of Threads\r\n- 12\r\n\r\nMax. Boost Clock\r\n- Up to 4.4GHz\r\n\r\nBase Clock\r\n- 3.5GHz\r\n\r\nL1 Cache\r\n- 384KB\r\n\r\nL2 Cache\r\n- 3MB\r\n\r\nL3 Cache\r\n- 32MB\r\n\r\nDefault TDP\r\n- 65W\r\n\r\nProcessor Technology for CPU Cores\r\n- TSMC 7nm FinFET\r\n\r\nProcessor Technology for I/O Die\r\n- 12nm (Globalfoundries)\r\n\r\nCPU Compute Die (CCD) Size\r\n- 74mm²\r\n\r\nI/O Die (IOD) Size\r\n- 125mm²\r\n\r\nPackage Die Count\r\n- 2\r\n\r\nUnlocked for Overclocking\r\n- Yes\r\n\r\nCPU Socket\r\n- AM4\r\n\r\nSocket Count\r\n- 1P\r\n\r\nSupporting Chipsets\r\n- X570\r\n- X470\r\n- X370\r\n- B550\r\n- B450\r\n- B350\r\n- A520\r\n\r\nCPU Boost Technology\r\n- Precision Boost 2\r\n\r\nInstruction Set\r\n- x86-64\r\n\r\nSupported Extensions\r\n- AES, AMD-V, AVX, AVX2, FMA3, MMX(+), SHA, SSE, SSE2, SSE3, SSE4.1, SSE4.2, SSE4A, SSSE3, x86-64\r\n\r\nThermal Solution (PIB)\r\n- AMD Wraith Stealth\r\n\r\nMax. Operating Temperature (Tjmax)\r\n- 90°C\r\n\r\nLaunch Date\r\n- 4/4/2022\r\n\r\nOS Support\r\n- Windows 11 - 64-Bit Edition\r\n- Windows 10 - 64-Bit Edition\r\n- RHEL x86 64-Bit\r\n- Ubuntu x86 64-Bit\r\n- Operating System (OS) support will vary by manufacturer.\r\n\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 1689000.00, 12, 'KTG003', 'BRD001', 'product_94f54dbaca74de07_1764442165.jpg', 600, 'tersedia', '2025-11-30 01:49:25'),
+('PRD010', 'KINGBANK SoarBlade RGB 32GB (16GBx2) DDR5 6000MHz CL36 Memory Kit - White', 'Specifications :\r\n\r\nPrice\r\nRp1.769.000\r\n\r\nModule Spec\r\n- DDR5 288 pin U DIMM\r\n\r\nCapacity\r\n- 32GB (16GBx2)\r\n\r\nFrequency\r\n- 6000\r\n\r\nVoltage\r\n- 1.35V\r\n\r\nCAS latency\r\n- CL36\r\n\r\nHeatsink Material\r\n- Aluminum Alloy\r\n\r\nSupported System\r\n- Intel XMP 3.0/AMD EXPO\r\n\r\nProduct Size\r\n- 133.3mmx41.8mmx8.1mm\r\n\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 3888900.00, 46, 'KTG006', 'BRD009', 'product_9af7b52afd65217a_1764421067.jpeg', 400, 'tersedia', '2025-11-29 19:57:47'),
+('PRD011', 'AMD Ryzen 5 5600 - AM4 BOX', 'Specifications :\r\n\r\nPlatform\r\n- Desktop\r\n\r\nMarket Segment\r\n- Mainstream Desktop\r\n\r\nProduct Family\r\n- AMD Ryzen Processors\r\n\r\nProduct Line\r\n- AMD Ryzen 5 Desktop Processors\r\n\r\nConsumer Use\r\n- Yes\r\n\r\nRegional Availability\r\n- Global, China, NA, EMEA, APJ, LATAM\r\n\r\nFormer Codename\r\n- \"Vermeer\"\r\n\r\nArchitecture\r\n- \"Zen 3\"\r\n\r\n# of CPU Cores\r\n- 6\r\n\r\nMultithreading (SMT)\r\n- Yes\r\n\r\n# of Threads\r\n- 12\r\n\r\nMax. Boost Clock\r\n- Up to 4.4GHz\r\n\r\nBase Clock\r\n- 3.5GHz\r\n\r\nL1 Cache\r\n- 384KB\r\n\r\nL2 Cache\r\n- 3MB\r\n\r\nL3 Cache\r\n- 32MB\r\n\r\nDefault TDP\r\n- 65W\r\n\r\nProcessor Technology for CPU Cores\r\n- TSMC 7nm FinFET\r\n\r\nProcessor Technology for I/O Die\r\n- 12nm (Globalfoundries)\r\n\r\nCPU Compute Die (CCD) Size\r\n- 74mm²\r\n\r\nI/O Die (IOD) Size\r\n- 125mm²\r\n\r\nPackage Die Count\r\n- 2\r\n\r\nUnlocked for Overclocking\r\n- Yes\r\n\r\nCPU Socket\r\n- AM4\r\n\r\nSocket Count\r\n- 1P\r\n\r\nSupporting Chipsets\r\n- X570\r\n- X470\r\n- X370\r\n- B550\r\n- B450\r\n- B350\r\n- A520\r\n\r\nCPU Boost Technology\r\n- Precision Boost 2\r\n\r\nInstruction Set\r\n- x86-64\r\n\r\nSupported Extensions\r\n- AES, AMD-V, AVX, AVX2, FMA3, MMX(+), SHA, SSE, SSE2, SSE3, SSE4.1, SSE4.2, SSE4A, SSSE3, x86-64\r\n\r\nThermal Solution (PIB)\r\n- AMD Wraith Stealth\r\n\r\nMax. Operating Temperature (Tjmax)\r\n- 90°C\r\n\r\nLaunch Date\r\n- 4/4/2022\r\n\r\nOS Support\r\n- Windows 11 - 64-Bit Edition\r\n- Windows 10 - 64-Bit Edition\r\n- RHEL x86 64-Bit\r\n- Ubuntu x86 64-Bit\r\n- Operating System (OS) support will vary by manufacturer.\r\n\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 1689000.00, 123, 'KTG003', 'BRD001', 'product_94f54dbaca74de07_1764442165.jpg', 600, 'tersedia', '2025-11-30 01:49:25'),
 ('PRD012', 'Asus ROG Strix x Hatsune Miku Limited Edition PC Bundle', 'ROG Strix x Hatsune Miku Limited Edition PC Bundle adalah paket eksklusif komponen PC premium hasil kolaborasi ASUS ROG dengan karakter virtual idol legendaris Hatsune Miku.\r\nBundle ini dirancang untuk gamer, kreator konten, dan kolektor yang menginginkan performa kelas atas dengan desain anime futuristik berwarna turquoise–pink khas Miku.\r\nSetiap komponen dilengkapi RGB Aura Sync, ilustrasi resmi Hatsune Miku, serta material premium yang menjamin performa tinggi, pendinginan optimal, dan tampilan showcase yang mencuri perhatian.\r\nIsi Bundle\r\n•	Motherboard ROG Strix Hatsune Miku Edition\r\n•	Casing ROG Strix Hatsune Miku Edition (Tempered Glass)\r\n•	Graphics Card ROG Strix Hatsune Miku Edition\r\n•	ROG Strix RGB Cooling Fans (3x)\r\n•	ROG Strix Liquid Cooler LCD Hatsune Miku Edition\r\nSpesifikasi Utama\r\nASUS MOTHERBOARD ROG STRIX X870E-H GAMING WIFI 7 HATSUNE MIKU EDITION DDR5 AM5 /AMD HATSUNE MIKU EDITION 3Y\r\n•	Chipset: Intel (LGA1700 – seri Strix)\r\n•	Form Factor: ATX\r\n•	Memory: Hingga 128GB DDR5\r\n•	Storage: M.2 NVMe Gen 4, SATA 6Gb/s\r\n•	RGB: ASUS Aura Sync (Hatsune Miku Theme)\r\nASUS PC CASE E-ATX ROG STRIX HELIOS II (4X 140MM BLACK FAN) HATSUNE MIKU EDITION 2Y\r\n•	Tipe: Mid Tower\r\n•	Material: Steel + Tempered Glass\r\n•	Support Motherboard: ATX / mATX / Mini-ITX\r\n•	Fan Support: Hingga 6 fan\r\n•	Radiator Support: Hingga 360mm\r\n•	Desain: Ilustrasi resmi Hatsune Miku\r\n ASUS VGA NVIDIA GEFORCE ROG ASTRAL RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION 3Y\r\n•	Seri: ROG Strix Hatsune Miku Edition\r\n•	Cooling: Triple Fan Axial-tech\r\n•	RGB: Aura Sync\r\n•	Output: HDMI, DisplayPort\r\n•	Fokus: Gaming & Content Creation kelas high-end\r\nASUS CPU AIO COOLER ROG RYUO IV 360 ARGB HATSUNE MIKU EDITION (360MM RADIATOR + 3X ARGB FANS + 6.67 INCH AMOLED DISPLAY) HATSUNE MIKU EDITION 6Y\r\n•	Radiator: 360mm\r\n•	Fan: 3x RGB Fans\r\n•	Layar: LCD Display Custom Hatsune Miku Animation\r\n•	Socket Support: Intel LGA1700 / AMD AM5\r\n•	Teknologi: AIO Liquid Cooling Performance\r\nRGB Fans\r\n•	Jumlah: 3 Unit\r\n•	Size: 120mm\r\n•	Lighting: Addressable RGB Aura Sync\r\n•	Airflow: High Performance\r\nPeripheral & Aksesori Tambahan (NEW)\r\nASUS Gaming Monitor 27” ROG Strix XG27ACMEG-G – Hatsune Miku Edition\r\n•	Panel: Fast IPS\r\n•	Ukuran Layar: 27 Inch\r\n•	Resolusi: 2K QHD (2560×1440)\r\n•	Refresh Rate: Hingga 260Hz\r\n•	Response Time: 0.3ms\r\n•	HDR: HDR10\r\n•	Konektivitas: HDMI, DisplayPort, USB-C\r\n•	Ergonomic Stand: Tilt, Swivel, Height Adjust, Pivot\r\n•	Desain: ROG Strix x Hatsune Miku Limited Edition\r\n•	Garansi: 3 Tahun\r\nASUS External SSD Case ROG Strix Arion – Hatsune Miku Edition\r\n•	Interface: USB-C (USB 3.2 Gen 2)\r\n•	Kecepatan Transfer: Up to 1250 MB/s\r\n•	Support SSD: M.2 NVMe\r\n•	Material: Aluminium Alloy (Heatsink Design)\r\n•	RGB: Aura Sync\r\n•	Desain Eksklusif Hatsune Miku\r\nASUS PSU ROG Thor 1200W Platinum III – Hatsune Miku Edition\r\n•	Daya: 1200 Watt\r\n•	Sertifikasi: 80+ Platinum\r\n•	Standar: ATX 3.1\r\n•	Konektor GPU: 12V-2×6\r\n•	Modular: Fully Modular\r\n•	Fitur: OLED Power Display\r\n•	Cooling: ROG Axial-tech Fan\r\n•	Garansi: 10 Tahun\r\nASUS Wireless Mouse TUF Gaming Mini – Hatsune Miku Edition\r\n•	Koneksi: Wireless\r\n•	Sensor: High Precision Gaming Sensor\r\n•	Desain: Lightweight & Compact\r\n•	Tombol: Programmable Buttons\r\n•	Cocok untuk: Gaming & produktivitas mobile\r\nASUS Gaming Headset TUF Gaming H1 Gen II – Hatsune Miku Edition\r\n•	Driver: 40mm ASUS Essence Driver\r\n•	Koneksi: USB\r\n•	Audio: Virtual Surround Sound\r\n•	Microphone: AI Noise-Canceling\r\n•	Bobot: Lightweight Design\r\n•	Desain: TUF Gaming x Hatsune Miku\r\nASUS Gaming Keyboard TUF Gaming K3 Gen II – Hatsune Miku Edition\r\n•	Switch: Mechanical (Gaming Grade)\r\n•	Lighting: RGB Backlight\r\n•	Layout: Full Size\r\n•	Durability: Military-grade build quality\r\n•	Desain: Exclusive Hatsune Miku Artwork\r\nASUS Mouse Pad TUF Gaming P1 – Hatsune Miku Edition\r\n•	Material: Gaming-grade Fabric Surface\r\n•	Base: Anti-Slip Rubber\r\n•	Edge: Anti-Fray Stitching\r\n•	Ukuran: Medium (Desk Friendly)\r\n•	Desain: Limited Edition Hatsune Miku', 89349000.00, 2, 'KTG012', 'BRD006', 'product_22158a90da35389e_1765372761.png', 0, 'tersedia', '2025-12-10 20:19:21');
 
 -- --------------------------------------------------------
@@ -681,7 +756,7 @@ CREATE TABLE `promo_kampanye` (
 
 INSERT INTO `promo_kampanye` (`id_kampanye`, `judul`, `slug`, `deskripsi`, `banner`, `tipe`, `mulai_pada`, `selesai_pada`, `kuota_total`, `kuota_terpakai`, `status`, `dibuat_pada`, `diperbarui_pada`) VALUES
 ('CMP0000000001', 'Diskon Akhir Tahun Hingga 85%', 'diskon-akhir-tahun-hingga-85', 'Diskon Akhir Tahun Hingga 85%', 'campaign_5a59f08f87c5dd30_1764553744.png', 'diskon_produk', '2025-12-01 10:48:00', '2025-12-31 23:59:00', 80, 0, 'aktif', '2025-12-01 08:49:04', '2025-12-02 10:08:48'),
-('CMP0000000002', 'Flash Sale Akhir Tahun Produk Skyworth', 'flash-sale-akhir-tahun-produk-skyworth', 'Flash Sale Akhir Tahun Produk Skyworth', 'campaign_fc37d5b090501208_1764556257.png', 'flash_sale', '2025-12-01 09:30:00', '2025-12-31 09:30:00', 20, 0, 'aktif', '2025-12-01 09:30:57', '2025-12-02 10:08:48');
+('CMP0000000002', 'Flash Sale Akhir Tahun Produk Skyworth', 'flash-sale-akhir-tahun-produk-skyworth', 'Flash Sale Akhir Tahun Produk Skyworth', 'campaign_fc37d5b090501208_1764556257.png', 'flash_sale', '2025-12-01 09:30:00', '2025-12-31 09:30:00', 20, 0, 'aktif', '2025-12-01 09:30:57', '2025-12-14 19:34:17');
 
 -- --------------------------------------------------------
 
@@ -813,7 +888,7 @@ INSERT INTO `role_permissions` (`id_role_permission`, `id_role`, `id_permission`
 CREATE TABLE `shipment` (
   `id_shipment` varchar(32) NOT NULL,
   `id_order` varchar(32) NOT NULL,
-  `id_alamat` varchar(10) DEFAULT NULL,
+  `id_alamat` int NOT NULL,
   `jasa_pengiriman` varchar(100) NOT NULL,
   `no_resi` varchar(100) DEFAULT NULL,
   `nama_penerima` varchar(100) NOT NULL,
@@ -856,7 +931,7 @@ CREATE TABLE `store_locations` (
 --
 
 INSERT INTO `store_locations` (`id_toko`, `nama_toko`, `no_telepon`, `alamat`, `provinsi`, `kota_kabupaten`, `kecamatan`, `kelurahan`, `kode_pos`, `jam_buka`, `jam_tutup`, `is_active`, `created_at`, `updated_at`) VALUES
-('TKO0001', 'Nano Komputer - Jakarta Pusat', '0816765803', 'Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 2', 'DKI JAKARTA', 'KOTA JAKARTA PUSAT', 'SAWAH BESAR', 'MANGGA DUA SELATAN', '10730', '08:00:00', '18:00:00', 1, '2025-12-12 12:59:04', '2025-12-12 13:04:01');
+('TKO0001', 'Nano Komputer - Jakarta Pusat', '0816765803', 'Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 21', 'DKI JAKARTA', 'KOTA JAKARTA PUSAT', 'SAWAH BESAR', 'MANGGA DUA SELATAN', '10730', '08:00:00', '18:00:00', 1, '2025-12-12 12:59:04', '2025-12-15 00:17:31');
 
 -- --------------------------------------------------------
 
@@ -886,7 +961,7 @@ CREATE TABLE `support_tickets` (
 --
 
 INSERT INTO `support_tickets` (`id_ticket`, `id_customer`, `nama_pengaju`, `email`, `no_telepon`, `subjek`, `kategori`, `message`, `attachment`, `status`, `priority`, `assigned_to`, `created_at`, `updated_at`) VALUES
-('TKT00001', NULL, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567890', 'Pertanyaan Umum', 'General', 'Tolong aktifkan akun saya', NULL, 'Open', 'Medium', NULL, '2025-12-12 13:06:30', '2025-12-12 13:06:30');
+('TKT00001', NULL, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567890', 'Kendala Login Akun Dinonaktifkan', 'Aktivasi Akun', 'Yth. Tim Support/Administrator\r\nDengan hormat,\r\n\r\nSaya yang bertanda tangan di bawah ini:\r\n\r\nNama: Fauzan Eldianzah\r\nEmail/Username: fauzan.customer@gmail.com\r\n\r\nDengan ini mengajukan permohonan untuk aktivasi ulang akun saya yang saat ini dinonaktifkan. Saya menyadari bahwa akun tersebut mungkin dinonaktifkan karena alasan tertentu, dan saya memohon kesediaan pihak terkait untuk meninjau kembali status akun saya.\r\n\r\nSaya berkomitmen untuk mematuhi seluruh ketentuan dan kebijakan yang berlaku. Apabila diperlukan informasi atau dokumen tambahan, saya siap untuk melengkapinya.\r\n\r\nDemikian permohonan ini saya sampaikan. Atas perhatian dan bantuannya, saya ucapkan terima kasih.\r\n\r\nHormat saya,', NULL, 'Open', 'Medium', NULL, '2025-12-16 17:06:57', '2025-12-16 17:06:57');
 
 -- --------------------------------------------------------
 
@@ -904,13 +979,6 @@ CREATE TABLE `ticket_replies` (
   `is_internal_note` tinyint(1) DEFAULT '0',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `ticket_replies`
---
-
-INSERT INTO `ticket_replies` (`id_reply`, `id_ticket`, `id_admin`, `id_customer`, `message`, `attachment`, `is_internal_note`, `created_at`) VALUES
-(1, 'TKT00001', 1, NULL, 'Baik sudah saya aktivasi akunnya, silahkan login kembali dengan email dan password yang sama', NULL, 1, '2025-12-12 14:01:15');
 
 -- --------------------------------------------------------
 
@@ -944,7 +1012,7 @@ CREATE TABLE `voucher` (
 --
 
 INSERT INTO `voucher` (`id_voucher`, `kode`, `judul`, `deskripsi`, `jenis`, `nilai`, `minimal_belanja`, `maksimal_diskon`, `mulai_pada`, `selesai_pada`, `kuota_total`, `kuota_terpakai`, `kuota_per_pengguna`, `terbatas_produk`, `terbatas_kategori`, `status`, `dibuat_pada`, `diperbarui_pada`) VALUES
-('VCH0000000001', '7HYFASLL', 'Flash Sale Akhir Tahun', 'Flash Sale', 'diskon_nominal', 1000000.00, 2.00, 2000000.00, '2025-11-30 19:30:00', '2025-12-12 23:59:00', 20, 0, 1, NULL, NULL, 'aktif', '2025-11-30 02:34:03', '2025-11-30 19:33:48');
+('VCH0000000001', '7HYFASLL', 'Flash Sale Akhir Tahun', 'Flash Sale', 'diskon_nominal', 1000000.00, 2.00, 2000000.00, '2025-11-30 19:30:00', '2025-12-31 23:59:00', 20, 0, 1, NULL, NULL, 'aktif', '2025-11-30 02:34:03', '2025-12-14 12:48:48');
 
 -- --------------------------------------------------------
 
@@ -965,14 +1033,13 @@ CREATE TABLE `wishlist` (
 --
 
 INSERT INTO `wishlist` (`id_wishlist`, `id_customer`, `id_product`, `tanggal_ditambahkan`, `tgl_diubah`) VALUES
-('WSH0000003', 1, 'PRD007', '2025-12-08 13:57:17', '2025-12-08 13:57:17'),
 ('WSH0000004', 7, 'PRD008', '2025-12-08 14:57:05', '2025-12-08 14:57:05'),
-('WSH0000005', 1, 'PRD009', '2025-12-10 18:09:10', '2025-12-10 18:09:10'),
-('WSH0000006', 1, 'PRD006', '2025-12-10 18:09:12', '2025-12-10 18:09:12'),
-('WSH0000007', 1, 'PRD003', '2025-12-10 18:09:22', '2025-12-10 18:09:22'),
-('WSH0000008', 1, 'PRD010', '2025-12-10 18:10:05', '2025-12-10 18:10:05'),
-('WSH0000009', 1, 'PRD011', '2025-12-10 18:10:07', '2025-12-10 18:10:07'),
-('WSH0000010', 1, 'PRD012', '2025-12-12 03:16:30', '2025-12-12 03:16:30');
+('WSH0000012', 8, 'PRD011', '2025-12-13 14:02:50', '2025-12-13 14:02:50'),
+('WSH0000013', 2, 'PRD002', '2025-12-13 14:04:18', '2025-12-13 14:04:18'),
+('WSH0000014', 2, 'PRD007', '2025-12-13 14:04:20', '2025-12-13 14:04:20'),
+('WSH0000015', 1, 'PRD012', '2025-12-14 09:09:05', '2025-12-14 09:09:05'),
+('WSH0000016', 1, 'PRD005', '2025-12-14 09:54:53', '2025-12-14 09:54:53'),
+('WSH0000017', 1, 'PRD001', '2025-12-16 13:57:59', '2025-12-16 13:57:59');
 
 --
 -- Indexes for dumped tables
@@ -1011,6 +1078,24 @@ ALTER TABLE `admin_permissions`
 ALTER TABLE `admin_roles`
   ADD PRIMARY KEY (`id_role`),
   ADD UNIQUE KEY `role_name` (`role_name`);
+
+--
+-- Indexes for table `blog_categories`
+--
+ALTER TABLE `blog_categories`
+  ADD PRIMARY KEY (`id_category`),
+  ADD UNIQUE KEY `slug` (`slug`);
+
+--
+-- Indexes for table `blog_posts`
+--
+ALTER TABLE `blog_posts`
+  ADD PRIMARY KEY (`id_post`),
+  ADD UNIQUE KEY `slug` (`slug`),
+  ADD KEY `fk_blog_admin` (`id_admin`),
+  ADD KEY `idx_blog_status` (`status`),
+  ADD KEY `idx_blog_published` (`published_at`),
+  ADD KEY `idx_blog_category` (`id_category`);
 
 --
 -- Indexes for table `brand`
@@ -1059,6 +1144,12 @@ ALTER TABLE `kampanye_produk`
 --
 ALTER TABLE `kategori`
   ADD PRIMARY KEY (`id_kategori`);
+
+--
+-- Indexes for table `log_blog`
+--
+ALTER TABLE `log_blog`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `log_promo`
@@ -1229,6 +1320,12 @@ ALTER TABLE `wishlist`
 --
 
 --
+-- AUTO_INCREMENT for table `address_book`
+--
+ALTER TABLE `address_book`
+  MODIFY `id_alamat` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `administrators`
 --
 ALTER TABLE `administrators`
@@ -1247,6 +1344,18 @@ ALTER TABLE `admin_roles`
   MODIFY `id_role` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `blog_categories`
+--
+ALTER TABLE `blog_categories`
+  MODIFY `id_category` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `blog_posts`
+--
+ALTER TABLE `blog_posts`
+  MODIFY `id_post` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
@@ -1256,7 +1365,13 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `kampanye_produk`
 --
 ALTER TABLE `kampanye_produk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `log_blog`
+--
+ALTER TABLE `log_blog`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `log_promo`
@@ -1303,6 +1418,13 @@ ALTER TABLE `address_book`
 --
 ALTER TABLE `administrators`
   ADD CONSTRAINT `fk_admin_role` FOREIGN KEY (`id_role`) REFERENCES `admin_roles` (`id_role`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `blog_posts`
+--
+ALTER TABLE `blog_posts`
+  ADD CONSTRAINT `fk_blog_admin` FOREIGN KEY (`id_admin`) REFERENCES `administrators` (`id_admin`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_blog_category` FOREIGN KEY (`id_category`) REFERENCES `blog_categories` (`id_category`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 --
 -- Constraints for table `cart`
@@ -1404,7 +1526,7 @@ ALTER TABLE `role_permissions`
 -- Constraints for table `shipment`
 --
 ALTER TABLE `shipment`
-  ADD CONSTRAINT `fk_shipment_address` FOREIGN KEY (`id_alamat`) REFERENCES `address_book` (`id_alamat`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_shipment_address` FOREIGN KEY (`id_alamat`) REFERENCES `address_book` (`id_alamat`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_shipment_order` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`) ON DELETE CASCADE;
 
 --
