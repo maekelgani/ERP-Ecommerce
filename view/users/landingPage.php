@@ -16,6 +16,7 @@ use App\Helper\CategoryLandingHelper;
 use App\Helper\ProductLandingHelper;
 use App\Helper\BrandLandingHelper;
 
+
 $categoryHelper = new CategoryLandingHelper();
 $productHelper = new ProductLandingHelper();
 $brandHelper = new BrandLandingHelper();
@@ -135,8 +136,8 @@ $articles = [
                                 ?>
                                 <a href="productCollection.php?category=<?= urlencode($categoryId) ?>"
                                     class="flex-shrink-0 category-card group relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500
-                                           w-[calc(50%-6px)] sm:w-[calc(33.333%-11px)] md:w-[calc(25%-12px)] lg:w-[calc(20%-13px)] xl:w-[calc(16.666%-14px)]
-                                           aspect-square min-w-[140px] max-w-[200px]"
+                                            w-[calc(50%-6px)] sm:w-[calc(33.333%-11px)] md:w-[calc(25%-12px)] lg:w-[calc(20%-13px)] xl:w-[calc(16.666%-14px)]
+                                            aspect-square min-w-[140px] max-w-[200px]"
                                     style="animation: fadeInUp 0.5s ease-out <?= $index * 0.08 ?>s both;">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10 opacity-70 group-hover:opacity-90 transition-opacity duration-300"></div>
                                     <img alt="<?= $categoryName ?>"
@@ -397,49 +398,141 @@ $articles = [
             </div>
         </section>
 
+        <?php
+
+        use App\Database\DatabaseConnection;
+
+        $pdo = DatabaseConnection::getInstance()->getConnection();
+
+        $sqlArticle = "
+            SELECT 
+                bp.id_post,
+                bp.judul,
+                bp.slug,
+                bp.excerpt,
+                bp.thumbnail,
+                bp.views,
+                bp.published_at,
+                bc.nama_kategori,
+                a.nama_lengkap AS author
+            FROM blog_posts bp
+            JOIN blog_categories bc ON bp.id_category = bc.id_category
+            JOIN administrators a ON bp.id_admin = a.id_admin
+            WHERE bp.status = 'publish'
+            ORDER BY bp.published_at DESC
+            LIMIT 3
+        ";
+
+        $stmtArticle = $pdo->prepare($sqlArticle);
+        $stmtArticle->execute();
+        $articles = $stmtArticle->fetchAll();
+
+        $hasArticle = count($articles) > 0;
+        ?>
+
+
+
         <!-- ARTICLES SECTION -->
-        <section class="w-full px-5 md:px-8 lg:px-20 mb-10">
+        <section class="w-full px-5 md:px-8 lg:px-20 mt-8">
             <div class="py-4 w-full">
-                <div class="mx-auto">
-                    <div class="flex justify-between items-end mb-8">
-                        <div>
-                            <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">Artikel Terbaru</h2>
-                            <p class="text-gray-500 mt-2 text-sm sm:text-base">Wawasan, tips, dan berita terkini seputar teknologi.</p>
-                        </div>
-                        <a href="blogNews.php" class="hidden sm:block text-primary font-semibold hover:text-[#A14646] transition-colors text-sm">Lihat Blog & Artikel Lainnya &rarr;</a>
+
+                <!-- Header -->
+                <div class="flex items-end justify-between mb-10">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2">
+                            Blog & Artikel Terbaru
+                        </h2>
+                        <p class="text-gray-500">
+                            Wawasan, tips, dan berita terkini seputar teknologi.
+                        </p>
                     </div>
 
-                    <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                        <?php foreach ($articles as $article): ?>
-                            <article class="flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 duration-300">
-                                <div class="h-48 w-full overflow-hidden bg-gray-100">
-                                    <img alt="<?= htmlspecialchars($article['title']) ?>" src="<?= $article['image'] ?>" class="h-full w-full object-cover transition duration-500 hover:scale-110" />
-                                </div>
-                                <div class="flex flex-1 flex-col justify-between p-6">
-                                    <div>
-                                        <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
-                                            <span class="font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full"><?= $article['category'] ?></span>
-                                            <span class="text-gray-300">&bull;</span>
-                                            <time datetime="2025-11-28"><?= $article['date'] ?></time>
-                                        </div>
-                                        <h3 class="text-lg font-bold text-gray-900">
-                                            <a href="#" class="hover:text-primary transition-colors"><?= $article['title'] ?></a>
-                                        </h3>
-                                        <p class="mt-2 line-clamp-3 text-sm text-gray-500"><?= $article['excerpt'] ?></p>
+                    <a href="blogNews.php"
+                        class="text-sm font-medium text-[#882426] hover:underline">
+                        Lihat Blog & Artikel Lainnya →
+                    </a>
+                </div>
+
+                <?php if ($hasArticle): ?>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                        <?php foreach ($articles as $row): ?>
+                            <?php
+                            // estimasi waktu baca (200 kata / menit)
+                            $wordCount = str_word_count(strip_tags($row['excerpt']));
+                            $readTime = max(1, ceil($wordCount / 200));
+                            ?>
+                            <article
+                                class="flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 duration-300">
+
+                                <!-- Thumbnail (NO CROP) -->
+                                <a href="articleTemplate.php?slug=<?= htmlspecialchars($row['slug']); ?>"
+                                    class="block bg-gray-50 h-48 w-full overflow-hidden flex items-center justify-center shrink-0">
+                                    <img
+                                        src="../../uploads/blog/<?= htmlspecialchars($row['thumbnail']); ?>"
+                                        alt="<?= htmlspecialchars($row['judul']); ?>"
+                                        class="h-full w-full object-cover transition duration-500 hover:scale-110">
+                                </a>
+
+                                <!-- Content -->
+                                <div class="p-6 flex flex-col flex-1">
+
+                                    <!-- Meta -->
+                                    <div class="flex items-center gap-3 text-xs mb-3">
+                                        <span class="px-3 py-1 rounded-full bg-[#882426]/10 text-[#882426] font-medium">
+                                            <?= htmlspecialchars($row['nama_kategori']); ?>
+                                        </span>
+                                        <span class="text-gray-400">
+                                            <?= date('d M Y', strtotime($row['published_at'])); ?>
+                                        </span>
+                                        <span class="text-gray-400">
+                                            • <?= $readTime; ?> menit
+                                        </span>
+                                        <span class="text-gray-400">
+                                            • <?= (int)$row['views']; ?> views
+                                        </span>
                                     </div>
-                                    <a href="../../view/users/articleTemplate.php" class="group mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-[#A14646]">
+
+                                    <!-- Judul (tinggi konsisten) -->
+                                    <h3 class="text-lg font-bold text-gray-900 leading-snug mb-3 line-clamp-2 min-h-[3.5rem]">
+                                        <a href="articleTemplate.php?slug=<?= htmlspecialchars($row['slug']); ?>"
+                                            class="hover:text-[#882426] transition-colors">
+                                            <?= htmlspecialchars($row['judul']); ?>
+                                        </a>
+                                    </h3>
+
+                                    <!-- Excerpt (tinggi konsisten) -->
+                                    <p class="text-sm text-gray-600 leading-relaxed mb-6 line-clamp-3 min-h-[4.5rem]">
+                                        <?= htmlspecialchars($row['excerpt']); ?>
+                                    </p>
+
+                                    <!-- Footer (SELALU DI BAWAH) -->
+                                    <a href="articleTemplate.php?slug=<?= htmlspecialchars($row['slug']); ?>"
+                                        class="inline-flex items-center gap-1 text-sm font-medium text-[#882426] hover:gap-2 transition-all mt-auto">
                                         Baca Selengkapnya
-                                        <span aria-hidden="true" class="block transition-all group-hover:translate-x-0.5">&rarr;</span>
+                                        <span>→</span>
                                     </a>
+
                                 </div>
                             </article>
+
+
                         <?php endforeach; ?>
+
                     </div>
 
-                    <div class="flex justify-center mt-6 sm:hidden">
-                        <a href="blogNews.php" class="text-primary font-semibold hover:text-[#A14646] transition-colors text-sm">Lihat Blog & Artikel Lainnya &rarr;</a>
+                <?php else: ?>
+                    <!-- Empty State -->
+                    <div class="text-center py-16 bg-gray-50 rounded-xl">
+                        <p class="text-lg font-semibold text-gray-700">
+                            Belum ada artikel
+                        </p>
+                        <p class="text-sm text-gray-500 mt-2">
+                            Artikel terbaru akan segera kami hadirkan.
+                        </p>
                     </div>
-                </div>
+                <?php endif; ?>
+
             </div>
         </section>
     </main>

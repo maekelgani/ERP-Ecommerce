@@ -27,6 +27,8 @@ if (!$article || $article['status'] !== 'publish') {
 $blogPostRepo->incrementViews($article['id_post']);
 
 $relatedPosts = $blogPostRepo->getRelatedPosts($article['id_post'], $article['id_category'], 4);
+$popularPosts = $blogPostRepo->getPopularPosts(5, $article['id_post']);
+$prevNextPosts = $blogPostRepo->getPrevNextPosts($article['id_post'], $article['published_at']);
 
 $pageTitle = $article['judul'];
 include '../../components/users/head.php';
@@ -489,7 +491,43 @@ function getCategoryColor($categoryName)
                         </div>
                     </div>
 
-                    <div class="mt-8 flex items-center justify-between">
+                    <?php if ($prevNextPosts['prev'] || $prevNextPosts['next']): ?>
+                        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <?php if ($prevNextPosts['prev']): ?>
+                                <a href="articleTemplate.php?slug=<?= urlencode($prevNextPosts['prev']['slug']) ?>"
+                                    class="group flex flex-col p-4 bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl hover:border-[#882426]/30 hover:shadow-md transition-all duration-300">
+                                    <div class="flex items-center gap-1 text-gray-500 text-xs font-medium uppercase tracking-wide mb-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                        Artikel Sebelumnya
+                                    </div>
+                                    <h4 class="font-semibold text-gray-900 line-clamp-2 group-hover:text-[#882426] transition-colors">
+                                        <?= htmlspecialchars($prevNextPosts['prev']['judul']) ?>
+                                    </h4>
+                                </a>
+                            <?php else: ?>
+                                <div></div>
+                            <?php endif; ?>
+
+                            <?php if ($prevNextPosts['next']): ?>
+                                <a href="articleTemplate.php?slug=<?= urlencode($prevNextPosts['next']['slug']) ?>"
+                                    class="group flex flex-col p-4 bg-gradient-to-l from-gray-50 to-white border border-gray-200 rounded-xl hover:border-[#882426]/30 hover:shadow-md transition-all duration-300 text-right">
+                                    <div class="flex items-center justify-end gap-1 text-gray-500 text-xs font-medium uppercase tracking-wide mb-2">
+                                        Artikel Selanjutnya
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </div>
+                                    <h4 class="font-semibold text-gray-900 line-clamp-2 group-hover:text-[#882426] transition-colors">
+                                        <?= htmlspecialchars($prevNextPosts['next']['judul']) ?>
+                                    </h4>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="mt-6 flex items-center justify-center">
                         <a href="blogNews.php" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all duration-300">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
@@ -501,6 +539,56 @@ function getCategoryColor($categoryName)
 
                 <aside class="lg:col-span-1">
                     <div class="sticky top-32 space-y-6">
+                        <?php if (!empty($popularPosts)): ?>
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-[#882426]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                    </svg>
+                                    Artikel Populer
+                                </h3>
+                                <div class="space-y-4">
+                                    <?php foreach ($popularPosts as $index => $popular): ?>
+                                        <a href="articleTemplate.php?slug=<?= urlencode($popular['slug']) ?>" class="group block">
+                                            <div class="flex gap-3">
+                                                <div class="relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
+                                                    <?php if ($popular['thumbnail']): ?>
+                                                        <img src="../../uploads/blog/<?= htmlspecialchars($popular['thumbnail']) ?>"
+                                                            alt="<?= htmlspecialchars($popular['judul']) ?>"
+                                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                                    <?php else: ?>
+                                                        <div class="w-full h-full bg-gradient-to-br <?= getCategoryColor($popular['nama_kategori'] ?? '') ?> flex items-center justify-center">
+                                                            <svg class="w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                                            </svg>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                    <span class="absolute top-0 left-0 bg-gray-800/80 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-br-lg">#<?= $index + 1 ?></span>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <h4 class="font-medium text-gray-900 text-sm line-clamp-2 group-hover:text-[#882426] transition-colors"><?= htmlspecialchars($popular['judul']) ?></h4>
+                                                    <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                        </svg>
+                                                        <?php
+                                                        $views = $popular['views'] ?? 0;
+                                                        if ($views >= 1000) {
+                                                            echo number_format($views / 1000, 1) . 'k';
+                                                        } else {
+                                                            echo number_format($views);
+                                                        }
+                                                        ?> views
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
                         <?php if (!empty($relatedPosts)): ?>
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                                 <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">

@@ -387,4 +387,75 @@ class BlogPostRepository
 
         return $slug;
     }
+
+    public function getPopularPosts(int $limit = 5, ?int $excludeId = null): array
+    {
+        $sql = "
+            SELECT 
+                bp.id_post, bp.judul, bp.slug, bp.thumbnail, bp.views,
+                bc.nama_kategori
+            FROM blog_posts bp
+            LEFT JOIN blog_categories bc ON bp.id_category = bc.id_category
+            WHERE bp.status = 'publish'
+        ";
+        $params = [];
+
+        if ($excludeId) {
+            $sql .= " AND bp.id_post != :exclude_id";
+            $params['exclude_id'] = $excludeId;
+        }
+
+        $sql .= " ORDER BY bp.views DESC LIMIT :limit";
+
+        $stmt = $this->db->prepare($sql);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(':' . $key, $value);
+        }
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    public function getPrevNextPosts(int $currentPostId, ?string $publishedAt = null): array
+    {
+        $result = ['prev' => null, 'next' => null];
+
+        if (!$publishedAt) {
+            $current = $this->getById($currentPostId);
+            $publishedAt = $current['published_at'] ?? null;
+        }
+
+        if (!$publishedAt) {
+            return $result;
+        }
+
+        $stmtPrev = $this->db->prepare("
+            SELECT bp.id_post, bp.judul, bp.slug, bp.thumbnail, bc.nama_kategori
+            FROM blog_posts bp
+            LEFT JOIN blog_categories bc ON bp.id_category = bc.id_category
+            WHERE bp.status = 'publish' 
+              AND bp.published_at < :published_at
+              AND bp.id_post != :current_id
+            ORDER BY bp.published_at DESC
+            LIMIT 1
+        ");
+        $stmtPrev->execute(['published_at' => $publishedAt, 'current_id' => $currentPostId]);
+        $result['prev'] = $stmtPrev->fetch() ?: null;
+
+        $stmtNext = $this->db->prepare("
+            SELECT bp.id_post, bp.judul, bp.slug, bp.thumbnail, bc.nama_kategori
+            FROM blog_posts bp
+            LEFT JOIN blog_categories bc ON bp.id_category = bc.id_category
+            WHERE bp.status = 'publish' 
+              AND bp.published_at > :published_at
+              AND bp.id_post != :current_id
+            ORDER BY bp.published_at ASC
+            LIMIT 1
+        ");
+        $stmtNext->execute(['published_at' => $publishedAt, 'current_id' => $currentPostId]);
+        $result['next'] = $stmtNext->fetch() ?: null;
+
+        return $result;
+    }
 }

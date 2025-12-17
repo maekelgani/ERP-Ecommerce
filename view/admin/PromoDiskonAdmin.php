@@ -391,7 +391,25 @@ include '../../components/admin/head.php';
                                     <input type="number" name="mass_maks_qty" id="mass_maks_qty" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]" placeholder="Unlimited">
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-base text-gray-400">event</span>
+                                        Mulai
+                                    </span>
+                                </label>
+                                <input type="datetime-local" name="mass_mulai" id="mass_mulai" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-base text-gray-400">event_busy</span>
+                                        Selesai
+                                    </span>
+                                </label>
+                                <input type="datetime-local" name="mass_selesai" id="mass_selesai" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]">
+                            </div>
+                            <!-- <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                                         <span class="flex items-center gap-1">
@@ -410,7 +428,7 @@ include '../../components/admin/head.php';
                                     </label>
                                     <input type="datetime-local" name="mass_selesai" id="mass_selesai" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]">
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     <span class="flex items-center gap-1">
