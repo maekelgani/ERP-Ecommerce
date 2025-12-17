@@ -19,14 +19,14 @@ $lastUpdated = "1 Desember 2025";
     <header>
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
-    
+
     <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const promoBanner = document.getElementById('promoBanner');
             const navbarSpacer = document.getElementById('navbarSpacer');
-            
+
             function updateSpacerHeight() {
                 if (window.innerWidth >= 768 && promoBanner) {
                     navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
@@ -34,13 +34,13 @@ $lastUpdated = "1 Desember 2025";
                     navbarSpacer.style.height = '112px';
                 }
             }
-            
+
             updateSpacerHeight();
             window.addEventListener('scroll', updateSpacerHeight);
             window.addEventListener('resize', updateSpacerHeight);
         });
     </script>
-    
+
     <main class="max-w-full mb-10">
         <section class="relative h-[200px] md:h-[280px] overflow-hidden mb-8">
             <div class="absolute inset-0 bg-gradient-to-r from-[#882426] via-[#a83234] to-[#882426]">
@@ -48,7 +48,7 @@ $lastUpdated = "1 Desember 2025";
                     <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                         <defs>
                             <pattern id="shield" width="20" height="20" patternUnits="userSpaceOnUse">
-                                <path d="M10 2 L18 6 L18 12 C18 16 14 19 10 20 C6 19 2 16 2 12 L2 6 Z" fill="none" stroke="white" stroke-width="0.3"/>
+                                <path d="M10 2 L18 6 L18 12 C18 16 14 19 10 20 C6 19 2 16 2 12 L2 6 Z" fill="none" stroke="white" stroke-width="0.3" />
                             </pattern>
                         </defs>
                         <rect width="100" height="100" fill="url(#shield)" />
@@ -71,7 +71,7 @@ $lastUpdated = "1 Desember 2025";
 
         <div class="w-full px-4 md:px-8 lg:px-20 py-6">
             <?php include '../../components/users/breadcrumb.php'; ?>
-            
+
             <div class="max-w-4xl mx-auto">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="bg-gray-50 px-6 py-4 border-b border-gray-100">
@@ -85,7 +85,7 @@ $lastUpdated = "1 Desember 2025";
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="p-6 md:p-8 prose prose-gray max-w-none">
                         <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-8">
                             <div class="flex items-start gap-3">
@@ -95,14 +95,14 @@ $lastUpdated = "1 Desember 2025";
                                 <p class="text-sm text-green-700 m-0">Nano Komputer berkomitmen untuk melindungi privasi Anda. Kebijakan ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi pribadi Anda.</p>
                             </div>
                         </div>
-                        
+
                         <section class="mb-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">1</span>
                                 Informasi yang Kami Kumpulkan
                             </h2>
                             <p class="text-gray-600 mb-4">Kami mengumpulkan beberapa jenis informasi untuk memberikan layanan terbaik:</p>
-                            
+
                             <div class="space-y-4">
                                 <div class="bg-gray-50 rounded-xl p-4">
                                     <h3 class="font-semibold text-gray-900 mb-2">Informasi yang Anda Berikan</h3>
@@ -113,7 +113,7 @@ $lastUpdated = "1 Desember 2025";
                                         <li>Riwayat pesanan dan preferensi belanja</li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="bg-gray-50 rounded-xl p-4">
                                     <h3 class="font-semibold text-gray-900 mb-2">Informasi yang Dikumpulkan Otomatis</h3>
                                     <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
@@ -125,7 +125,7 @@ $lastUpdated = "1 Desember 2025";
                                 </div>
                             </div>
                         </section>
-                        
+
                         <section class="mb-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">2</span>
@@ -142,7 +142,7 @@ $lastUpdated = "1 Desember 2025";
                                 <li>Mematuhi kewajiban hukum</li>
                             </ul>
                         </section>
-                        
+
                         <section class="mb-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">3</span>
@@ -155,7 +155,7 @@ $lastUpdated = "1 Desember 2025";
                                 <li><strong>Otoritas hukum:</strong> Jika diwajibkan oleh hukum yang berlaku</li>
                             </ul>
                         </section>
-                        
+
                         <section class="mb-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">4</span>
@@ -183,7 +183,7 @@ $lastUpdated = "1 Desember 2025";
                             </div>
                             <p class="text-gray-600">Meskipun kami berusaha keras melindungi data Anda, tidak ada metode transmisi internet yang 100% aman. Kami terus meningkatkan langkah-langkah keamanan.</p>
                         </section>
-                        
+
                         <section class="mb-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">5</span>
@@ -198,7 +198,7 @@ $lastUpdated = "1 Desember 2025";
                             </ul>
                             <p class="text-gray-600 mt-4">Anda dapat mengatur browser untuk menolak cookies, namun beberapa fitur website mungkin tidak berfungsi optimal.</p>
                         </section>
-                        
+
                         <section class="mb-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">6</span>
@@ -232,7 +232,7 @@ $lastUpdated = "1 Desember 2025";
                                 </div>
                             </div>
                         </section>
-                        
+
                         <section class="mb-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">7</span>
@@ -240,7 +240,7 @@ $lastUpdated = "1 Desember 2025";
                             </h2>
                             <p class="text-gray-600">Kami menyimpan data pribadi Anda selama diperlukan untuk tujuan yang dijelaskan dalam kebijakan ini, atau sesuai yang diwajibkan oleh hukum. Setelah tidak diperlukan, data akan dihapus atau dianonimkan dengan aman.</p>
                         </section>
-                        
+
                         <section class="mb-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">8</span>
@@ -248,7 +248,7 @@ $lastUpdated = "1 Desember 2025";
                             </h2>
                             <p class="text-gray-600">Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu. Perubahan signifikan akan diberitahukan melalui email atau pemberitahuan di website. Kami menyarankan Anda untuk meninjau kebijakan ini secara berkala.</p>
                         </section>
-                        
+
                         <section>
                             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span class="w-8 h-8 bg-[#882426]/10 rounded-lg flex items-center justify-center text-[#882426] text-sm font-bold">9</span>
@@ -263,7 +263,7 @@ $lastUpdated = "1 Desember 2025";
                         </section>
                     </div>
                 </div>
-                
+
                 <div class="mt-8 text-center">
                     <a href="landingPage.php" class="inline-flex items-center gap-2 px-6 py-3 bg-[#882426] text-white font-medium rounded-xl hover:bg-[#6a1c1e] transition-all duration-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -275,7 +275,8 @@ $lastUpdated = "1 Desember 2025";
             </div>
         </div>
     </main>
-    
+
     <?php include '../../components/users/footer.php'; ?>
 </body>
+
 </html>

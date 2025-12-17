@@ -122,9 +122,9 @@ include '../../components/users/head.php';
         });
     </script>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <section class="bg-[#882426] rounded-2xl py-12 md:py-16 mb-8 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10">
+    <main class="max-w-full mb-10">
+        <section class="bg-[#882426] py-12 md:py-16 mb-8 relative overflow-hidden">
+            <div class="absolute inset-0 overflow-hidden opacity-10">
                 <div class="absolute top-10 left-10 w-32 h-32 border-4 border-white rounded-full"></div>
                 <div class="absolute bottom-10 right-10 w-48 h-48 border-4 border-white rounded-full"></div>
                 <div class="absolute top-1/2 left-1/3 w-20 h-20 border-2 border-white rounded-full"></div>
@@ -154,135 +154,134 @@ include '../../components/users/head.php';
             </div>
         </section>
 
-        <div class="mb-8">
+        <section class="mt-10 w-full px-5 md:px-8 lg:px-20">
             <?php include '../../components/users/breadcrumb.php'; ?>
-        </div>
+            <div class="lg:hidden mb-6">
+                <label for="mobile-category" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Kategori</label>
+                <select id="mobile-category" onchange="filterCategory(this.value)"
+                    class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-700 focus:border-[#882426] focus:outline-none transition-colors">
+                    <option value="all">Semua Topik</option>
+                    <?php foreach ($categories as $key => $cat): ?>
+                        <option value="<?= $key ?>"><?= $cat['name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-        <div class="lg:hidden mb-6">
-            <label for="mobile-category" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Kategori</label>
-            <select id="mobile-category" onchange="filterCategory(this.value)"
-                class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-700 focus:border-[#882426] focus:outline-none transition-colors">
-                <option value="all">Semua Topik</option>
-                <?php foreach ($categories as $key => $cat): ?>
-                    <option value="<?= $key ?>"><?= $cat['name'] ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="flex flex-col lg:flex-row gap-8">
-            <aside class="hidden lg:block w-72 flex-shrink-0">
-                <div class="sticky top-32 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-900 mb-4 text-lg">Kategori Bantuan</h3>
-                    <nav class="space-y-2" id="faq-nav">
-                        <button onclick="filterCategory('all')"
-                            class="category-btn active w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all bg-[#882426] text-white"
-                            data-category="all">
-                            <span class="flex items-center gap-3">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                                </svg>
-                                Semua Topik
-                            </span>
-                        </button>
-                        <?php foreach ($categories as $key => $cat): ?>
-                            <button onclick="filterCategory('<?= $key ?>')"
-                                class="category-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all"
-                                data-category="<?= $key ?>">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <aside class="hidden lg:block w-72 flex-shrink-0">
+                    <div class="sticky top-32 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-900 mb-4 text-lg">Kategori Bantuan</h3>
+                        <nav class="space-y-2" id="faq-nav">
+                            <button onclick="filterCategory('all')"
+                                class="category-btn active w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all bg-[#882426] text-white"
+                                data-category="all">
                                 <span class="flex items-center gap-3">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <?= $cat['icon'] ?>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                                     </svg>
-                                    <?= $cat['name'] ?>
+                                    Semua Topik
                                 </span>
                             </button>
-                        <?php endforeach; ?>
-                    </nav>
+                            <?php foreach ($categories as $key => $cat): ?>
+                                <button onclick="filterCategory('<?= $key ?>')"
+                                    class="category-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all"
+                                    data-category="<?= $key ?>">
+                                    <span class="flex items-center gap-3">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <?= $cat['icon'] ?>
+                                        </svg>
+                                        <?= $cat['name'] ?>
+                                    </span>
+                                </button>
+                            <?php endforeach; ?>
+                        </nav>
 
-                    <div class="mt-6 pt-6 border-t border-gray-100">
-                        <div class="text-center">
-                            <p class="text-xs text-gray-500 mb-2">Total Pertanyaan</p>
-                            <p class="text-3xl font-bold text-[#882426]" id="faq-count"><?= $totalFaqs ?></p>
+                        <div class="mt-6 pt-6 border-t border-gray-100">
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500 mb-2">Total Pertanyaan</p>
+                                <p class="text-3xl font-bold text-[#882426]" id="faq-count"><?= $totalFaqs ?></p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-6 border-t border-gray-100">
+                            <a href="aboutContact.php#contact" class="flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#882426] text-white rounded-xl text-sm font-medium hover:bg-[#6a1c1e] transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                                Hubungi Kami
+                            </a>
                         </div>
                     </div>
+                </aside>
 
-                    <div class="mt-6 pt-6 border-t border-gray-100">
-                        <a href="aboutContact.php#contact" class="flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#882426] text-white rounded-xl text-sm font-medium hover:bg-[#6a1c1e] transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <div class="flex-1 space-y-4" id="faq-container">
+                    <?php if (empty($allFaqs) || $totalFaqs === 0): ?>
+                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
+                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Hubungi Kami
-                        </a>
-                    </div>
-                </div>
-            </aside>
-
-            <div class="flex-1 space-y-4" id="faq-container">
-                <?php if (empty($allFaqs) || $totalFaqs === 0): ?>
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
-                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Belum ada FAQ</h3>
-                        <p class="text-gray-500 text-sm">Pertanyaan yang sering ditanyakan akan muncul di sini.</p>
-                    </div>
-                <?php else: ?>
-                    <?php foreach ($allFaqs as $catKey => $items): ?>
-                        <?php foreach ($items as $index => $faq): ?>
-                            <div class="faq-item" data-category="<?= $catKey ?>" data-question="<?= strtolower(htmlspecialchars($faq['question'])) ?>">
-                                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                                    <button class="accordion-header w-full flex items-center justify-between p-5 md:p-6 text-left group">
-                                        <div class="flex items-start gap-4 flex-1">
-                                            <span class="flex-shrink-0 w-10 h-10 bg-[#882426]/10 text-[#882426] rounded-xl flex items-center justify-center font-bold text-sm">Q</span>
-                                            <span class="font-semibold text-gray-800 group-hover:text-[#882426] transition-colors text-base md:text-lg leading-snug"><?= htmlspecialchars($faq['question']) ?></span>
-                                        </div>
-                                        <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-[#882426] flex items-center justify-center transition-all ml-4">
-                                            <svg class="w-5 h-5 text-gray-500 group-hover:text-white transform transition-transform duration-300 icon-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <div class="accordion-body">
-                                        <div class="px-5 md:px-6 pb-6 pt-0">
-                                            <div class="pl-14 text-gray-600 leading-relaxed">
-                                                <p><?= $faq['answer'] ?></p>
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Belum ada FAQ</h3>
+                            <p class="text-gray-500 text-sm">Pertanyaan yang sering ditanyakan akan muncul di sini.</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($allFaqs as $catKey => $items): ?>
+                            <?php foreach ($items as $index => $faq): ?>
+                                <div class="faq-item" data-category="<?= $catKey ?>" data-question="<?= strtolower(htmlspecialchars($faq['question'])) ?>">
+                                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                                        <button class="accordion-header w-full flex items-center justify-between p-5 md:p-6 text-left group">
+                                            <div class="flex items-start gap-4 flex-1">
+                                                <span class="flex-shrink-0 w-10 h-10 bg-[#882426]/10 text-[#882426] rounded-xl flex items-center justify-center font-bold text-sm">Q</span>
+                                                <span class="font-semibold text-gray-800 group-hover:text-[#882426] transition-colors text-base md:text-lg leading-snug"><?= htmlspecialchars($faq['question']) ?></span>
+                                            </div>
+                                            <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-[#882426] flex items-center justify-center transition-all ml-4">
+                                                <svg class="w-5 h-5 text-gray-500 group-hover:text-white transform transition-transform duration-300 icon-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        <div class="accordion-body">
+                                            <div class="px-5 md:px-6 pb-6 pt-0">
+                                                <div class="pl-14 text-gray-600 leading-relaxed">
+                                                    <p><?= $faq['answer'] ?></p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach; ?>
                         <?php endforeach; ?>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                    <?php endif; ?>
 
-                <div id="no-results" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Tidak ditemukan</h3>
-                    <p class="text-gray-500 text-sm">Pertanyaan yang Anda cari tidak ditemukan. Coba kata kunci lain atau <a href="aboutContact.php#contact" class="text-[#882426] hover:underline">hubungi kami</a>.</p>
+                    <div id="no-results" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
+                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Tidak ditemukan</h3>
+                        <p class="text-gray-500 text-sm">Pertanyaan yang Anda cari tidak ditemukan. Coba kata kunci lain atau <a href="aboutContact.php#contact" class="text-[#882426] hover:underline">hubungi kami</a>.</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <section class="mt-12 bg-[#882426] rounded-2xl p-8 md:p-12 text-center">
-            <div class="max-w-2xl mx-auto">
-                <h2 class="text-xl md:text-2xl font-bold text-white mb-3">Masih ada pertanyaan?</h2>
-                <p class="text-white/80 mb-6 text-sm md:text-base">Tim customer service kami siap membantu Anda 7 hari seminggu.</p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="aboutContact.php#contact" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-[#882426] font-medium rounded-xl hover:bg-gray-100 transition-colors text-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        Kirim Pesan
-                    </a>
-                    <a href="https://wa.me/6281298765432" target="_blank" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white font-medium rounded-xl hover:bg-green-600 transition-colors text-sm">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                        </svg>
-                        WhatsApp
-                    </a>
+            <section class="mt-12 bg-[#882426] rounded-2xl p-8 md:p-12 text-center">
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-xl md:text-2xl font-bold text-white mb-3">Masih ada pertanyaan?</h2>
+                    <p class="text-white/80 mb-6 text-sm md:text-base">Tim customer service kami siap membantu Anda 7 hari seminggu.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="aboutContact.php#contact" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-[#882426] font-medium rounded-xl hover:bg-gray-100 transition-colors text-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Kirim Pesan
+                        </a>
+                        <a href="https://wa.me/62816765801" target="_blank" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white font-medium rounded-xl hover:bg-green-600 transition-colors text-sm">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                            </svg>
+                            WhatsApp
+                        </a>
+                    </div>
                 </div>
-            </div>
+            </section>
         </section>
     </main>
 

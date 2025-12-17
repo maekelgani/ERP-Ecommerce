@@ -2,15 +2,41 @@
 $pageTitle = "Syarat & Ketentuan";
 require_once __DIR__ . '/../../config/config.php';
 include '../../components/users/head.php';
+
+$breadcrumbs = [
+    ['label' => 'Home', 'url' => 'landingPage.php'],
+    ['label' => 'Syarat & Ketentuan', 'url' => null]
+];
 ?>
 
-<body class="bg-gray-50 min-h-screen font-sans antialiased">
-    <header class="sticky top-0 z-50 bg-white shadow-sm">
+<body class="w-full bg-gray-50 min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
+    <header>
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
 
-    <main class="w-full">
-        <section class="bg-[#882426] py-16 md:py-20 relative overflow-hidden">
+    <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const promoBanner = document.getElementById('promoBanner');
+            const navbarSpacer = document.getElementById('navbarSpacer');
+
+            function updateSpacerHeight() {
+                if (window.innerWidth >= 768 && promoBanner) {
+                    navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
+                } else {
+                    navbarSpacer.style.height = '112px';
+                }
+            }
+
+            updateSpacerHeight();
+            window.addEventListener('scroll', updateSpacerHeight);
+            window.addEventListener('resize', updateSpacerHeight);
+        });
+    </script>
+
+    <main class="max-w-full mb-10">
+        <section class="bg-[#882426] py-12 md:py-16 mb-8 relative overflow-hidden">
             <div class="absolute inset-0 opacity-10">
                 <div class="absolute top-20 right-20 w-40 h-40 border-4 border-white rounded-full"></div>
                 <div class="absolute bottom-10 left-20 w-32 h-32 border-4 border-white rounded-full"></div>
@@ -43,7 +69,8 @@ include '../../components/users/head.php';
             </div>
         </section>
 
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mt-10 w-full px-5 md:px-8 lg:px-20">
+            <?php include '../../components/users/breadcrumb.php'; ?>
             <div class="lg:hidden mb-8">
                 <label for="mobile-nav" class="block text-sm font-semibold text-gray-700 mb-2">Navigasi Cepat</label>
                 <select id="mobile-nav" onchange="scrollToSection(this.value)" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-700 focus:border-[#882426] focus:outline-none transition-colors">

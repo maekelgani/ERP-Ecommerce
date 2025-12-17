@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 16, 2025 at 10:33 AM
+-- Generation Time: Dec 17, 2025 at 08:10 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -82,7 +82,7 @@ CREATE TABLE `administrators` (
 --
 
 INSERT INTO `administrators` (`id_admin`, `id_role`, `nama_lengkap`, `email`, `password_hash`, `photo`, `remember_token`, `remember_expires`, `is_active`, `last_login`, `created_at`, `updated_at`, `username`, `phone`, `password_updated_at`) VALUES
-(1, 1, 'Fajar Nano Komputer', 'fajarnanokomp@gmail.com', '$2y$10$astJh04o3V9LU2jtOsDKhuDoKu.JptPrj8KPZkRnCdnKY5.pgR6r6', NULL, 'a79549f890ecd930f5ad480e061e80451222cb9ee059300fc010cf43767aa4ea', '2026-01-14 14:28:29', 1, '2025-12-14 21:36:05', '2025-11-25 08:38:19', '2025-12-15 21:28:29', 'nanocomp', '081234567890', '2025-12-01 01:42:22'),
+(1, 1, 'Fajar Nano Komputer', 'fajarnanokomp@gmail.com', '$2y$10$astJh04o3V9LU2jtOsDKhuDoKu.JptPrj8KPZkRnCdnKY5.pgR6r6', NULL, '1123718b95e030ed178ab02f24c23458a6030c16070086af6467fb97975dd117', '2026-01-15 14:28:43', 1, '2025-12-14 21:36:05', '2025-11-25 08:38:19', '2025-12-16 21:28:43', 'nanocomp', '081234567890', '2025-12-01 01:42:22'),
 (2, 2, 'Faizal Ardi', 'faizalardi@gmail.com', '$2y$10$g55WWArkauw.WR2wyA5.rOdS3KS/HGCxN3CbYzM6onKijcgcH19jC', NULL, NULL, NULL, 1, '2025-11-30 18:54:35', '2025-11-25 08:38:19', '2025-11-30 18:54:35', NULL, NULL, NULL),
 (3, 2, 'Maekel Gani', 'maekelgani@gmail.com', '$2y$10$CF0hB8G7NMEemnjWpFeQpuhGzOaW4fzuZNvj5Moqwd5r2id6Wzve2', NULL, NULL, NULL, 1, '2025-11-25 16:51:00', '2025-11-25 08:38:19', '2025-11-29 12:11:41', NULL, NULL, NULL),
 (4, 2, 'Isfahan Kaefal', 'isfahankaefal@gmail.com', '$2y$10$MxnS65hsh9C8iTxSZhLYWuSqyERCIukMTqHIczUq.EBj4x1bEW4Pu', NULL, NULL, NULL, 1, '2025-11-25 16:59:25', '2025-11-25 08:38:19', '2025-11-30 18:16:02', NULL, '', NULL);
@@ -204,8 +204,10 @@ CREATE TABLE `blog_posts` (
 --
 
 INSERT INTO `blog_posts` (`id_post`, `id_admin`, `id_category`, `judul`, `slug`, `excerpt`, `konten`, `thumbnail`, `status`, `views`, `published_at`, `created_at`, `updated_at`) VALUES
-(4, 1, 1, 'Perbedaan GPU RTX dan GTX untuk Gaming', 'perbedaan-gpu-rtx-dan-gtx-untuk-gaming', 'Mengenal Perbedaan GPU RTX dan GTX untuk Kebutuhan Gaming Modern: Dalam dunia gaming modern, GPU (Graphics Processing Unit) menjadi komponen kunci yang sangat menentukan kualitas visual dan performa permainan. NVIDIA sebagai salah satu produsen GPU terbesar di dunia memiliki dua lini populer yang sering dibandingkan oleh gamer, yaitu GTX dan RTX. Artikel ini akan membahas secara lengkap perbedaan GPU RTX dan GTX, serta membantu Anda menentukan pilihan terbaik sesuai kebutuhan gaming saat ini.', 'Apa Itu GPU NVIDIA GTX?\n\nSeri NVIDIA GeForce GTX merupakan lini GPU yang telah hadir lebih dulu sebelum RTX. GPU GTX berfokus pada rasterization tradisional, yaitu teknik rendering grafis konvensional yang digunakan oleh sebagian besar game sebelum era ray tracing.', 'blog_137d5c46139947c3_1765871172.jpg', 'publish', 2, '2025-12-16 07:46:15', '2025-12-16 14:46:15', '2025-12-16 14:50:59'),
-(5, 1, 2, 'Cara Merakit PC Gaming untuk Pemula 2025', 'cara-merakit-pc-gaming-untuk-pemula-2025', 'Merakit PC gaming sendiri di tahun 2025 menjadi pilihan populer bagi banyak gamer, terutama pemula yang ingin mendapatkan performa maksimal sesuai budget. Selain lebih hemat, merakit PC juga memberi fleksibilitas dalam memilih komponen dan memudahkan upgrade di masa depan. Artikel ini akan membahas panduan lengkap dan mudah dipahami tentang cara merakit PC gaming untuk pemula di tahun 2025.', 'Mengapa Merakit PC Gaming Sendiri?\n\nSebelum masuk ke tahap perakitan, penting untuk mengetahui keuntungannya:\n- Lebih hemat biaya dibanding PC rakitan pabrikan\n-  Bebas memilih spesifikasi sesuai kebutuhan\n- Mudah di-upgrade ke depannya\n- Menambah pengetahuan hardware komputer', 'blog_6e94a3fcd73a81db_1765871514.jpg', 'publish', 0, '2025-12-16 07:52:22', '2025-12-16 14:52:22', '2025-12-16 14:52:22');
+(4, 1, 1, 'Perbedaan GPU RTX dan GTX untuk Gaming', 'perbedaan-gpu-rtx-dan-gtx-untuk-gaming', 'Mengenal Perbedaan GPU RTX dan GTX untuk Kebutuhan Gaming Modern: Dalam dunia gaming modern, GPU (Graphics Processing Unit) menjadi komponen kunci yang sangat menentukan kualitas visual dan performa permainan. NVIDIA sebagai salah satu produsen GPU terbesar di dunia memiliki dua lini populer yang sering dibandingkan oleh gamer, yaitu GTX dan RTX. Artikel ini akan membahas secara lengkap perbedaan GPU RTX dan GTX, serta membantu Anda menentukan pilihan terbaik sesuai kebutuhan gaming saat ini.', 'Apa Itu GPU NVIDIA GTX?\n\nSeri NVIDIA GeForce GTX merupakan lini GPU yang telah hadir lebih dulu sebelum RTX. GPU GTX berfokus pada rasterization tradisional, yaitu teknik rendering grafis konvensional yang digunakan oleh sebagian besar game sebelum era ray tracing.', 'blog_137d5c46139947c3_1765871172.jpg', 'publish', 3, '2025-12-16 07:46:15', '2025-12-16 14:46:15', '2025-12-17 12:48:09'),
+(5, 1, 2, 'Cara Merakit PC Gaming untuk Pemula 2025', 'cara-merakit-pc-gaming-untuk-pemula-2025', 'Merakit PC gaming sendiri di tahun 2025 menjadi pilihan populer bagi banyak gamer, terutama pemula yang ingin mendapatkan performa maksimal sesuai budget. Selain lebih hemat, merakit PC juga memberi fleksibilitas dalam memilih komponen dan memudahkan upgrade di masa depan. Artikel ini akan membahas panduan lengkap dan mudah dipahami tentang cara merakit PC gaming untuk pemula di tahun 2025.', 'Mengapa Merakit PC Gaming Sendiri?\n\nSebelum masuk ke tahap perakitan, penting untuk mengetahui keuntungannya:\n- Lebih hemat biaya dibanding PC rakitan pabrikan\n-  Bebas memilih spesifikasi sesuai kebutuhan\n- Mudah di-upgrade ke depannya\n- Menambah pengetahuan hardware komputer', 'blog_6e94a3fcd73a81db_1765871514.jpg', 'publish', 6, '2025-12-16 07:52:22', '2025-12-16 14:52:22', '2025-12-17 15:01:13'),
+(6, 1, 3, 'NVIDIA GeForce RTX 50 Series Resmi Diumumkan', 'nvidia-geforce-rtx-50-series-resmi-diumumkan', 'NVIDIA kembali menggebrak dunia teknologi dengan resmi mengumumkan NVIDIA GeForce RTX 50 Series, generasi terbaru GPU yang dirancang untuk menghadirkan lompatan besar dalam performa gaming, grafis realistis, dan pemrosesan berbasis AI. Kehadiran seri RTX 50 menjadi tonggak penting bagi gamer, content creator, dan profesional yang membutuhkan performa grafis kelas atas di era modern.', 'Sekilas Tentang NVIDIA GeForce RTX 50 Series: GeForce RTX 50 Series merupakan penerus langsung dari RTX 40 Series dan dibangun untuk menjawab kebutuhan game generasi terbaru, resolusi tinggi, serta teknologi AI yang semakin kompleks. NVIDIA memposisikan seri ini sebagai GPU next-generation yang tidak hanya fokus pada gaming, tetapi juga produktivitas dan komputasi AI.', 'blog_130010319e1b73cc_1765909043.jpg', 'publish', 4, '2025-12-17 01:15:57', '2025-12-17 01:15:57', '2025-12-17 15:02:05'),
+(7, 1, 4, 'Review Montech XR: Casing Budget Rasa Premium', 'review-montech-xr-casing-budget-rasa-premium', 'Pasar casing PC semakin kompetitif, terutama di segmen budget hingga mid-range. Salah satu produk yang belakangan menarik perhatian adalah Montech XR, sebuah casing PC yang menawarkan desain modern, airflow optimal, dan fitur yang biasanya ditemui di kelas harga lebih tinggi. Dalam artikel ini, kita akan membahas review lengkap Montech XR, mulai dari desain, build quality, airflow, hingga apakah casing ini layak disebut budget rasa premium.', 'Sekilas Tentang Montech XR\n\nMontech dikenal sebagai brand yang fokus menghadirkan produk PC dengan value tinggi. Montech XR diposisikan sebagai casing entry–mid level yang menargetkan gamer dan PC builder pemula hingga menengah yang menginginkan tampilan elegan tanpa harus mengeluarkan biaya besar.\n\n- Segmentasi pengguna Montech XR:\n- PC gaming entry hingga mid-range\n- Builder pemula\n- Pengguna yang mengutamakan airflow dan estetika minimalis', 'blog_af0d0175f86f2b77_1765909168.jpg', 'publish', 3, '2025-12-17 01:19:56', '2025-12-17 01:19:56', '2025-12-17 15:02:07');
 
 -- --------------------------------------------------------
 
@@ -262,10 +264,10 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`id_cart`, `id_customer`, `id_product`, `jumlah`, `harga_satuan`, `tanggal_ditambahkan`, `tgl_diubah`) VALUES
 ('CRT0000005', 7, 'PRD005', 1, 57429000.00, '2025-12-08 13:42:36', '2025-12-14 14:04:57'),
-('CRT0000006', 1, 'PRD010', 1, 3888900.00, '2025-12-11 09:46:12', '2025-12-11 09:46:12'),
-('CRT0000007', 1, 'PRD005', 1, 57429000.00, '2025-12-13 14:21:35', '2025-12-13 14:21:35'),
 ('CRT0000008', 7, 'PRD012', 1, 89349000.00, '2025-12-14 14:06:18', '2025-12-14 14:06:18'),
-('CRT0000009', 1, 'PRD001', 1, 5789000.00, '2025-12-16 13:57:43', '2025-12-16 13:57:43');
+('CRT0000010', 1, 'PRD003', 1, 1299000.00, '2025-12-16 22:08:57', '2025-12-17 12:33:44'),
+('CRT0000011', 1, 'PRD012', 1, 89349000.00, '2025-12-17 11:32:28', '2025-12-17 11:32:28'),
+('CRT0000012', 1, 'PRD010', 1, 3888900.00, '2025-12-17 12:02:13', '2025-12-17 12:02:13');
 
 -- --------------------------------------------------------
 
@@ -302,7 +304,8 @@ INSERT INTO `customers` (`id_customer`, `nama_lengkap`, `email`, `no_telp`, `pas
 (2, 'Akmal Dwi Saputra', 'akmal.customer@gmail.com', '089577658894', '$2y$10$14VOQUECTKXo7NE6DeVn5Od5.ho5aJir2iRxVm3Kzl16FG9KupSK6', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, NULL, '2025-11-30 16:27:34', '2025-11-30 16:27:34'),
 (3, 'Jason Susanto', 'susanto.customer@gmail.com', '081246379958', '$2y$10$E0Z/97QeW3WFUwFuexZ8D.W6O09hmW7EB/gCV9A5JP.I1TZ6yuZS.', NULL, NULL, NULL, 'regular', NULL, NULL, 0, 0, NULL, NULL, '2025-11-30 16:41:05', '2025-11-30 16:41:57'),
 (7, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '81290413082', '$2y$10$5VwN0M9pZCy/a0NLowhinOyq/rwaLC/GOwp00RE6nNoBbvh2ARQlu', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-04 19:07:59', 'google_profile_6931799f1b454_1764850079.jpg', '2025-12-04 19:07:59', '2025-12-14 21:17:54'),
-(8, '0728_Muhamad Faizal Ardiansyah', 'mhmdfaizalardi@gmail.com', NULL, NULL, '114145390091505445484', 'mhmdfaizalardi@gmail.com', '0728_Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-10 13:37:29', 'google_profile_69391529751f4_1765348649.jpg', '2025-12-10 13:37:29', '2025-12-14 21:15:35');
+(8, '0728_Muhamad Faizal Ardiansyah', 'mhmdfaizalardi@gmail.com', NULL, NULL, '114145390091505445484', 'mhmdfaizalardi@gmail.com', '0728_Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-10 13:37:29', 'google_profile_69391529751f4_1765348649.jpg', '2025-12-10 13:37:29', '2025-12-14 21:15:35'),
+(9, 'Faizal Ardi', 'mhfaizalardillia22@gmail.com', '081291203984', '$2y$10$m8micOQf4IefkSng2uFtYeC84XnBiKQsUTYRz3pjWuLyj5JBiHd6y', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, NULL, '2025-12-17 13:50:21', '2025-12-17 13:50:21');
 
 -- --------------------------------------------------------
 
@@ -342,9 +345,7 @@ CREATE TABLE `kampanye_produk` (
 --
 
 INSERT INTO `kampanye_produk` (`id`, `id_kampanye`, `id_produk`, `id_diskon`, `prioritas`, `dibuat_pada`) VALUES
-(5, 'CMP0000000002', 'PRD003', NULL, 1, '2025-12-01 09:39:02'),
-(6, 'CMP0000000001', 'PRD005', NULL, 1, '2025-12-01 09:39:06'),
-(7, 'CMP0000000001', 'PRD012', NULL, 1, '2025-12-14 13:52:39');
+(8, 'CMP0000000002', 'PRD003', NULL, 1, '2025-12-17 09:33:46');
 
 -- --------------------------------------------------------
 
@@ -677,7 +678,7 @@ INSERT INTO `products` (`id_product`, `nama_product`, `deskripsi_speksifikasi`, 
 ('PRD009', 'KingBank Sharp Blade RGB DDR5 32GB Kit (2 x 16GB) 6000 MT/s CL28 White A-Die', '𝗦𝗽𝗲𝗰𝗶𝗳𝗶𝗰𝗮𝘁𝗶𝗼𝗻𝘀 :\r\nModule Spec\r\n\r\n- DDR5 288 pin U DIMM\r\nCapacity\r\n\r\n- 32GB(16GBx2)\r\nFrequency\r\n\r\n- 6000MHz\r\nCAS latency\r\n\r\n- 28\r\nHeatsink material\r\n\r\n- Aluminum Alloy\r\nSupported System\'\r\n\r\n- Intel XMP 3.0 / AMD EXPO\r\nProduct Size\r\n\r\n- 133.8mmx41.8mmx8mm', 4559000.00, 22, 'KTG006', 'BRD009', 'product_4a816e634068837b_1764420931.jpeg', 400, 'tersedia', '2025-11-29 19:55:31'),
 ('PRD010', 'KINGBANK SoarBlade RGB 32GB (16GBx2) DDR5 6000MHz CL36 Memory Kit - White', 'Specifications :\r\n\r\nPrice\r\nRp1.769.000\r\n\r\nModule Spec\r\n- DDR5 288 pin U DIMM\r\n\r\nCapacity\r\n- 32GB (16GBx2)\r\n\r\nFrequency\r\n- 6000\r\n\r\nVoltage\r\n- 1.35V\r\n\r\nCAS latency\r\n- CL36\r\n\r\nHeatsink Material\r\n- Aluminum Alloy\r\n\r\nSupported System\r\n- Intel XMP 3.0/AMD EXPO\r\n\r\nProduct Size\r\n- 133.3mmx41.8mmx8.1mm\r\n\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 3888900.00, 46, 'KTG006', 'BRD009', 'product_9af7b52afd65217a_1764421067.jpeg', 400, 'tersedia', '2025-11-29 19:57:47'),
 ('PRD011', 'AMD Ryzen 5 5600 - AM4 BOX', 'Specifications :\r\n\r\nPlatform\r\n- Desktop\r\n\r\nMarket Segment\r\n- Mainstream Desktop\r\n\r\nProduct Family\r\n- AMD Ryzen Processors\r\n\r\nProduct Line\r\n- AMD Ryzen 5 Desktop Processors\r\n\r\nConsumer Use\r\n- Yes\r\n\r\nRegional Availability\r\n- Global, China, NA, EMEA, APJ, LATAM\r\n\r\nFormer Codename\r\n- \"Vermeer\"\r\n\r\nArchitecture\r\n- \"Zen 3\"\r\n\r\n# of CPU Cores\r\n- 6\r\n\r\nMultithreading (SMT)\r\n- Yes\r\n\r\n# of Threads\r\n- 12\r\n\r\nMax. Boost Clock\r\n- Up to 4.4GHz\r\n\r\nBase Clock\r\n- 3.5GHz\r\n\r\nL1 Cache\r\n- 384KB\r\n\r\nL2 Cache\r\n- 3MB\r\n\r\nL3 Cache\r\n- 32MB\r\n\r\nDefault TDP\r\n- 65W\r\n\r\nProcessor Technology for CPU Cores\r\n- TSMC 7nm FinFET\r\n\r\nProcessor Technology for I/O Die\r\n- 12nm (Globalfoundries)\r\n\r\nCPU Compute Die (CCD) Size\r\n- 74mm²\r\n\r\nI/O Die (IOD) Size\r\n- 125mm²\r\n\r\nPackage Die Count\r\n- 2\r\n\r\nUnlocked for Overclocking\r\n- Yes\r\n\r\nCPU Socket\r\n- AM4\r\n\r\nSocket Count\r\n- 1P\r\n\r\nSupporting Chipsets\r\n- X570\r\n- X470\r\n- X370\r\n- B550\r\n- B450\r\n- B350\r\n- A520\r\n\r\nCPU Boost Technology\r\n- Precision Boost 2\r\n\r\nInstruction Set\r\n- x86-64\r\n\r\nSupported Extensions\r\n- AES, AMD-V, AVX, AVX2, FMA3, MMX(+), SHA, SSE, SSE2, SSE3, SSE4.1, SSE4.2, SSE4A, SSSE3, x86-64\r\n\r\nThermal Solution (PIB)\r\n- AMD Wraith Stealth\r\n\r\nMax. Operating Temperature (Tjmax)\r\n- 90°C\r\n\r\nLaunch Date\r\n- 4/4/2022\r\n\r\nOS Support\r\n- Windows 11 - 64-Bit Edition\r\n- Windows 10 - 64-Bit Edition\r\n- RHEL x86 64-Bit\r\n- Ubuntu x86 64-Bit\r\n- Operating System (OS) support will vary by manufacturer.\r\n\r\nBeta\r\n0 / 0\r\nused queries\r\n1', 1689000.00, 123, 'KTG003', 'BRD001', 'product_94f54dbaca74de07_1764442165.jpg', 600, 'tersedia', '2025-11-30 01:49:25'),
-('PRD012', 'Asus ROG Strix x Hatsune Miku Limited Edition PC Bundle', 'ROG Strix x Hatsune Miku Limited Edition PC Bundle adalah paket eksklusif komponen PC premium hasil kolaborasi ASUS ROG dengan karakter virtual idol legendaris Hatsune Miku.\r\nBundle ini dirancang untuk gamer, kreator konten, dan kolektor yang menginginkan performa kelas atas dengan desain anime futuristik berwarna turquoise–pink khas Miku.\r\nSetiap komponen dilengkapi RGB Aura Sync, ilustrasi resmi Hatsune Miku, serta material premium yang menjamin performa tinggi, pendinginan optimal, dan tampilan showcase yang mencuri perhatian.\r\nIsi Bundle\r\n•	Motherboard ROG Strix Hatsune Miku Edition\r\n•	Casing ROG Strix Hatsune Miku Edition (Tempered Glass)\r\n•	Graphics Card ROG Strix Hatsune Miku Edition\r\n•	ROG Strix RGB Cooling Fans (3x)\r\n•	ROG Strix Liquid Cooler LCD Hatsune Miku Edition\r\nSpesifikasi Utama\r\nASUS MOTHERBOARD ROG STRIX X870E-H GAMING WIFI 7 HATSUNE MIKU EDITION DDR5 AM5 /AMD HATSUNE MIKU EDITION 3Y\r\n•	Chipset: Intel (LGA1700 – seri Strix)\r\n•	Form Factor: ATX\r\n•	Memory: Hingga 128GB DDR5\r\n•	Storage: M.2 NVMe Gen 4, SATA 6Gb/s\r\n•	RGB: ASUS Aura Sync (Hatsune Miku Theme)\r\nASUS PC CASE E-ATX ROG STRIX HELIOS II (4X 140MM BLACK FAN) HATSUNE MIKU EDITION 2Y\r\n•	Tipe: Mid Tower\r\n•	Material: Steel + Tempered Glass\r\n•	Support Motherboard: ATX / mATX / Mini-ITX\r\n•	Fan Support: Hingga 6 fan\r\n•	Radiator Support: Hingga 360mm\r\n•	Desain: Ilustrasi resmi Hatsune Miku\r\n ASUS VGA NVIDIA GEFORCE ROG ASTRAL RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION 3Y\r\n•	Seri: ROG Strix Hatsune Miku Edition\r\n•	Cooling: Triple Fan Axial-tech\r\n•	RGB: Aura Sync\r\n•	Output: HDMI, DisplayPort\r\n•	Fokus: Gaming & Content Creation kelas high-end\r\nASUS CPU AIO COOLER ROG RYUO IV 360 ARGB HATSUNE MIKU EDITION (360MM RADIATOR + 3X ARGB FANS + 6.67 INCH AMOLED DISPLAY) HATSUNE MIKU EDITION 6Y\r\n•	Radiator: 360mm\r\n•	Fan: 3x RGB Fans\r\n•	Layar: LCD Display Custom Hatsune Miku Animation\r\n•	Socket Support: Intel LGA1700 / AMD AM5\r\n•	Teknologi: AIO Liquid Cooling Performance\r\nRGB Fans\r\n•	Jumlah: 3 Unit\r\n•	Size: 120mm\r\n•	Lighting: Addressable RGB Aura Sync\r\n•	Airflow: High Performance\r\nPeripheral & Aksesori Tambahan (NEW)\r\nASUS Gaming Monitor 27” ROG Strix XG27ACMEG-G – Hatsune Miku Edition\r\n•	Panel: Fast IPS\r\n•	Ukuran Layar: 27 Inch\r\n•	Resolusi: 2K QHD (2560×1440)\r\n•	Refresh Rate: Hingga 260Hz\r\n•	Response Time: 0.3ms\r\n•	HDR: HDR10\r\n•	Konektivitas: HDMI, DisplayPort, USB-C\r\n•	Ergonomic Stand: Tilt, Swivel, Height Adjust, Pivot\r\n•	Desain: ROG Strix x Hatsune Miku Limited Edition\r\n•	Garansi: 3 Tahun\r\nASUS External SSD Case ROG Strix Arion – Hatsune Miku Edition\r\n•	Interface: USB-C (USB 3.2 Gen 2)\r\n•	Kecepatan Transfer: Up to 1250 MB/s\r\n•	Support SSD: M.2 NVMe\r\n•	Material: Aluminium Alloy (Heatsink Design)\r\n•	RGB: Aura Sync\r\n•	Desain Eksklusif Hatsune Miku\r\nASUS PSU ROG Thor 1200W Platinum III – Hatsune Miku Edition\r\n•	Daya: 1200 Watt\r\n•	Sertifikasi: 80+ Platinum\r\n•	Standar: ATX 3.1\r\n•	Konektor GPU: 12V-2×6\r\n•	Modular: Fully Modular\r\n•	Fitur: OLED Power Display\r\n•	Cooling: ROG Axial-tech Fan\r\n•	Garansi: 10 Tahun\r\nASUS Wireless Mouse TUF Gaming Mini – Hatsune Miku Edition\r\n•	Koneksi: Wireless\r\n•	Sensor: High Precision Gaming Sensor\r\n•	Desain: Lightweight & Compact\r\n•	Tombol: Programmable Buttons\r\n•	Cocok untuk: Gaming & produktivitas mobile\r\nASUS Gaming Headset TUF Gaming H1 Gen II – Hatsune Miku Edition\r\n•	Driver: 40mm ASUS Essence Driver\r\n•	Koneksi: USB\r\n•	Audio: Virtual Surround Sound\r\n•	Microphone: AI Noise-Canceling\r\n•	Bobot: Lightweight Design\r\n•	Desain: TUF Gaming x Hatsune Miku\r\nASUS Gaming Keyboard TUF Gaming K3 Gen II – Hatsune Miku Edition\r\n•	Switch: Mechanical (Gaming Grade)\r\n•	Lighting: RGB Backlight\r\n•	Layout: Full Size\r\n•	Durability: Military-grade build quality\r\n•	Desain: Exclusive Hatsune Miku Artwork\r\nASUS Mouse Pad TUF Gaming P1 – Hatsune Miku Edition\r\n•	Material: Gaming-grade Fabric Surface\r\n•	Base: Anti-Slip Rubber\r\n•	Edge: Anti-Fray Stitching\r\n•	Ukuran: Medium (Desk Friendly)\r\n•	Desain: Limited Edition Hatsune Miku', 89349000.00, 2, 'KTG012', 'BRD006', 'product_22158a90da35389e_1765372761.png', 0, 'tersedia', '2025-12-10 20:19:21');
+('PRD012', 'Asus ROG Strix x Hatsune Miku Limited Edition PC Bundle', 'ROG Strix x Hatsune Miku Limited Edition PC Bundle adalah paket eksklusif komponen PC premium hasil kolaborasi ASUS ROG dengan karakter virtual idol legendaris Hatsune Miku.\r\nBundle ini dirancang untuk gamer, kreator konten, dan kolektor yang menginginkan performa kelas atas dengan desain anime futuristik berwarna turquoise–pink khas Miku.\r\nSetiap komponen dilengkapi RGB Aura Sync, ilustrasi resmi Hatsune Miku, serta material premium yang menjamin performa tinggi, pendinginan optimal, dan tampilan showcase yang mencuri perhatian.\r\nIsi Bundle\r\n•	Motherboard ROG Strix Hatsune Miku Edition\r\n•	Casing ROG Strix Hatsune Miku Edition (Tempered Glass)\r\n•	Graphics Card ROG Strix Hatsune Miku Edition\r\n•	ROG Strix RGB Cooling Fans (3x)\r\n•	ROG Strix Liquid Cooler LCD Hatsune Miku Edition\r\nSpesifikasi Utama\r\nASUS MOTHERBOARD ROG STRIX X870E-H GAMING WIFI 7 HATSUNE MIKU EDITION DDR5 AM5 /AMD HATSUNE MIKU EDITION 3Y\r\n•	Chipset: Intel (LGA1700 – seri Strix)\r\n•	Form Factor: ATX\r\n•	Memory: Hingga 128GB DDR5\r\n•	Storage: M.2 NVMe Gen 4, SATA 6Gb/s\r\n•	RGB: ASUS Aura Sync (Hatsune Miku Theme)\r\nASUS PC CASE E-ATX ROG STRIX HELIOS II (4X 140MM BLACK FAN) HATSUNE MIKU EDITION 2Y\r\n•	Tipe: Mid Tower\r\n•	Material: Steel + Tempered Glass\r\n•	Support Motherboard: ATX / mATX / Mini-ITX\r\n•	Fan Support: Hingga 6 fan\r\n•	Radiator Support: Hingga 360mm\r\n•	Desain: Ilustrasi resmi Hatsune Miku\r\n ASUS VGA NVIDIA GEFORCE ROG ASTRAL RTX 5080 16GB GDDR7 OC HATSUNE MIKU EDITION 3Y\r\n•	Seri: ROG Strix Hatsune Miku Edition\r\n•	Cooling: Triple Fan Axial-tech\r\n•	RGB: Aura Sync\r\n•	Output: HDMI, DisplayPort\r\n•	Fokus: Gaming & Content Creation kelas high-end\r\nASUS CPU AIO COOLER ROG RYUO IV 360 ARGB HATSUNE MIKU EDITION (360MM RADIATOR + 3X ARGB FANS + 6.67 INCH AMOLED DISPLAY) HATSUNE MIKU EDITION 6Y\r\n•	Radiator: 360mm\r\n•	Fan: 3x RGB Fans\r\n•	Layar: LCD Display Custom Hatsune Miku Animation\r\n•	Socket Support: Intel LGA1700 / AMD AM5\r\n•	Teknologi: AIO Liquid Cooling Performance\r\nRGB Fans\r\n•	Jumlah: 3 Unit\r\n•	Size: 120mm\r\n•	Lighting: Addressable RGB Aura Sync\r\n•	Airflow: High Performance\r\nPeripheral & Aksesori Tambahan (NEW)\r\nASUS Gaming Monitor 27” ROG Strix XG27ACMEG-G – Hatsune Miku Edition\r\n•	Panel: Fast IPS\r\n•	Ukuran Layar: 27 Inch\r\n•	Resolusi: 2K QHD (2560×1440)\r\n•	Refresh Rate: Hingga 260Hz\r\n•	Response Time: 0.3ms\r\n•	HDR: HDR10\r\n•	Konektivitas: HDMI, DisplayPort, USB-C\r\n•	Ergonomic Stand: Tilt, Swivel, Height Adjust, Pivot\r\n•	Desain: ROG Strix x Hatsune Miku Limited Edition\r\n•	Garansi: 3 Tahun\r\nASUS External SSD Case ROG Strix Arion – Hatsune Miku Edition\r\n•	Interface: USB-C (USB 3.2 Gen 2)\r\n•	Kecepatan Transfer: Up to 1250 MB/s\r\n•	Support SSD: M.2 NVMe\r\n•	Material: Aluminium Alloy (Heatsink Design)\r\n•	RGB: Aura Sync\r\n•	Desain Eksklusif Hatsune Miku\r\nASUS PSU ROG Thor 1200W Platinum III – Hatsune Miku Edition\r\n•	Daya: 1200 Watt\r\n•	Sertifikasi: 80+ Platinum\r\n•	Standar: ATX 3.1\r\n•	Konektor GPU: 12V-2×6\r\n•	Modular: Fully Modular\r\n•	Fitur: OLED Power Display\r\n•	Cooling: ROG Axial-tech Fan\r\n•	Garansi: 10 Tahun\r\nASUS Wireless Mouse TUF Gaming Mini – Hatsune Miku Edition\r\n•	Koneksi: Wireless\r\n•	Sensor: High Precision Gaming Sensor\r\n•	Desain: Lightweight & Compact\r\n•	Tombol: Programmable Buttons\r\n•	Cocok untuk: Gaming & produktivitas mobile\r\nASUS Gaming Headset TUF Gaming H1 Gen II – Hatsune Miku Edition\r\n•	Driver: 40mm ASUS Essence Driver\r\n•	Koneksi: USB\r\n•	Audio: Virtual Surround Sound\r\n•	Microphone: AI Noise-Canceling\r\n•	Bobot: Lightweight Design\r\n•	Desain: TUF Gaming x Hatsune Miku\r\nASUS Gaming Keyboard TUF Gaming K3 Gen II – Hatsune Miku Edition\r\n•	Switch: Mechanical (Gaming Grade)\r\n•	Lighting: RGB Backlight\r\n•	Layout: Full Size\r\n•	Durability: Military-grade build quality\r\n•	Desain: Exclusive Hatsune Miku Artwork\r\nASUS Mouse Pad TUF Gaming P1 – Hatsune Miku Edition\r\n•	Material: Gaming-grade Fabric Surface\r\n•	Base: Anti-Slip Rubber\r\n•	Edge: Anti-Fray Stitching\r\n•	Ukuran: Medium (Desk Friendly)\r\n•	Desain: Limited Edition Hatsune Miku', 89349000.00, 0, 'KTG012', 'BRD006', 'product_22158a90da35389e_1765372761.png', 12000, 'habis', '2025-12-10 20:19:21');
 
 -- --------------------------------------------------------
 
@@ -703,6 +704,16 @@ CREATE TABLE `promo_diskon` (
   `dibuat_pada` datetime DEFAULT CURRENT_TIMESTAMP,
   `diperbarui_pada` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `promo_diskon`
+--
+
+INSERT INTO `promo_diskon` (`id_diskon`, `id_produk`, `id_kampanye`, `label`, `harga_awal`, `harga_diskon`, `jenis`, `nilai`, `stok_promo`, `stok_terpakai`, `maks_qty_per_pengguna`, `mulai_pada`, `selesai_pada`, `status`, `dibuat_pada`, `diperbarui_pada`) VALUES
+('DSK75B220E5', 'PRD008', NULL, 'Diskon Akhir Tahun Hingga 60% Produk RAM', 4339000.00, 1735600.00, 'persen', 60.00, 10, 0, 1, '2025-12-17 01:48:00', '2025-12-31 01:47:00', 'aktif', '2025-12-17 01:47:19', '2025-12-17 01:48:48'),
+('DSK9D622DAB', 'PRD009', NULL, 'Diskon Akhir Tahun Hingga 60% Produk RAM', 4559000.00, 1823600.00, 'persen', 60.00, 10, 0, 1, '2025-12-17 01:48:00', '2025-12-31 01:47:00', 'aktif', '2025-12-17 01:47:19', '2025-12-17 01:48:48'),
+('DSKDC18E439', 'PRD010', NULL, 'Diskon Akhir Tahun Hingga 60% Produk RAM', 3888900.00, 1555560.00, 'persen', 60.00, 10, 0, 1, '2025-12-17 01:48:00', '2025-12-31 01:47:00', 'aktif', '2025-12-17 01:47:19', '2025-12-17 01:48:48'),
+('DSKEDEBE3DB', 'PRD003', NULL, 'Diskon Monitor 550rb', 1799000.00, 1249000.00, 'nominal', 550000.00, 10, 0, 1, '2025-12-16 23:27:00', '2025-12-31 23:26:00', 'aktif', '2025-12-16 23:26:46', '2025-12-17 13:03:24');
 
 --
 -- Triggers `promo_diskon`
@@ -1012,7 +1023,8 @@ CREATE TABLE `voucher` (
 --
 
 INSERT INTO `voucher` (`id_voucher`, `kode`, `judul`, `deskripsi`, `jenis`, `nilai`, `minimal_belanja`, `maksimal_diskon`, `mulai_pada`, `selesai_pada`, `kuota_total`, `kuota_terpakai`, `kuota_per_pengguna`, `terbatas_produk`, `terbatas_kategori`, `status`, `dibuat_pada`, `diperbarui_pada`) VALUES
-('VCH0000000001', '7HYFASLL', 'Flash Sale Akhir Tahun', 'Flash Sale', 'diskon_nominal', 1000000.00, 2.00, 2000000.00, '2025-11-30 19:30:00', '2025-12-31 23:59:00', 20, 0, 1, NULL, NULL, 'aktif', '2025-11-30 02:34:03', '2025-12-14 12:48:48');
+('VCH0000000001', '7HYFASLL', 'Flash Sale Akhir Tahun', 'Flash Sale', 'diskon_nominal', 1000000.00, 2.00, 2000000.00, '2025-11-30 19:30:00', '2025-12-31 23:59:00', 20, 0, 1, NULL, NULL, 'aktif', '2025-11-30 02:34:03', '2025-12-14 12:48:48'),
+('VCH0000000002', '8ZMF5XBE', 'Diskon Monitor 250rb', 'Untuk pembelian monitor ', 'diskon_nominal', 250000.00, 1.00, 250000.00, '2025-12-16 23:05:00', '2025-12-31 23:05:00', 10, 0, 1, NULL, NULL, 'aktif', '2025-12-16 23:05:54', '2025-12-17 01:20:00');
 
 -- --------------------------------------------------------
 
@@ -1037,9 +1049,9 @@ INSERT INTO `wishlist` (`id_wishlist`, `id_customer`, `id_product`, `tanggal_dit
 ('WSH0000012', 8, 'PRD011', '2025-12-13 14:02:50', '2025-12-13 14:02:50'),
 ('WSH0000013', 2, 'PRD002', '2025-12-13 14:04:18', '2025-12-13 14:04:18'),
 ('WSH0000014', 2, 'PRD007', '2025-12-13 14:04:20', '2025-12-13 14:04:20'),
-('WSH0000015', 1, 'PRD012', '2025-12-14 09:09:05', '2025-12-14 09:09:05'),
-('WSH0000016', 1, 'PRD005', '2025-12-14 09:54:53', '2025-12-14 09:54:53'),
-('WSH0000017', 1, 'PRD001', '2025-12-16 13:57:59', '2025-12-16 13:57:59');
+('WSH0000015', 1, 'PRD001', '2025-12-17 01:48:15', '2025-12-17 01:48:15'),
+('WSH0000016', 1, 'PRD003', '2025-12-17 01:48:33', '2025-12-17 01:48:33'),
+('WSH0000017', 1, 'PRD010', '2025-12-17 09:58:04', '2025-12-17 09:58:04');
 
 --
 -- Indexes for dumped tables
@@ -1353,19 +1365,19 @@ ALTER TABLE `blog_categories`
 -- AUTO_INCREMENT for table `blog_posts`
 --
 ALTER TABLE `blog_posts`
-  MODIFY `id_post` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_post` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id_customer` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_customer` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `kampanye_produk`
 --
 ALTER TABLE `kampanye_produk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `log_blog`

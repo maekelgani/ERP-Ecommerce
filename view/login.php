@@ -425,7 +425,7 @@ if ($dbConnected && $customerRepo && $_SERVER['REQUEST_METHOD'] === 'POST' && is
                     </form>
 
                     <p class="text-center text-sm text-gray-600 mt-6">
-                        Butuh bantuan? <a href="../view/users/aboutContact.php" class="text-primary hover:text-primary-dark font-medium">Hubungi Nano Komputer</a>
+                        Butuh bantuan? <a href="../view/users/aboutContact.php#contact" class="text-primary hover:text-primary-dark font-medium">Hubungi Nano Komputer</a>
                     </p>
                 </div>
             </div>
@@ -640,7 +640,7 @@ if ($dbConnected && $customerRepo && $_SERVER['REQUEST_METHOD'] === 'POST' && is
                         </button>
                     </p>
                     <p class="text-xs text-gray-600 mt-3">
-                        Butuh bantuan? <a href="#" class="text-primary hover:text-primary-dark font-medium">Hubungi Kami</a>
+                        Butuh bantuan? <a href="../view/users/aboutContact.php#contact" class="text-primary hover:text-primary-dark font-medium">Hubungi Kami</a>
                     </p>
                 </div>
             </div>

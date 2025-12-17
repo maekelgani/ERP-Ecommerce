@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                             <div>
                                 <h4 class="font-semibold text-gray-900">${escapeHtml(store.nama_toko)}</h4>
-                                <span class="w-1.5 h-1.5 rounded-full ${store.is_active == 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} mr-1.5"">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${store.is_active == 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} mr-1.5"">
                                     ${store.is_active == 1 ? 'Aktif' : 'Nonaktif'}
                                 </span>
                             </div>

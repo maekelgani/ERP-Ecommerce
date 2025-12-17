@@ -39,13 +39,13 @@ $breadcrumbs = [
         });
     </script>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <section class="bg-[#882426] rounded-2xl py-12 md:py-16 mb-8 relative overflow-hidden">
+    <main class="max-w-full mb-10">
+        <section class="relative h-[200px] md:h-[280px] bg-[#882426] overflow-hidden mb-8">
             <div class="absolute inset-0 overflow-hidden opacity-10">
                 <div class="absolute top-6 right-6 w-24 h-24 border-4 border-white rounded-full"></div>
                 <div class="absolute bottom-6 left-6 w-20 h-20 border-4 border-white rounded-full"></div>
             </div>
-            <div class="relative z-10 text-center px-4">
+            <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-5">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -56,11 +56,9 @@ $breadcrumbs = [
             </div>
         </section>
 
-        <div class="mb-8">
+        <section class="mt-10 w-full px-5 md:px-8 lg:px-20">
             <?php include '../../components/users/breadcrumb.php'; ?>
-        </div>
 
-        <section class="mb-12">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
                     <div class="flex items-center gap-3 mb-5">
@@ -148,7 +146,7 @@ $breadcrumbs = [
             </div>
         </section>
 
-        <section class="mb-12">
+        <section class="mt-10 w-full px-5 md:px-8 lg:px-20">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 text-center group hover:shadow-md hover:border-[#882426]/20 transition-all duration-300">
                     <div class="w-12 h-12 bg-[#882426]/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#882426] transition-colors duration-300">
@@ -189,9 +187,9 @@ $breadcrumbs = [
             </div>
         </section>
 
-        <section id="contact" class="mb-8">
+        <section class="mt-10 w-full px-5 md:px-8 lg:px-20">
             <div class="text-center mb-8">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Hubungi Kami</h2>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-2" id="contact">Hubungi Kami</h2>
                 <p class="text-gray-600 text-sm md:text-base">Kami siap membantu Anda dengan pertanyaan atau kebutuhan apapun</p>
             </div>
 
