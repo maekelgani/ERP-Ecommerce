@@ -268,11 +268,18 @@ include '../../components/admin/head.php';
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <select name="status" id="status" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
-                        <option value="terjadwal">Terjadwal</option>
-                        <option value="aktif">Aktif</option>
-                        <option value="nonaktif">Nonaktif</option>
-                    </select>
+                    <div class="flex items-center gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="is_nonaktif" id="is_nonaktif" class="w-4 h-4 rounded border-gray-300 text-[#882426] focus:ring-[#882426]">
+                            <span class="text-sm text-gray-600">Nonaktifkan diskon</span>
+                        </label>
+                    </div>
+                    <input type="hidden" name="status" id="status" value="aktif">
+                    <p class="text-xs text-gray-500 mt-2">
+                        <span class="material-symbols-outlined text-sm align-middle">info</span>
+                        Status akan ditentukan otomatis: <strong>Terjadwal</strong> jika waktu mulai di masa depan,
+                        <strong>Aktif</strong> jika sudah memasuki periode, <strong>Berakhir</strong> jika melewati waktu selesai.
+                    </p>
                 </div>
 
                 <div class="flex gap-3 pt-4 border-t">
@@ -283,69 +290,160 @@ include '../../components/admin/head.php';
         </div>
     </div>
 
-    <div id="massModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-            <div class="sticky top-0 bg-white border-b border-gray-100 p-4 flex justify-between items-center">
-                <h2 class="text-lg font-semibold">Mass Assign Diskon</h2>
-                <button onclick="closeMassModal()" class="p-1 hover:bg-gray-100 rounded-lg">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <form id="massForm" class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="font-medium text-gray-700 mb-3">Pilih Produk</h3>
-                        <div class="mb-3">
-                            <input type="text" id="massProductSearch" placeholder="Cari produk..." class="w-full px-4 py-2 border border-gray-200 rounded-lg">
-                        </div>
-                        <div id="massProductList" class="space-y-2 max-h-[300px] overflow-y-auto">
-                            <p class="text-gray-500 text-center py-4">Memuat produk...</p>
-                        </div>
-                        <p class="text-sm text-gray-500 mt-2">Terpilih: <span id="selectedCount">0</span> produk</p>
+    <div id="massModal"
+        class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 transition-all duration-300"
+        onclick="closeMassModal()">
+        <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl transform transition-all duration-300"
+            onclick="event.stopPropagation()">
+            <div class="sticky top-0 z-10 px-6 py-5 flex items-center justify-between border-b border-gray-100" style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white">playlist_add</span>
                     </div>
                     <div>
-                        <h3 class="font-medium text-gray-700 mb-3">Pengaturan Diskon</h3>
+                        <h2 class="text-lg font-bold text-white">Mass Assign Diskon</h2>
+                        <p class="text-white/70 text-sm">Terapkan diskon ke banyak produk sekaligus</p>
+                    </div>
+                </div>
+                <button onclick="closeMassModal()" class="p-2 hover:bg-white/10 rounded-xl transition-colors">
+                    <span class="material-symbols-outlined text-white">close</span>
+                </button>
+            </div>
+            <form id="massForm" class="overflow-y-auto max-h-[calc(90vh-140px)]">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                    <div class="p-6 border-r border-gray-100 bg-gray-50/50">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-[#882426]">inventory_2</span>
+                            <h3 class="font-semibold text-gray-800">Pilih Produk</h3>
+                        </div>
+                        <div class="relative mb-4">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                                <span class="material-symbols-outlined text-lg">search</span>
+                            </span>
+                            <input type="text" id="massProductSearch" placeholder="Cari produk..." class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white">
+                        </div>
+                        <div id="massProductList"
+                            class="space-y-2 h-[340px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                            <p class="text-gray-500 text-center py-4">Memuat produk...</p>
+                        </div>
+                        <div class="mt-4 p-3 bg-[#882426]/5 rounded-xl border border-[#882426]/10">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Produk terpilih:</span>
+                                <span id="selectedCount" class="text-lg font-bold text-[#882426]">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-[#882426]">tune</span>
+                            <h3 class="font-semibold text-gray-800">Pengaturan Diskon</h3>
+                        </div>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Label Diskon</label>
-                                <input type="text" name="mass_label" id="mass_label" class="w-full px-4 py-2 border border-gray-200 rounded-lg" placeholder="Contoh: Diskon Akhir Tahun">
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-base text-gray-400">label</span>
+                                        Label Diskon
+                                    </span>
+                                </label>
+                                <input type="text" name="mass_label" id="mass_label" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]" placeholder="Contoh: Promo Akhir Tahun 2025">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Jenis</label>
-                                    <select name="mass_jenis" id="mass_jenis" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-base text-gray-400">category</span>
+                                            Jenis <span class="text-red-500">*</span>
+                                        </span>
+                                    </label>
+                                    <select name="mass_jenis" id="mass_jenis" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]">
                                         <option value="persen">Persen (%)</option>
                                         <option value="nominal">Nominal (Rp)</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nilai <span class="text-red-500">*</span></label>
-                                    <input type="number" name="mass_nilai" id="mass_nilai" required min="0.01" step="0.01" class="w-full px-4 py-2 border border-gray-200 rounded-lg" placeholder="Contoh: 10">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-base text-gray-400">price_change</span>
+                                            Nilai <span class="text-red-500">*</span>
+                                        </span>
+                                    </label>
+                                    <input type="number" name="mass_nilai" id="mass_nilai" required min="0.01" step="0.01" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]" placeholder="Contoh: 10">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Mulai</label>
-                                    <input type="datetime-local" name="mass_mulai" id="mass_mulai" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-base text-gray-400">inventory</span>
+                                            Stok Promo
+                                        </span>
+                                    </label>
+                                    <input type="number" name="mass_stok_promo" id="mass_stok_promo" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]" placeholder="Unlimited">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Selesai</label>
-                                    <input type="datetime-local" name="mass_selesai" id="mass_selesai" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-base text-gray-400">person</span>
+                                            Maks Qty/User
+                                        </span>
+                                    </label>
+                                    <input type="number" name="mass_maks_qty" id="mass_maks_qty" min="0" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]" placeholder="Unlimited">
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                                <select name="mass_status" id="mass_status" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
-                                    <option value="aktif">Aktif</option>
-                                    <option value="terjadwal">Terjadwal</option>
-                                </select>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-base text-gray-400">event</span>
+                                            Mulai
+                                        </span>
+                                    </label>
+                                    <input type="datetime-local" name="mass_mulai" id="mass_mulai" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-base text-gray-400">event_busy</span>
+                                            Selesai
+                                        </span>
+                                    </label>
+                                    <input type="datetime-local" name="mass_selesai" id="mass_selesai" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]">
+                                </div>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-base text-gray-400">toggle_on</span>
+                                        Status Diskon
+                                    </span>
+                                </label>
+                                <div class="flex items-center gap-3">
+                                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                                        <input type="checkbox" name="mass_is_nonaktif" id="mass_is_nonaktif" class="w-5 h-5 rounded border-gray-300 text-[#882426] focus:ring-[#882426]">
+                                        <span class="text-sm text-gray-600">Nonaktifkan diskon (override manual)</span>
+                                    </label>
+                                </div>
+                                <input type="hidden" name="mass_status" id="mass_status" value="aktif">
+                                <p class="text-xs text-gray-500 mt-3 flex items-start gap-1">
+                                    <span class="material-symbols-outlined text-sm mt-0.5">info</span>
+                                    <span>Status ditentukan otomatis: <strong class="text-amber-600">Terjadwal</strong> (waktu mulai di masa depan),
+                                        <strong class="text-emerald-600">Aktif</strong> (periode berjalan), <strong class="text-red-600">Berakhir</strong> (melewati waktu selesai).</span>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="flex gap-3 pt-4 mt-6 border-t">
-                    <button type="button" onclick="closeMassModal()" class="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">Batal</button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-[#882426] text-white rounded-lg hover:bg-[#6d1d1f]">Terapkan Diskon</button>
+                <div class="sticky bottom-0 bg-white border-t border-gray-100 p-4 flex gap-3">
+                    <button type="button" onclick="closeMassModal()" class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 font-medium transition-colors">
+                        Batal
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-[#882426] to-[#a52a2c] text-white rounded-xl hover:from-[#6d1d1f] hover:to-[#882426] font-medium transition-all shadow-lg shadow-[#882426]/25">
+                        <span class="flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-lg">check_circle</span>
+                            Terapkan Diskon
+                        </span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -430,7 +528,8 @@ include '../../components/admin/head.php';
                 berakhir: 0
             };
             diskons.forEach(d => {
-                if (stats[d.status] !== undefined) stats[d.status]++;
+                const displayStatus = d.computed_status || d.status;
+                if (stats[displayStatus] !== undefined) stats[displayStatus]++;
             });
             document.getElementById('statTotal').textContent = stats.total;
             document.getElementById('statAktif').textContent = stats.aktif;
@@ -453,7 +552,16 @@ include '../../components/admin/head.php';
                 'nonaktif': 'bg-gray-100 text-gray-600'
             };
 
+            // Tambahkan mapping untuk warna dot indicator
+            const statusDotColors = {
+                'terjadwal': 'bg-blue-500',
+                'aktif': 'bg-emerald-500',
+                'berakhir': 'bg-red-500',
+                'nonaktif': 'bg-gray-500'
+            };
+
             tbody.innerHTML = diskons.map(d => {
+                const displayStatus = d.computed_status || d.status;
                 const formatDate = (date) => date ? new Date(date).toLocaleDateString('id-ID', {
                     day: 'numeric',
                     month: 'short'
@@ -480,7 +588,11 @@ include '../../components/admin/head.php';
                             ${formatDate(d.mulai_pada)} - ${formatDate(d.selesai_pada)}
                         </td>
                         <td class="px-4 py-3">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[d.status]}">${d.status}</span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${displayStatus === 'aktif' ? 'animate-pulse' : ''} ${statusColors[displayStatus] || statusColors.terjadwal}">
+                                    <span class="w-1.5 h-1.5 rounded-full ${statusDotColors[displayStatus] || statusDotColors.terjadwal} mr-1.5"></span>
+                                    ${displayStatus.charAt(0).toUpperCase() + displayStatus.slice(1)}
+                                </span>
+
                         </td>
                         <td class="px-4 py-3 text-center">
                             <div class="flex items-center justify-center gap-1">
@@ -525,6 +637,7 @@ include '../../components/admin/head.php';
                     document.getElementById('maks_qty_per_pengguna').value = d.maks_qty_per_pengguna || '';
                     document.getElementById('mulai_pada').value = d.mulai_pada?.slice(0, 16) || '';
                     document.getElementById('selesai_pada').value = d.selesai_pada?.slice(0, 16) || '';
+                    document.getElementById('is_nonaktif').checked = d.status === 'nonaktif';
                     document.getElementById('status').value = d.status;
                     document.getElementById('diskonModal').classList.remove('hidden');
                 }
@@ -582,6 +695,9 @@ include '../../components/admin/head.php';
             const formData = new FormData(e.target);
             const diskonId = document.getElementById('diskonId').value;
             formData.append('action', diskonId ? 'update' : 'create');
+
+            const isNonaktif = document.getElementById('is_nonaktif').checked;
+            formData.set('status', isNonaktif ? 'nonaktif' : 'aktif');
 
             console.log('Submitting diskon form:');
             for (let [key, value] of formData.entries()) {
@@ -677,15 +793,19 @@ include '../../components/admin/head.php';
                 return;
             }
 
+            const isNonaktif = document.getElementById('mass_is_nonaktif').checked;
+
             const formData = new FormData();
             formData.append('action', 'mass_create');
             formData.append('product_ids', JSON.stringify([...selectedProducts]));
             formData.append('label', document.getElementById('mass_label').value);
             formData.append('jenis', document.getElementById('mass_jenis').value);
             formData.append('nilai', nilaiValue);
+            formData.append('stok_promo', document.getElementById('mass_stok_promo').value);
+            formData.append('maks_qty_per_pengguna', document.getElementById('mass_maks_qty').value);
             formData.append('mulai_pada', document.getElementById('mass_mulai').value);
             formData.append('selesai_pada', document.getElementById('mass_selesai').value);
-            formData.append('status', document.getElementById('mass_status').value);
+            formData.append('status', isNonaktif ? 'nonaktif' : 'aktif');
 
             console.log('Mass create form data:');
             for (let [key, value] of formData.entries()) {
@@ -714,6 +834,9 @@ include '../../components/admin/head.php';
                     Swal.fire('Berhasil', data.message, 'success');
                     closeMassModal();
                     loadDiskons();
+                    document.getElementById('massForm').reset();
+                    selectedProducts.clear();
+                    document.getElementById('selectedCount').textContent = '0';
                 } else {
                     Swal.fire('Gagal', data.message || 'Terjadi kesalahan', 'error');
                 }

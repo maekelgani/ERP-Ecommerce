@@ -13,8 +13,10 @@ if (!$isLoggedIn) {
 include '../../components/users/head.php';
 
 use App\Helper\ProductLandingHelper;
+use App\Helper\DiscountHelper;
 
 $productHelper = new ProductLandingHelper();
+$discountHelper = new DiscountHelper();
 
 $wishlistItems = [];
 $categories = [];
@@ -23,31 +25,38 @@ $brands = [];
 if (isset($customer['id_customer'])) {
     try {
         $db = \App\Database\DatabaseConnection::getInstance()->getConnection();
+        $now = date('Y-m-d H:i:s');
         $stmt = $db->prepare("
             SELECT 
                 p.*, 
                 k.nama_kategori, 
                 b.nama_brand, 
                 w.tanggal_ditambahkan as added_at,
-                d.id_diskon,
-                d.tipe_diskon,
-                d.nilai_diskon,
-                d.harga_setelah_diskon as harga_diskon,
-                d.tanggal_mulai as diskon_mulai,
-                d.tanggal_berakhir as diskon_berakhir,
-                d.status as diskon_status
+                pd.id_diskon,
+                pd.jenis as tipe_diskon,
+                pd.nilai as nilai_diskon,
+                pd.mulai_pada as diskon_mulai,
+                pd.selesai_pada as diskon_berakhir,
+                pd.status as diskon_status,
+                pd.stok_promo,
+                pd.label as diskon_label
             FROM wishlist w
             JOIN products p ON w.id_product = p.id_product
             LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
             LEFT JOIN brand b ON p.id_brand = b.id_brand
-            LEFT JOIN diskon d ON p.id_product = d.id_product 
-                AND d.status = 'aktif' 
-                AND (d.tanggal_mulai IS NULL OR d.tanggal_mulai <= NOW())
-                AND (d.tanggal_berakhir IS NULL OR d.tanggal_berakhir >= NOW())
+            LEFT JOIN promo_diskon pd ON p.id_product = pd.id_produk 
+                AND pd.status = 'aktif' 
+                AND (pd.mulai_pada IS NULL OR pd.mulai_pada <= :now1)
+                AND (pd.selesai_pada IS NULL OR pd.selesai_pada >= :now2)
+                AND (pd.stok_promo IS NULL OR pd.stok_promo > 0)
             WHERE w.id_customer = :customer_id
             ORDER BY w.tanggal_ditambahkan DESC
         ");
-        $stmt->execute([':customer_id' => $customer['id_customer']]);
+        $stmt->execute([
+            ':customer_id' => $customer['id_customer'],
+            ':now1' => $now,
+            ':now2' => $now
+        ]);
         $wishlistItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($wishlistItems as $item) {
@@ -172,18 +181,31 @@ $breadcrumbs = [
 
                         $hasDiscount = !empty($product['id_diskon']) && $product['diskon_status'] === 'aktif';
                         $originalPrice = (float)$product['harga'];
-                        $discountPrice = $hasDiscount ? (float)$product['harga_diskon'] : null;
+                        $discountPrice = null;
                         $discountPercent = 0;
+                        $savings = 0;
 
-                        if ($hasDiscount && $product['tipe_diskon'] === 'persen') {
-                            $discountPercent = (int)$product['nilai_diskon'];
-                        } elseif ($hasDiscount && $discountPrice && $originalPrice > 0) {
-                            $discountPercent = round((($originalPrice - $discountPrice) / $originalPrice) * 100);
+                        if ($hasDiscount) {
+                            $nilaiDiskon = (float)$product['nilai_diskon'];
+                            $tipeDiskon = $product['tipe_diskon'];
+
+                            if ($tipeDiskon === 'persen') {
+                                $discountPercent = (int)$nilaiDiskon;
+                                $discountPrice = $originalPrice - ($originalPrice * $nilaiDiskon / 100);
+                            } else {
+                                $discountPrice = $originalPrice - $nilaiDiskon;
+                                if ($originalPrice > 0) {
+                                    $discountPercent = round(($nilaiDiskon / $originalPrice) * 100);
+                                }
+                            }
+                            $discountPrice = max(0, $discountPrice);
+                            $savings = $originalPrice - $discountPrice;
                         }
 
-                        $displayPrice = $hasDiscount && $discountPrice ? $discountPrice : $originalPrice;
+                        $displayPrice = $hasDiscount && $discountPrice !== null ? $discountPrice : $originalPrice;
                         $price = $productHelper->formatPrice($displayPrice);
                         $originalPriceFormatted = $productHelper->formatPrice($originalPrice);
+                        $savingsFormatted = $productHelper->formatPrice($savings);
 
                         $description = htmlspecialchars(substr($product['deskripsi_speksifikasi'] ?? '', 0, 100));
                         $stockBadge = $productHelper->getStockBadge($product['stok'], $product['status_produk']);
@@ -191,6 +213,7 @@ $breadcrumbs = [
                         $addedDate = !empty($product['added_at']) ? date('d M Y', strtotime($product['added_at'])) : '-';
                         $categoryName = htmlspecialchars($product['nama_kategori'] ?? '');
                         $brandName = htmlspecialchars($product['nama_brand'] ?? '');
+                        $diskonLabel = htmlspecialchars($product['diskon_label'] ?? '');
                         ?>
                         <div class="wishlist-item group bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full overflow-hidden"
                             data-product-id="<?= $productId ?>"
@@ -204,11 +227,26 @@ $breadcrumbs = [
                                     <img src="<?= $imagePath ?>" alt="<?= $productName ?>" class="w-full h-full object-cover" loading="lazy"
                                         onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 400 400%27%3E%3Crect width=%27400%27 height=%27400%27 fill=%27%23f3f4f6%27/%3E%3Cpath d=%27M200 120c-44.18 0-80 35.82-80 80s35.82 80 80 80 80-35.82 80-80-35.82-80-80-80zm0 140c-33.14 0-60-26.86-60-60s26.86-60 60-60 60 26.86 60 60-26.86 60-60 60z%27 fill=%27%23d1d5db%27/%3E%3Cpath d=%27M200 160c-22.09 0-40 17.91-40 40s17.91 40 40 40 40-17.91 40-40-17.91-40-40-40z%27 fill=%27%23d1d5db%27/%3E%3C/svg%3E'" />
 
-                                    <?php if ($hasDiscount && $discountPercent > 0): ?>
-                                        <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-lg text-xs font-bold">
-                                            -<?= $discountPercent ?>%
+                                    <?php if ($hasDiscount): ?>
+                                        <div class="absolute top-2 left-2 flex flex-col gap-1">
+
+                                            <?php if ($tipeDiskon === 'persen' && $discountPercent > 0): ?>
+                                                <!-- DISKON PERSEN -->
+                                                <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold z-10">
+                                                    -<?= $discountPercent ?>%
+                                                </div>
+
+                                            <?php elseif ($tipeDiskon === 'nominal' && $savings > 0): ?>
+                                                <!-- DISKON NOMINAL -->
+                                                <div class="bg-gradient-to-r from-red-500 to-red-600 
+                        text-white px-2 py-1 rounded-lg text-xs font-bold shadow-sm">
+                                                    Hemat <?= $savingsFormatted ?>
+                                                </div>
+                                            <?php endif; ?>
+
                                         </div>
                                     <?php endif; ?>
+
 
                                     <?php if (!$stockBadge['available']): ?>
                                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -231,10 +269,20 @@ $breadcrumbs = [
                             </a>
                             <div class="p-4 sm:p-5 flex flex-col justify-between flex-grow">
                                 <div class="flex-grow">
-                                    <div class="flex items-baseline gap-2 flex-wrap">
-                                        <p class="text-primary font-bold text-lg"><?= $price ?></p>
-                                        <?php if ($hasDiscount && $discountPrice && $discountPrice < $originalPrice): ?>
-                                            <p class="text-gray-400 text-sm line-through"><?= $originalPriceFormatted ?></p>
+                                    <div class="flex flex-col gap-1">
+                                        <div class="flex items-baseline gap-2 flex-wrap">
+                                            <p class="text-primary font-bold text-lg"><?= $price ?></p>
+                                            <?php if ($hasDiscount && $discountPrice !== null && $discountPrice < $originalPrice): ?>
+                                                <p class="text-gray-400 text-sm line-through"><?= $originalPriceFormatted ?></p>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php if ($hasDiscount && $savings > 0): ?>
+                                            <p class="text-xs text-emerald-600 font-medium flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                </svg>
+                                                Hemat <?= $savingsFormatted ?>
+                                            </p>
                                         <?php endif; ?>
                                     </div>
                                     <a href="productDetail.php?id=<?= urlencode($productId) ?>">
@@ -304,7 +352,6 @@ $breadcrumbs = [
     </main>
 
     <?php include '../../components/users/footer.php'; ?>
-
     <script>
         function showNotification(message, type = 'success') {
             const existing = document.querySelector('.notification-toast');
@@ -444,7 +491,16 @@ $breadcrumbs = [
         }
 
         function buyNowFromWishlist(productId) {
-            window.location.href = 'productCheckout.php?from=buynow&product_id=' + productId + '&quantity=1';
+            const isLoggedIn = document.body.dataset.customerLoggedIn === 'true';
+            if (!isLoggedIn) {
+                if (typeof showLoginRequiredModal === 'function') {
+                    showLoginRequiredModal();
+                } else {
+                    window.location.href = 'customerLogin.php';
+                }
+                return;
+            }
+            window.location.href = 'productCheckout.php?from=buynow&product=' + encodeURIComponent(productId) + '&qty=1';
         }
 
         document.addEventListener('DOMContentLoaded', function() {

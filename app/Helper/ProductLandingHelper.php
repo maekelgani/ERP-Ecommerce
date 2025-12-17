@@ -7,10 +7,12 @@ use App\Database\DatabaseConnection;
 class ProductLandingHelper
 {
     private \PDO $db;
+    private DiscountHelper $discountHelper;
 
     public function __construct()
     {
         $this->db = DatabaseConnection::getInstance()->getConnection();
+        $this->discountHelper = new DiscountHelper();
     }
 
     public function getNewProducts(int $limit = 8): array
@@ -28,7 +30,9 @@ class ProductLandingHelper
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $products = $stmt->fetchAll();
+
+        return $this->discountHelper->applyDiscountsToProducts($products);
     }
 
     public function getBestSellers(int $limit = 4): array
@@ -46,7 +50,9 @@ class ProductLandingHelper
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $products = $stmt->fetchAll();
+
+        return $this->discountHelper->applyDiscountsToProducts($products);
     }
 
     public function getProductsForCatalog(int $limit = 12): array
@@ -64,7 +70,9 @@ class ProductLandingHelper
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $products = $stmt->fetchAll();
+
+        return $this->discountHelper->applyDiscountsToProducts($products);
     }
 
     public function getFeaturedProducts(int $limit = 6): array
@@ -82,7 +90,9 @@ class ProductLandingHelper
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $products = $stmt->fetchAll();
+
+        return $this->discountHelper->applyDiscountsToProducts($products);
     }
 
     public function getProductsByCategory(string $categoryId, int $limit = 8): array
@@ -101,7 +111,9 @@ class ProductLandingHelper
         $stmt->bindValue(':category_id', $categoryId, \PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $products = $stmt->fetchAll();
+
+        return $this->discountHelper->applyDiscountsToProducts($products);
     }
 
     public function getProductsByBrand(string $brandId, int $limit = 8): array
@@ -120,7 +132,14 @@ class ProductLandingHelper
         $stmt->bindValue(':brand_id', $brandId, \PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $products = $stmt->fetchAll();
+
+        return $this->discountHelper->applyDiscountsToProducts($products);
+    }
+
+    public function getProductsWithActiveDiscounts(int $limit = 20): array
+    {
+        return $this->discountHelper->getProductsWithActiveDiscounts($limit);
     }
 
     public function getTotalProductCount(): int
@@ -191,7 +210,11 @@ class ProductLandingHelper
         $stmt->execute();
         $result = $stmt->fetch();
 
-        return $result ?: null;
+        if ($result) {
+            return $this->discountHelper->applyDiscountToProduct($result);
+        }
+
+        return null;
     }
 
     public function getAllProducts(array $filters = [], string $sort = 'newest', int $page = 1, int $perPage = 12): array
@@ -228,12 +251,10 @@ class ProductLandingHelper
         }
 
         if (!empty($filters['search'])) {
-            $where[] = "(p.nama_product LIKE :search1 OR p.deskripsi_speksifikasi LIKE :search2 OR EXISTS (SELECT 1 FROM brand b2 WHERE b2.id_brand = p.id_brand AND b2.nama_brand LIKE :search3) OR EXISTS (SELECT 1 FROM kategori k2 WHERE k2.id_kategori = p.id_kategori AND k2.nama_kategori LIKE :search4))";
+            $where[] = "(p.nama_product LIKE :search1 OR EXISTS (SELECT 1 FROM brand b2 WHERE b2.id_brand = p.id_brand AND b2.nama_brand LIKE :search2))";
             $searchTerm = '%' . $filters['search'] . '%';
             $params[':search1'] = $searchTerm;
             $params[':search2'] = $searchTerm;
-            $params[':search3'] = $searchTerm;
-            $params[':search4'] = $searchTerm;
         }
 
         $whereClause = implode(' AND ', $where);
@@ -359,7 +380,9 @@ class ProductLandingHelper
         $stmt->bindValue(':product_id', $productId, \PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $products = $stmt->fetchAll();
+
+        return $this->discountHelper->applyDiscountsToProducts($products);
     }
 
     public function calculateDiscount(float $originalPrice, float $discountPercent = 0): array

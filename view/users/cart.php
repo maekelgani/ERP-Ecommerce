@@ -9,14 +9,18 @@ $customerId = \App\Auth\CustomerAuthMiddleware::getCustomerId();
 $isLoggedIn = \App\Auth\CustomerAuthMiddleware::isLoggedIn();
 
 use App\Helper\ProductLandingHelper;
+use App\Helper\DiscountHelper;
 
 $productHelper = new ProductLandingHelper();
+$discountHelper = new DiscountHelper();
 
 $cartItems = [];
 $inStockItems = [];
 $outOfStockItems = [];
 $lowStockItems = [];
 $subtotal = 0;
+$subtotalBeforeDiscount = 0;
+$totalSavings = 0;
 $totalItems = 0;
 $stockAdjustments = [];
 
@@ -24,26 +28,49 @@ if ($customerId) {
     try {
         $db = \App\Database\DatabaseConnection::getInstance()->getConnection();
 
+        // Fetch cart items with product info (tanpa discount JOIN)
         $stmt = $db->prepare("
             SELECT c.id_cart, c.jumlah as quantity, c.harga_satuan, 
                    c.tanggal_ditambahkan as created_at, c.tgl_diubah as updated_at,
                    p.id_product, p.nama_product, p.harga, p.stok, p.status_produk, 
                    p.gambar, p.deskripsi_speksifikasi,
-                   k.nama_kategori, b.nama_brand,
-                   COALESCE(d.harga_setelah_diskon, p.harga) as harga_final,
-                   d.nilai_diskon, d.tipe_diskon
+                   k.nama_kategori, b.nama_brand
             FROM cart c
             JOIN products p ON c.id_product = p.id_product
             LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
             LEFT JOIN brand b ON p.id_brand = b.id_brand
-            LEFT JOIN diskon d ON p.id_product = d.id_product 
-                AND d.status = 'aktif' 
-                AND NOW() BETWEEN d.tanggal_mulai AND d.tanggal_berakhir
             WHERE c.id_customer = :customer_id
             ORDER BY c.tanggal_ditambahkan DESC
         ");
         $stmt->execute([':customer_id' => $customerId]);
         $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Apply discounts using DiscountHelper (dengan computeStatus logic)
+        $productIds = array_column($cartItems, 'id_product');
+        $activeDiscounts = $discountHelper->getActiveDiscountsForProducts($productIds);
+
+        foreach ($cartItems as &$cartItem) {
+            $productId = $cartItem['id_product'];
+            $discount = $activeDiscounts[$productId] ?? null;
+
+            // Set default values
+            $cartItem['has_discount'] = false;
+            $cartItem['harga_final'] = $cartItem['harga'];
+            $cartItem['discount_label'] = '';
+            $cartItem['discount_badge'] = '';
+            $cartItem['savings_per_item'] = 0;
+
+            if ($discount) {
+                $discountedPrice = $discountHelper->calculateDiscountedPrice($cartItem['harga'], $discount);
+                $cartItem['has_discount'] = true;
+                $cartItem['harga_final'] = $discountedPrice;
+                $cartItem['discount_label'] = $discountHelper->getDiscountLabel($discount);
+                $cartItem['discount_badge'] = $discountHelper->getDiscountBadge($discount);
+                $cartItem['savings_per_item'] = $cartItem['harga'] - $discountedPrice;
+                $cartItem['id_diskon'] = $discount['id_diskon'];
+            }
+        }
+        unset($cartItem);
 
         foreach ($cartItems as &$item) {
             $isAvailable = $item['stok'] > 0 && $item['status_produk'] !== 'habis' && $item['status_produk'] !== 'nonaktif';
@@ -62,9 +89,10 @@ if ($customerId) {
             }
 
             if ($isAvailable) {
-                $itemPrice = $item['harga_final'] ?? $item['harga'];
                 $inStockItems[] = $item;
-                $subtotal += $itemPrice * $item['quantity'];
+                $subtotal += $item['harga_final'] * $item['quantity'];
+                $subtotalBeforeDiscount += $item['harga'] * $item['quantity'];
+                $totalSavings += $item['savings_per_item'] * $item['quantity'];
                 $totalItems += $item['quantity'];
 
                 if ($item['stok'] <= 5) {
@@ -205,9 +233,11 @@ include '../../components/users/head.php';
                                 <div class="divide-y divide-gray-100" id="inStockItems">
                                     <?php foreach ($inStockItems as $item):
                                         $imagePath = !empty($item['gambar']) ? '../../uploads/products/' . htmlspecialchars($item['gambar']) : '../../assets/img/placeholder-product.png';
-                                        $hasDiscount = !empty($item['nilai_diskon']) && $item['harga_final'] < $item['harga'];
-                                        $itemPrice = $hasDiscount ? $item['harga_final'] : $item['harga'];
+                                        $hasDiscount = $item['has_discount'] ?? false;
+                                        $itemPrice = $item['harga_final'] ?? $item['harga'];
                                         $itemTotal = $itemPrice * $item['quantity'];
+                                        $discountLabel = $item['discount_label'] ?? '';
+                                        $discountPercent = $hasDiscount ? round((($item['harga'] - $itemPrice) / $item['harga']) * 100) : 0;
 
                                         $stockStatus = 'in_stock';
                                         $stockClass = 'bg-emerald-100 text-emerald-700';
@@ -227,6 +257,8 @@ include '../../components/users/head.php';
                                             data-product-id="<?= $item['id_product'] ?>"
                                             data-price="<?= $itemPrice ?>"
                                             data-original-price="<?= $item['harga'] ?>"
+                                            data-has-discount="<?= $hasDiscount ? 'true' : 'false' ?>"
+                                            data-savings="<?= $item['savings_per_item'] ?? 0 ?>"
                                             data-stock="<?= $item['stok'] ?>">
                                             <div class="flex gap-4">
                                                 <div class="flex items-start gap-4 flex-shrink-0">
@@ -263,10 +295,10 @@ include '../../components/users/head.php';
                                                     <div class="mt-3 flex flex-wrap items-center gap-2">
                                                         <span class="px-2.5 py-1 text-xs font-medium rounded-full <?= $stockClass ?>"><?= $stockText ?></span>
                                                         <?php if ($hasDiscount): ?>
-                                                            <?php
-                                                            $discountPercent = round((($item['harga'] - $item['harga_final']) / $item['harga']) * 100);
-                                                            ?>
                                                             <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700">-<?= $discountPercent ?>%</span>
+                                                            <?php if (!empty($discountLabel)): ?>
+                                                                <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-700"><?= htmlspecialchars($discountLabel) ?></span>
+                                                            <?php endif; ?>
                                                         <?php endif; ?>
                                                     </div>
 
@@ -433,6 +465,21 @@ include '../../components/users/head.php';
 
                             <div class="p-6">
                                 <div class="space-y-4 mb-6">
+                                    <!-- Harga Normal - selalu ada, disembunyikan jika tidak ada diskon -->
+                                    <div id="originalPriceRow" class="flex justify-between text-gray-600 <?= $totalSavings > 0 ? '' : 'hidden' ?>">
+                                        <span>Harga Normal</span>
+                                        <span class="font-semibold text-gray-400 line-through" id="originalPriceDisplay"><?= $productHelper->formatPrice($subtotalBeforeDiscount) ?></span>
+                                    </div>
+                                    <!-- Total Hemat - selalu ada, disembunyikan jika tidak ada diskon -->
+                                    <div id="savingsRow" class="flex justify-between text-emerald-600 bg-emerald-50 -mx-6 px-6 py-3 <?= $totalSavings > 0 ? '' : 'hidden' ?>">
+                                        <div class="flex items-center gap-2">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span class="font-semibold">Total Hemat</span>
+                                        </div>
+                                        <span class="font-bold" id="savingsDisplay">-<?= $productHelper->formatPrice($totalSavings) ?></span>
+                                    </div>
                                     <div class="flex justify-between text-gray-600">
                                         <span>Subtotal (<span id="totalItemsCount"><?= $totalItems ?></span> item)</span>
                                         <span class="font-semibold text-gray-900" id="subtotalDisplay"><?= $productHelper->formatPrice($subtotal) ?></span>
@@ -706,6 +753,8 @@ include '../../components/users/head.php';
 
         function recalculateTotals() {
             let subtotal = 0;
+            let subtotalBeforeDiscount = 0;
+            let totalSavings = 0;
             let totalItems = 0;
 
             document.querySelectorAll('#inStockItems .cart-item').forEach(item => {
@@ -713,9 +762,14 @@ include '../../components/users/head.php';
                 if (checkbox && !checkbox.checked) return;
 
                 const price = parseFloat(item.dataset.price);
+                const originalPrice = parseFloat(item.dataset.originalPrice);
+                const savings = parseFloat(item.dataset.savings) || 0;
                 const qtyInput = item.querySelector('.qty-input');
                 const quantity = parseInt(qtyInput.value);
+
                 subtotal += price * quantity;
+                subtotalBeforeDiscount += originalPrice * quantity;
+                totalSavings += savings * quantity;
                 totalItems += quantity;
 
                 const itemTotal = item.querySelector('.item-total');
@@ -731,10 +785,26 @@ include '../../components/users/head.php';
             const subtotalEl = document.getElementById('subtotalDisplay');
             const taxEl = document.getElementById('taxDisplay');
             const grandTotalEl = document.getElementById('grandTotalDisplay');
+            const savingsEl = document.getElementById('savingsDisplay');
+            const originalPriceEl = document.getElementById('originalPriceDisplay');
+            const originalPriceRow = document.getElementById('originalPriceRow');
+            const savingsRow = document.getElementById('savingsRow');
 
             if (totalItemsEl) totalItemsEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
             if (taxEl) taxEl.textContent = formatPrice(tax);
+
+            // Update dan show/hide elemen Total Hemat berdasarkan ada tidaknya savings
+            if (totalSavings > 0) {
+                if (savingsEl) savingsEl.textContent = '-' + formatPrice(totalSavings);
+                if (originalPriceEl) originalPriceEl.textContent = formatPrice(subtotalBeforeDiscount);
+                if (originalPriceRow) originalPriceRow.classList.remove('hidden');
+                if (savingsRow) savingsRow.classList.remove('hidden');
+            } else {
+                if (originalPriceRow) originalPriceRow.classList.add('hidden');
+                if (savingsRow) savingsRow.classList.add('hidden');
+            }
+
             if (grandTotalEl) {
                 grandTotalEl.textContent = formatPrice(grandTotal);
                 grandTotalEl.classList.add('price-animate');
@@ -743,25 +813,42 @@ include '../../components/users/head.php';
         }
 
         function updateSummaryFromAPI(data) {
-            if (data.subtotal !== undefined) {
-                const subtotalEl = document.getElementById('subtotalDisplay');
-                if (subtotalEl) subtotalEl.textContent = formatPrice(data.subtotal);
+            const subtotalEl = document.getElementById('subtotalDisplay');
+            const taxEl = document.getElementById('taxDisplay');
+            const grandTotalEl = document.getElementById('grandTotalDisplay');
+            const totalItemsEl = document.getElementById('totalItemsCount');
+            const savingsEl = document.getElementById('savingsDisplay');
+            const originalPriceEl = document.getElementById('originalPriceDisplay');
+            const originalPriceRow = document.getElementById('originalPriceRow');
+            const savingsRow = document.getElementById('savingsRow');
+
+            if (data.subtotal !== undefined && subtotalEl) {
+                subtotalEl.textContent = formatPrice(data.subtotal);
             }
-            if (data.tax !== undefined) {
-                const taxEl = document.getElementById('taxDisplay');
-                if (taxEl) taxEl.textContent = formatPrice(data.tax);
+            if (data.tax !== undefined && taxEl) {
+                taxEl.textContent = formatPrice(data.tax);
             }
-            if (data.grand_total !== undefined) {
-                const grandTotalEl = document.getElementById('grandTotalDisplay');
-                if (grandTotalEl) {
-                    grandTotalEl.textContent = formatPrice(data.grand_total);
-                    grandTotalEl.classList.add('price-animate');
-                    setTimeout(() => grandTotalEl.classList.remove('price-animate'), 400);
+            if (data.grand_total !== undefined && grandTotalEl) {
+                grandTotalEl.textContent = formatPrice(data.grand_total);
+                grandTotalEl.classList.add('price-animate');
+                setTimeout(() => grandTotalEl.classList.remove('price-animate'), 400);
+            }
+            if (data.total_items !== undefined && totalItemsEl) {
+                totalItemsEl.textContent = data.total_items;
+            }
+
+            if (data.total_savings !== undefined) {
+                if (data.total_savings > 0) {
+                    if (savingsEl) savingsEl.textContent = '-' + formatPrice(data.total_savings);
+                    if (originalPriceEl && data.subtotal_before_discount !== undefined) {
+                        originalPriceEl.textContent = formatPrice(data.subtotal_before_discount);
+                    }
+                    if (originalPriceRow) originalPriceRow.classList.remove('hidden');
+                    if (savingsRow) savingsRow.classList.remove('hidden');
+                } else {
+                    if (originalPriceRow) originalPriceRow.classList.add('hidden');
+                    if (savingsRow) savingsRow.classList.add('hidden');
                 }
-            }
-            if (data.total_items !== undefined) {
-                const totalItemsEl = document.getElementById('totalItemsCount');
-                if (totalItemsEl) totalItemsEl.textContent = data.total_items;
             }
         }
 

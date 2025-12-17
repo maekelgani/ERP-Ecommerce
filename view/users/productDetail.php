@@ -5,8 +5,10 @@ $isLoggedIn = \App\Auth\CustomerAuthMiddleware::isLoggedIn();
 $customer = \App\Auth\CustomerAuthMiddleware::getCurrentCustomer();
 
 use App\Helper\ProductLandingHelper;
+use App\Helper\DiscountHelper;
 
 $productHelper = new ProductLandingHelper();
+$discountHelper = new DiscountHelper();
 
 $productId = $_GET['id'] ?? '';
 $product = null;
@@ -37,7 +39,10 @@ if (empty($gambar)) {
 }
 
 $stockBadge = $productHelper->getStockBadge((int)($product['stok'] ?? 0), $product['status_produk'] ?? 'tersedia');
-$formattedPrice = $productHelper->formatPrice((float)$product['harga']);
+$hasDiscount = !empty($product['has_discount']);
+$formattedPrice = $productHelper->formatPrice((float)($product['harga_final'] ?? $product['harga']));
+$originalPrice = $productHelper->formatPrice((float)$product['harga']);
+$discountBadge = $product['discount_badge'] ?? '';
 
 $breadcrumbs = [
     ['label' => 'Home', 'url' => 'landingPage.php'],
@@ -97,6 +102,11 @@ include '../../components/users/head.php';
                         </div>
 
                         <div class="absolute top-4 left-4 flex flex-col gap-2">
+                            <?php if ($hasDiscount): ?>
+                                <span class="px-3 py-1.5 text-xs font-bold rounded-full bg-red-500 text-white">
+                                    <?= htmlspecialchars($discountBadge) ?>
+                                </span>
+                            <?php endif; ?>
                             <span class="px-3 py-1.5 text-xs font-semibold rounded-full <?= $stockBadge['class'] ?>">
                                 <?= $stockBadge['text'] ?>
                             </span>
@@ -166,8 +176,12 @@ include '../../components/users/head.php';
                     </div>
 
                     <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                        <div class="flex items-baseline gap-3">
+                        <div class="flex items-baseline gap-3 flex-wrap">
                             <span class="text-3xl md:text-4xl font-bold text-primary"><?= $formattedPrice ?></span>
+                            <?php if ($hasDiscount): ?>
+                                <span class="text-lg md:text-xl text-gray-400 line-through"><?= $originalPrice ?></span>
+                                <span class="px-2 py-1 text-xs font-bold rounded bg-red-100 text-red-600"><?= htmlspecialchars($discountBadge) ?></span>
+                            <?php endif; ?>
                         </div>
 
                         <div class="flex items-center gap-4 mt-3 text-sm">
@@ -453,6 +467,12 @@ include '../../components/users/head.php';
 
     <?php include '../../components/users/footer.php'; ?>
     <?php include '../../components/users/loginRequiredModal.php'; ?>
+    <script>
+        window.APP_CONFIG = {
+            baseUrl: '<?= rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/') ?>',
+            apiUrl: '<?= rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/') ?>/api'
+        };
+    </script>
     <script src="../../assets/js/users/product-actions.js"></script>
 
     <script>
@@ -490,12 +510,6 @@ include '../../components/users/head.php';
                 input.value = current - 1;
             }
         }
-    </script>
-    <script>
-        window.APP_CONFIG = {
-            baseUrl: '<?= rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/') ?>',
-            apiUrl: '<?= rtrim(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))), '/') ?>/api'
-        };
     </script>
 </body>
 

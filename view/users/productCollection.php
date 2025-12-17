@@ -6,6 +6,7 @@ $isLoggedIn = \App\Auth\CustomerAuthMiddleware::isLoggedIn();
 $customer = \App\Auth\CustomerAuthMiddleware::getCurrentCustomer();
 
 use App\Helper\ProductLandingHelper;
+use App\Helper\DiscountHelper;
 
 function buildQueryString($params)
 {
@@ -13,6 +14,7 @@ function buildQueryString($params)
 }
 
 $productHelper = new ProductLandingHelper();
+$discountHelper = new DiscountHelper();
 
 $categoryFilter = $_GET['category'] ?? '';
 $brandFilter = $_GET['brand'] ?? '';
@@ -33,7 +35,7 @@ if ($maxPrice) $filters['max_price'] = $maxPrice;
 if ($searchQuery) $filters['search'] = $searchQuery;
 
 $result = $productHelper->getAllProducts($filters, $sortBy, $currentPage, $perPage);
-$products = $result['products'];
+$products = $discountHelper->applyDiscountsToProducts($result['products']);
 $pagination = $result['pagination'];
 
 $categories = $productHelper->getAllCategories();
@@ -65,6 +67,7 @@ if ($categoryName) {
 }
 
 include '../../components/users/head.php';
+include '../../components/users/productCard.php';
 ?>
 
 <body class="w-full bg-gray-50 min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
@@ -271,75 +274,8 @@ include '../../components/users/head.php';
 
                     <?php if (!empty($products)): ?>
                         <ul class="grid gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            <?php foreach ($products as $index => $product):
-                                $imagePath = '';
-                                $gambar = $product['gambar'] ?? '';
-                                if (empty($gambar)) {
-                                    $imagePath = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23f3f4f6'/%3E%3Cpath d='M200 120c-44.18 0-80 35.82-80 80s35.82 80 80 80 80-35.82 80-80-35.82-80-80-80zm0 140c-33.14 0-60-26.86-60-60s26.86-60 60-60 60 26.86 60 60-26.86 60-60 60z' fill='%23d1d5db'/%3E%3Cpath d='M200 160c-22.09 0-40 17.91-40 40s17.91 40 40 40 40-17.91 40-40-17.91-40-40-40z' fill='%23d1d5db'/%3E%3C/svg%3E";
-                                } elseif (str_starts_with($gambar, 'http://') || str_starts_with($gambar, 'https://')) {
-                                    $imagePath = $gambar;
-                                } else {
-                                    $imagePath = '../../uploads/products/' . htmlspecialchars($gambar);
-                                }
-
-                                $stockBadge = $productHelper->getStockBadge((int)($product['stok'] ?? 0), $product['status_produk'] ?? 'tersedia');
-                                $formattedPrice = $productHelper->formatPrice((float)$product['harga']);
-                                $description = htmlspecialchars(substr($product['deskripsi_speksifikasi'] ?? '', 0, 100));
-                                $productName = htmlspecialchars($product['nama_product']);
-                            ?>
-                                <li class="group bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full overflow-hidden"
-                                    style="animation: fadeInUp 0.4s ease-out <?= $index * 0.05 ?>s both;">
-                                    <a href="productDetail.php?id=<?= urlencode($product['id_product']) ?>" class="block">
-                                        <div class="relative aspect-square overflow-hidden bg-gray-50">
-                                            <img src="<?= $imagePath ?>"
-                                                alt="<?= $productName ?>"
-                                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                loading="lazy"
-                                                onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 400 400%27%3E%3Crect width=%27400%27 height=%27400%27 fill=%27%23f3f4f6%27/%3E%3Cpath d=%27M200 120c-44.18 0-80 35.82-80 80s35.82 80 80 80 80-35.82 80-80-35.82-80-80-80zm0 140c-33.14 0-60-26.86-60-60s26.86-60 60-60 60 26.86 60 60-26.86 60-60 60z%27 fill=%27%23d1d5db%27/%3E%3Cpath d=%27M200 160c-22.09 0-40 17.91-40 40s17.91 40 40 40 40-17.91 40-40-17.91-40-40-40z%27 fill=%27%23d1d5db%27/%3E%3C/svg%3E'">
-                                            <?php if (!$stockBadge['available']): ?>
-                                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                                    <span class="bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold">Stok Habis</span>
-                                                </div>
-                                            <?php else: ?>
-                                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                    <span class="text-white text-sm font-medium px-4 py-2 bg-white/20 rounded-lg backdrop-blur-sm">Lihat Detail</span>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </a>
-                                    <div class="p-5 lg:p-6 flex flex-col justify-between flex-grow">
-                                        <div class="flex-grow">
-                                            <p class="text-primary font-bold text-xl"><?= $formattedPrice ?></p>
-                                            <a href="productDetail.php?id=<?= urlencode($product['id_product']) ?>">
-                                                <h3 class="mt-2 text-base font-semibold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors leading-snug"><?= $productName ?></h3>
-                                            </a>
-                                            <?php if (!empty($description)): ?>
-                                                <p class="mt-2.5 text-gray-500 text-sm line-clamp-2 leading-relaxed"><?= $description ?>...</p>
-                                            <?php endif; ?>
-                                        </div>
-                                        <div class="mt-4 flex gap-2">
-                                            <button class="w-10 flex-shrink-0 rounded-lg bg-gray-100 px-2.5 py-2.5 text-sm font-medium text-gray-700 transition-all hover:bg-red-50 hover:text-red-500 hover:shadow-sm"
-                                                onclick="event.preventDefault(); event.stopPropagation(); addToWishlist('<?= $product['id_product'] ?>')"
-                                                data-wishlist-product="<?= $product['id_product'] ?>">
-                                                <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                </svg>
-                                            </button>
-                                            <button class="w-10 flex-shrink-0 rounded-lg bg-gray-100 px-2.5 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:border-[#882426] hover:text-[#882426] <?= !$stockBadge['available'] ? 'opacity-50 cursor-not-allowed' : '' ?>"
-                                                <?= !$stockBadge['available'] ? 'disabled' : '' ?>
-                                                onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?= $product['id_product'] ?>')">
-                                                <svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                </svg>
-                                            </button>
-                                            <button type="button" class="flex-1 rounded-lg bg-primary px-3 py-2.5 text-sm font-medium text-white transition-all hover:bg-[#A14646] hover:shadow-md <?= !$stockBadge['available'] ? 'opacity-50 cursor-not-allowed' : '' ?>"
-                                                <?= !$stockBadge['available'] ? 'disabled' : '' ?>
-                                                onclick="event.preventDefault(); event.stopPropagation(); buyNow('<?= $product['id_product'] ?>')">
-                                                Beli Sekarang
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
+                            <?php foreach ($products as $product): ?>
+                                <?= renderProductCard($product, $productHelper) ?>
                             <?php endforeach; ?>
                         </ul>
 

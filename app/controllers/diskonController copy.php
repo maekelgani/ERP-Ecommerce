@@ -33,57 +33,6 @@ $diskonRepo = new DiskonRepository();
 $campaignRepo = new PromoCampaignRepository();
 $productRepo = new ProductRepository();
 
-/**
- * Menghitung status diskon berdasarkan logika waktu
- * 
- * PRIORITAS:
- * 1. Jika status = 'nonaktif' → TETAP nonaktif (manual override)
- * 2. Jika mulai_pada IS NULL → status = 'aktif' (promo langsung aktif)
- * 3. Jika mulai_pada <= now:
- *    - Jika selesai_pada IS NULL → status = 'aktif'
- *    - Jika now <= selesai_pada → status = 'aktif'
- *    - Jika now > selesai_pada → status = 'berakhir'
- * 4. Jika mulai_pada > now → status = 'terjadwal'
- * 
- * @param string|null $mulaiPada
- * @param string|null $selesaiPada
- * @param bool $isNonaktif - true jika checkbox nonaktif dicentang
- * @return string
- */
-function calculateDiscountStatus(?string $mulaiPada, ?string $selesaiPada, bool $isNonaktif = false): string
-{
-    if ($isNonaktif) {
-        return 'nonaktif';
-    }
-
-    $now = new DateTime('now', new DateTimeZone('Asia/Jakarta'));
-    $nowStr = $now->format('Y-m-d H:i');
-
-    if (empty($mulaiPada)) {
-        return 'aktif';
-    }
-
-    $mulai = new DateTime($mulaiPada, new DateTimeZone('Asia/Jakarta'));
-    $mulaiStr = $mulai->format('Y-m-d H:i');
-
-    if ($mulaiStr <= $nowStr) {
-        if (empty($selesaiPada)) {
-            return 'aktif';
-        }
-
-        $selesai = new DateTime($selesaiPada, new DateTimeZone('Asia/Jakarta'));
-        $selesaiStr = $selesai->format('Y-m-d H:i');
-
-        if ($nowStr <= $selesaiStr) {
-            return 'aktif';
-        } else {
-            return 'berakhir';
-        }
-    }
-
-    return 'terjadwal';
-}
-
 try {
     switch ($action) {
         case 'create':
@@ -93,12 +42,6 @@ try {
 
             error_log('Create diskon - POST data: ' . json_encode($_POST));
 
-            $mulaiPada = !empty($_POST['mulai_pada']) ? $_POST['mulai_pada'] : null;
-            $selesaiPada = !empty($_POST['selesai_pada']) ? $_POST['selesai_pada'] : null;
-            $isNonaktif = ($_POST['status'] ?? '') === 'nonaktif';
-
-            $calculatedStatus = calculateDiscountStatus($mulaiPada, $selesaiPada, $isNonaktif);
-
             $data = [
                 'id_produk' => $_POST['id_produk'] ?? null,
                 'id_kampanye' => !empty($_POST['id_kampanye']) ? $_POST['id_kampanye'] : null,
@@ -107,12 +50,12 @@ try {
                 'nilai' => $_POST['nilai'] ?? 0,
                 'stok_promo' => !empty($_POST['stok_promo']) ? $_POST['stok_promo'] : null,
                 'maks_qty_per_pengguna' => !empty($_POST['maks_qty_per_pengguna']) ? $_POST['maks_qty_per_pengguna'] : null,
-                'mulai_pada' => $mulaiPada,
-                'selesai_pada' => $selesaiPada,
-                'status' => $calculatedStatus
+                'mulai_pada' => !empty($_POST['mulai_pada']) ? $_POST['mulai_pada'] : null,
+                'selesai_pada' => !empty($_POST['selesai_pada']) ? $_POST['selesai_pada'] : null,
+                'status' => $_POST['status'] ?? 'terjadwal'
             ];
 
-            error_log('Create diskon - Processed data (with calculated status): ' . json_encode($data));
+            error_log('Create diskon - Processed data: ' . json_encode($data));
 
             $result = $diskonRepo->create($data);
             error_log('Create diskon - Result: ' . json_encode($result));
@@ -129,12 +72,6 @@ try {
                 throw new Exception('ID diskon tidak valid');
             }
 
-            $mulaiPada = !empty($_POST['mulai_pada']) ? $_POST['mulai_pada'] : null;
-            $selesaiPada = !empty($_POST['selesai_pada']) ? $_POST['selesai_pada'] : null;
-            $isNonaktif = ($_POST['status'] ?? '') === 'nonaktif';
-
-            $calculatedStatus = calculateDiscountStatus($mulaiPada, $selesaiPada, $isNonaktif);
-
             $data = [
                 'id_produk' => $_POST['id_produk'] ?? null,
                 'id_kampanye' => $_POST['id_kampanye'] ?? null,
@@ -143,12 +80,10 @@ try {
                 'nilai' => $_POST['nilai'] ?? 0,
                 'stok_promo' => $_POST['stok_promo'] ?? null,
                 'maks_qty_per_pengguna' => $_POST['maks_qty_per_pengguna'] ?? null,
-                'mulai_pada' => $mulaiPada,
-                'selesai_pada' => $selesaiPada,
-                'status' => $calculatedStatus
+                'mulai_pada' => $_POST['mulai_pada'] ?? null,
+                'selesai_pada' => $_POST['selesai_pada'] ?? null,
+                'status' => $_POST['status'] ?? 'terjadwal'
             ];
-
-            error_log('Update diskon - Processed data (with calculated status): ' . json_encode($data));
 
             $result = $diskonRepo->update($id, $data);
             echo json_encode($result);
@@ -186,12 +121,6 @@ try {
                 throw new Exception('Pilih minimal satu produk');
             }
 
-            $mulaiPada = !empty($_POST['mulai_pada']) ? $_POST['mulai_pada'] : null;
-            $selesaiPada = !empty($_POST['selesai_pada']) ? $_POST['selesai_pada'] : null;
-            $isNonaktif = ($_POST['status'] ?? '') === 'nonaktif';
-
-            $calculatedStatus = calculateDiscountStatus($mulaiPada, $selesaiPada, $isNonaktif);
-
             $discountData = [
                 'id_kampanye' => !empty($_POST['id_kampanye']) ? $_POST['id_kampanye'] : null,
                 'label' => $_POST['label'] ?? '',
@@ -199,12 +128,12 @@ try {
                 'nilai' => $_POST['nilai'] ?? 0,
                 'stok_promo' => !empty($_POST['stok_promo']) ? $_POST['stok_promo'] : null,
                 'maks_qty_per_pengguna' => !empty($_POST['maks_qty_per_pengguna']) ? $_POST['maks_qty_per_pengguna'] : null,
-                'mulai_pada' => $mulaiPada,
-                'selesai_pada' => $selesaiPada,
-                'status' => $calculatedStatus
+                'mulai_pada' => !empty($_POST['mulai_pada']) ? $_POST['mulai_pada'] : null,
+                'selesai_pada' => !empty($_POST['selesai_pada']) ? $_POST['selesai_pada'] : null,
+                'status' => $_POST['status'] ?? 'terjadwal'
             ];
 
-            error_log('Mass create diskon - Discount data (with calculated status): ' . json_encode($discountData));
+            error_log('Mass create diskon - Discount data: ' . json_encode($discountData));
 
             $result = $diskonRepo->massCreate($productIds, $discountData);
             error_log('Mass create diskon - Result: ' . json_encode($result));
@@ -226,8 +155,6 @@ try {
             break;
 
         case 'list':
-            $diskonRepo->syncAllStatuses();
-
             $filters = [
                 'status' => $_GET['status'] ?? '',
                 'jenis' => $_GET['jenis'] ?? '',
@@ -237,41 +164,8 @@ try {
                 'sort' => $_GET['sort'] ?? 'newest'
             ];
 
-            $diskons = $diskonRepo->getAllWithComputedStatus($filters);
+            $diskons = $diskonRepo->getAll($filters);
             echo json_encode(['success' => true, 'data' => $diskons]);
-            break;
-
-        case 'sync_statuses':
-            if (!PermissionHelper::hasPermission('manage_product_discounts') && !PermissionHelper::isSuperAdmin()) {
-                throw new Exception('Anda tidak memiliki akses untuk mengelola diskon');
-            }
-
-            $result = $diskonRepo->syncAllStatuses();
-            echo json_encode([
-                'success' => true,
-                'message' => "Status diskon berhasil disinkronkan. {$result['updated']} diskon diperbarui."
-            ]);
-            break;
-
-        case 'toggle_status':
-            if (!PermissionHelper::hasPermission('manage_product_discounts') && !PermissionHelper::isSuperAdmin()) {
-                throw new Exception('Anda tidak memiliki akses untuk mengelola diskon');
-            }
-
-            $id = $_POST['id'] ?? '';
-            $newStatus = $_POST['status'] ?? '';
-
-            if (empty($id)) {
-                throw new Exception('ID diskon tidak valid');
-            }
-
-            $existing = $diskonRepo->getById($id);
-            if (!$existing) {
-                throw new Exception('Diskon tidak ditemukan');
-            }
-
-            $result = $diskonRepo->updateStatus($id, $newStatus);
-            echo json_encode($result);
             break;
 
         case 'get_by_product':

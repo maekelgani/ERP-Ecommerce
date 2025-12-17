@@ -189,29 +189,7 @@ function buyNow(productId, quantity = 1) {
     const qtyInput = document.getElementById('quantity');
     const qty = qtyInput ? parseInt(qtyInput.value) : quantity;
 
-    fetch(getApiUrl('cart/add.php'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product_id: productId, quantity: qty })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.href = 'productCheckout.php?from=buynow&product=' + productId;
-        } else {
-            if (data.require_login) {
-                if (typeof showLoginRequiredModal === 'function') {
-                    showLoginRequiredModal();
-                }
-            } else {
-                showNotification(data.message, 'error');
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Terjadi kesalahan', 'error');
-    });
+    window.location.href = 'productCheckout.php?from=buynow&product=' + encodeURIComponent(productId) + '&qty=' + qty;
 }
 
 function updateCartCount(count, animate = true) {

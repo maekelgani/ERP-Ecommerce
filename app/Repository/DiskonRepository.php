@@ -9,6 +9,7 @@ class DiskonRepository
     private \PDO $db;
     private const ID_PREFIX = 'DSK';
     private const ID_LENGTH = 10;
+    private const TABLE_NAME = 'promo_diskon';
 
     public function __construct()
     {
@@ -19,7 +20,7 @@ class DiskonRepository
     {
         $sql = "SELECT d.*, p.nama_product, p.harga as harga_produk, p.gambar as gambar_produk,
                        pk.judul as nama_kampanye
-                FROM diskon d 
+                FROM " . self::TABLE_NAME . " d 
                 LEFT JOIN products p ON d.id_produk = p.id_product
                 LEFT JOIN promo_kampanye pk ON d.id_kampanye = pk.id_kampanye
                 WHERE 1=1";
@@ -47,7 +48,7 @@ class DiskonRepository
 
         if (!empty($filters['search'])) {
             $search = '%' . strtolower($filters['search']) . '%';
-            $sql .= " AND (LOWER(d.label) LIKE :search OR LOWER(p.nama_product) LIKE :search2)";
+            $sql .= " AND (LOWER(d.label) ILIKE :search OR LOWER(p.nama_product) ILIKE :search2)";
             $params['search'] = $search;
             $params['search2'] = $search;
         }
@@ -64,39 +65,61 @@ class DiskonRepository
                 $sql .= " ORDER BY d.dibuat_pada DESC";
         }
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll();
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::getAll - ' . $e->getMessage());
+            return [];
+        }
     }
 
     public function getById(string $id): ?array
     {
-        $stmt = $this->db->prepare("
-            SELECT d.*, p.nama_product, p.harga as harga_produk, p.gambar as gambar_produk,
-                   pk.judul as nama_kampanye
-            FROM diskon d 
-            LEFT JOIN products p ON d.id_produk = p.id_product
-            LEFT JOIN promo_kampanye pk ON d.id_kampanye = pk.id_kampanye
-            WHERE d.id_diskon = :id
-        ");
-        $stmt->execute(['id' => $id]);
-        $result = $stmt->fetch();
-        return $result ?: null;
+        try {
+            $stmt = $this->db->prepare("
+                SELECT d.*, p.nama_product, p.harga as harga_produk, p.gambar as gambar_produk,
+                       pk.judul as nama_kampanye
+                FROM " . self::TABLE_NAME . " d 
+                LEFT JOIN products p ON d.id_produk = p.id_product
+                LEFT JOIN promo_kampanye pk ON d.id_kampanye = pk.id_kampanye
+                WHERE d.id_diskon = :id
+            ");
+            $stmt->execute(['id' => $id]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $result ?: null;
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::getById - ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function getActiveDiscountsByProduct(string $idProduct): array
     {
-        $stmt = $this->db->prepare("
-            SELECT d.* FROM diskon d 
-            WHERE d.id_produk = :id_produk 
-              AND d.status = 'aktif'
-              AND (d.mulai_pada IS NULL OR NOW() >= d.mulai_pada)
-              AND (d.selesai_pada IS NULL OR NOW() <= d.selesai_pada)
-              AND (d.stok_promo IS NULL OR d.stok_terpakai < d.stok_promo)
-            ORDER BY d.nilai DESC
-        ");
-        $stmt->execute(['id_produk' => $idProduct]);
-        return $stmt->fetchAll();
+        try {
+            // Gunakan waktu PHP (sudah di-set ke Asia/Jakarta) bukan NOW() PostgreSQL
+            $currentTime = date('Y-m-d H:i:s');
+
+            $stmt = $this->db->prepare("
+                SELECT d.* FROM " . self::TABLE_NAME . " d 
+                WHERE d.id_produk = :id_produk 
+                  AND d.status = 'aktif'
+                  AND (d.mulai_pada IS NULL OR :current_time >= d.mulai_pada)
+                  AND (d.selesai_pada IS NULL OR :current_time2 <= d.selesai_pada)
+                  AND (d.stok_promo IS NULL OR d.stok_terpakai < d.stok_promo)
+                ORDER BY d.nilai DESC
+            ");
+            $stmt->execute([
+                'id_produk' => $idProduct,
+                'current_time' => $currentTime,
+                'current_time2' => $currentTime
+            ]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::getActiveDiscountsByProduct - ' . $e->getMessage());
+            return [];
+        }
     }
 
     public function getBestDiscountForProduct(string $idProduct): ?array
@@ -122,23 +145,28 @@ class DiskonRepository
 
     public function isStockAvailable(string $idDiskon): bool
     {
-        $stmt = $this->db->prepare("
-            SELECT stok_promo, stok_terpakai 
-            FROM diskon 
-            WHERE id_diskon = :id
-        ");
-        $stmt->execute(['id' => $idDiskon]);
-        $result = $stmt->fetch();
+        try {
+            $stmt = $this->db->prepare("
+                SELECT stok_promo, stok_terpakai 
+                FROM " . self::TABLE_NAME . " 
+                WHERE id_diskon = :id
+            ");
+            $stmt->execute(['id' => $idDiskon]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        if (!$result) {
+            if (!$result) {
+                return false;
+            }
+
+            if ($result['stok_promo'] === null) {
+                return true;
+            }
+
+            return $result['stok_terpakai'] < $result['stok_promo'];
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::isStockAvailable - ' . $e->getMessage());
             return false;
         }
-
-        if ($result['stok_promo'] === null) {
-            return true;
-        }
-
-        return $result['stok_terpakai'] < $result['stok_promo'];
     }
 
     public function create(array $data): array
@@ -163,16 +191,22 @@ class DiskonRepository
         $mulaiPada = !empty($data['mulai_pada']) ? $this->formatDatetime($data['mulai_pada']) : null;
         $selesaiPada = !empty($data['selesai_pada']) ? $this->formatDatetime($data['selesai_pada']) : null;
 
+        if (!empty($data['status']) && $data['status'] === 'nonaktif') {
+            $status = 'nonaktif';
+        } else {
+            $status = $this->determineInitialStatus($mulaiPada, $selesaiPada);
+        }
+
         try {
             $stmt = $this->db->prepare("
-                INSERT INTO diskon (
+                INSERT INTO " . self::TABLE_NAME . " (
                     id_diskon, id_produk, id_kampanye, label, harga_awal, harga_diskon,
                     jenis, nilai, stok_promo, maks_qty_per_pengguna,
-                    mulai_pada, selesai_pada, status
+                    mulai_pada, selesai_pada, status, stok_terpakai
                 ) VALUES (
                     :id, :id_produk, :id_kampanye, :label, :harga_awal, :harga_diskon,
                     :jenis, :nilai, :stok_promo, :maks_qty,
-                    :mulai_pada, :selesai_pada, :status
+                    :mulai_pada, :selesai_pada, :status, 0
                 )
             ");
 
@@ -189,7 +223,7 @@ class DiskonRepository
                 'maks_qty' => !empty($data['maks_qty_per_pengguna']) ? (int)$data['maks_qty_per_pengguna'] : null,
                 'mulai_pada' => $mulaiPada,
                 'selesai_pada' => $selesaiPada,
-                'status' => !empty($data['status']) ? $data['status'] : 'terjadwal'
+                'status' => $status
             ]);
 
             if ($success && $stmt->rowCount() > 0) {
@@ -203,7 +237,7 @@ class DiskonRepository
             return ['success' => false, 'message' => 'Gagal menambahkan diskon'];
         } catch (\PDOException $e) {
             error_log('DiskonRepository::create - ' . $e->getMessage());
-            return ['success' => false, 'message' => 'Terjadi kesalahan saat menambahkan diskon. Silakan coba lagi.'];
+            return ['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()];
         }
     }
 
@@ -232,9 +266,15 @@ class DiskonRepository
         $mulaiPada = !empty($data['mulai_pada']) ? $this->formatDatetime($data['mulai_pada']) : null;
         $selesaiPada = !empty($data['selesai_pada']) ? $this->formatDatetime($data['selesai_pada']) : null;
 
+        if (!empty($data['status']) && $data['status'] === 'nonaktif') {
+            $status = 'nonaktif';
+        } else {
+            $status = $this->determineInitialStatus($mulaiPada, $selesaiPada);
+        }
+
         try {
             $stmt = $this->db->prepare("
-                UPDATE diskon SET
+                UPDATE " . self::TABLE_NAME . " SET
                     id_produk = :id_produk,
                     id_kampanye = :id_kampanye,
                     label = :label,
@@ -246,7 +286,8 @@ class DiskonRepository
                     maks_qty_per_pengguna = :maks_qty,
                     mulai_pada = :mulai_pada,
                     selesai_pada = :selesai_pada,
-                    status = :status
+                    status = :status,
+                    diperbarui_pada = CURRENT_TIMESTAMP
                 WHERE id_diskon = :id
             ");
 
@@ -263,7 +304,7 @@ class DiskonRepository
                 'maks_qty' => !empty($data['maks_qty_per_pengguna']) ? (int)$data['maks_qty_per_pengguna'] : null,
                 'mulai_pada' => $mulaiPada,
                 'selesai_pada' => $selesaiPada,
-                'status' => !empty($data['status']) ? $data['status'] : 'terjadwal'
+                'status' => $status
             ]);
 
             if ($success) {
@@ -273,7 +314,7 @@ class DiskonRepository
             return ['success' => false, 'message' => 'Gagal memperbarui diskon'];
         } catch (\PDOException $e) {
             error_log('DiskonRepository::update - ' . $e->getMessage());
-            return ['success' => false, 'message' => 'Terjadi kesalahan saat memperbarui diskon. Silakan coba lagi.'];
+            return ['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()];
         }
     }
 
@@ -284,12 +325,12 @@ class DiskonRepository
             return ['success' => false, 'message' => 'Diskon tidak ditemukan'];
         }
 
-        if ($existing['stok_terpakai'] > 0) {
+        if (isset($existing['stok_terpakai']) && $existing['stok_terpakai'] > 0) {
             return ['success' => false, 'message' => 'Diskon tidak dapat dihapus karena sudah pernah digunakan'];
         }
 
         try {
-            $stmt = $this->db->prepare("DELETE FROM diskon WHERE id_diskon = :id");
+            $stmt = $this->db->prepare("DELETE FROM " . self::TABLE_NAME . " WHERE id_diskon = :id");
             $success = $stmt->execute(['id' => $id]);
 
             if ($success && $stmt->rowCount() > 0) {
@@ -299,7 +340,7 @@ class DiskonRepository
             return ['success' => false, 'message' => 'Gagal menghapus diskon'];
         } catch (\PDOException $e) {
             error_log('DiskonRepository::delete - ' . $e->getMessage());
-            return ['success' => false, 'message' => 'Terjadi kesalahan saat menghapus diskon. Silakan coba lagi.'];
+            return ['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()];
         }
     }
 
@@ -310,12 +351,12 @@ class DiskonRepository
 
             $stmt = $this->db->prepare("
                 SELECT stok_promo, stok_terpakai 
-                FROM diskon 
+                FROM " . self::TABLE_NAME . " 
                 WHERE id_diskon = :id 
                 FOR UPDATE
             ");
             $stmt->execute(['id' => $id]);
-            $discount = $stmt->fetch();
+            $discount = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$discount) {
                 $this->db->rollBack();
@@ -328,7 +369,7 @@ class DiskonRepository
             }
 
             $updateStmt = $this->db->prepare("
-                UPDATE diskon 
+                UPDATE " . self::TABLE_NAME . " 
                 SET stok_terpakai = stok_terpakai + 1 
                 WHERE id_diskon = :id
             ");
@@ -338,6 +379,7 @@ class DiskonRepository
             return true;
         } catch (\PDOException $e) {
             $this->db->rollBack();
+            error_log('DiskonRepository::decrementStock - ' . $e->getMessage());
             return false;
         }
     }
@@ -371,15 +413,25 @@ class DiskonRepository
 
     public function count(): int
     {
-        $stmt = $this->db->query("SELECT COUNT(*) as total FROM diskon");
-        return (int) $stmt->fetch()['total'];
+        try {
+            $stmt = $this->db->query("SELECT COUNT(*) as total FROM " . self::TABLE_NAME);
+            return (int) $stmt->fetch(\PDO::FETCH_ASSOC)['total'];
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::count - ' . $e->getMessage());
+            return 0;
+        }
     }
 
     public function countByStatus(string $status): int
     {
-        $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM diskon WHERE status = :status");
-        $stmt->execute(['status' => $status]);
-        return (int) $stmt->fetch()['total'];
+        try {
+            $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM " . self::TABLE_NAME . " WHERE status = :status");
+            $stmt->execute(['status' => $status]);
+            return (int) $stmt->fetch(\PDO::FETCH_ASSOC)['total'];
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::countByStatus - ' . $e->getMessage());
+            return 0;
+        }
     }
 
     public function getStatusInfo(string $status): array
@@ -391,6 +443,171 @@ class DiskonRepository
             'nonaktif' => ['label' => 'Nonaktif', 'class' => 'bg-gray-100 text-gray-600', 'dot_class' => 'bg-gray-400']
         ];
         return $statusMap[$status] ?? $statusMap['terjadwal'];
+    }
+
+    public function computeStatus(?string $mulaiPada, ?string $selesaiPada, string $currentStatus = 'terjadwal'): string
+    {
+        // 1. Status nonaktif adalah manual override - tidak berubah otomatis
+        if ($currentStatus === 'nonaktif') {
+            return 'nonaktif';
+        }
+
+        // Gunakan presisi menit (set detik ke 0)
+        $now = new \DateTime();
+        $now->setTime((int)$now->format('H'), (int)$now->format('i'), 0);
+
+        // 2. Jika mulai_pada IS NULL → status = 'aktif' (promo langsung aktif)
+        if (empty($mulaiPada)) {
+            // Cek apakah sudah berakhir
+            if (!empty($selesaiPada)) {
+                $endTime = new \DateTime($selesaiPada);
+                $endTime->setTime((int)$endTime->format('H'), (int)$endTime->format('i'), 0);
+                if ($now > $endTime) {
+                    return 'berakhir';
+                }
+            }
+            return 'aktif';
+        }
+
+        $startTime = new \DateTime($mulaiPada);
+        $startTime->setTime((int)$startTime->format('H'), (int)$startTime->format('i'), 0);
+
+        // 3. Jika mulai_pada <= now
+        if ($now >= $startTime) {
+            // 3a. Jika selesai_pada IS NULL → status = 'aktif'
+            if (empty($selesaiPada)) {
+                return 'aktif';
+            }
+
+            $endTime = new \DateTime($selesaiPada);
+            $endTime->setTime((int)$endTime->format('H'), (int)$endTime->format('i'), 0);
+
+            // 3b. Jika now <= selesai_pada → status = 'aktif'
+            if ($now <= $endTime) {
+                return 'aktif';
+            }
+
+            // 3c. Jika now > selesai_pada → status = 'berakhir'
+            return 'berakhir';
+        }
+
+        // 4. Jika mulai_pada > now → status = 'terjadwal'
+        // PENTING: Promo yang sudah 'aktif' atau 'berakhir' TIDAK boleh kembali ke 'terjadwal'
+        // kecuali di-edit manual (ubah mulai_pada)
+        if ($currentStatus === 'aktif' || $currentStatus === 'berakhir') {
+            // Jika selesai_pada sudah lewat, tetap berakhir
+            if (!empty($selesaiPada)) {
+                $endTime = new \DateTime($selesaiPada);
+                $endTime->setTime((int)$endTime->format('H'), (int)$endTime->format('i'), 0);
+                if ($now > $endTime) {
+                    return 'berakhir';
+                }
+            }
+            // Jika tidak, kembalikan status saat ini (aktif/berakhir tetap)
+            return $currentStatus;
+        }
+
+        return 'terjadwal';
+    }
+
+    public function determineInitialStatus(?string $mulaiPada, ?string $selesaiPada): string
+    {
+        // Gunakan presisi menit (set detik ke 0)
+        $now = new \DateTime();
+        $now->setTime((int)$now->format('H'), (int)$now->format('i'), 0);
+
+        if (!empty($selesaiPada)) {
+            $endTime = new \DateTime($selesaiPada);
+            $endTime->setTime((int)$endTime->format('H'), (int)$endTime->format('i'), 0);
+            if ($now > $endTime) {
+                return 'berakhir';
+            }
+        }
+
+        if (empty($mulaiPada)) {
+            return 'aktif';
+        }
+
+        $startTime = new \DateTime($mulaiPada);
+        $startTime->setTime((int)$startTime->format('H'), (int)$startTime->format('i'), 0);
+
+        if ($now >= $startTime) {
+            return 'aktif';
+        }
+
+        return 'terjadwal';
+    }
+
+    public function getAllWithComputedStatus(array $filters = []): array
+    {
+        $discounts = $this->getAll($filters);
+
+        foreach ($discounts as &$discount) {
+            $discount['computed_status'] = $this->computeStatus(
+                $discount['mulai_pada'],
+                $discount['selesai_pada'],
+                $discount['status']
+            );
+        }
+
+        return $discounts;
+    }
+
+    public function syncAllStatuses(): array
+    {
+        $updated = 0;
+        $errors = [];
+
+        try {
+            $stmt = $this->db->query("SELECT id_diskon, mulai_pada, selesai_pada, status FROM " . self::TABLE_NAME . " WHERE status NOT IN ('nonaktif')");
+            $discounts = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            foreach ($discounts as $discount) {
+                $computedStatus = $this->computeStatus(
+                    $discount['mulai_pada'],
+                    $discount['selesai_pada'],
+                    $discount['status']
+                );
+
+                if ($computedStatus !== $discount['status']) {
+                    $updateStmt = $this->db->prepare("UPDATE " . self::TABLE_NAME . " SET status = :status, diperbarui_pada = CURRENT_TIMESTAMP WHERE id_diskon = :id");
+                    $updateStmt->execute(['status' => $computedStatus, 'id' => $discount['id_diskon']]);
+                    $updated++;
+                }
+            }
+
+            return ['success' => true, 'updated' => $updated];
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::syncAllStatuses - ' . $e->getMessage());
+            return ['success' => false, 'message' => $e->getMessage(), 'updated' => $updated];
+        }
+    }
+
+    public function updateStatus(string $id, string $newStatus): array
+    {
+        $validStatuses = ['terjadwal', 'aktif', 'berakhir', 'nonaktif'];
+        if (!in_array($newStatus, $validStatuses)) {
+            return ['success' => false, 'message' => 'Status tidak valid'];
+        }
+
+        try {
+            $existing = $this->getById($id);
+            if (!$existing) {
+                return ['success' => false, 'message' => 'Diskon tidak ditemukan'];
+            }
+
+            if ($newStatus === 'aktif' && $existing['status'] === 'nonaktif') {
+                $newStatus = $this->determineInitialStatus($existing['mulai_pada'], $existing['selesai_pada']);
+            }
+
+            $stmt = $this->db->prepare("UPDATE " . self::TABLE_NAME . " SET status = :status, diperbarui_pada = CURRENT_TIMESTAMP WHERE id_diskon = :id");
+            $stmt->execute(['status' => $newStatus, 'id' => $id]);
+
+            return ['success' => true, 'message' => 'Status berhasil diperbarui', 'new_status' => $newStatus];
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::updateStatus - ' . $e->getMessage());
+            return ['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()];
+        }
     }
 
     private function validateData(array $data): array
@@ -419,24 +636,41 @@ class DiskonRepository
 
     private function generateId(): string
     {
-        $stmt = $this->db->query("SELECT id_diskon FROM diskon ORDER BY id_diskon DESC LIMIT 1");
-        $last = $stmt->fetch();
+        $maxAttempts = 10;
+        $attempt = 0;
 
-        if ($last) {
-            $num = (int) substr($last['id_diskon'], strlen(self::ID_PREFIX)) + 1;
-        } else {
-            $num = 1;
-        }
+        do {
+            // Generate random hex string (8 characters) with prefix DSK
+            $randomHex = strtoupper(bin2hex(random_bytes(4)));
+            $newId = self::ID_PREFIX . $randomHex;
 
-        return self::ID_PREFIX . str_pad($num, self::ID_LENGTH, '0', STR_PAD_LEFT);
+            // Check if ID already exists
+            try {
+                $stmt = $this->db->prepare("SELECT COUNT(*) FROM " . self::TABLE_NAME . " WHERE id_diskon = :id");
+                $stmt->execute(['id' => $newId]);
+                $exists = (int) $stmt->fetchColumn() > 0;
+            } catch (\PDOException $e) {
+                error_log('DiskonRepository::generateId - Check error: ' . $e->getMessage());
+                $exists = false; // Assume not exists if check fails
+            }
+
+            $attempt++;
+        } while ($exists && $attempt < $maxAttempts);
+
+        return $newId;
     }
 
     private function getProductPrice(string $productId): ?float
     {
-        $stmt = $this->db->prepare("SELECT harga FROM products WHERE id_product = :id");
-        $stmt->execute(['id' => $productId]);
-        $result = $stmt->fetch();
-        return $result ? (float)$result['harga'] : null;
+        try {
+            $stmt = $this->db->prepare("SELECT harga FROM products WHERE id_product = :id");
+            $stmt->execute(['id' => $productId]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $result ? (float)$result['harga'] : null;
+        } catch (\PDOException $e) {
+            error_log('DiskonRepository::getProductPrice - ' . $e->getMessage());
+            return null;
+        }
     }
 
     private function calculateFinalPrice(float $originalPrice, string $jenis, float $nilai): float
@@ -465,13 +699,13 @@ class DiskonRepository
         if (empty($datetime)) {
             return null;
         }
-        
+
         $datetime = str_replace('T', ' ', $datetime);
-        
+
         if (strlen($datetime) === 16) {
             $datetime .= ':00';
         }
-        
+
         return $datetime;
     }
 }

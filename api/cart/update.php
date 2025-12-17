@@ -4,6 +4,7 @@ header('Cache-Control: no-cache, must-revalidate');
 require_once __DIR__ . '/../../config/config.php';
 
 use App\Auth\CustomerAuthMiddleware;
+use App\Helper\DiscountHelper;
 
 $response = ['success' => false, 'message' => ''];
 
@@ -31,15 +32,12 @@ try {
 
     $customerId = CustomerAuthMiddleware::getCustomerId();
     $db = \App\Database\DatabaseConnection::getInstance()->getConnection();
+    $discountHelper = new DiscountHelper();
 
     $stmtCart = $db->prepare("
-        SELECT c.id_cart, c.id_product, c.jumlah, p.stok, p.status_produk, p.harga,
-               COALESCE(d.harga_setelah_diskon, p.harga) as harga_final
+        SELECT c.id_cart, c.id_product, c.jumlah, p.stok, p.status_produk, p.harga
         FROM cart c 
         JOIN products p ON c.id_product = p.id_product 
-        LEFT JOIN diskon d ON p.id_product = d.id_product 
-            AND d.status = 'aktif' 
-            AND NOW() BETWEEN d.tanggal_mulai AND d.tanggal_berakhir
         WHERE c.id_cart = :cart_id AND c.id_customer = :customer_id
     ");
     $stmtCart->execute([':cart_id' => $cartId, ':customer_id' => $customerId]);
@@ -53,6 +51,15 @@ try {
         throw new Exception('Produk tidak tersedia');
     }
 
+    $discount = $discountHelper->getActiveDiscountForProduct($cart['id_product']);
+    $hargaFinal = $cart['harga'];
+    $savingsPerItem = 0;
+
+    if ($discount) {
+        $hargaFinal = $discountHelper->calculateDiscountedPrice($cart['harga'], $discount);
+        $savingsPerItem = $cart['harga'] - $hargaFinal;
+    }
+
     $adjusted = false;
     if ($quantity > $cart['stok']) {
         $quantity = $cart['stok'];
@@ -60,28 +67,48 @@ try {
     }
 
     $stmtUpdate = $db->prepare("UPDATE cart SET jumlah = :qty, harga_satuan = :harga, tgl_diubah = NOW() WHERE id_cart = :cart_id");
-    $stmtUpdate->execute([':qty' => $quantity, ':harga' => $cart['harga_final'], ':cart_id' => $cartId]);
+    $stmtUpdate->execute([':qty' => $quantity, ':harga' => $hargaFinal, ':cart_id' => $cartId]);
 
-    $itemTotal = $cart['harga_final'] * $quantity;
+    $itemTotal = $hargaFinal * $quantity;
+    $itemSavings = $savingsPerItem * $quantity;
 
-    $stmtTotals = $db->prepare("
-        SELECT 
-            SUM(COALESCE(d.harga_setelah_diskon, p.harga) * c.jumlah) as subtotal,
-            SUM(c.jumlah) as total_items,
-            COUNT(*) as cart_count
+    $stmtProducts = $db->prepare("
+        SELECT c.id_product, c.jumlah, p.harga
         FROM cart c
         JOIN products p ON c.id_product = p.id_product
-        LEFT JOIN diskon d ON p.id_product = d.id_product 
-            AND d.status = 'aktif' 
-            AND NOW() BETWEEN d.tanggal_mulai AND d.tanggal_berakhir
         WHERE c.id_customer = :customer_id
             AND p.stok > 0 
             AND p.status_produk NOT IN ('habis', 'nonaktif')
     ");
-    $stmtTotals->execute([':customer_id' => $customerId]);
-    $totals = $stmtTotals->fetch(PDO::FETCH_ASSOC);
+    $stmtProducts->execute([':customer_id' => $customerId]);
+    $cartItems = $stmtProducts->fetchAll(PDO::FETCH_ASSOC);
 
-    $subtotal = (float)($totals['subtotal'] ?? 0);
+    $productIds = array_column($cartItems, 'id_product');
+    $activeDiscounts = $discountHelper->getActiveDiscountsForProducts($productIds);
+
+    $subtotal = 0;
+    $subtotalBeforeDiscount = 0;
+    $totalSavings = 0;
+    $totalItems = 0;
+
+    foreach ($cartItems as $item) {
+        $productId = $item['id_product'];
+        $qty = (int)$item['jumlah'];
+        $originalPrice = (float)$item['harga'];
+
+        $itemDiscount = $activeDiscounts[$productId] ?? null;
+        $finalPrice = $originalPrice;
+
+        if ($itemDiscount) {
+            $finalPrice = $discountHelper->calculateDiscountedPrice($originalPrice, $itemDiscount);
+        }
+
+        $subtotal += $finalPrice * $qty;
+        $subtotalBeforeDiscount += $originalPrice * $qty;
+        $totalSavings += ($originalPrice - $finalPrice) * $qty;
+        $totalItems += $qty;
+    }
+
     $tax = $subtotal * 0.11;
     $grandTotal = $subtotal + $tax;
 
@@ -90,13 +117,18 @@ try {
     $response['adjusted'] = $adjusted;
     $response['quantity'] = $quantity;
     $response['item_total'] = $itemTotal;
-    $response['price'] = $cart['harga_final'];
+    $response['item_savings'] = $itemSavings;
+    $response['price'] = $hargaFinal;
+    $response['original_price'] = $cart['harga'];
+    $response['savings_per_item'] = $savingsPerItem;
     $response['max_stock'] = $cart['stok'];
     $response['subtotal'] = $subtotal;
+    $response['subtotal_before_discount'] = $subtotalBeforeDiscount;
+    $response['total_savings'] = $totalSavings;
     $response['tax'] = $tax;
     $response['grand_total'] = $grandTotal;
-    $response['total_items'] = (int)($totals['total_items'] ?? 0);
-    $response['cart_count'] = (int)($totals['cart_count'] ?? 0);
+    $response['total_items'] = $totalItems;
+    $response['cart_count'] = count($cartItems);
 } catch (Exception $e) {
     $response['message'] = $e->getMessage();
 }

@@ -9,9 +9,11 @@ $customerId = \App\Auth\CustomerAuthMiddleware::getCustomerId();
 $isLoggedIn = \App\Auth\CustomerAuthMiddleware::isLoggedIn();
 
 use App\Helper\ProductLandingHelper;
+use App\Helper\DiscountHelper;
 use App\Repository\StoreLocationRepository;
 
 $productHelper = new ProductLandingHelper();
+$discountHelper = new DiscountHelper();
 $storeRepository = new StoreLocationRepository();
 $storeLocations = [];
 
@@ -24,6 +26,8 @@ try {
 
 $checkoutItems = [];
 $subtotal = 0;
+$originalSubtotal = 0;
+$totalDiscount = 0;
 $totalItems = 0;
 $totalWeight = 0;
 $errorMessage = '';
@@ -31,30 +35,54 @@ $checkoutSource = $_GET['from'] ?? '';
 
 try {
     $db = \App\Database\DatabaseConnection::getInstance()->getConnection();
+    $currentTime = date('Y-m-d H:i:s');
 
     if ($checkoutSource === 'cart') {
         $stmt = $db->prepare("
             SELECT c.id_cart, c.jumlah as quantity, c.id_product,
                     p.id_product, p.nama_product, p.harga, p.stok, p.status_produk, 
                     p.gambar, p.deskripsi_speksifikasi, p.berat_gram,
-                    k.nama_kategori, b.nama_brand
+                    k.nama_kategori, b.nama_brand,
+                    pd.id_diskon, pd.label as discount_label, pd.jenis as discount_type,
+                    pd.nilai as discount_value, pd.stok_promo, pd.stok_terpakai,
+                    CASE 
+                        WHEN pd.id_diskon IS NOT NULL THEN
+                            CASE 
+                                WHEN pd.jenis = 'persen' THEN p.harga - (p.harga * pd.nilai / 100)
+                                ELSE GREATEST(0, p.harga - pd.nilai)
+                            END
+                        ELSE p.harga
+                    END as harga_final
             FROM cart c
             JOIN products p ON c.id_product = p.id_product
             LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
             LEFT JOIN brand b ON p.id_brand = b.id_brand
+            LEFT JOIN promo_diskon pd ON p.id_product = pd.id_produk 
+                AND pd.status = 'aktif' 
+                AND (pd.mulai_pada IS NULL OR :now1 >= pd.mulai_pada)
+                AND (pd.selesai_pada IS NULL OR :now2 <= pd.selesai_pada)
+                AND (pd.stok_promo IS NULL OR pd.stok_promo > COALESCE(pd.stok_terpakai, 0))
             WHERE c.id_customer = :customer_id
                 AND p.stok > 0 
                 AND p.status_produk NOT IN ('habis', 'nonaktif')
             ORDER BY c.tanggal_ditambahkan DESC
         ");
-        $stmt->execute([':customer_id' => $customerId]);
+        $stmt->execute([':customer_id' => $customerId, ':now1' => $currentTime, ':now2' => $currentTime]);
         $checkoutItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach ($checkoutItems as $item) {
-            $subtotal += $item['harga'] * $item['quantity'];
+        foreach ($checkoutItems as &$item) {
+            $itemPrice = $item['harga_final'] ?? $item['harga'];
+            $item['has_discount'] = $item['id_diskon'] !== null;
+            $originalSubtotal += $item['harga'] * $item['quantity'];
+            $subtotal += $itemPrice * $item['quantity'];
             $totalItems += $item['quantity'];
             $totalWeight += ($item['berat_gram'] ?? 0) * $item['quantity'];
+
+            if ($item['has_discount']) {
+                $totalDiscount += ($item['harga'] - $itemPrice) * $item['quantity'];
+            }
         }
+        unset($item);
     } elseif ($checkoutSource === 'buynow' && !empty($_GET['product'])) {
         $productId = $_GET['product'];
         $quantity = max(1, (int)($_GET['qty'] ?? 1));
@@ -62,24 +90,46 @@ try {
         $stmt = $db->prepare("
             SELECT p.id_product, p.nama_product, p.harga, p.stok, p.status_produk, 
                    p.gambar, p.deskripsi_speksifikasi, p.berat_gram,
-                   k.nama_kategori, b.nama_brand
+                   k.nama_kategori, b.nama_brand,
+                   pd.id_diskon, pd.label as discount_label, pd.jenis as discount_type,
+                   pd.nilai as discount_value, pd.stok_promo, pd.stok_terpakai,
+                   CASE 
+                       WHEN pd.id_diskon IS NOT NULL THEN
+                           CASE 
+                               WHEN pd.jenis = 'persen' THEN p.harga - (p.harga * pd.nilai / 100)
+                               ELSE GREATEST(0, p.harga - pd.nilai)
+                           END
+                       ELSE p.harga
+                   END as harga_final
             FROM products p
             LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
             LEFT JOIN brand b ON p.id_brand = b.id_brand
+            LEFT JOIN promo_diskon pd ON p.id_product = pd.id_produk 
+                AND pd.status = 'aktif' 
+                AND (pd.mulai_pada IS NULL OR :now1 >= pd.mulai_pada)
+                AND (pd.selesai_pada IS NULL OR :now2 <= pd.selesai_pada)
+                AND (pd.stok_promo IS NULL OR pd.stok_promo > COALESCE(pd.stok_terpakai, 0))
             WHERE p.id_product = :product_id
               AND p.stok > 0 
               AND p.status_produk NOT IN ('habis', 'nonaktif')
         ");
-        $stmt->execute([':product_id' => $productId]);
+        $stmt->execute([':product_id' => $productId, ':now1' => $currentTime, ':now2' => $currentTime]);
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($product) {
             $quantity = min($quantity, $product['stok']);
             $product['quantity'] = $quantity;
+            $product['has_discount'] = $product['id_diskon'] !== null;
+            $itemPrice = $product['harga_final'] ?? $product['harga'];
             $checkoutItems[] = $product;
-            $subtotal = $product['harga'] * $quantity;
+            $originalSubtotal = $product['harga'] * $quantity;
+            $subtotal = $itemPrice * $quantity;
             $totalItems = $quantity;
             $totalWeight = ($product['berat_gram'] ?? 0) * $quantity;
+
+            if ($product['has_discount']) {
+                $totalDiscount = ($product['harga'] - $itemPrice) * $quantity;
+            }
         } else {
             $errorMessage = 'Produk tidak tersedia atau stok habis.';
         }
@@ -107,6 +157,8 @@ $grandTotal = $subtotal + $taxAmount;
 $_SESSION['checkout_data'] = [
     'items' => $checkoutItems,
     'subtotal' => $subtotal,
+    'original_subtotal' => $originalSubtotal,
+    'total_discount' => $totalDiscount,
     'total_items' => $totalItems,
     'total_weight' => $totalWeight,
     'tax_rate' => $taxRate,

@@ -5,6 +5,9 @@
  * Load environment variables dan initialize necessary services
  */
 
+// Set timezone ke WIB (Asia/Jakarta)
+date_default_timezone_set('Asia/Jakarta');
+
 // Start output buffering to prevent headers already sent errors
 ob_start();
 
@@ -37,6 +40,8 @@ require_once __DIR__ . '/../app/Repository/VoucherUsageRepository.php';
 require_once __DIR__ . '/../app/Repository/StoreLocationRepository.php';
 require_once __DIR__ . '/../app/Helper/AdminProfileHelper.php';
 require_once __DIR__ . '/../app/Helper/CategoryLandingHelper.php';
+require_once __DIR__ . '/../app/Helper/DiscountHelper.php';
+require_once __DIR__ . '/../app/Helper/ProductLandingHelper.php';
 require_once __DIR__ . '/../app/Helper/ProductLandingHelper.php';
 require_once __DIR__ . '/../app/Helper/BrandLandingHelper.php';
 require_once __DIR__ . '/../app/Repository/BlogCategoryRepository.php';
