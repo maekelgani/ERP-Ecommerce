@@ -245,7 +245,7 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
                             <a href="../../view/login.php" class="px-4 py-2 text-sm font-medium text-[#882426] hover:text-[#6a1c1e] hover:bg-[#882426]/5 rounded-lg transition-all duration-200">
                                 Masuk
                             </a>
-                            <a href="../../view/login.php#registerPanel" class="px-4 py-2.5 text-sm font-medium text-white bg-[#882426] hover:bg-[#6a1c1e] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                            <a href="../../view/login.php" class="px-4 py-2.5 text-sm font-medium text-white bg-[#882426] hover:bg-[#6a1c1e] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
                                 Daftar
                             </a>
                         </div>

@@ -460,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         try {
-            const response = await fetch('../../api/customer/address-book.php', {
+            const response = await fetch('../../api/customer/address-book.php?action=add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -625,8 +625,48 @@ document.addEventListener('DOMContentLoaded', function() {
         const kotaSelect = document.getElementById('kotaSelect');
         const kecamatanSelect = document.getElementById('kecamatanSelect');
         const kelurahanSelect = document.getElementById('kelurahanSelect');
+        const labelAlamatSelect = document.getElementById('labelAlamatCheckout');
         
         if (!provinsiSelect) return;
+        
+        if (typeof $ !== 'undefined' && $.fn.select2) {
+            if (labelAlamatSelect) {
+                $('#labelAlamatCheckout').select2({
+                    placeholder: 'Pilih Label Alamat',
+                    minimumResultsForSearch: Infinity,
+                    width: '100%',
+                    dropdownParent: $('#addAddressModal .address-modal-content')
+                });
+            }
+            
+            $('#provinsiSelect').select2({
+                placeholder: 'Pilih Provinsi',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#addAddressModal .address-modal-content')
+            });
+            
+            $('#kotaSelect').select2({
+                placeholder: 'Pilih Kota/Kabupaten',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#addAddressModal .address-modal-content')
+            });
+            
+            $('#kecamatanSelect').select2({
+                placeholder: 'Pilih Kecamatan',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#addAddressModal .address-modal-content')
+            });
+            
+            $('#kelurahanSelect').select2({
+                placeholder: 'Pilih Kelurahan/Desa',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#addAddressModal .address-modal-content')
+            });
+        }
         
         fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
             .then(res => res.json())
@@ -634,76 +674,115 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(prov => {
                     provinsiSelect.innerHTML += `<option value="${prov.id}" data-name="${prov.name}">${prov.name}</option>`;
                 });
+                if (typeof $ !== 'undefined' && $.fn.select2) {
+                    $('#provinsiSelect').trigger('change.select2');
+                }
             })
             .catch(err => console.error('Error loading provinces:', err));
         
-        provinsiSelect.addEventListener('change', function() {
-            const selected = this.options[this.selectedIndex];
-            document.getElementById('provinsiNama').value = selected.dataset.name || '';
+        const handleProvinsiChange = function() {
+            const selected = provinsiSelect.options[provinsiSelect.selectedIndex];
+            document.getElementById('provinsiNama').value = selected?.dataset?.name || '';
             
             kotaSelect.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
-            kotaSelect.disabled = !this.value;
+            kotaSelect.disabled = !provinsiSelect.value;
             kecamatanSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
             kecamatanSelect.disabled = true;
             kelurahanSelect.innerHTML = '<option value="">Pilih Kelurahan/Desa</option>';
             kelurahanSelect.disabled = true;
             
-            if (this.value) {
-                fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${this.value}.json`)
+            if (typeof $ !== 'undefined' && $.fn.select2) {
+                $('#kotaSelect').prop('disabled', !provinsiSelect.value).trigger('change.select2');
+                $('#kecamatanSelect').prop('disabled', true).trigger('change.select2');
+                $('#kelurahanSelect').prop('disabled', true).trigger('change.select2');
+            }
+            
+            if (provinsiSelect.value) {
+                fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinsiSelect.value}.json`)
                     .then(res => res.json())
                     .then(data => {
                         data.forEach(kota => {
                             kotaSelect.innerHTML += `<option value="${kota.id}" data-name="${kota.name}">${kota.name}</option>`;
                         });
+                        if (typeof $ !== 'undefined' && $.fn.select2) {
+                            $('#kotaSelect').trigger('change.select2');
+                        }
                     })
                     .catch(err => console.error('Error loading regencies:', err));
             }
-        });
+        };
         
-        kotaSelect.addEventListener('change', function() {
-            const selected = this.options[this.selectedIndex];
-            document.getElementById('kotaNama').value = selected.dataset.name || '';
+        const handleKotaChange = function() {
+            const selected = kotaSelect.options[kotaSelect.selectedIndex];
+            document.getElementById('kotaNama').value = selected?.dataset?.name || '';
             
             kecamatanSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
-            kecamatanSelect.disabled = !this.value;
+            kecamatanSelect.disabled = !kotaSelect.value;
             kelurahanSelect.innerHTML = '<option value="">Pilih Kelurahan/Desa</option>';
             kelurahanSelect.disabled = true;
             
-            if (this.value) {
-                fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${this.value}.json`)
+            if (typeof $ !== 'undefined' && $.fn.select2) {
+                $('#kecamatanSelect').prop('disabled', !kotaSelect.value).trigger('change.select2');
+                $('#kelurahanSelect').prop('disabled', true).trigger('change.select2');
+            }
+            
+            if (kotaSelect.value) {
+                fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${kotaSelect.value}.json`)
                     .then(res => res.json())
                     .then(data => {
                         data.forEach(kec => {
                             kecamatanSelect.innerHTML += `<option value="${kec.id}" data-name="${kec.name}">${kec.name}</option>`;
                         });
+                        if (typeof $ !== 'undefined' && $.fn.select2) {
+                            $('#kecamatanSelect').trigger('change.select2');
+                        }
                     })
                     .catch(err => console.error('Error loading districts:', err));
             }
-        });
+        };
         
-        kecamatanSelect.addEventListener('change', function() {
-            const selected = this.options[this.selectedIndex];
-            document.getElementById('kecamatanNama').value = selected.dataset.name || '';
+        const handleKecamatanChange = function() {
+            const selected = kecamatanSelect.options[kecamatanSelect.selectedIndex];
+            document.getElementById('kecamatanNama').value = selected?.dataset?.name || '';
             
             kelurahanSelect.innerHTML = '<option value="">Pilih Kelurahan/Desa</option>';
-            kelurahanSelect.disabled = !this.value;
+            kelurahanSelect.disabled = !kecamatanSelect.value;
             
-            if (this.value) {
-                fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${this.value}.json`)
+            if (typeof $ !== 'undefined' && $.fn.select2) {
+                $('#kelurahanSelect').prop('disabled', !kecamatanSelect.value).trigger('change.select2');
+            }
+            
+            if (kecamatanSelect.value) {
+                fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${kecamatanSelect.value}.json`)
                     .then(res => res.json())
                     .then(data => {
                         data.forEach(kel => {
                             kelurahanSelect.innerHTML += `<option value="${kel.id}" data-name="${kel.name}">${kel.name}</option>`;
                         });
+                        if (typeof $ !== 'undefined' && $.fn.select2) {
+                            $('#kelurahanSelect').trigger('change.select2');
+                        }
                     })
                     .catch(err => console.error('Error loading villages:', err));
             }
-        });
+        };
         
-        kelurahanSelect.addEventListener('change', function() {
-            const selected = this.options[this.selectedIndex];
-            document.getElementById('kelurahanNama').value = selected.dataset.name || '';
-        });
+        const handleKelurahanChange = function() {
+            const selected = kelurahanSelect.options[kelurahanSelect.selectedIndex];
+            document.getElementById('kelurahanNama').value = selected?.dataset?.name || '';
+        };
+        
+        if (typeof $ !== 'undefined' && $.fn.select2) {
+            $('#provinsiSelect').on('select2:select select2:clear', handleProvinsiChange);
+            $('#kotaSelect').on('select2:select select2:clear', handleKotaChange);
+            $('#kecamatanSelect').on('select2:select select2:clear', handleKecamatanChange);
+            $('#kelurahanSelect').on('select2:select select2:clear', handleKelurahanChange);
+        } else {
+            provinsiSelect.addEventListener('change', handleProvinsiChange);
+            kotaSelect.addEventListener('change', handleKotaChange);
+            kecamatanSelect.addEventListener('change', handleKecamatanChange);
+            kelurahanSelect.addEventListener('change', handleKelurahanChange);
+        }
     }
     
     function formatNumber(num) {

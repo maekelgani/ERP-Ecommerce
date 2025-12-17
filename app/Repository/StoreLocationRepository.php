@@ -217,7 +217,7 @@ class StoreLocationRepository
     {
         $stmt = $this->db->prepare("
             SELECT id_toko, nama_toko, no_telepon, alamat, provinsi, kota_kabupaten, 
-                   kecamatan, kelurahan, kode_pos, jam_buka, jam_tutup
+                    kecamatan, kelurahan, kode_pos, jam_buka, jam_tutup
             FROM store_locations 
             WHERE is_active = 1 
             ORDER BY nama_toko ASC

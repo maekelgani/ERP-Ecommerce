@@ -127,7 +127,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Label Alamat</label>
-                        <select name="label_alamat" id="labelAlamatCheckout" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] outline-none transition-all">
+                        <select name="label_alamat" id="labelAlamatCheckout" class="select2-wilayah w-full">
                             <option value="Rumah">Rumah</option>
                             <option value="Kantor">Kantor</option>
                             <option value="Apartemen">Apartemen</option>

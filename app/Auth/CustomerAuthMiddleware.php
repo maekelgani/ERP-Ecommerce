@@ -181,7 +181,7 @@ class CustomerAuthMiddleware
 
     public static function getRegisterUrl(): string
     {
-        return '../../view/login.php#registerPanel';
+        return '../../view/login.php';
     }
 
     private static function renderLoginRequiredPage(array $pageInfo, string $returnPage): void
@@ -302,7 +302,7 @@ class CustomerAuthMiddleware
                                 <span class="relative px-4 text-sm text-gray-500 bg-white">atau</span>
                             </div>
 
-                            <a href="<?= $registerUrl ?>"
+                            <a href="<?= $registerUrl ?>?redirect=<?= $returnUrl ?>"
                                 class="flex items-center justify-center gap-2 w-full py-4 px-6 bg-white border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-all duration-300">
                                 <span class="material-symbols-outlined">person_add</span>
                                 <span>Daftar Akun Baru</span>

@@ -525,7 +525,7 @@ include '../../components/admin/head.php';
                 </div>
 
                 <!-- Footer Actions -->
-                <div class="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4 flex justify-end gap-3">
+                <div class="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4 flex justify-end gap-3 mb-2">
                     <button type="button" id="cancelStoreBtn" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-medium flex items-center gap-2">
                         <span class="material-symbols-outlined text-lg">close</span>
                         Batal

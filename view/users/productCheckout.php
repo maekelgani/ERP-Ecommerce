@@ -191,6 +191,7 @@ $breadcrumbs = [
 include '../../components/users/head.php';
 ?>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -585,6 +586,11 @@ include '../../components/users/head.php';
             border-radius: 0.75rem !important;
             background-color: #fff !important;
             font-size: 0.95rem !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .select2-container--default .select2-selection--single:hover {
+            border-color: #d1d5db !important;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -596,6 +602,16 @@ include '../../components/users/head.php';
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 46px !important;
             right: 8px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow b {
+            border-color: #9ca3af transparent transparent transparent !important;
+            border-width: 6px 5px 0 5px !important;
+        }
+
+        .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+            border-color: transparent transparent #882426 transparent !important;
+            border-width: 0 5px 6px 5px !important;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__placeholder {
@@ -652,6 +668,34 @@ include '../../components/users/head.php';
 
         .select2-container {
             width: 100% !important;
+        }
+
+        .select2-container--default .select2-results__option--disabled {
+            color: #9ca3af !important;
+        }
+
+        .wilayah-loading {
+            position: relative;
+        }
+
+        .wilayah-loading::after {
+            content: '';
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border: 2px solid #882426;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: wilayah-spin 0.8s linear infinite;
+        }
+
+        @keyframes wilayah-spin {
+            to {
+                transform: translateY(-50%) rotate(360deg);
+            }
         }
 
         .step-item {

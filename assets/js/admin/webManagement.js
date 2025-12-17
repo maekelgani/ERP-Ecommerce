@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                             <div>
                                 <h4 class="font-semibold text-gray-900">${escapeHtml(store.nama_toko)}</h4>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${store.is_active == 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} mr-1.5"">
+                                <span class="text-xs px-2 py-0.5 rounded-full ${store.is_active == 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
                                     ${store.is_active == 1 ? 'Aktif' : 'Nonaktif'}
                                 </span>
                             </div>
@@ -245,10 +245,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function openStoreModal(storeData = null) {
+    async function openStoreModal(storeData = null) {
         storeEditMode = !!storeData;
         document.getElementById('storeModalTitle').textContent = storeEditMode ? 'Edit Lokasi Toko' : 'Tambah Lokasi Toko';
         document.getElementById('storeForm').reset();
+        
+        $('#provinsiToko').val('').trigger('change');
+        $('#kotaToko').html('<option value="">Pilih Kota/Kabupaten</option>').val('').trigger('change');
+        $('#kecamatanToko').html('<option value="">Pilih Kecamatan</option>').val('').trigger('change');
+        $('#kelurahanToko').html('<option value="">Pilih Kelurahan</option>').val('').trigger('change');
 
         if (storeData) {
             document.getElementById('storeId').value = storeData.id_toko;
@@ -259,10 +264,112 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('jamBuka').value = storeData.jam_buka || '';
             document.getElementById('jamTutup').value = storeData.jam_tutup || '';
             document.getElementById('isActive').checked = storeData.is_active == 1;
+            
+            if (storeData.provinsi) {
+                await populateWilayahForEdit(storeData);
+            }
         }
 
         document.getElementById('storeModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+    }
+    
+    async function populateWilayahForEdit(storeData) {
+        try {
+            const provincesRes = await fetch(`${WILAYAH_API}/provinces.json`);
+            const provinces = await provincesRes.json();
+            
+            const provinceSelect = document.getElementById('provinsiToko');
+            provinceSelect.innerHTML = '<option value="">Pilih Provinsi</option>';
+            
+            let selectedProvinceId = null;
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.id;
+                option.textContent = province.name;
+                option.dataset.name = province.name;
+                provinceSelect.appendChild(option);
+                
+                if (storeData.provinsi && province.name.toUpperCase() === storeData.provinsi.toUpperCase()) {
+                    selectedProvinceId = province.id;
+                }
+            });
+            
+            if (selectedProvinceId) {
+                $('#provinsiToko').val(selectedProvinceId).trigger('change.select2');
+                
+                const citiesRes = await fetch(`${WILAYAH_API}/regencies/${selectedProvinceId}.json`);
+                const cities = await citiesRes.json();
+                
+                const citySelect = document.getElementById('kotaToko');
+                citySelect.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
+                
+                let selectedCityId = null;
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.id;
+                    option.textContent = city.name;
+                    option.dataset.name = city.name;
+                    citySelect.appendChild(option);
+                    
+                    if (storeData.kota_kabupaten && city.name.toUpperCase() === storeData.kota_kabupaten.toUpperCase()) {
+                        selectedCityId = city.id;
+                    }
+                });
+                
+                if (selectedCityId) {
+                    $('#kotaToko').val(selectedCityId).trigger('change.select2');
+                    
+                    const districtsRes = await fetch(`${WILAYAH_API}/districts/${selectedCityId}.json`);
+                    const districts = await districtsRes.json();
+                    
+                    const districtSelect = document.getElementById('kecamatanToko');
+                    districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+                    
+                    let selectedDistrictId = null;
+                    districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.id;
+                        option.textContent = district.name;
+                        option.dataset.name = district.name;
+                        districtSelect.appendChild(option);
+                        
+                        if (storeData.kecamatan && district.name.toUpperCase() === storeData.kecamatan.toUpperCase()) {
+                            selectedDistrictId = district.id;
+                        }
+                    });
+                    
+                    if (selectedDistrictId) {
+                        $('#kecamatanToko').val(selectedDistrictId).trigger('change.select2');
+                        
+                        const villagesRes = await fetch(`${WILAYAH_API}/villages/${selectedDistrictId}.json`);
+                        const villages = await villagesRes.json();
+                        
+                        const villageSelect = document.getElementById('kelurahanToko');
+                        villageSelect.innerHTML = '<option value="">Pilih Kelurahan</option>';
+                        
+                        let selectedVillageId = null;
+                        villages.forEach(village => {
+                            const option = document.createElement('option');
+                            option.value = village.id;
+                            option.textContent = village.name;
+                            option.dataset.name = village.name;
+                            villageSelect.appendChild(option);
+                            
+                            if (storeData.kelurahan && village.name.toUpperCase() === storeData.kelurahan.toUpperCase()) {
+                                selectedVillageId = village.id;
+                            }
+                        });
+                        
+                        if (selectedVillageId) {
+                            $('#kelurahanToko').val(selectedVillageId).trigger('change.select2');
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error populating wilayah for edit:', error);
+        }
     }
 
     function closeStoreModal() {
@@ -921,7 +1028,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('articleModalTitle').textContent = articleEditMode ? 'Edit Artikel' : 'Tambah Artikel';
         document.getElementById('articleForm').reset();
-        
+
         document.getElementById('articleId').value = '';
         document.getElementById('articleTitle').value = '';
         document.getElementById('articleCategory').value = '';
@@ -954,7 +1061,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('articleModal').classList.add('hidden');
         document.body.style.overflow = '';
         document.getElementById('articleForm').reset();
-        
+
         document.getElementById('articleId').value = '';
         document.getElementById('thumbnailFilename').value = '';
         thumbnailRemoved = false;
