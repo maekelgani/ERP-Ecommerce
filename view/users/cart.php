@@ -1002,12 +1002,15 @@ include '../../components/users/head.php';
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        clearCartSelectionOnRemove(cartId);
+
                         if (cartItem) {
                             cartItem.classList.add('fade-out-item');
                             setTimeout(() => {
                                 cartItem.remove();
                                 updateSummaryFromAPI(data);
                                 checkEmptyCart();
+                                updateCheckoutButton();
                             }, 400);
                         }
                         showNotification('Produk dihapus dari keranjang', 'success');
@@ -1194,29 +1197,143 @@ include '../../components/users/head.php';
                 });
         }
 
+        const CART_SELECTION_KEY = 'nano_cart_selected_items';
+
+        function saveCartSelection() {
+            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+            const selectedItems = [];
+
+            itemCheckboxes.forEach(checkbox => {
+                const cartItem = checkbox.closest('.cart-item');
+                if (cartItem && checkbox.checked) {
+                    selectedItems.push(cartItem.dataset.cartId);
+                }
+            });
+
+            localStorage.setItem(CART_SELECTION_KEY, JSON.stringify(selectedItems));
+            updateCheckoutButton();
+        }
+
+        function loadCartSelection() {
+            const saved = localStorage.getItem(CART_SELECTION_KEY);
+            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+
+            if (!saved) {
+                itemCheckboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                saveCartSelection();
+                return;
+            }
+
+            try {
+                const selectedItems = JSON.parse(saved);
+                const currentCartIds = [];
+
+                itemCheckboxes.forEach(checkbox => {
+                    const cartItem = checkbox.closest('.cart-item');
+                    if (cartItem) {
+                        const cartId = cartItem.dataset.cartId;
+                        currentCartIds.push(cartId);
+                        checkbox.checked = selectedItems.includes(cartId);
+                    }
+                });
+
+                const validSelectedItems = selectedItems.filter(id => currentCartIds.includes(id));
+                if (validSelectedItems.length !== selectedItems.length) {
+                    localStorage.setItem(CART_SELECTION_KEY, JSON.stringify(validSelectedItems));
+                }
+
+                updateSelectAllCheckbox();
+                recalculateTotals();
+            } catch (e) {
+                console.error('Error loading cart selection:', e);
+                itemCheckboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                saveCartSelection();
+            }
+        }
+
+        function updateSelectAllCheckbox() {
+            const selectAllCheckbox = document.getElementById('selectAllInStock');
+            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+
+            if (!selectAllCheckbox || itemCheckboxes.length === 0) return;
+
+            const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
+            const someChecked = Array.from(itemCheckboxes).some(cb => cb.checked);
+
+            selectAllCheckbox.checked = allChecked;
+            selectAllCheckbox.indeterminate = someChecked && !allChecked;
+        }
+
+        function getSelectedCartIds() {
+            const selectedIds = [];
+            document.querySelectorAll('#inStockItems .cart-item').forEach(item => {
+                const checkbox = item.querySelector('.item-checkbox');
+                if (checkbox && checkbox.checked) {
+                    selectedIds.push(item.dataset.cartId);
+                }
+            });
+            return selectedIds;
+        }
+
+        function updateCheckoutButton() {
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (!checkoutBtn) return;
+
+            const selectedIds = getSelectedCartIds();
+
+            if (selectedIds.length === 0) {
+                checkoutBtn.classList.add('pointer-events-none', 'opacity-50');
+                checkoutBtn.setAttribute('href', '#');
+                checkoutBtn.onclick = function(e) {
+                    e.preventDefault();
+                    showNotification('Pilih minimal 1 produk untuk checkout', 'warning');
+                };
+            } else {
+                checkoutBtn.classList.remove('pointer-events-none', 'opacity-50');
+                checkoutBtn.removeAttribute('onclick');
+                checkoutBtn.onclick = null;
+                checkoutBtn.setAttribute('href', 'productCheckout.php?from=cart&items=' + selectedIds.join(','));
+            }
+        }
+
+        function clearCartSelectionOnRemove(cartId) {
+            const saved = localStorage.getItem(CART_SELECTION_KEY);
+            if (!saved) return;
+
+            try {
+                let selectedItems = JSON.parse(saved);
+                selectedItems = selectedItems.filter(id => id !== cartId);
+                localStorage.setItem(CART_SELECTION_KEY, JSON.stringify(selectedItems));
+            } catch (e) {
+                console.error('Error clearing cart selection:', e);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const selectAllCheckbox = document.getElementById('selectAllInStock');
             const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+
+            loadCartSelection();
+            updateCheckoutButton();
 
             if (selectAllCheckbox) {
                 selectAllCheckbox.addEventListener('change', function() {
                     itemCheckboxes.forEach(checkbox => {
                         checkbox.checked = this.checked;
                     });
+                    saveCartSelection();
                     recalculateTotals();
                 });
             }
 
             itemCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
-                    const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
-                    const someChecked = Array.from(itemCheckboxes).some(cb => cb.checked);
-
-                    if (selectAllCheckbox) {
-                        selectAllCheckbox.checked = allChecked;
-                        selectAllCheckbox.indeterminate = someChecked && !allChecked;
-                    }
-
+                    updateSelectAllCheckbox();
+                    saveCartSelection();
                     recalculateTotals();
                 });
             });

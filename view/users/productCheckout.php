@@ -38,7 +38,9 @@ try {
     $currentTime = date('Y-m-d H:i:s');
 
     if ($checkoutSource === 'cart') {
-        $stmt = $db->prepare("
+        $selectedItems = isset($_GET['items']) ? array_filter(explode(',', $_GET['items'])) : [];
+
+        $query = "
             SELECT c.id_cart, c.jumlah as quantity, c.id_product,
                     p.id_product, p.nama_product, p.harga, p.stok, p.status_produk, 
                     p.gambar, p.deskripsi_speksifikasi, p.berat_gram,
@@ -65,9 +67,24 @@ try {
             WHERE c.id_customer = :customer_id
                 AND p.stok > 0 
                 AND p.status_produk NOT IN ('habis', 'nonaktif')
-            ORDER BY c.tanggal_ditambahkan DESC
-        ");
-        $stmt->execute([':customer_id' => $customerId, ':now1' => $currentTime, ':now2' => $currentTime]);
+        ";
+
+        $params = [':customer_id' => $customerId, ':now1' => $currentTime, ':now2' => $currentTime];
+
+        if (!empty($selectedItems)) {
+            $placeholders = [];
+            foreach ($selectedItems as $index => $cartId) {
+                $key = ':cart_id_' . $index;
+                $placeholders[] = $key;
+                $params[$key] = $cartId;
+            }
+            $query .= " AND c.id_cart IN (" . implode(',', $placeholders) . ")";
+        }
+
+        $query .= " ORDER BY c.tanggal_ditambahkan DESC";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute($params);
         $checkoutItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($checkoutItems as &$item) {
