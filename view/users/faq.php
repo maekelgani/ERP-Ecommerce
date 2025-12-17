@@ -10,78 +10,22 @@ $dbError = false;
 try {
     require_once __DIR__ . '/../../app/Repository/SupportTicketRepository.php';
     $ticketRepo = new \App\Repository\SupportTicketRepository();
-    $faqFromDb = $ticketRepo->getResolvedByCategory();
+    $faqFromDb = $ticketRepo->getFaqList();
 } catch (Exception $e) {
     $dbError = true;
 }
 
-$staticFaqs = [
-    'general' => [
-        [
-            'question' => 'Apakah produk di Nano Komputer 100% baru dan original?',
-            'answer' => 'Ya, seluruh produk yang kami jual adalah <strong class="text-[#882426]">100% Baru (BNIB)</strong> dan <strong class="text-[#882426]">Original</strong> bergaransi resmi distributor Indonesia. Kami tidak menjual barang bekas, refurbish, atau black market.'
-        ],
-        [
-            'question' => 'Apakah harga di website sudah termasuk PPN?',
-            'answer' => 'Harga yang tertera di website sudah final. Jika Anda memerlukan <strong>Faktur Pajak</strong> untuk pembelian perusahaan, silakan hubungi Admin kami melalui WhatsApp sebelum melakukan pembayaran.'
-        ],
-        [
-            'question' => 'Bagaimana cara mengaktifkan akun saya?',
-            'answer' => 'Setelah mendaftar, Anda akan menerima email verifikasi. Klik link yang ada di email tersebut untuk mengaktifkan akun Anda. Jika tidak menerima email, periksa folder spam atau hubungi customer service kami.'
-        ]
-    ],
-    'order' => [
-        [
-            'question' => 'Berapa lama proses perakitan PC?',
-            'answer' => 'Proses perakitan PC membutuhkan waktu estimasi <strong class="text-[#882426]">1-3 hari kerja</strong> tergantung antrian. Waktu ini mencakup pengecekan komponen, perakitan rapi (Cable Management), instalasi OS & Driver (Trial), dan Stress Test (Benchmarking) untuk memastikan kestabilan sistem.'
-        ],
-        [
-            'question' => 'Apakah PC Rakitan sudah termasuk Windows & Office?',
-            'answer' => 'Secara standar, kami akan menginstalkan Windows 10/11 versi <strong>Trial (Unactivated)</strong> untuk keperluan pengetesan. Jika Anda ingin Windows Original (Full License) atau Microsoft Office, Anda harus membeli lisensinya secara terpisah di kategori Software.'
-        ]
-    ],
-    'shipping' => [
-        [
-            'question' => 'Apakah pengiriman PC aman ke luar kota?',
-            'answer' => '<strong class="text-[#882426]">Sangat aman.</strong> Untuk pengiriman PC Rakitan ke luar kota (via JNE/Sicepat/Kargo), kami mewajibkan penggunaan <strong>Packing Kayu</strong> dan <strong>Asuransi</strong>. Di bagian dalam PC, kami juga menyisipkan <em>instapak foam</em> atau <em>bubble wrap</em> untuk menahan VGA dan heatsink agar tidak berguncang.'
-        ],
-        [
-            'question' => 'Berapa lama estimasi pengiriman?',
-            'answer' => 'Estimasi pengiriman tergantung lokasi tujuan. Untuk area Jabodetabek biasanya 1-2 hari kerja. Luar Jawa 3-7 hari kerja tergantung lokasi dan layanan ekspedisi yang dipilih.'
-        ]
-    ],
-    'warranty' => [
-        [
-            'question' => 'Bagaimana prosedur klaim garansi?',
-            'answer' => 'Pastikan segel garansi utuh dan tidak ada cacat fisik pada barang. Hubungi tim support kami atau bisa langsung membawa barang ke Service Center Distributor terkait (alamat ada di kartu garansi). Jika melalui kami, silakan kirim barang ke toko Nano Komputer. Biaya ongkos kirim Pulang-Pergi ditanggung sepenuhnya oleh pembeli.'
-        ],
-        [
-            'question' => 'Berapa lama masa garansi produk?',
-            'answer' => 'Masa garansi berbeda-beda tergantung jenis produk dan kebijakan distributor. Umumnya komponen seperti motherboard dan VGA mendapatkan garansi 2-3 tahun, sedangkan power supply bisa hingga 5-10 tahun tergantung brand.'
-        ]
-    ]
-];
 
 $categories = [
-    'general' => ['name' => 'Umum & Akun', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>'],
-    'order' => ['name' => 'Pemesanan & Rakit PC', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>'],
-    'shipping' => ['name' => 'Pengiriman', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>'],
-    'warranty' => ['name' => 'Garansi & Retur', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>']
+    'General' => ['name' => 'General', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'],
+    'Garansi & Servis' => ['name' => 'Garansi & Servis', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>'],
+    'Aktivasi Akun' => ['name' => 'Aktivasi Akun', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>'],
+    'Komplain' => ['name' => 'Komplain', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'],
+    'Pertanyaan Produk' => ['name' => 'Pertanyaan Produk', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>'],
+    'Status Pesanan' => ['name' => 'Status Pesanan', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>']
 ];
 
-$allFaqs = $staticFaqs;
-foreach ($faqFromDb as $catKey => $items) {
-    if (!isset($allFaqs[$catKey])) {
-        $allFaqs[$catKey] = [];
-    }
-    foreach ($items as $item) {
-        $allFaqs[$catKey][] = [
-            'question' => $item['question'],
-            'answer' => $item['answer'],
-            'from_db' => true
-        ];
-    }
-}
+$allFaqs = $faqFromDb;
 
 $totalFaqs = 0;
 foreach ($allFaqs as $items) {
@@ -242,7 +186,7 @@ include '../../components/users/head.php';
                                         <div class="accordion-body">
                                             <div class="px-5 md:px-6 pb-6 pt-0">
                                                 <div class="pl-14 text-gray-600 leading-relaxed">
-                                                    <p><?= $faq['answer'] ?></p>
+                                                    <p><?= nl2br(htmlspecialchars($faq['answer'])) ?></p>
                                                 </div>
                                             </div>
                                         </div>

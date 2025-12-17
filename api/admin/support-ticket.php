@@ -35,6 +35,12 @@ switch ($action) {
     case 'statistics':
         handleStatistics($ticketRepo);
         break;
+    case 'deleteReply': // ← WAJIB ADA
+        handleDeleteReply($ticketRepo);
+        break;
+    case 'deleteAllReplies':
+        handleDeleteAllReplies($ticketRepo);
+        break;
     default:
         sendJsonResponse(['success' => false, 'message' => 'Aksi tidak valid']);
 }
@@ -42,7 +48,7 @@ switch ($action) {
 function handleList(SupportTicketRepository $repo): void
 {
     $filters = [];
-    
+
     if (!empty($_GET['search'])) {
         $filters['search'] = $_GET['search'];
     }
@@ -64,7 +70,7 @@ function handleList(SupportTicketRepository $repo): void
 
     $tickets = $repo->getAll($filters);
     $stats = $repo->getStatistics();
-    
+
     sendJsonResponse([
         'success' => true,
         'data' => $tickets,
@@ -121,12 +127,12 @@ function handleReply(SupportTicketRepository $repo): void
     }
 
     $adminId = $_SESSION['admin_id'] ?? null;
-    
+
     if (empty($adminId)) {
         sendJsonResponse(['success' => false, 'message' => 'Unauthorized: Admin ID tidak ditemukan']);
         return;
     }
-    
+
     $data = [
         'id_admin' => (int)$adminId,
         'message' => $_POST['message'] ?? '',
@@ -146,6 +152,22 @@ function handleReply(SupportTicketRepository $repo): void
     }
 
     $result = $repo->addReply($ticketId, $data, $attachmentFile);
+
+    if ($result['success']) {
+
+        $status = $data['update_status'] ?? null;
+
+        // AUTO FAQ RULE
+        if (
+            in_array($status, ['Resolved', 'Closed']) &&
+            ($data['is_internal_note'] ?? 0) == 0
+        ) {
+            $repo->updateIsFaq($ticketId, 1);
+        } else {
+            $repo->updateIsFaq($ticketId, 0);
+        }
+    }
+
     sendJsonResponse($result);
 }
 
@@ -157,8 +179,9 @@ function handleUpdateStatus(SupportTicketRepository $repo): void
     }
 
     $ticketId = $_POST['id_ticket'] ?? '';
-    $status = $_POST['status'] ?? '';
-    
+    $status   = $_POST['status'] ?? '';
+    $isFaq    = isset($_POST['is_faq']) ? (int)$_POST['is_faq'] : 0;
+
     if (empty($ticketId) || empty($status)) {
         sendJsonResponse(['success' => false, 'message' => 'Data tidak lengkap']);
         return;
@@ -175,10 +198,64 @@ function handleUpdateStatus(SupportTicketRepository $repo): void
         sendJsonResponse(['success' => false, 'message' => 'Unauthorized']);
         return;
     }
-    
+
+    /**
+     * 🔒 RULE WAJIB:
+     * FAQ hanya boleh untuk Resolved / Closed
+     */
+    if (!in_array($status, ['Resolved', 'Closed'])) {
+        $isFaq = 0;
+    }
+
+    // Update status
     $result = $repo->updateStatus($ticketId, $status, (int)$adminId);
-    sendJsonResponse($result);
+
+    if (!$result['success']) {
+        sendJsonResponse($result);
+        return;
+    }
+
+    // Update FAQ flag (hanya jika status berhasil diupdate)
+    $repo->updateIsFaq($ticketId, $isFaq);
+
+    sendJsonResponse([
+        'success' => true,
+        'message' => 'Status tiket berhasil diperbarui'
+    ]);
 }
+
+
+
+// function handleUpdateStatus(SupportTicketRepository $repo): void
+// {
+//     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//         sendJsonResponse(['success' => false, 'message' => 'Metode request tidak valid']);
+//         return;
+//     }
+
+//     $ticketId = $_POST['id_ticket'] ?? '';
+//     $status = $_POST['status'] ?? '';
+
+//     if (empty($ticketId) || empty($status)) {
+//         sendJsonResponse(['success' => false, 'message' => 'Data tidak lengkap']);
+//         return;
+//     }
+
+//     $validStatuses = ['Open', 'In Progress', 'Resolved', 'Closed'];
+//     if (!in_array($status, $validStatuses)) {
+//         sendJsonResponse(['success' => false, 'message' => 'Status tidak valid']);
+//         return;
+//     }
+
+//     $adminId = $_SESSION['admin_id'] ?? null;
+//     if (empty($adminId)) {
+//         sendJsonResponse(['success' => false, 'message' => 'Unauthorized']);
+//         return;
+//     }
+
+//     $result = $repo->updateStatus($ticketId, $status, (int)$adminId);
+//     sendJsonResponse($result);
+// }
 
 function handleDelete(SupportTicketRepository $repo): void
 {
@@ -202,4 +279,91 @@ function sendJsonResponse(array $data): void
 {
     echo json_encode($data);
     exit;
+}
+
+function handleDeleteReply(SupportTicketRepository $repo): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        sendJsonResponse(['success' => false, 'message' => 'Metode tidak valid']);
+        return;
+    }
+
+    $data = json_decode(file_get_contents('php://input'), true);
+    $replyId = $data['id_reply'] ?? null;
+
+    if (!$replyId) {
+        sendJsonResponse(['success' => false, 'message' => 'ID balasan tidak valid']);
+        return;
+    }
+
+    $adminId = $_SESSION['admin_id'] ?? null;
+    if (!$adminId) {
+        sendJsonResponse(['success' => false, 'message' => 'Unauthorized']);
+        return;
+    }
+
+    $reply = $repo->getReplyById($replyId);
+    if (!$reply || !$reply['id_admin']) {
+        sendJsonResponse(['success' => false, 'message' => 'Balasan tidak dapat dihapus']);
+        return;
+    }
+
+    // 🔥 Ambil ticket ID
+    $ticketId = $repo->getTicketIdByReply($replyId);
+
+    // Hapus balasan
+    $repo->deleteReply($replyId);
+
+    /**
+     * 🔒 POST DELETE BUSINESS RULE
+     */
+    if (!$repo->hasPublicAdminReply($ticketId)) {
+
+        // ❌ Tidak ada jawaban admin → FAQ MATI
+        $repo->updateIsFaq($ticketId, 0);
+
+        // ⬇️ Turunkan status jika sebelumnya Resolved / Closed
+        $repo->forceStatusIfInvalid($ticketId);
+    }
+
+    sendJsonResponse([
+        'success' => true,
+        'message' => 'Balasan berhasil dihapus dan status disesuaikan'
+    ]);
+}
+
+function handleDeleteAllReplies(SupportTicketRepository $repo): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        sendJsonResponse(['success' => false, 'message' => 'Metode tidak valid']);
+        return;
+    }
+
+    $data = json_decode(file_get_contents('php://input'), true);
+    $ticketId = $data['id_ticket'] ?? null;
+
+    if (!$ticketId) {
+        sendJsonResponse(['success' => false, 'message' => 'ID tiket tidak valid']);
+        return;
+    }
+
+    $adminId = $_SESSION['admin_id'] ?? null;
+    if (!$adminId) {
+        sendJsonResponse(['success' => false, 'message' => 'Unauthorized']);
+        return;
+    }
+
+    // Hapus semua balasan admin
+    $deleted = $repo->deleteAllAdminReplies($ticketId);
+
+    // ❌ FAQ MATI
+    $repo->updateIsFaq($ticketId, 0);
+
+    // ⬇️ Turunkan status
+    $repo->forceStatusIfInvalid($ticketId);
+
+    sendJsonResponse([
+        'success' => true,
+        'message' => "Semua balasan admin dihapus ({$deleted}), status diperbarui"
+    ]);
 }

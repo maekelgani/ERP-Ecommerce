@@ -238,11 +238,11 @@ $breadcrumbs = [
                                 <select name="kategori" id="kategori" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:border-[#882426] focus:ring-2 focus:ring-[#882426]/10 transition-all text-sm">
                                     <option value="">Pilih kategori</option>
                                     <option value="General">General</option>
-                                    <option value="Garansi & Retur">Garansi & Retur</option>
+                                    <option value="Garansi & Servis">Garansi & Servis</option>
                                     <option value="Aktivasi Akun">Aktivasi Akun</option>
-                                    <option value="Pengiriman">Pengiriman</option>
+                                    <option value="Komplain">Komplain</option>
                                     <option value="Pertanyaan Produk">Pertanyaan Produk</option>
-                                    <option value="Pemesanan & Rakit PC">Pemesanan & Rakit PC</option>
+                                    <!-- <option value="Pemesanan & Rakit PC">Pemesanan & Rakit PC</option> -->
                                     <option value="Status Pesanan">Status Pesanan</option>
                                 </select>
                                 <p class="text-xs text-red-500 mt-1 hidden" id="kategori_error"></p>
@@ -315,7 +315,7 @@ $breadcrumbs = [
                                 </div>
                                 <div>
                                     <h4 class="font-medium text-gray-900 text-sm">Alamat</h4>
-                                    <p class="text-gray-600 text-xs mt-0.5 leading-relaxed">Jl. Mangga Dua Raya No.47A-B Lt. 2, Jakarta Pusat, DKI Jakarta 10730</p>
+                                    <p class="text-gray-600 text-xs mt-0.5 leading-relaxed">Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 2, Mangga Dua Sel., Kecamatan Sawah Besar, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10730</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
@@ -327,7 +327,7 @@ $breadcrumbs = [
                                 <div>
                                     <h4 class="font-medium text-gray-900 text-sm">Telepon</h4>
                                     <p class="text-gray-600 text-xs mt-0.5">(021) 623-09578</p>
-                                    <p class="text-gray-600 text-xs">0812-9876-5432 (WhatsApp)</p>
+                                    <p class="text-gray-600 text-xs">0816-765-801(WhatsApp)</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
@@ -361,7 +361,7 @@ $breadcrumbs = [
                         <div class="p-4 border-b border-gray-100">
                             <h3 class="text-base font-bold text-gray-900">Lokasi Kami</h3>
                         </div>
-                        <div class="h-48">
+                        <div class="h-96">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.952870960768!2d106.82047507575525!3d-6.137034560167588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698bf8a2cc18d9%3A0x55ec037cb9f65946!2sNano%20Komputer!5e0!3m2!1sid!2sid!4v1764763083486!5m2!1sid!2sid"
                                 width="100%"

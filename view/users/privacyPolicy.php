@@ -256,9 +256,9 @@ $lastUpdated = "1 Desember 2025";
                             </h2>
                             <p class="text-gray-600 mb-4">Jika Anda memiliki pertanyaan tentang Kebijakan Privasi ini atau ingin menggunakan hak privasi Anda:</p>
                             <div class="bg-gray-50 rounded-xl p-4 space-y-2">
-                                <p class="text-gray-600"><strong>Email:</strong> privacy@nanokomputer.com</p>
-                                <p class="text-gray-600"><strong>Telepon:</strong> (021) 612-8899</p>
-                                <p class="text-gray-600"><strong>Alamat:</strong> Mal Mangga Dua Lt.2 No.47A-B, Jakarta Utara</p>
+                                <p class="text-gray-600"><strong>Email:</strong> cs@nanokomputer.com</p>
+                                <p class="text-gray-600"><strong>Telepon:</strong> (021) 623-09578</p>
+                                <p class="text-gray-600"><strong>Alamat:</strong> Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 2, Mangga Dua Sel., Kecamatan Sawah Besar, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10730</p>
                             </div>
                         </section>
                     </div>

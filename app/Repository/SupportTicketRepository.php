@@ -248,13 +248,20 @@ class SupportTicketRepository
             ]);
 
             if ($success) {
+                $replyId = (int) $this->db->lastInsertId();
+
                 if (!empty($data['update_status'])) {
-                    $this->updateStatus($ticketId, $data['update_status'], $data['id_admin'] ?? null);
+                    $this->updateStatus(
+                        $ticketId,
+                        $data['update_status'],
+                        $data['id_admin'] ?? null
+                    );
                 }
 
                 return [
                     'success' => true,
-                    'message' => 'Balasan berhasil ditambahkan'
+                    'message' => 'Balasan berhasil ditambahkan',
+                    'id_reply' => $replyId
                 ];
             }
 
@@ -267,9 +274,13 @@ class SupportTicketRepository
             if ($attachmentPath) {
                 $this->deleteAttachment($attachmentPath);
             }
-            return ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
         }
     }
+
 
     public function getReplies(string $ticketId): array
     {
@@ -409,7 +420,7 @@ class SupportTicketRepository
             return ['success' => false, 'message' => 'Pesan wajib diisi'];
         }
 
-        $validCategories = ['General', 'Garansi & Retur', 'Aktivasi Akun', 'Pengiriman', 'Pertanyaan Produk', 'Pemesanan & Rakit PC', 'Status Pesanan'];
+        $validCategories = ['General', 'Garansi & Servis', 'Aktivasi Akun', 'Komplain', 'Pertanyaan Produk', 'Status Pesanan'];
         if (!empty($data['kategori']) && !in_array($data['kategori'], $validCategories)) {
             return ['success' => false, 'message' => 'Kategori tidak valid'];
         }
@@ -515,46 +526,201 @@ class SupportTicketRepository
 
     public function getResolvedByCategory(): array
     {
-        $categoryMapping = [
-            'General' => 'general',
-            'Aktivasi Akun' => 'general',
-            'Garansi & Retur' => 'warranty',
-            'Pengiriman' => 'shipping',
-            'Pertanyaan Produk' => 'general',
-            'Pemesanan & Rakit PC' => 'order',
-            'Status Pesanan' => 'order'
-        ];
-
         $stmt = $this->db->query("
             SELECT 
                 st.id_ticket,
                 st.subjek,
                 st.kategori,
-                st.message as question,
-                (SELECT tr.message FROM ticket_replies tr WHERE tr.id_ticket = st.id_ticket ORDER BY tr.created_at DESC LIMIT 1) as answer,
-                st.created_at
+                st.message AS fallback_answer,
+                (
+                    SELECT tr.message
+                    FROM ticket_replies tr
+                    WHERE tr.id_ticket = st.id_ticket
+                        AND tr.id_admin IS NOT NULL
+                        AND tr.is_internal_note = 0
+                    ORDER BY tr.created_at DESC
+                    LIMIT 1
+                ) AS admin_answer
+
             FROM support_tickets st
             WHERE st.status IN ('Resolved', 'Closed')
-            AND EXISTS (SELECT 1 FROM ticket_replies tr WHERE tr.id_ticket = st.id_ticket AND tr.id_admin IS NOT NULL)
             ORDER BY st.kategori, st.created_at DESC
         ");
 
         $results = [];
+
         while ($row = $stmt->fetch()) {
-            if (!empty($row['answer'])) {
-                $categoryKey = $categoryMapping[$row['kategori']] ?? 'general';
-                if (!isset($results[$categoryKey])) {
-                    $results[$categoryKey] = [];
-                }
-                $results[$categoryKey][] = [
-                    'id' => $row['id_ticket'],
+
+            // PRIORITAS: admin → fallback ke ticket message
+            $answer = $row['admin_answer'] ?: $row['fallback_answer'];
+
+            if (!empty($answer)) {
+                $results[$row['kategori']][] = [
+                    'id'       => $row['id_ticket'],
                     'question' => htmlspecialchars_decode($row['subjek'], ENT_QUOTES),
-                    'answer' => htmlspecialchars_decode($row['answer'], ENT_QUOTES),
+                    'answer'   => htmlspecialchars_decode($answer, ENT_QUOTES),
                     'category' => $row['kategori']
                 ];
             }
         }
 
         return $results;
+    }
+
+    public function getFaqList(): array
+    {
+        $stmt = $this->db->query("
+            SELECT 
+                st.kategori,
+                st.subjek,
+                st.message AS ticket_message,
+                (
+                    SELECT tr.message
+                    FROM ticket_replies tr
+                    WHERE tr.id_ticket = st.id_ticket
+                      AND tr.id_admin IS NOT NULL
+                      AND tr.is_internal_note = 0
+                    ORDER BY tr.created_at DESC
+                    LIMIT 1
+                ) AS admin_reply
+            FROM support_tickets st
+            WHERE st.is_faq = 1
+              AND st.status IN ('Resolved','Closed')
+            ORDER BY st.kategori, st.updated_at DESC
+        ");
+
+        $data = [];
+
+        while ($row = $stmt->fetch()) {
+            $data[$row['kategori']][] = [
+                'question' => $row['subjek'], // ← JUDUL
+                'answer'   => $row['admin_reply'] ?: $row['ticket_message'], // ← ISI
+                'answered_by_admin' => !empty($row['admin_reply'])
+            ];
+        }
+
+        return $data;
+    }
+
+
+    // public function getFaqList(): array
+    // {
+    //     $stmt = $this->db->query("
+    //     SELECT 
+    //         st.id_ticket,
+    //         st.subjek,
+    //         st.kategori,
+    //         st.message AS ticket_message,
+    //         (
+    //             SELECT tr.message
+    //             FROM ticket_replies tr
+    //             WHERE tr.id_ticket = st.id_ticket
+    //                 AND tr.id_admin IS NOT NULL
+    //                 AND tr.is_internal_note = 0
+    //             ORDER BY tr.created_at DESC
+    //             LIMIT 1
+    //         ) AS admin_answer
+    //     FROM support_tickets st
+    //     WHERE st.is_faq = 1
+    //         AND st.status IN ('Resolved','Closed')
+    //     ORDER BY st.kategori, st.updated_at DESC
+    // ");
+
+    //     $data = [];
+
+    //     while ($row = $stmt->fetch()) {
+
+    //         $answer = $row['admin_answer'] ?: $row['ticket_message'];
+    //         $answeredByAdmin = !empty($row['admin_answer']);
+
+    //         $data[$row['kategori']][] = [
+    //             'id' => $row['id_ticket'],
+    //             'question' => $row['subjek'],
+    //             'answer' => $answer,
+    //             'answered_by_admin' => $answeredByAdmin
+    //         ];
+    //     }
+
+    //     return $data;
+    // }
+
+    public function updateIsFaq(string $ticketId, int $isFaq): void
+    {
+        $stmt = $this->db->prepare("
+            UPDATE support_tickets
+            SET is_faq = :is_faq
+            WHERE id_ticket = :id
+        ");
+        $stmt->execute([
+            ':is_faq' => $isFaq,
+            ':id'     => $ticketId
+        ]);
+    }
+
+    public function getReplyById($id)
+    {
+        $stmt = $this->db->prepare(
+            "SELECT id_reply, id_admin FROM ticket_replies WHERE id_reply = ?"
+        );
+        $stmt->execute([$id]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getTicketIdByReply(int $replyId): ?string
+    {
+        $stmt = $this->db->prepare(
+            "SELECT id_ticket FROM ticket_replies WHERE id_reply = ?"
+        );
+        $stmt->execute([$replyId]);
+        return $stmt->fetchColumn() ?: null;
+    }
+
+    public function hasPublicAdminReply(string $ticketId): bool
+    {
+        $stmt = $this->db->prepare("
+            SELECT COUNT(*) 
+            FROM ticket_replies
+            WHERE id_ticket = ?
+                AND id_admin IS NOT NULL
+                AND is_internal_note = 0
+        ");
+        $stmt->execute([$ticketId]);
+        return (int)$stmt->fetchColumn() > 0;
+    }
+
+
+
+    public function deleteReply($id)
+    {
+        $stmt = $this->db->prepare(
+            "DELETE FROM ticket_replies WHERE id_reply = ?"
+        );
+        return $stmt->execute([$id]);
+    }
+
+    public function deleteAllAdminReplies(string $ticketId): int
+    {
+        $stmt = $this->db->prepare("
+        DELETE FROM ticket_replies
+        WHERE id_ticket = :id_ticket
+            AND id_admin IS NOT NULL
+    ");
+
+        $stmt->execute([
+            ':id_ticket' => $ticketId
+        ]);
+
+        return $stmt->rowCount(); // jumlah balasan yang terhapus
+    }
+
+    public function forceStatusIfInvalid(string $ticketId): void
+    {
+        $stmt = $this->db->prepare("
+        UPDATE support_tickets
+        SET status = 'In Progress'
+        WHERE id_ticket = ?
+            AND status IN ('Resolved', 'Closed')
+    ");
+        $stmt->execute([$ticketId]);
     }
 }

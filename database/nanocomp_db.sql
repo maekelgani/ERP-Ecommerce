@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 17, 2025 at 08:10 AM
+-- Generation Time: Dec 17, 2025 at 04:27 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -51,7 +51,8 @@ INSERT INTO `address_book` (`id_alamat`, `id_customer`, `label_alamat`, `nama_pe
 (2, 1, 'Kantor', 'Fauzan Eldianzah', '081234567890', 'PT Maju Jaya Sejahtera\nJl. Teknologi Raya No. 88, Gedung Inovasi Lantai 3', 'CIPINANG MUARA', 'JATINEGARA', 'KOTA JAKARTA TIMUR', 'DKI JAKARTA', '13420', 0),
 (3, 2, 'Rumah', 'Akmal Dwi Saputra', '089576893421', 'Jalan Gg. Noble Blok J4 no.05 RT 13/RW 02', 'KARADENAN', 'CIBINONG', 'KABUPATEN BOGOR', 'JAWA BARAT', '16920', 1),
 (4, 7, 'Rumah', 'Faizal Ardi', '081239230945', 'Perumahan Bukit Waringin Blok G6 No. 04 RT 04/RW 014', 'CIMANGGIS', 'BOJONG GEDE', 'KABUPATEN BOGOR', 'JAWA BARAT', '16920', 0),
-(5, 7, 'Kantor', 'Faizal Ardi', '081290413082', 'PT Digital Solu Filantropi\nJl. Teknologi Raya No. 88, Gedung Inovasi Lantai 3', 'SENAYAN', 'KEBAYORAN BARU', 'KOTA JAKARTA SELATAN', 'DKI JAKARTA', '13420', 1);
+(5, 7, 'Kantor', 'Faizal Ardi', '081290413082', 'PT Digital Solu Filantropi\nJl. Teknologi Raya No. 88, Gedung Inovasi Lantai 3', 'SENAYAN', 'KEBAYORAN BARU', 'KOTA JAKARTA SELATAN', 'DKI JAKARTA', '13420', 1),
+(6, 9, 'Rumah', 'Faizal Ardi', '081290413082', 'Perumahan Bukit Waringin Blok H4 No. 10 RT 08/RW 014', 'CIMANGGIS', 'BOJONG GEDE', 'KABUPATEN BOGOR', 'JAWA BARAT', '16924', 1);
 
 -- --------------------------------------------------------
 
@@ -82,7 +83,7 @@ CREATE TABLE `administrators` (
 --
 
 INSERT INTO `administrators` (`id_admin`, `id_role`, `nama_lengkap`, `email`, `password_hash`, `photo`, `remember_token`, `remember_expires`, `is_active`, `last_login`, `created_at`, `updated_at`, `username`, `phone`, `password_updated_at`) VALUES
-(1, 1, 'Fajar Nano Komputer', 'fajarnanokomp@gmail.com', '$2y$10$astJh04o3V9LU2jtOsDKhuDoKu.JptPrj8KPZkRnCdnKY5.pgR6r6', NULL, '1123718b95e030ed178ab02f24c23458a6030c16070086af6467fb97975dd117', '2026-01-15 14:28:43', 1, '2025-12-14 21:36:05', '2025-11-25 08:38:19', '2025-12-16 21:28:43', 'nanocomp', '081234567890', '2025-12-01 01:42:22'),
+(1, 1, 'Fajar Nano Komputer', 'fajarnanokomp@gmail.com', '$2y$10$astJh04o3V9LU2jtOsDKhuDoKu.JptPrj8KPZkRnCdnKY5.pgR6r6', NULL, 'a888ba8cfa53792637fbf186e91472af84f7108dff44f1df47e3ca3d0784389d', '2026-01-16 15:12:01', 1, '2025-12-14 21:36:05', '2025-11-25 08:38:19', '2025-12-17 15:12:01', 'nanocomp', '081234567890', '2025-12-01 01:42:22'),
 (2, 2, 'Faizal Ardi', 'faizalardi@gmail.com', '$2y$10$g55WWArkauw.WR2wyA5.rOdS3KS/HGCxN3CbYzM6onKijcgcH19jC', NULL, NULL, NULL, 1, '2025-11-30 18:54:35', '2025-11-25 08:38:19', '2025-11-30 18:54:35', NULL, NULL, NULL),
 (3, 2, 'Maekel Gani', 'maekelgani@gmail.com', '$2y$10$CF0hB8G7NMEemnjWpFeQpuhGzOaW4fzuZNvj5Moqwd5r2id6Wzve2', NULL, NULL, NULL, 1, '2025-11-25 16:51:00', '2025-11-25 08:38:19', '2025-11-29 12:11:41', NULL, NULL, NULL),
 (4, 2, 'Isfahan Kaefal', 'isfahankaefal@gmail.com', '$2y$10$MxnS65hsh9C8iTxSZhLYWuSqyERCIukMTqHIczUq.EBj4x1bEW4Pu', NULL, NULL, NULL, 1, '2025-11-25 16:59:25', '2025-11-25 08:38:19', '2025-11-30 18:16:02', NULL, '', NULL);
@@ -206,7 +207,7 @@ CREATE TABLE `blog_posts` (
 INSERT INTO `blog_posts` (`id_post`, `id_admin`, `id_category`, `judul`, `slug`, `excerpt`, `konten`, `thumbnail`, `status`, `views`, `published_at`, `created_at`, `updated_at`) VALUES
 (4, 1, 1, 'Perbedaan GPU RTX dan GTX untuk Gaming', 'perbedaan-gpu-rtx-dan-gtx-untuk-gaming', 'Mengenal Perbedaan GPU RTX dan GTX untuk Kebutuhan Gaming Modern: Dalam dunia gaming modern, GPU (Graphics Processing Unit) menjadi komponen kunci yang sangat menentukan kualitas visual dan performa permainan. NVIDIA sebagai salah satu produsen GPU terbesar di dunia memiliki dua lini populer yang sering dibandingkan oleh gamer, yaitu GTX dan RTX. Artikel ini akan membahas secara lengkap perbedaan GPU RTX dan GTX, serta membantu Anda menentukan pilihan terbaik sesuai kebutuhan gaming saat ini.', 'Apa Itu GPU NVIDIA GTX?\n\nSeri NVIDIA GeForce GTX merupakan lini GPU yang telah hadir lebih dulu sebelum RTX. GPU GTX berfokus pada rasterization tradisional, yaitu teknik rendering grafis konvensional yang digunakan oleh sebagian besar game sebelum era ray tracing.', 'blog_137d5c46139947c3_1765871172.jpg', 'publish', 3, '2025-12-16 07:46:15', '2025-12-16 14:46:15', '2025-12-17 12:48:09'),
 (5, 1, 2, 'Cara Merakit PC Gaming untuk Pemula 2025', 'cara-merakit-pc-gaming-untuk-pemula-2025', 'Merakit PC gaming sendiri di tahun 2025 menjadi pilihan populer bagi banyak gamer, terutama pemula yang ingin mendapatkan performa maksimal sesuai budget. Selain lebih hemat, merakit PC juga memberi fleksibilitas dalam memilih komponen dan memudahkan upgrade di masa depan. Artikel ini akan membahas panduan lengkap dan mudah dipahami tentang cara merakit PC gaming untuk pemula di tahun 2025.', 'Mengapa Merakit PC Gaming Sendiri?\n\nSebelum masuk ke tahap perakitan, penting untuk mengetahui keuntungannya:\n- Lebih hemat biaya dibanding PC rakitan pabrikan\n-  Bebas memilih spesifikasi sesuai kebutuhan\n- Mudah di-upgrade ke depannya\n- Menambah pengetahuan hardware komputer', 'blog_6e94a3fcd73a81db_1765871514.jpg', 'publish', 6, '2025-12-16 07:52:22', '2025-12-16 14:52:22', '2025-12-17 15:01:13'),
-(6, 1, 3, 'NVIDIA GeForce RTX 50 Series Resmi Diumumkan', 'nvidia-geforce-rtx-50-series-resmi-diumumkan', 'NVIDIA kembali menggebrak dunia teknologi dengan resmi mengumumkan NVIDIA GeForce RTX 50 Series, generasi terbaru GPU yang dirancang untuk menghadirkan lompatan besar dalam performa gaming, grafis realistis, dan pemrosesan berbasis AI. Kehadiran seri RTX 50 menjadi tonggak penting bagi gamer, content creator, dan profesional yang membutuhkan performa grafis kelas atas di era modern.', 'Sekilas Tentang NVIDIA GeForce RTX 50 Series: GeForce RTX 50 Series merupakan penerus langsung dari RTX 40 Series dan dibangun untuk menjawab kebutuhan game generasi terbaru, resolusi tinggi, serta teknologi AI yang semakin kompleks. NVIDIA memposisikan seri ini sebagai GPU next-generation yang tidak hanya fokus pada gaming, tetapi juga produktivitas dan komputasi AI.', 'blog_130010319e1b73cc_1765909043.jpg', 'publish', 4, '2025-12-17 01:15:57', '2025-12-17 01:15:57', '2025-12-17 15:02:05'),
+(6, 1, 3, 'NVIDIA GeForce RTX 50 Series Resmi Diumumkan', 'nvidia-geforce-rtx-50-series-resmi-diumumkan', 'NVIDIA kembali menggebrak dunia teknologi dengan resmi mengumumkan NVIDIA GeForce RTX 50 Series, generasi terbaru GPU yang dirancang untuk menghadirkan lompatan besar dalam performa gaming, grafis realistis, dan pemrosesan berbasis AI. Kehadiran seri RTX 50 menjadi tonggak penting bagi gamer, content creator, dan profesional yang membutuhkan performa grafis kelas atas di era modern.', 'Sekilas Tentang NVIDIA GeForce RTX 50 Series: GeForce RTX 50 Series merupakan penerus langsung dari RTX 40 Series dan dibangun untuk menjawab kebutuhan game generasi terbaru, resolusi tinggi, serta teknologi AI yang semakin kompleks. NVIDIA memposisikan seri ini sebagai GPU next-generation yang tidak hanya fokus pada gaming, tetapi juga produktivitas dan komputasi AI.', 'blog_130010319e1b73cc_1765909043.jpg', 'publish', 5, '2025-12-17 01:15:57', '2025-12-17 01:15:57', '2025-12-17 22:19:50'),
 (7, 1, 4, 'Review Montech XR: Casing Budget Rasa Premium', 'review-montech-xr-casing-budget-rasa-premium', 'Pasar casing PC semakin kompetitif, terutama di segmen budget hingga mid-range. Salah satu produk yang belakangan menarik perhatian adalah Montech XR, sebuah casing PC yang menawarkan desain modern, airflow optimal, dan fitur yang biasanya ditemui di kelas harga lebih tinggi. Dalam artikel ini, kita akan membahas review lengkap Montech XR, mulai dari desain, build quality, airflow, hingga apakah casing ini layak disebut budget rasa premium.', 'Sekilas Tentang Montech XR\n\nMontech dikenal sebagai brand yang fokus menghadirkan produk PC dengan value tinggi. Montech XR diposisikan sebagai casing entry–mid level yang menargetkan gamer dan PC builder pemula hingga menengah yang menginginkan tampilan elegan tanpa harus mengeluarkan biaya besar.\n\n- Segmentasi pengguna Montech XR:\n- PC gaming entry hingga mid-range\n- Builder pemula\n- Pengguna yang mengutamakan airflow dan estetika minimalis', 'blog_af0d0175f86f2b77_1765909168.jpg', 'publish', 3, '2025-12-17 01:19:56', '2025-12-17 01:19:56', '2025-12-17 15:02:07');
 
 -- --------------------------------------------------------
@@ -303,8 +304,8 @@ INSERT INTO `customers` (`id_customer`, `nama_lengkap`, `email`, `no_telp`, `pas
 (1, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567810', '$2y$10$QArwIUUQKH9XeT/2YAszdONm1kkz75Dwaj0udRsB1y7tNwpSU0HIm', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, 'customer_1_1765615083_906cac87.jpg', '2025-11-28 18:18:48', '2025-12-13 15:38:03'),
 (2, 'Akmal Dwi Saputra', 'akmal.customer@gmail.com', '089577658894', '$2y$10$14VOQUECTKXo7NE6DeVn5Od5.ho5aJir2iRxVm3Kzl16FG9KupSK6', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, NULL, '2025-11-30 16:27:34', '2025-11-30 16:27:34'),
 (3, 'Jason Susanto', 'susanto.customer@gmail.com', '081246379958', '$2y$10$E0Z/97QeW3WFUwFuexZ8D.W6O09hmW7EB/gCV9A5JP.I1TZ6yuZS.', NULL, NULL, NULL, 'regular', NULL, NULL, 0, 0, NULL, NULL, '2025-11-30 16:41:05', '2025-11-30 16:41:57'),
-(7, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '81290413082', '$2y$10$5VwN0M9pZCy/a0NLowhinOyq/rwaLC/GOwp00RE6nNoBbvh2ARQlu', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-04 19:07:59', 'google_profile_6931799f1b454_1764850079.jpg', '2025-12-04 19:07:59', '2025-12-14 21:17:54'),
-(8, '0728_Muhamad Faizal Ardiansyah', 'mhmdfaizalardi@gmail.com', NULL, NULL, '114145390091505445484', 'mhmdfaizalardi@gmail.com', '0728_Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-10 13:37:29', 'google_profile_69391529751f4_1765348649.jpg', '2025-12-10 13:37:29', '2025-12-14 21:15:35'),
+(7, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '81290413082', '$2y$10$5VwN0M9pZCy/a0NLowhinOyq/rwaLC/GOwp00RE6nNoBbvh2ARQlu', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-04 19:07:59', 'google_profile_6931799f1b454_1764850079.jpg', '2025-12-04 19:07:59', '2025-12-17 17:47:14'),
+(8, '0728_Muhamad Faizal Ardiansyah', 'mhmdfaizalardi@gmail.com', NULL, NULL, '114145390091505445484', 'mhmdfaizalardi@gmail.com', '0728_Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-10 13:37:29', 'google_profile_69391529751f4_1765348649.jpg', '2025-12-10 13:37:29', '2025-12-17 17:40:15'),
 (9, 'Faizal Ardi', 'mhfaizalardillia22@gmail.com', '081291203984', '$2y$10$m8micOQf4IefkSng2uFtYeC84XnBiKQsUTYRz3pjWuLyj5JBiHd6y', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, NULL, '2025-12-17 13:50:21', '2025-12-17 13:50:21');
 
 -- --------------------------------------------------------
@@ -942,7 +943,7 @@ CREATE TABLE `store_locations` (
 --
 
 INSERT INTO `store_locations` (`id_toko`, `nama_toko`, `no_telepon`, `alamat`, `provinsi`, `kota_kabupaten`, `kecamatan`, `kelurahan`, `kode_pos`, `jam_buka`, `jam_tutup`, `is_active`, `created_at`, `updated_at`) VALUES
-('TKO0001', 'Nano Komputer - Jakarta Pusat', '0816765803', 'Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 21', 'DKI JAKARTA', 'KOTA JAKARTA PUSAT', 'SAWAH BESAR', 'MANGGA DUA SELATAN', '10730', '08:00:00', '18:00:00', 1, '2025-12-12 12:59:04', '2025-12-15 00:17:31');
+('TKO0001', 'Nano Komputer - Jakarta Pusat', '0816765803', 'Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 21', 'DKI JAKARTA', 'KOTA JAKARTA PUSAT', 'SAWAH BESAR', 'KARANG ANYAR', '10730', '07:00:00', '18:00:00', 1, '2025-12-12 12:59:04', '2025-12-17 19:04:07');
 
 -- --------------------------------------------------------
 
@@ -967,13 +968,6 @@ CREATE TABLE `support_tickets` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `support_tickets`
---
-
-INSERT INTO `support_tickets` (`id_ticket`, `id_customer`, `nama_pengaju`, `email`, `no_telepon`, `subjek`, `kategori`, `message`, `attachment`, `status`, `priority`, `assigned_to`, `created_at`, `updated_at`) VALUES
-('TKT00001', NULL, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567890', 'Kendala Login Akun Dinonaktifkan', 'Aktivasi Akun', 'Yth. Tim Support/Administrator\r\nDengan hormat,\r\n\r\nSaya yang bertanda tangan di bawah ini:\r\n\r\nNama: Fauzan Eldianzah\r\nEmail/Username: fauzan.customer@gmail.com\r\n\r\nDengan ini mengajukan permohonan untuk aktivasi ulang akun saya yang saat ini dinonaktifkan. Saya menyadari bahwa akun tersebut mungkin dinonaktifkan karena alasan tertentu, dan saya memohon kesediaan pihak terkait untuk meninjau kembali status akun saya.\r\n\r\nSaya berkomitmen untuk mematuhi seluruh ketentuan dan kebijakan yang berlaku. Apabila diperlukan informasi atau dokumen tambahan, saya siap untuk melengkapinya.\r\n\r\nDemikian permohonan ini saya sampaikan. Atas perhatian dan bantuannya, saya ucapkan terima kasih.\r\n\r\nHormat saya,', NULL, 'Open', 'Medium', NULL, '2025-12-16 17:06:57', '2025-12-16 17:06:57');
-
 -- --------------------------------------------------------
 
 --
@@ -990,6 +984,43 @@ CREATE TABLE `ticket_replies` (
   `is_internal_note` tinyint(1) DEFAULT '0',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Triggers `ticket_replies`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_update_ticket_status_after_reply` AFTER INSERT ON `ticket_replies` FOR EACH ROW BEGIN
+    DECLARE current_status VARCHAR(20);
+
+    -- Ambil status ticket saat ini
+    SELECT status
+    INTO current_status
+    FROM support_tickets
+    WHERE id_ticket = NEW.id_ticket
+    LIMIT 1;
+
+    -- Abaikan jika sudah resolved / closed
+    IF current_status NOT IN ('Resolved', 'Closed') THEN
+
+        -- Jika customer membalas (dan bukan internal note)
+        IF NEW.id_customer IS NOT NULL AND NEW.is_internal_note = 0 THEN
+            UPDATE support_tickets
+            SET status = 'Open',
+                updated_at = NOW()
+            WHERE id_ticket = NEW.id_ticket;
+
+        -- Jika admin membalas (dan bukan internal note)
+        ELSEIF NEW.id_admin IS NOT NULL AND NEW.is_internal_note = 0 THEN
+            UPDATE support_tickets
+            SET status = 'In Progress',
+                updated_at = NOW()
+            WHERE id_ticket = NEW.id_ticket;
+        END IF;
+
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -1335,7 +1366,7 @@ ALTER TABLE `wishlist`
 -- AUTO_INCREMENT for table `address_book`
 --
 ALTER TABLE `address_book`
-  MODIFY `id_alamat` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_alamat` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `administrators`

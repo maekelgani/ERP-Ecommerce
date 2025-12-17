@@ -822,7 +822,6 @@ include '../../components/users/head.php';
             }
         }
     </style>
-
     <input type="hidden" id="checkoutData" value='<?= json_encode([
                                                         'subtotal' => $subtotal,
                                                         'tax_amount' => $taxAmount,

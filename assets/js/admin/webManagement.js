@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initSelect2();
     loadStores();
     loadTickets();
+    loadArticles();
+    loadArticleCategories();
+    initDragDropThumbnail();
+    
 
     document.getElementById('btnAddStore').addEventListener('click', () => openStoreModal());
     document.getElementById('closeStoreModal').addEventListener('click', closeStoreModal);
@@ -245,15 +249,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    async function openStoreModal(storeData = null) {
+    function openStoreModal(storeData = null) {
         storeEditMode = !!storeData;
         document.getElementById('storeModalTitle').textContent = storeEditMode ? 'Edit Lokasi Toko' : 'Tambah Lokasi Toko';
         document.getElementById('storeForm').reset();
-        
-        $('#provinsiToko').val('').trigger('change');
-        $('#kotaToko').html('<option value="">Pilih Kota/Kabupaten</option>').val('').trigger('change');
-        $('#kecamatanToko').html('<option value="">Pilih Kecamatan</option>').val('').trigger('change');
-        $('#kelurahanToko').html('<option value="">Pilih Kelurahan</option>').val('').trigger('change');
 
         if (storeData) {
             document.getElementById('storeId').value = storeData.id_toko;
@@ -264,112 +263,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('jamBuka').value = storeData.jam_buka || '';
             document.getElementById('jamTutup').value = storeData.jam_tutup || '';
             document.getElementById('isActive').checked = storeData.is_active == 1;
-            
-            if (storeData.provinsi) {
-                await populateWilayahForEdit(storeData);
-            }
         }
 
         document.getElementById('storeModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
-    }
-    
-    async function populateWilayahForEdit(storeData) {
-        try {
-            const provincesRes = await fetch(`${WILAYAH_API}/provinces.json`);
-            const provinces = await provincesRes.json();
-            
-            const provinceSelect = document.getElementById('provinsiToko');
-            provinceSelect.innerHTML = '<option value="">Pilih Provinsi</option>';
-            
-            let selectedProvinceId = null;
-            provinces.forEach(province => {
-                const option = document.createElement('option');
-                option.value = province.id;
-                option.textContent = province.name;
-                option.dataset.name = province.name;
-                provinceSelect.appendChild(option);
-                
-                if (storeData.provinsi && province.name.toUpperCase() === storeData.provinsi.toUpperCase()) {
-                    selectedProvinceId = province.id;
-                }
-            });
-            
-            if (selectedProvinceId) {
-                $('#provinsiToko').val(selectedProvinceId).trigger('change.select2');
-                
-                const citiesRes = await fetch(`${WILAYAH_API}/regencies/${selectedProvinceId}.json`);
-                const cities = await citiesRes.json();
-                
-                const citySelect = document.getElementById('kotaToko');
-                citySelect.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
-                
-                let selectedCityId = null;
-                cities.forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city.id;
-                    option.textContent = city.name;
-                    option.dataset.name = city.name;
-                    citySelect.appendChild(option);
-                    
-                    if (storeData.kota_kabupaten && city.name.toUpperCase() === storeData.kota_kabupaten.toUpperCase()) {
-                        selectedCityId = city.id;
-                    }
-                });
-                
-                if (selectedCityId) {
-                    $('#kotaToko').val(selectedCityId).trigger('change.select2');
-                    
-                    const districtsRes = await fetch(`${WILAYAH_API}/districts/${selectedCityId}.json`);
-                    const districts = await districtsRes.json();
-                    
-                    const districtSelect = document.getElementById('kecamatanToko');
-                    districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
-                    
-                    let selectedDistrictId = null;
-                    districts.forEach(district => {
-                        const option = document.createElement('option');
-                        option.value = district.id;
-                        option.textContent = district.name;
-                        option.dataset.name = district.name;
-                        districtSelect.appendChild(option);
-                        
-                        if (storeData.kecamatan && district.name.toUpperCase() === storeData.kecamatan.toUpperCase()) {
-                            selectedDistrictId = district.id;
-                        }
-                    });
-                    
-                    if (selectedDistrictId) {
-                        $('#kecamatanToko').val(selectedDistrictId).trigger('change.select2');
-                        
-                        const villagesRes = await fetch(`${WILAYAH_API}/villages/${selectedDistrictId}.json`);
-                        const villages = await villagesRes.json();
-                        
-                        const villageSelect = document.getElementById('kelurahanToko');
-                        villageSelect.innerHTML = '<option value="">Pilih Kelurahan</option>';
-                        
-                        let selectedVillageId = null;
-                        villages.forEach(village => {
-                            const option = document.createElement('option');
-                            option.value = village.id;
-                            option.textContent = village.name;
-                            option.dataset.name = village.name;
-                            villageSelect.appendChild(option);
-                            
-                            if (storeData.kelurahan && village.name.toUpperCase() === storeData.kelurahan.toUpperCase()) {
-                                selectedVillageId = village.id;
-                            }
-                        });
-                        
-                        if (selectedVillageId) {
-                            $('#kelurahanToko').val(selectedVillageId).trigger('change.select2');
-                        }
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error populating wilayah for edit:', error);
-        }
     }
 
     function closeStoreModal() {
@@ -533,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             tbody.innerHTML = result.data.map(ticket => `
-                <tr class="hover:bg-gray-50">
+                <tr data-ticket-id="${ticket.id_ticket}" class="hover:bg-gray-50">
                     <td class="px-4 py-3 font-mono text-sm font-medium text-gray-900">${ticket.id_ticket}</td>
                     <td class="px-4 py-3">
                         <div>
@@ -570,7 +467,17 @@ document.addEventListener('DOMContentLoaded', function() {
             tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-12 text-center text-red-500">Error memuat data tiket</td></tr>`;
         }
     }
-
+    function updateTicketTableStatus(ticketId, status) {
+        const row = document.querySelector(`tr[data-ticket-id="${ticketId}"]`);
+        if (!row) return;
+    
+        const badge = row.querySelector('td:nth-child(5) span');
+        if (!badge) return;
+    
+        badge.textContent = status;
+        badge.className = `px-2 py-1 text-xs rounded-full font-medium ${getStatusBadgeClass(status)}`;
+    }
+    
     window.viewTicket = async function(id) {
         try {
             const response = await fetch(`${API_BASE}support-ticket.php?action=get&id=${id}`);
@@ -586,64 +493,137 @@ document.addEventListener('DOMContentLoaded', function() {
                 content.innerHTML = `
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 space-y-6">
-                            <div class="bg-gray-50 rounded-xl p-5">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">${escapeHtml(ticket.subjek)}</h4>
-                                        <p class="text-sm text-gray-500">Dari: ${escapeHtml(ticket.nama_pengaju)} (${escapeHtml(ticket.email)})</p>
+                            <!-- Ticket Question Card -->
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div class="px-5 py-4 border-b border-gray-100 flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-lg text-gray-900 leading-tight">
+                                            ${escapeHtml(ticket.subjek)}
+                                        </h4>
+                                        <p class="text-xs text-gray-500 mt-1 flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-sm">person</span>
+                                            <b>${escapeHtml(ticket.nama_pengaju)}</b> · ${formatDate(ticket.created_at)}
+                                        </p>
                                     </div>
-                                    <span class="px-3 py-1 text-sm rounded-full font-medium ${getStatusBadgeClass(ticket.status)}">${ticket.status}</span>
+                                    <span data-ticket-status class="px-3 py-1.5 text-xs font-semibold rounded-lg ${getStatusBadgeClass(ticket.status)} shrink-0">
+                                        ${ticket.status}
+                                    </span>
                                 </div>
-                                <div class="prose prose-sm max-w-none text-gray-700">
-                                    <p>${escapeHtml(ticket.message).replace(/\n/g, '<br>')}</p>
+                                <div class="p-5">
+                                    <div class="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+                                        <p>${escapeHtml(ticket.message).replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                    ${ticket.attachment ? `
+                                    <div class="mt-4 pt-4 border-t border-gray-100">
+                                        <a href="../../uploads/tickets/${ticket.attachment}" target="_blank" 
+                                           class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                            <span class="material-symbols-outlined text-lg">attachment</span>
+                                            Lihat Lampiran
+                                        </a>
+                                    </div>
+                                    ` : ''}
                                 </div>
-                                ${ticket.attachment ? `
-                                <div class="mt-4 pt-4 border-t border-gray-200">
-                                    <a href="../../uploads/tickets/${ticket.attachment}" target="_blank" class="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline">
-                                        <span class="material-symbols-outlined text-lg">attachment</span>
-                                        Lihat Lampiran
-                                    </a>
-                                </div>
-                                ` : ''}
                             </div>
 
-                            <div>
-                                <h4 class="font-semibold text-gray-900 mb-4">Riwayat Balasan</h4>
-                                <div class="space-y-4" id="repliesList">
-                                    ${replies.length === 0 ? '<p class="text-gray-500 text-sm">Belum ada balasan</p>' : 
-                                    replies.map(reply => `
-                                        <div class="bg-white border border-gray-200 rounded-xl p-4 ${reply.id_admin ? 'ml-6 border-l-4 border-l-gray-800' : ''}">
-                                            <div class="flex items-center justify-between mb-2">
-                                                <div class="flex items-center gap-2">
-                                                    <span class="font-medium text-gray-900">${reply.id_admin ? (reply.admin_name || 'Admin') : (reply.customer_name || 'Customer')}</span>
-                                                    ${reply.is_internal_note == 1 ? '<span class="px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 rounded-full">Internal Note</span>' : ''}
-                                                </div>
-                                                <span class="text-xs text-gray-500">${formatDate(reply.created_at)}</span>
+                            <!-- Riwayat Balasan Section -->
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-[#882426]">forum</span>
+                                        <h4 class="font-semibold text-gray-900">Riwayat Balasan</h4>
+                                        <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-full">${replies.length}</span>
+                                    </div>
+                                    ${replies.length > 0 ? `
+                                    <button onclick="deleteAllReplies('${ticket.id_ticket}')"
+                                        class="flex items-center gap-1 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 rounded-lg transition-colors font-medium">
+                                        <span class="material-symbols-outlined text-sm">delete_sweep</span>
+                                        Hapus Semua
+                                    </button>
+                                    ` : ''}
+                                </div>
+                                <div class="p-5 space-y-4 max-h-[400px] overflow-y-auto" id="repliesList">
+                                    ${replies.length === 0 ? `
+                                        <div class="text-center py-8">
+                                            <div class="w-16 h-16 mx-auto mb-3 bg-gray-100 rounded-full flex items-center justify-center">
+                                                <span class="material-symbols-outlined text-3xl text-gray-400">chat_bubble_outline</span>
                                             </div>
-                                            <p class="text-gray-700 text-sm">${escapeHtml(reply.message).replace(/\n/g, '<br>')}</p>
+                                            <p class="text-gray-500 text-sm">Belum ada balasan</p>
+                                            <p class="text-gray-400 text-xs mt-1">Kirim balasan pertama untuk tiket ini</p>
+                                        </div>
+                                    ` : replies.map(reply => `
+                                        <div data-reply-id="${reply.id_reply}" 
+                                             class="rounded-xl p-4 transition-all hover:shadow-sm
+                                                    ${reply.id_admin 
+                                                        ? 'bg-[#882426]/5 border-l-4 border-l-[#882426] ml-4' 
+                                                        : 'bg-blue-50 border-l-4 border-l-blue-400'}">
+                                            <div class="flex items-center justify-between mb-3">
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold
+                                                                ${reply.id_admin ? 'bg-[#882426]' : 'bg-blue-500'}">
+                                                        ${reply.id_admin ? 'A' : 'C'}
+                                                    </div>
+                                                    <div>
+                                                        <span class="font-medium text-gray-900 text-sm">
+                                                            ${reply.id_admin ? (reply.admin_name || 'Admin') : (reply.customer_name || 'Customer')}
+                                                        </span>
+                                                        ${reply.is_internal_note == 1 ? `
+                                                            <span class="ml-2 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full font-medium">
+                                                                Internal Note
+                                                            </span>
+                                                        ` : ''}
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-xs text-gray-500">${formatDate(reply.created_at)}</span>
+                                                    ${reply.id_admin ? `
+                                                        <button onclick="deleteReply('${reply.id_reply}', '${ticket.id_ticket}')"
+                                                            class="p-1.5 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                                                            title="Hapus balasan">
+                                                            <span class="material-symbols-outlined text-lg">delete</span>
+                                                        </button>
+                                                    ` : ''}
+                                                </div>
+                                            </div>
+                                            <p class="text-gray-700 text-sm leading-relaxed pl-10">
+                                                ${escapeHtml(reply.message).replace(/\n/g, '<br>')}
+                                            </p>
                                         </div>
                                     `).join('')}
                                 </div>
                             </div>
 
-                            <div class="bg-white border border-gray-200 rounded-xl p-5">
-                                <h4 class="font-semibold text-gray-900 mb-4">Kirim Balasan</h4>
-                                <form id="replyForm" onsubmit="submitReply(event, '${ticket.id_ticket}')">
-                                    <textarea id="replyMessage" rows="3" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-gray-800 resize-none" placeholder="Tulis balasan..."></textarea>
-                                    <div class="flex items-center justify-between mt-4">
-                                        <div class="flex items-center gap-4">
-                                            <label class="flex items-center gap-2 text-sm">
-                                                <input type="checkbox" id="internalNote" class="w-4 h-4 text-gray-800 border-gray-300 rounded">
+                            <!-- Kirim Balasan Section -->
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[#882426]">reply</span>
+                                    <h4 class="font-semibold text-gray-900">Kirim Balasan</h4>
+                                </div>
+                                <form id="replyForm" onsubmit="submitReply(event, '${ticket.id_ticket}')" class="p-5">
+                                    <textarea
+                                        id="replyMessage"
+                                        rows="5"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all resize-none text-sm"
+                                        placeholder="Tulis balasan yang jelas dan membantu pelanggan..."></textarea>
+                                    <p class="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">info</span>
+                                        Gunakan bahasa sopan dan ringkas. Balasan dapat ditampilkan ke publik jika dijadikan FAQ.
+                                    </p>
+                                    <div class="flex flex-wrap items-center justify-between gap-4 mt-4 pt-4 border-t border-gray-100">
+                                        <div class="flex flex-wrap items-center gap-4">
+                                            <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-[#882426] transition-colors">
+                                                <input type="checkbox" id="internalNote" class="w-4 h-4 accent-[#882426] rounded">
                                                 <span>Internal Note</span>
                                             </label>
-                                            <select id="updateStatusOnReply" class="text-sm border border-gray-300 rounded-lg px-3 py-1.5">
+                                            <select id="updateStatusOnReply" class="text-sm border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white">
                                                 <option value="">Tidak ubah status</option>
                                                 <option value="In Progress">Set: In Progress</option>
                                                 <option value="Resolved">Set: Resolved</option>
                                                 <option value="Closed">Set: Closed</option>
                                             </select>
                                         </div>
-                                        <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium">
+                                        <button type="submit" class="px-5 py-2.5 bg-[#882426] text-white rounded-xl hover:bg-[#6d1a1c] transition-all font-medium flex items-center gap-2 shadow-sm hover:shadow-md">
+                                            <span class="material-symbols-outlined text-lg">send</span>
                                             Kirim Balasan
                                         </button>
                                     </div>
@@ -651,61 +631,104 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                         </div>
 
+                        <!-- Sidebar -->
                         <div class="space-y-4">
-                            <div class="bg-white border border-gray-200 rounded-xl p-5">
-                                <h4 class="font-semibold text-gray-900 mb-4">Informasi Tiket</h4>
-                                <div class="space-y-3 text-sm">
-                                    <div class="flex justify-between">
+                            <!-- Informasi Tiket Card -->
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[#882426]">info</span>
+                                    <h4 class="font-semibold text-gray-900">Informasi Tiket</h4>
+                                </div>
+                                <div class="p-5 space-y-3 text-sm">
+                                    <div class="flex justify-between items-center">
                                         <span class="text-gray-500">ID Tiket</span>
-                                        <span class="font-mono font-medium">${ticket.id_ticket}</span>
+                                        <span class="font-mono font-semibold text-[#882426] bg-[#882426]/10 px-2 py-1 rounded">${ticket.id_ticket}</span>
                                     </div>
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between items-center">
                                         <span class="text-gray-500">Kategori</span>
-                                        <span class="px-2 py-0.5 text-xs rounded-full ${getKategoriBadgeClass(ticket.kategori)}">${ticket.kategori}</span>
+                                        <span class="px-2.5 py-1 text-xs rounded-lg font-medium ${getKategoriBadgeClass(ticket.kategori)}">${ticket.kategori}</span>
                                     </div>
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between items-center">
                                         <span class="text-gray-500">Prioritas</span>
-                                        <span class="px-2 py-0.5 text-xs rounded-full ${getPriorityBadgeClass(ticket.priority)}">${ticket.priority}</span>
+                                        <span class="px-2.5 py-1 text-xs rounded-lg font-medium ${getPriorityBadgeClass(ticket.priority)}">${ticket.priority}</span>
                                     </div>
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between items-center">
                                         <span class="text-gray-500">Dibuat</span>
-                                        <span>${formatDate(ticket.created_at)}</span>
+                                        <span class="text-gray-700">${formatDate(ticket.created_at)}</span>
                                     </div>
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between items-center">
                                         <span class="text-gray-500">Update Terakhir</span>
-                                        <span>${formatDate(ticket.updated_at)}</span>
+                                        <span class="text-gray-700">${formatDate(ticket.updated_at)}</span>
+                                    </div>
+                                    <div class="pt-4 mt-2 border-t border-gray-100">
+                                        <label class="flex items-start gap-3 text-sm cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <input type="checkbox" id="isFaqCheckbox" class="mt-0.5 w-5 h-5 accent-[#882426] rounded">
+                                            <div>
+                                                <span class="font-medium text-gray-800">Tampilkan sebagai FAQ</span>
+                                                <p class="text-xs text-gray-500 mt-0.5">
+                                                    FAQ hanya muncul jika status <b>Resolved</b> atau <b>Closed</b>
+                                                </p>
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="bg-white border border-gray-200 rounded-xl p-5">
-                                <h4 class="font-semibold text-gray-900 mb-4">Update Status</h4>
-                                <select id="ticketStatusUpdate" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-800 focus:border-gray-800">
-                                    <option value="Open" ${ticket.status === 'Open' ? 'selected' : ''}>Open</option>
-                                    <option value="In Progress" ${ticket.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                                    <option value="Resolved" ${ticket.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
-                                    <option value="Closed" ${ticket.status === 'Closed' ? 'selected' : ''}>Closed</option>
-                                </select>
-                                <button onclick="updateTicketStatus('${ticket.id_ticket}')" class="w-full mt-3 px-4 py-2.5 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium">
-                                    Update Status
-                                </button>
+                            <!-- Update Status Card -->
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[#882426]">sync</span>
+                                    <h4 class="font-semibold text-gray-900">Update Status</h4>
+                                </div>
+                                <div class="p-5">
+                                    <select id="ticketStatusUpdate" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] text-sm bg-white">
+                                        <option value="Open" ${ticket.status === 'Open' ? 'selected' : ''}>Open</option>
+                                        <option value="In Progress" ${ticket.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                        <option value="Resolved" ${ticket.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+                                        <option value="Closed" ${ticket.status === 'Closed' ? 'selected' : ''}>Closed</option>
+                                    </select>
+                                    <button onclick="updateTicketStatus('${ticket.id_ticket}')" 
+                                            class="w-full mt-3 px-4 py-3 bg-[#882426] text-white rounded-xl hover:bg-[#6d1a1c] transition-all font-medium flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                                        <span class="material-symbols-outlined text-lg">check_circle</span>
+                                        Update Status
+                                    </button>
+                                </div>
                             </div>
 
-                            <div class="bg-white border border-gray-200 rounded-xl p-5">
-                                <h4 class="font-semibold text-gray-900 mb-4">Kontak</h4>
-                                <div class="space-y-3 text-sm">
-                                    <div>
-                                        <span class="text-gray-500 block">Nama</span>
-                                        <span class="font-medium">${escapeHtml(ticket.nama_pengaju)}</span>
+                            <!-- Kontak Card -->
+                            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[#882426]">contact_mail</span>
+                                    <h4 class="font-semibold text-gray-900">Kontak</h4>
+                                </div>
+                                <div class="p-5 space-y-4 text-sm">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-[#882426]/10 rounded-full flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-[#882426]">person</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500 text-xs block">Nama</span>
+                                            <span class="font-medium text-gray-900">${escapeHtml(ticket.nama_pengaju)}</span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <span class="text-gray-500 block">Email</span>
-                                        <a href="mailto:${ticket.email}" class="text-blue-600 hover:underline">${escapeHtml(ticket.email)}</a>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-blue-600">email</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500 text-xs block">Email</span>
+                                            <a href="mailto:${ticket.email}" class="text-blue-600 hover:underline font-medium">${escapeHtml(ticket.email)}</a>
+                                        </div>
                                     </div>
                                     ${ticket.no_telepon ? `
-                                    <div>
-                                        <span class="text-gray-500 block">Telepon</span>
-                                        <a href="tel:${ticket.no_telepon}" class="text-blue-600 hover:underline">${escapeHtml(ticket.no_telepon)}</a>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-green-600">phone</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-500 text-xs block">Telepon</span>
+                                            <a href="tel:${ticket.no_telepon}" class="text-green-600 hover:underline font-medium">${escapeHtml(ticket.no_telepon)}</a>
+                                        </div>
                                     </div>
                                     ` : ''}
                                 </div>
@@ -713,6 +736,37 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                 `;
+                // ===============================
+                // FAQ checkbox & status sync
+                // ===============================
+                const statusSelect = document.getElementById('ticketStatusUpdate');
+                const faqCheckbox = document.getElementById('isFaqCheckbox');
+
+                if (statusSelect && faqCheckbox) {
+
+                    // 🔥 1. SET STATE AWAL DARI DATABASE
+                    faqCheckbox.checked = ticket.is_faq == 1;
+
+                    const syncFaqCheckboxState = () => {
+                        const allowed = ['Resolved', 'Closed'].includes(statusSelect.value);
+
+                        if (!allowed) {
+                            faqCheckbox.checked = false;
+                            faqCheckbox.disabled = true;
+                        } else {
+                            faqCheckbox.disabled = false;
+
+                            // 🔥 JANGAN override nilai dari database
+                            // checkbox tetap sesuai ticket.is_faq
+                        }
+                    };
+
+                    // 🔥 2. JALANKAN SEKALI SAAT MODAL DIBUKA
+                    syncFaqCheckboxState();
+
+                    // 🔄 3. SYNC SAAT STATUS BERUBAH
+                    statusSelect.addEventListener('change', syncFaqCheckboxState);
+                }
 
                 document.getElementById('ticketModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
@@ -725,62 +779,261 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    window.submitReply = async function(e, ticketId) {
-        e.preventDefault();
+    window.deleteReply = async function (replyId, ticketId) {
+        if (!confirm('Yakin ingin menghapus balasan ini?')) return;
+    
+        const response = await fetch(`${API_BASE}support-ticket.php?action=deleteReply`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_reply: replyId })
+        });
+    
+        const result = await response.json();
+    
+        if (!result.success) {
+            showToast(result.message || 'Terjadi kesalahan', 'error');
+            return;
+        }
+    
+        document.querySelector(`[data-reply-id="${replyId}"]`)?.remove();
+    
+        // 🔥 SINKRON STATUS & FAQ DARI SERVER
+        const ticket = await refreshTicketMeta(ticketId);
+    
+        if (ticket) {
+            updateTicketTableStatus(ticketId, ticket.status);
+        }
+    
+        showToast('Balasan dihapus', 'success');
+    };
 
+    window.deleteAllReplies = async function (ticketId) {
+        if (!confirm('Yakin ingin menghapus SEMUA balasan tiket ini?')) return;
+    
+        const response = await fetch(`${API_BASE}support-ticket.php?action=deleteAllReplies`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_ticket: ticketId })
+        });
+    
+        const result = await response.json();
+    
+        if (!result.success) {
+            showToast(result.message || 'Gagal menghapus balasan', 'error');
+            return;
+        }
+    
+        document.getElementById('repliesList').innerHTML =
+            '<p class="text-gray-500 text-sm">Belum ada balasan</p>';
+    
+            updateStatusBadge('In Progress');
+            syncStatusSelect('In Progress');
+            updateFaqCheckboxState('In Progress', 0);
+            
+            // 🔥 UPDATE TABEL
+            updateTicketTableStatus(ticketId, 'In Progress');
+            
+    
+        showToast('Semua balasan dihapus', 'success');
+    };
+    
+    async function refreshTicketMeta(ticketId) {
+        const response = await fetch(`${API_BASE}support-ticket.php?action=get&id=${ticketId}`);
+        const result = await response.json();
+    
+        if (!result.success) return null;
+    
+        const ticket = result.data;
+    
+        updateStatusBadge(ticket.status);
+        syncStatusSelect(ticket.status);
+        updateFaqCheckboxState(ticket.status, ticket.is_faq);
+    
+        return ticket; // 🔥 PENTING
+    }    
+
+    async function submitReply(event, ticketId) {
+        event.preventDefault();
+    
+        const formData = new FormData();
+        const isFaq = document.getElementById('isFaqCheckbox')?.checked ? 1 : 0;
+        formData.append('is_faq', isFaq);
+        formData.append('id_ticket', ticketId);
+        formData.append('action', 'reply');
+        formData.append('message', document.getElementById('replyMessage').value);
+        formData.append(
+            'is_internal_note',
+            document.getElementById('internalNote')?.checked ? 1 : 0
+        );
+        formData.append(
+            'update_status',
+            document.getElementById('updateStatusOnReply')?.value || ''
+        );
+    
+        // 🔥 INI KUNCI MASALAH KAMU
+        formData.append(
+            'is_faq',
+            document.getElementById('isFaqCheckbox')?.checked ? 1 : 0
+        );
+    
+        const response = await fetch('../../api/admin/support-ticket.php?action=reply', {
+            method: 'POST',
+            body: formData
+        });
+    
+        const result = await response.json();
+        // handle response...
+    }    
+    
+    window.submitReply = async function (e, ticketId) {
+        e.preventDefault();
+    
+        const messageEl = document.getElementById('replyMessage');
+        const internalNoteEl = document.getElementById('internalNote');
+        const updateStatusEl = document.getElementById('updateStatusOnReply');
+        const faqCheckbox = document.getElementById('isFaqCheckbox');
+    
         const formData = new FormData();
         formData.append('id_ticket', ticketId);
-        formData.append('message', document.getElementById('replyMessage').value);
-        formData.append('is_internal_note', document.getElementById('internalNote').checked ? 1 : 0);
-        formData.append('update_status', document.getElementById('updateStatusOnReply').value);
-
+        formData.append('message', messageEl.value);
+        formData.append('is_internal_note', internalNoteEl.checked ? 1 : 0);
+        formData.append('update_status', updateStatusEl.value);
+        formData.append('is_faq', faqCheckbox?.checked ? 1 : 0);
+    
         try {
             const response = await fetch(`${API_BASE}support-ticket.php?action=reply`, {
                 method: 'POST',
                 body: formData
             });
-
+    
             const result = await response.json();
-
-            if (result.success) {
-                showToast(result.message, 'success');
-                viewTicket(ticketId);
-                loadTickets();
-            } else {
+    
+            if (!result.success) {
                 showToast(result.message || 'Gagal mengirim balasan', 'error');
+                return;
             }
+    
+            // 🔥 APPEND BALASAN TANPA REFRESH - include id_reply from server
+            appendNewReply({
+                id_reply: result.id_reply,
+                admin_name: 'Admin',
+                message: messageEl.value,
+                is_internal_note: internalNoteEl.checked ? 1 : 0,
+                created_at: new Date().toISOString()
+            }, ticketId);
+
+            // 🔄 STATUS AUTO JIKA DIPILIH
+            if (updateStatusEl.value) {
+                updateStatusBadge(updateStatusEl.value);
+                syncStatusSelect(updateStatusEl.value);
+            
+                const autoFaq = ['Resolved', 'Closed'].includes(updateStatusEl.value) ? 1 : 0;
+                updateFaqCheckboxState(updateStatusEl.value, autoFaq);
+            
+                // 🔥 UPDATE TABEL
+                updateTicketTableStatus(ticketId, updateStatusEl.value);
+            }
+            // RESET FORM
+            messageEl.value = '';
+            internalNoteEl.checked = false;
+            updateStatusEl.value = '';
+    
+            showToast('Balasan berhasil dikirim', 'success');
+    
         } catch (error) {
-            console.error('Error submitting reply:', error);
+            console.error(error);
             showToast('Terjadi kesalahan', 'error');
         }
     };
+    
+function appendNewReply(reply, ticketId) {
+    const container = document.getElementById('repliesList');
+    if (!container) return;
 
-    window.updateTicketStatus = async function(ticketId) {
-        const status = document.getElementById('ticketStatusUpdate').value;
+    const emptyState = container.querySelector('.text-center');
+    if (emptyState) {
+        container.innerHTML = '';
+    }
 
-        const formData = new FormData();
-        formData.append('id_ticket', ticketId);
-        formData.append('status', status);
+    const div = document.createElement('div');
+    div.dataset.replyId = reply.id_reply;
+    div.className = 'rounded-xl p-4 transition-all hover:shadow-sm bg-[#882426]/5 border-l-4 border-l-[#882426] ml-4';
 
-        try {
-            const response = await fetch(`${API_BASE}support-ticket.php?action=updateStatus`, {
-                method: 'POST',
-                body: formData
-            });
+    div.innerHTML = `
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold bg-[#882426]">
+                    A
+                </div>
+                <div>
+                    <span class="font-medium text-gray-900 text-sm">${reply.admin_name || 'Admin'}</span>
+                    ${reply.is_internal_note ? `
+                        <span class="ml-2 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full font-medium">
+                            Internal Note
+                        </span>
+                    ` : ''}
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500">${formatDate(reply.created_at)}</span>
+                <button onclick="deleteReply('${reply.id_reply}', '${ticketId}')"
+                    class="p-1.5 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                    title="Hapus balasan">
+                    <span class="material-symbols-outlined text-lg">delete</span>
+                </button>
+            </div>
+        </div>
+        <p class="text-gray-700 text-sm leading-relaxed pl-10">
+            ${escapeHtml(reply.message).replace(/\n/g, '<br>')}
+        </p>
+    `;
 
-            const result = await response.json();
+    container.appendChild(div);
+    
+    const replyCountBadge = document.querySelector('.bg-gray-100.text-gray-600.rounded-full');
+    if (replyCountBadge) {
+        const currentCount = parseInt(replyCountBadge.textContent) || 0;
+        replyCountBadge.textContent = currentCount + 1;
+    }
+}
 
-            if (result.success) {
-                showToast(result.message, 'success');
-                viewTicket(ticketId);
-                loadTickets();
-            } else {
-                showToast(result.message || 'Gagal update status', 'error');
-            }
-        } catch (error) {
-            console.error('Error updating status:', error);
-            showToast('Terjadi kesalahan', 'error');
+    
+    window.updateTicketStatus = async function (ticketId) {
+        const statusSelect = document.getElementById('ticketStatusUpdate');
+        const faqCheckbox = document.getElementById('isFaqCheckbox');
+    
+        const status = statusSelect.value;
+        let isFaq = faqCheckbox.checked ? 1 : 0;
+    
+        // 🔒 RULE FRONTEND
+        if (!['Resolved', 'Closed'].includes(status)) {
+            isFaq = 0;
         }
+    
+        const response = await fetch(`${API_BASE}support-ticket.php?action=updateStatus`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id_ticket: ticketId,
+                status,
+                is_faq: isFaq
+            })
+        });
+    
+        const result = await response.json();
+    
+        if (!result.success) {
+            showToast(result.message || 'Gagal update status', 'error');
+            return;
+        }
+    
+        // 🔥 REALTIME SYNC
+        updateStatusBadge(status);
+        syncStatusSelect(status);
+        updateFaqCheckboxState(status, isFaq);
+        updateTicketTableStatus(ticketId, status);        
+    
+        showToast('Status tiket diperbarui', 'success');
     };
 
     window.deleteTicket = function(id) {
@@ -790,6 +1043,56 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('deleteModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     };
+
+    function updateTicketRowStatus(ticketId, status) {
+        const row = document.querySelector(`tr td:first-child:textContent("${ticketId}")`);
+        if (!row) return;
+    
+        const badge = row.closest('tr')?.querySelector('td:nth-child(5) span');
+        if (!badge) return;
+    
+        badge.textContent = status;
+        badge.className = `px-2 py-1 text-xs rounded-full font-medium ${getStatusBadgeClass(status)}`;
+    }    
+
+    function updateStatusBadge(status) {
+        const badge = document.querySelector('[data-ticket-status]');
+        if (!badge) return;
+    
+        badge.textContent = status;
+        badge.className = `px-3 py-1 text-xs font-semibold rounded-full ${getStatusBadgeClass(status)}`;
+    }    
+
+    function syncStatusSelect(status) {
+        const select = document.getElementById('ticketStatusUpdate');
+        if (!select) return;
+        select.value = status;
+    }
+    
+
+    function updateFaqCheckboxState(status, isFaqFromServer = null) {
+        const faqCheckbox = document.getElementById('isFaqCheckbox');
+        if (!faqCheckbox) return;
+    
+        const allowed = ['Resolved', 'Closed'].includes(status);
+    
+        if (!allowed) {
+            faqCheckbox.checked = false;
+            faqCheckbox.disabled = true;
+            faqCheckbox.dataset.autoUnchecked = '1';
+            return;
+        }
+    
+        faqCheckbox.disabled = false;
+    
+        // 🔥 AUTO CHECK
+        if (isFaqFromServer !== null) {
+            faqCheckbox.checked = !!isFaqFromServer;
+        } else if (faqCheckbox.dataset.autoUnchecked === '1') {
+            faqCheckbox.checked = true;
+            delete faqCheckbox.dataset.autoUnchecked;
+        }
+    }    
 
     function closeTicketModal() {
         document.getElementById('ticketModal').classList.add('hidden');
@@ -1028,7 +1331,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('articleModalTitle').textContent = articleEditMode ? 'Edit Artikel' : 'Tambah Artikel';
         document.getElementById('articleForm').reset();
-
+        
         document.getElementById('articleId').value = '';
         document.getElementById('articleTitle').value = '';
         document.getElementById('articleCategory').value = '';
@@ -1061,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('articleModal').classList.add('hidden');
         document.body.style.overflow = '';
         document.getElementById('articleForm').reset();
-
+        
         document.getElementById('articleId').value = '';
         document.getElementById('thumbnailFilename').value = '';
         thumbnailRemoved = false;

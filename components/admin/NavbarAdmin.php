@@ -57,13 +57,18 @@ if (!file_exists(__DIR__ . '../../' . ltrim($adminPhoto, '/'))) {
         </div>
 
         <!-- Center Section - Time Display -->
-        <div class="hidden md:flex flex-col items-center">
+        <!-- <div class="hidden md:flex flex-col items-end">
             <div class="text-lg font-semibold text-gray-800" id="currentTime">--:--:--</div>
             <div class="text-xs text-gray-400" id="currentDate">-- -- ----</div>
-        </div>
+        </div> -->
 
         <!-- Right Section: Icons and Profile -->
         <nav class="flex items-center gap-4 navbar-right">
+            <div class="hidden md:flex flex-col items-end">
+                <div class="text-lg font-semibold text-gray-800" id="currentTime">--:--:--</div>
+                <div class="text-xs text-gray-400" id="currentDate">-- -- ----</div>
+            </div>
+
             <!-- Notification Button -->
             <div class="relative">
                 <button class="icon-button" id="notification-btn" title="Notifikasi">
