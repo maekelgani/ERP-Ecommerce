@@ -1,6 +1,6 @@
 <?php
 $loginUrl = '../../view/login.php';
-$registerUrl = '../../view/login.php';
+$registerUrl = '../../view/login.php#registerPanel';
 ?>
 <div id="loginRequiredModal" class="fixed inset-0 z-[9999] hidden">
     <!-- Background overlay gelap - klik di sini akan close modal -->
@@ -124,7 +124,7 @@ $registerUrl = '../../view/login.php';
         const redirect = redirectUrl || encodeURIComponent(window.location.href);
 
         loginBtn.href = `<?= $loginUrl ?>?redirect=${redirect}`;
-        registerBtn.href = `<?= $registerUrl ?>?redirect=${redirect}`;
+        registerBtn.href = `<?= $registerUrl ?>`;
 
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';

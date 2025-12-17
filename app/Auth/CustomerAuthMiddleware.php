@@ -181,7 +181,7 @@ class CustomerAuthMiddleware
 
     public static function getRegisterUrl(): string
     {
-        return '../../view/login.php';
+        return '../../view/login.php#registerPanel';
     }
 
     private static function renderLoginRequiredPage(array $pageInfo, string $returnPage): void
@@ -198,6 +198,7 @@ class CustomerAuthMiddleware
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title><?= htmlspecialchars($pageInfo['title']) ?> - Login Diperlukan | Nano Komputer</title>
+            <link rel="icon" href="../../assets/img/logo-nano-transparant.png" type="image/x-icon">
             <script src="https://cdn.tailwindcss.com"></script>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
             <script>
@@ -301,7 +302,7 @@ class CustomerAuthMiddleware
                                 <span class="relative px-4 text-sm text-gray-500 bg-white">atau</span>
                             </div>
 
-                            <a href="<?= $registerUrl ?>?redirect=<?= $returnUrl ?>"
+                            <a href="<?= $registerUrl ?>"
                                 class="flex items-center justify-center gap-2 w-full py-4 px-6 bg-white border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-all duration-300">
                                 <span class="material-symbols-outlined">person_add</span>
                                 <span>Daftar Akun Baru</span>
