@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 17, 2025 at 04:27 PM
+-- Generation Time: Dec 18, 2025 at 07:34 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -304,7 +304,7 @@ INSERT INTO `customers` (`id_customer`, `nama_lengkap`, `email`, `no_telp`, `pas
 (1, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567810', '$2y$10$QArwIUUQKH9XeT/2YAszdONm1kkz75Dwaj0udRsB1y7tNwpSU0HIm', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, 'customer_1_1765615083_906cac87.jpg', '2025-11-28 18:18:48', '2025-12-13 15:38:03'),
 (2, 'Akmal Dwi Saputra', 'akmal.customer@gmail.com', '089577658894', '$2y$10$14VOQUECTKXo7NE6DeVn5Od5.ho5aJir2iRxVm3Kzl16FG9KupSK6', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, NULL, '2025-11-30 16:27:34', '2025-11-30 16:27:34'),
 (3, 'Jason Susanto', 'susanto.customer@gmail.com', '081246379958', '$2y$10$E0Z/97QeW3WFUwFuexZ8D.W6O09hmW7EB/gCV9A5JP.I1TZ6yuZS.', NULL, NULL, NULL, 'regular', NULL, NULL, 0, 0, NULL, NULL, '2025-11-30 16:41:05', '2025-11-30 16:41:57'),
-(7, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '81290413082', '$2y$10$5VwN0M9pZCy/a0NLowhinOyq/rwaLC/GOwp00RE6nNoBbvh2ARQlu', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-04 19:07:59', 'google_profile_6931799f1b454_1764850079.jpg', '2025-12-04 19:07:59', '2025-12-17 17:47:14'),
+(7, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '081290413082', '$2y$10$5VwN0M9pZCy/a0NLowhinOyq/rwaLC/GOwp00RE6nNoBbvh2ARQlu', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-04 19:07:59', 'google_profile_6931799f1b454_1764850079.jpg', '2025-12-04 19:07:59', '2025-12-18 05:53:11'),
 (8, '0728_Muhamad Faizal Ardiansyah', 'mhmdfaizalardi@gmail.com', NULL, NULL, '114145390091505445484', 'mhmdfaizalardi@gmail.com', '0728_Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-10 13:37:29', 'google_profile_69391529751f4_1765348649.jpg', '2025-12-10 13:37:29', '2025-12-17 17:40:15'),
 (9, 'Faizal Ardi', 'mhfaizalardillia22@gmail.com', '081291203984', '$2y$10$m8micOQf4IefkSng2uFtYeC84XnBiKQsUTYRz3pjWuLyj5JBiHd6y', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, NULL, '2025-12-17 13:50:21', '2025-12-17 13:50:21');
 
@@ -965,8 +965,27 @@ CREATE TABLE `support_tickets` (
   `priority` enum('Low','Medium','High','Urgent') DEFAULT 'Medium',
   `assigned_to` int DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `is_faq` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `support_tickets`
+--
+
+INSERT INTO `support_tickets` (`id_ticket`, `id_customer`, `nama_pengaju`, `email`, `no_telepon`, `subjek`, `kategori`, `message`, `attachment`, `status`, `priority`, `assigned_to`, `created_at`, `updated_at`, `is_faq`) VALUES
+('TKT00001', NULL, 'Akmal Dwi Saputra', 'akmal.customer@gmail.com', '089576893421', 'Apakah produk di Nano Komputer 100% baru dan original?', 'General', 'Saya ingin memastikan apakah semua produk yang dijual di Nano Komputer merupakan produk 100% baru dan original. Apakah produk tersebut dilengkapi dengan garansi resmi dari masing-masing brand?', NULL, 'Resolved', 'Medium', 1, '2025-12-18 01:11:56', '2025-12-18 05:51:31', 1),
+('TKT00002', NULL, 'Faizal Ardi', 'mhmdfaizalardi@gmail.com', '081290413082', 'Apakah harga di website sudah termasuk PPN?', 'General', 'Saya ingin menanyakan apakah harga produk yang tercantum di website Nano Komputer sudah termasuk PPN atau masih akan dikenakan biaya tambahan pada saat checkout atau pembayaran.', NULL, 'Resolved', 'Medium', 1, '2025-12-18 01:14:16', '2025-12-18 05:50:41', 1),
+('TKT00003', 7, 'Faizal Ardi', 'faizalardi2016@gmail.com', '081290413082', 'Berapa lama proses perakitan PC di Nano Komputer?', 'Garansi & Servis', 'Saya ingin mengetahui berapa lama estimasi waktu yang dibutuhkan untuk proses perakitan PC di Nano Komputer. Apakah terdapat perbedaan waktu untuk PC rakitan standar dan custom build?', NULL, 'Resolved', 'Medium', 1, '2025-12-18 01:25:07', '2025-12-18 05:49:56', 1),
+('TKT00004', 7, 'Faizal Ardi', 'faizalardi2016@gmail.com', '081290413082', 'Apakah PC Rakitan sudah termasuk Windows Office?', 'Pertanyaan Produk', 'Saya ingin menanyakan apakah PC Rakitan yang dijual di Nano Komputer sudah termasuk sistem operasi Windows dan aplikasi Microsoft Office, atau perlu dibeli dan diinstal secara terpisah.', NULL, 'Resolved', 'Medium', 1, '2025-12-18 01:27:56', '2025-12-18 05:49:27', 1),
+('TKT00005', 7, 'Faizal Ardi', 'faizalardi2016@gmail.com', '081290413082', 'Bagaimana prosedur klaim garansi berjalan?', 'Garansi & Servis', 'Saya ingin mengetahui bagaimana prosedur klaim garansi di Nano Komputer. Dokumen apa saja yang perlu disiapkan dan bagaimana alur proses klaim garansi tersebut?', NULL, 'Resolved', 'Medium', 1, '2025-12-18 01:28:27', '2025-12-18 05:42:49', 1),
+('TKT00006', NULL, 'Bambang', 'yanoesa269@gmail.com', '081287403092', 'Berapa lama masa garansi produk?', 'Garansi & Servis', 'Saya ingin mengetahui berapa lama masa garansi untuk produk yang dibeli di Nano Komputer. Apakah masa garansi berbeda untuk setiap jenis produk atau brand tertentu?', NULL, 'Resolved', 'Medium', 1, '2025-12-18 05:54:27', '2025-12-18 05:58:24', 1),
+('TKT00007', NULL, 'Akmal Dwi Saputra', 'akmal.customer@gmail.com', '089576893421', 'Apakah tersedia layanan upgrade RAM setelah pembelian?', 'Garansi & Servis', 'Saya ingin menanyakan apakah Nano Komputer menyediakan layanan upgrade RAM setelah produk dibeli. Apakah upgrade bisa dilakukan langsung di tempat atau harus mengirim unit ke service center?', NULL, 'Resolved', 'Medium', 1, '2025-12-18 05:57:52', '2025-12-18 05:58:10', 1),
+('TKT00008', NULL, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567890', 'Apakah bisa melakukan pembelian tanpa akun?', 'Aktivasi Akun', 'Saya ingin mengetahui apakah pembelian di website Nano Komputer bisa dilakukan tanpa harus membuat akun terlebih dahulu.', NULL, 'Resolved', 'Medium', 1, '2025-12-18 05:59:19', '2025-12-18 05:59:42', 1),
+('TKT00009', NULL, 'Akmal Dwi Saputra', 'akmal.customer@gmail.com', '089576893421', 'Apakah ada diskon untuk pembelian dalam jumlah banyak?', 'General', 'Saya berencana melakukan pembelian dalam jumlah besar untuk kebutuhan kantor. Apakah Nano Komputer menyediakan harga khusus atau diskon untuk pembelian grosir?', NULL, 'Resolved', 'Medium', 1, '2025-12-18 06:00:39', '2025-12-18 06:00:50', 1),
+('TKT00010', NULL, 'Jason Susanto', 'susanto.customer@gmail.com', '089576891020', 'Bagaimana cara melacak pesanan saya?', 'Status Pesanan', 'Saya ingin mengetahui bagaimana cara melacak status dan posisi pengiriman pesanan yang telah saya lakukan di Nano Komputer.', NULL, 'Resolved', 'Medium', 1, '2025-12-18 06:01:52', '2025-12-18 06:02:19', 1),
+('TKT00011', NULL, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567890', 'Produk yang saya terima tidak sesuai pesanan dan deskripsi. Bagaimana prosedur pengembalian atau penukarannya?', 'Komplain', 'Saya menerima produk yang tidak sesuai dengan pesanan yang saya lakukan. Bagaimana prosedur pengembalian atau penukarannya?', NULL, 'Resolved', 'Medium', 1, '2025-12-18 06:03:28', '2025-12-18 06:03:42', 1),
+('TKT00012', NULL, 'Maekel Gani', 'maekelgani@gmail.com', '081299802020', 'Apakah stok di website selalu update secara realtime?', 'Pertanyaan Produk', 'Saya ingin memastikan apakah informasi stok produk yang ditampilkan di website Nano Komputer selalu diperbarui secara real-time.', NULL, 'Resolved', 'Medium', 1, '2025-12-18 06:04:37', '2025-12-18 06:04:48', 1);
 
 -- --------------------------------------------------------
 
@@ -984,6 +1003,26 @@ CREATE TABLE `ticket_replies` (
   `is_internal_note` tinyint(1) DEFAULT '0',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `ticket_replies`
+--
+
+INSERT INTO `ticket_replies` (`id_reply`, `id_ticket`, `id_admin`, `id_customer`, `message`, `attachment`, `is_internal_note`, `created_at`) VALUES
+(49, 'TKT00005', 1, NULL, 'Untuk melakukan klaim garansi di Nano Komputer, silakan mengikuti langkah-langkah berikut:\r\n1. Hubungi customer service Nano Komputer melalui website, WhatsApp, atau email resmi.\r\n2. Sertakan informasi lengkap, seperti nomor pesanan, nama produk, dan deskripsi kendala yang dialami.\r\n3. Lampirkan bukti pendukung, berupa foto atau video kondisi produk.\r\n4. Tim kami akan melakukan verifikasi awal dan memberikan instruksi lanjutan terkait proses klaim.\r\n\r\nProses klaim garansi akan mengikuti ketentuan garansi resmi dari masing-masing brand. Estimasi waktu penanganan dapat berbeda tergantung jenis produk dan tingkat kerusakan.\r\n\r\nJika klaim disetujui, produk akan diperbaiki, diganti, atau diproses sesuai kebijakan garansi yang berlaku.', NULL, 0, '2025-12-18 05:40:58'),
+(50, 'TKT00005', 1, NULL, 'Untuk melakukan klaim garansi di Nano Komputer, silakan mengikuti langkah-langkah berikut:\r\n1. Hubungi customer service Nano Komputer melalui website, WhatsApp, atau email resmi.\r\n2. Sertakan informasi lengkap, seperti nomor pesanan, nama produk, dan deskripsi kendala yang dialami.\r\n3. Lampirkan bukti pendukung, berupa foto atau video kondisi produk.\r\n4. Tim kami akan melakukan verifikasi awal dan memberikan instruksi lanjutan terkait proses klaim.\r\n\r\nProses klaim garansi akan mengikuti ketentuan garansi resmi dari masing-masing brand. Estimasi waktu penanganan dapat berbeda tergantung jenis produk dan tingkat kerusakan.\r\n\r\nJika klaim disetujui, produk akan diperbaiki, diganti, atau diproses sesuai kebijakan garansi yang berlaku.', NULL, 0, '2025-12-18 05:41:54'),
+(51, 'TKT00005', 1, NULL, 'Untuk melakukan klaim garansi di Nano Komputer, silakan mengikuti langkah-langkah berikut:\r\n1. Hubungi customer service Nano Komputer melalui website, WhatsApp, atau email resmi.\r\n2. Sertakan informasi lengkap, seperti nomor pesanan, nama produk, dan deskripsi kendala yang dialami.\r\n3. Lampirkan bukti pendukung, berupa foto atau video kondisi produk.\r\n4. Tim kami akan melakukan verifikasi awal dan memberikan instruksi lanjutan terkait proses klaim.\r\n\r\nProses klaim garansi akan mengikuti ketentuan garansi resmi dari masing-masing brand. Estimasi waktu penanganan dapat berbeda tergantung jenis produk dan tingkat kerusakan.\r\n\r\nJika klaim disetujui, produk akan diperbaiki, diganti, atau diproses sesuai kebijakan garansi yang berlaku.', NULL, 0, '2025-12-18 05:42:49'),
+(52, 'TKT00004', 1, NULL, 'Secara default, PC Rakitan Nano Komputer tidak termasuk Windows dan Microsoft Office.\r\n\r\nNamun, kami menyediakan opsi tambahan (add-on) untuk instalasi Windows resmi dan Microsoft Office berlisensi sesuai kebutuhan Anda. Tim kami juga dapat membantu proses instalasi dan aktivasi sebelum PC dikirim.\r\n\r\nInformasi detail mengenai opsi tambahan tersebut dapat dilihat pada halaman produk atau dikonfirmasi melalui customer service kami.', NULL, 0, '2025-12-18 05:49:27'),
+(53, 'TKT00003', 1, NULL, 'Proses perakitan PC di Nano Komputer umumnya membutuhkan waktu 1–3 hari kerja, tergantung pada tingkat kompleksitas rakitan dan ketersediaan komponen.\r\n\r\nUntuk PC rakitan standar, proses biasanya lebih cepat, sedangkan custom build atau permintaan khusus dapat memerlukan waktu tambahan untuk memastikan hasil yang optimal dan sesuai standar kualitas kami.\r\n\r\nStatus perakitan akan diinformasikan secara berkala melalui akun Anda atau dapat dicek dengan menghubungi customer service kami.', NULL, 0, '2025-12-18 05:49:56'),
+(54, 'TKT00002', 1, NULL, 'Harga produk yang tercantum di website Nano Komputer belum termasuk PPN. Jadi akan ada biaya pajak tambahan yang akan dikenakan saat proses checkout atau pembayaran. Sebagai gantinya kami menyediakan promo diskon besar.\r\n\r\nJika terdapat promo, diskon, atau biaya lain seperti ongkos kirim, detail perhitungannya akan ditampilkan secara transparan sebelum Anda menyelesaikan pesanan.', NULL, 0, '2025-12-18 05:50:41'),
+(55, 'TKT00001', 1, NULL, 'Ya, seluruh produk yang dijual di Nano Komputer adalah 100% baru dan original. Kami hanya menjual produk dari distributor dan brand resmi.\r\n\r\nSetiap produk dilengkapi dengan garansi resmi sesuai ketentuan masing-masing brand, sehingga keaslian dan kualitas produk terjamin. Jika Anda membutuhkan informasi lebih lanjut terkait garansi atau keaslian produk tertentu, tim customer service kami siap membantu.', NULL, 0, '2025-12-18 05:51:31'),
+(56, 'TKT00007', 1, NULL, 'Ya, Nano Komputer menyediakan layanan upgrade RAM setelah pembelian. Upgrade dapat dilakukan langsung di toko atau dengan mengirim unit ke service center kami.\r\n\r\nUntuk memastikan kompatibilitas dan menjaga kualitas produk, kami menyarankan upgrade dilakukan oleh teknisi resmi Nano Komputer.', NULL, 0, '2025-12-18 05:58:10'),
+(57, 'TKT00006', 1, NULL, 'Masa garansi produk di Nano Komputer bervariasi tergantung pada jenis produk dan kebijakan masing-masing brand. Umumnya, produk memiliki masa garansi antara 1 hingga 3 tahun.\r\n\r\nInformasi detail mengenai masa garansi dapat dilihat pada deskripsi produk, kartu garansi, atau nota pembelian. Jika Anda membutuhkan konfirmasi lebih lanjut terkait masa garansi produk tertentu, tim customer service kami siap membantu.', NULL, 0, '2025-12-18 05:58:24'),
+(58, 'TKT00008', 1, NULL, 'Saat ini, pembelian di website Nano Komputer mengharuskan pelanggan memiliki akun. Hal ini bertujuan untuk memudahkan proses pelacakan pesanan, garansi, dan layanan purna jual. Proses pendaftaran akun sangat cepat, mudah dan gratis.', NULL, 0, '2025-12-18 05:59:42'),
+(59, 'TKT00009', 1, NULL, 'Nano Komputer menyediakan penawaran khusus untuk pembelian dalam jumlah tertentu, terutama untuk kebutuhan kantor atau instansi.\r\n\r\nSilakan hubungi tim sales kami untuk mendapatkan penawaran dan informasi lebih lanjut.', NULL, 0, '2025-12-18 06:00:50'),
+(60, 'TKT00010', 1, NULL, 'Anda dapat melacak pesanan melalui menu Riwayat Pesanan di akun Nano Komputer Anda. Nomor resi pengiriman juga akan ditampilkan setelah pesanan dikirim, sehingga dapat dipantau langsung melalui website ekspedisi terkait.', NULL, 0, '2025-12-18 06:02:19'),
+(61, 'TKT00011', 1, NULL, 'Mohon maaf atas ketidaknyamanannya. Silakan segera hubungi customer service Nano Komputer maksimal 1x24 jam setelah produk diterima dengan menyertakan nomor pesanan serta foto atau video produk.\r\n\r\nTim kami akan membantu proses penukaran sesuai dengan kebijakan yang berlaku.', NULL, 0, '2025-12-18 06:03:42'),
+(62, 'TKT00012', 1, NULL, 'Ya, informasi stok produk di website Nano Komputer diperbarui secara berkala. Namun, pada kondisi tertentu stok dapat berubah dengan cepat.\r\n\r\nJika Anda membutuhkan kepastian stok, silakan hubungi customer service kami sebelum melakukan pembelian.', NULL, 0, '2025-12-18 06:04:48');
 
 --
 -- Triggers `ticket_replies`
@@ -1444,7 +1483,7 @@ ALTER TABLE `role_permissions`
 -- AUTO_INCREMENT for table `ticket_replies`
 --
 ALTER TABLE `ticket_replies`
-  MODIFY `id_reply` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_reply` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- Constraints for dumped tables

@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function openStoreModal(storeData = null) {
+    async function openStoreModal(storeData = null) {
         storeEditMode = !!storeData;
         document.getElementById('storeModalTitle').textContent = storeEditMode ? 'Edit Lokasi Toko' : 'Tambah Lokasi Toko';
         document.getElementById('storeForm').reset();
@@ -263,6 +263,66 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('jamBuka').value = storeData.jam_buka || '';
             document.getElementById('jamTutup').value = storeData.jam_tutup || '';
             document.getElementById('isActive').checked = storeData.is_active == 1;
+
+            // Load and set location dropdowns for editing
+            if (storeData.provinsi || storeData.kota_kabupaten) {
+                try {
+                    // Load all provinces first
+                    const provincesResponse = await fetch(`${WILAYAH_API}/provinces.json`);
+                    const provinces = await provincesResponse.json();
+                    
+                    // Find matching province by name
+                    const matchedProvince = provinces.find(p => p.name === storeData.provinsi);
+                    if (matchedProvince) {
+                        const provinsiSelect = document.getElementById('provinsiToko');
+                        
+                        // Set province value and trigger change
+                        $('#provinsiToko').val(matchedProvince.id).trigger('change');
+                        
+                        // Wait for cities to load
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        
+                        // Load and set cities
+                        const citiesResponse = await fetch(`${WILAYAH_API}/regencies/${matchedProvince.id}.json`);
+                        const cities = await citiesResponse.json();
+                        const matchedCity = cities.find(c => c.name === storeData.kota_kabupaten);
+                        
+                        if (matchedCity) {
+                            $('#kotaToko').val(matchedCity.id).trigger('change');
+                            
+                            // Wait for districts to load
+                            await new Promise(resolve => setTimeout(resolve, 500));
+                            
+                            // Load and set districts if kecamatan exists
+                            if (storeData.kecamatan) {
+                                const districtsResponse = await fetch(`${WILAYAH_API}/districts/${matchedCity.id}.json`);
+                                const districts = await districtsResponse.json();
+                                const matchedDistrict = districts.find(d => d.name === storeData.kecamatan);
+                                
+                                if (matchedDistrict) {
+                                    $('#kecamatanToko').val(matchedDistrict.id).trigger('change');
+                                    
+                                    // Wait for villages to load
+                                    await new Promise(resolve => setTimeout(resolve, 500));
+                                    
+                                    // Load and set villages if kelurahan exists
+                                    if (storeData.kelurahan) {
+                                        const villagesResponse = await fetch(`${WILAYAH_API}/villages/${matchedDistrict.id}.json`);
+                                        const villages = await villagesResponse.json();
+                                        const matchedVillage = villages.find(v => v.name === storeData.kelurahan);
+                                        
+                                        if (matchedVillage) {
+                                            $('#kelurahanToko').val(matchedVillage.id).trigger('change');
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading location data for edit:', error);
+                }
+            }
         }
 
         document.getElementById('storeModal').classList.remove('hidden');
