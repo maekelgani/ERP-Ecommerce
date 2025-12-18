@@ -28,7 +28,8 @@ $allowedCouriers = [
 ];
 
 $allowedStores = ['store-jakarta', 'store-bekasi'];
-$packingCostFixed = 15000;
+$bubbleWrapCost = 5000;
+$packingKayuCost = 20000;
 $taxRate = 0.11;
 
 try {
@@ -48,15 +49,35 @@ try {
         throw new Exception('Tidak ada produk dalam checkout');
     }
 
+    $currentTime = date('Y-m-d H:i:s');
     $placeholders = implode(',', array_fill(0, count($productIds), '?'));
     $verifyStmt = $db->prepare("
-        SELECT id_product, nama_product, harga, stok, status_produk 
-        FROM products 
-        WHERE id_product IN ($placeholders)
+        SELECT p.id_product, p.nama_product, p.harga, p.stok, p.status_produk,
+               pd.id_diskon, pd.jenis as discount_type, pd.nilai as discount_value,
+               pd.stok_promo, pd.stok_terpakai,
+               CASE 
+                   WHEN pd.id_diskon IS NOT NULL THEN
+                       CASE 
+                           WHEN pd.jenis = 'persen' THEN p.harga - (p.harga * pd.nilai / 100)
+                           ELSE GREATEST(0, p.harga - pd.nilai)
+                       END
+                   ELSE p.harga
+               END as harga_final
+        FROM products p
+        LEFT JOIN promo_diskon pd ON p.id_product = pd.id_produk 
+            AND pd.status = 'aktif' 
+            AND (pd.mulai_pada IS NULL OR ? >= pd.mulai_pada)
+            AND (pd.selesai_pada IS NULL OR ? <= pd.selesai_pada)
+            AND (pd.stok_promo IS NULL OR pd.stok_promo > COALESCE(pd.stok_terpakai, 0))
+        WHERE p.id_product IN ($placeholders)
     ");
-    $verifyStmt->execute($productIds);
+    $verifyParams = array_merge([$currentTime, $currentTime], $productIds);
+    $verifyStmt->execute($verifyParams);
     $dbProducts = $verifyStmt->fetchAll(PDO::FETCH_ASSOC);
     $dbProductMap = array_column($dbProducts, null, 'id_product');
+
+    $serverProductDiscount = 0;
+    $serverOriginalSubtotal = 0;
 
     foreach ($checkoutData['items'] as $item) {
         $productId = $item['id_product'];
@@ -76,16 +97,28 @@ try {
             throw new Exception("Produk {$dbProduct['nama_product']} tidak tersedia");
         }
 
-        $serverPrice = floatval($dbProduct['harga']);
-        $itemSubtotal = $serverPrice * $qty;
+        $originalPrice = floatval($dbProduct['harga']);
+        $finalPrice = floatval($dbProduct['harga_final']);
+        $hasDiscount = $dbProduct['id_diskon'] !== null;
+        $discountPerUnit = $hasDiscount ? ($originalPrice - $finalPrice) : 0;
+
+        $serverOriginalSubtotal += $originalPrice * $qty;
+        $itemSubtotal = $finalPrice * $qty;
         $serverSubtotal += $itemSubtotal;
+
+        if ($hasDiscount) {
+            $serverProductDiscount += $discountPerUnit * $qty;
+        }
 
         $verifiedItems[] = [
             'id_product' => $productId,
             'nama_product' => $dbProduct['nama_product'],
             'quantity' => $qty,
-            'harga' => $serverPrice,
-            'subtotal' => $itemSubtotal
+            'harga_asli' => $originalPrice,
+            'harga_final' => $finalPrice,
+            'diskon_satuan' => $discountPerUnit,
+            'subtotal' => $itemSubtotal,
+            'id_diskon' => $dbProduct['id_diskon']
         ];
     }
 
@@ -120,8 +153,14 @@ try {
     }
 
     $serverPackingCost = 0;
-    if (!empty($input['extra_packing']) && $input['extra_packing'] === true) {
-        $serverPackingCost = $packingCostFixed;
+    $serverBubbleWrap = filter_var($input['bubble_wrap'] ?? false, FILTER_VALIDATE_BOOLEAN);
+    $serverPackingKayu = filter_var($input['packing_kayu'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+    if ($serverBubbleWrap) {
+        $serverPackingCost += $bubbleWrapCost;
+    }
+    if ($serverPackingKayu) {
+        $serverPackingCost += $packingKayuCost;
     }
 
     $serverVoucherDiscount = 0;
@@ -198,26 +237,36 @@ try {
     $insertOrder = $db->prepare("
         INSERT INTO orders (
             id_order, id_customer, total_harga, total_ongkir, total_diskon, total_bayar,
-            status_order, tanggal_order, catatan_order
+            status_order, tanggal_order, catatan_order, bubble_wrap, packing_kayu, biaya_packing
         ) VALUES (
             :id_order, :id_customer, :total_harga, :total_ongkir, :total_diskon, :total_bayar,
-            'pending', NOW(), :catatan_order
+            'pending', NOW(), :catatan_order, :bubble_wrap, :packing_kayu, :biaya_packing
         )
     ");
 
     $catatan_order = '';
-    if ($serverPackingCost > 0) {
-        $catatan_order .= 'Packing kayu (+Rp ' . number_format($serverPackingCost, 0, ',', '.') . ')';
+    $packingNotes = [];
+    if ($serverBubbleWrap) {
+        $packingNotes[] = 'Bubble Wrap (+Rp ' . number_format($bubbleWrapCost, 0, ',', '.') . ')';
+    }
+    if ($serverPackingKayu) {
+        $packingNotes[] = 'Packing Kayu (+Rp ' . number_format($packingKayuCost, 0, ',', '.') . ')';
+    }
+    if (!empty($packingNotes)) {
+        $catatan_order = 'Extra Packing: ' . implode(', ', $packingNotes);
     }
 
     $insertOrder->execute([
         ':id_order' => $orderId,
         ':id_customer' => $customerId,
         ':total_harga' => $serverSubtotal + $serverTax,
-        ':total_ongkir' => $serverShippingCost + $serverPackingCost,
-        ':total_diskon' => $serverVoucherDiscount,
+        ':total_ongkir' => $serverShippingCost,
+        ':total_diskon' => $serverProductDiscount + $serverVoucherDiscount,
         ':total_bayar' => $serverGrandTotal,
-        ':catatan_order' => $catatan_order
+        ':catatan_order' => $catatan_order,
+        ':bubble_wrap' => $serverBubbleWrap ? 1 : 0,
+        ':packing_kayu' => $serverPackingKayu ? 1 : 0,
+        ':biaya_packing' => $serverPackingCost
     ]);
 
     $insertDetail = $db->prepare("
@@ -241,10 +290,22 @@ try {
             ':id_product' => $item['id_product'],
             ':nama_product' => $item['nama_product'],
             ':jumlah' => $item['quantity'],
-            ':harga_satuan' => $item['harga'],
-            ':diskon_satuan' => 0,
+            ':harga_satuan' => $item['harga_asli'],
+            ':diskon_satuan' => $item['diskon_satuan'],
             ':subtotal' => $item['subtotal']
         ]);
+
+        if (!empty($item['id_diskon'])) {
+            $updatePromoStmt = $db->prepare("
+                UPDATE promo_diskon 
+                SET stok_terpakai = COALESCE(stok_terpakai, 0) + :qty 
+                WHERE id_diskon = :id_diskon
+            ");
+            $updatePromoStmt->execute([
+                ':qty' => $item['quantity'],
+                ':id_diskon' => $item['id_diskon']
+            ]);
+        }
 
         $updateStock->execute([
             ':qty' => $item['quantity'],

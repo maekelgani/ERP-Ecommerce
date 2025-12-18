@@ -229,19 +229,38 @@
 
         <div class="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
             <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                     </svg>
                 </div>
-                <div>
+                <div class="flex-1">
                     <h4 class="font-semibold text-blue-800">Packing Aman</h4>
-                    <p class="text-sm text-blue-700 mt-1">Tambahkan packing kayu untuk perlindungan ekstra (+Rp 15.000)</p>
-                    <label class="flex items-center gap-2 mt-2 cursor-pointer">
-                        <input type="checkbox" name="extra_packing" value="15000" id="extraPackingCheckbox"
-                            class="w-5 h-5 rounded border-blue-300 text-blue-600 focus:ring-blue-500">
-                        <span class="text-sm font-medium text-blue-800">Ya, tambahkan packing kayu</span>
-                    </label>
+                    <p class="text-sm text-blue-700 mt-1">Tambahkan perlindungan ekstra untuk paket Anda</p>
+
+                    <div class="mt-3 space-y-3">
+                        <label class="flex items-center gap-3 p-3 bg-white rounded-lg border border-blue-200 cursor-pointer hover:border-blue-400 transition-colors">
+                            <input type="checkbox" name="bubble_wrap" value="5000" id="bubbleWrapCheckbox"
+                                class="w-5 h-5 rounded border-blue-300 text-blue-600 focus:ring-blue-500">
+                            <div class="flex-1">
+                                <span class="text-sm font-medium text-gray-800">Bubble Wrap</span>
+                                <p class="text-xs text-gray-500">Perlindungan dasar dari benturan</p>
+                            </div>
+                            <span class="text-sm font-bold text-blue-600">+Rp 5.000</span>
+                        </label>
+
+                        <label class="flex items-center gap-3 p-3 bg-white rounded-lg border border-blue-200 cursor-pointer hover:border-blue-400 transition-colors">
+                            <input type="checkbox" name="packing_kayu" value="20000" id="packingKayuCheckbox"
+                                class="w-5 h-5 rounded border-blue-300 text-blue-600 focus:ring-blue-500">
+                            <div class="flex-1">
+                                <span class="text-sm font-medium text-gray-800">Packing Kayu</span>
+                                <p class="text-xs text-gray-500">Perlindungan maksimal untuk barang besar/berat</p>
+                            </div>
+                            <span class="text-sm font-bold text-blue-600">+Rp 20.000</span>
+                        </label>
+                    </div>
+
+                    <p class="text-xs text-blue-600 mt-2">* Bisa dipilih keduanya untuk perlindungan maksimal</p>
                 </div>
             </div>
         </div>

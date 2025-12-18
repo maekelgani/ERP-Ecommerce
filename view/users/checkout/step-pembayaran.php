@@ -49,23 +49,70 @@
             </div>
         </div>
 
-        <div class="mb-6 p-4 bg-amber-50 rounded-xl border border-amber-200">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                    </svg>
+        <div class="mb-6 rounded-xl border border-amber-200 overflow-hidden">
+            <div class="bg-amber-50 px-4 py-3 border-b border-amber-200">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-amber-800">Voucher & Promo</span>
                 </div>
-                <div class="flex-1">
-                    <label class="block text-sm font-medium text-amber-800 mb-1">Punya Kode Voucher?</label>
+            </div>
+
+            <div class="p-4 bg-white">
+                <div class="flex border-b border-gray-200 mb-4">
+                    <button type="button" id="tabInputCode" class="flex-1 py-2 px-4 text-sm font-medium border-b-2 border-[#882426] text-[#882426] transition-colors">
+                        Masukkan Kode
+                    </button>
+                    <button type="button" id="tabSelectVoucher" class="flex-1 py-2 px-4 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-colors">
+                        Pilih Voucher
+                    </button>
+                </div>
+
+                <div id="voucherInputSection">
                     <div class="flex gap-2">
                         <input type="text" id="voucherCode" placeholder="Masukkan kode voucher"
-                            class="flex-1 px-4 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm">
-                        <button type="button" id="btnApplyVoucher" class="px-4 py-2 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors text-sm">
+                            class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all text-sm uppercase">
+                        <button type="button" id="btnApplyVoucher" class="px-5 py-2.5 bg-[#882426] text-white font-medium rounded-lg hover:bg-[#6a1c1e] transition-colors text-sm">
                             Terapkan
                         </button>
                     </div>
-                    <p class="text-xs text-amber-700 mt-2" id="voucherMessage"></p>
+                    <p class="text-xs mt-2" id="voucherMessage"></p>
+                </div>
+
+                <div id="voucherSelectSection" class="hidden">
+                    <div id="voucherListLoading" class="flex items-center justify-center py-8">
+                        <div class="animate-spin w-6 h-6 border-2 border-[#882426] border-t-transparent rounded-full"></div>
+                        <span class="ml-2 text-sm text-gray-500">Memuat voucher...</span>
+                    </div>
+                    <div id="voucherListEmpty" class="hidden text-center py-8">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 text-sm">Tidak ada voucher tersedia saat ini</p>
+                    </div>
+                    <div id="voucherListContainer" class="hidden space-y-3 max-h-80 overflow-y-auto pr-1"></div>
+                </div>
+
+                <div id="appliedVoucherSection" class="hidden mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <p class="text-sm font-medium text-green-800" id="appliedVoucherCode">-</p>
+                                <p class="text-xs text-green-600" id="appliedVoucherDiscount">-</p>
+                            </div>
+                        </div>
+                        <button type="button" id="btnRemoveVoucher" class="text-red-500 hover:text-red-700 text-sm font-medium">
+                            Hapus
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -291,5 +338,24 @@
 
     .payment-category-toggle.expanded svg:last-child {
         transform: rotate(180deg);
+    }
+
+    .voucher-card {
+        transition: all 0.2s ease;
+    }
+
+    .voucher-card:hover:not(.disabled) {
+        border-color: #882426;
+        background: rgba(136, 36, 38, 0.02);
+    }
+
+    .voucher-card.selected {
+        border-color: #882426;
+        background: rgba(136, 36, 38, 0.05);
+    }
+
+    .voucher-card.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 </style>

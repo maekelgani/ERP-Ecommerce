@@ -320,27 +320,76 @@ include '../../components/users/head.php';
                                 <div class="max-h-64 overflow-y-auto space-y-4 mb-6 custom-scrollbar">
                                     <?php foreach ($checkoutItems as $item):
                                         $imagePath = !empty($item['gambar']) ? '../../uploads/products/' . htmlspecialchars($item['gambar']) : '../../assets/img/placeholder-product.png';
+                                        $hasDiscount = !empty($item['has_discount']) && $item['has_discount'];
+                                        $originalPrice = floatval($item['harga']);
+                                        $finalPrice = floatval($item['harga_final'] ?? $item['harga']);
+                                        $discountAmount = $hasDiscount ? ($originalPrice - $finalPrice) : 0;
                                     ?>
                                         <div class="flex gap-3">
-                                            <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($item['nama_product']) ?>"
-                                                class="w-16 h-16 object-cover rounded-lg border border-gray-100"
-                                                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%23f3f4f6%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2212%22 fill=%22%239ca3af%22 text-anchor=%22middle%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                                            <div class="relative">
+                                                <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($item['nama_product']) ?>"
+                                                    class="w-16 h-16 object-cover rounded-lg border border-gray-100"
+                                                    onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%23f3f4f6%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2212%22 fill=%22%239ca3af%22 text-anchor=%22middle%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                                            </div>
                                             <div class="flex-1 min-w-0">
                                                 <p class="text-sm font-medium text-gray-900 line-clamp-2"><?= htmlspecialchars($item['nama_product']) ?></p>
                                                 <p class="text-xs text-gray-500 mt-1">Qty: <?= $item['quantity'] ?></p>
-                                                <p class="text-sm font-bold text-[#882426] mt-1">Rp <?= number_format($item['harga'] * $item['quantity'], 0, ',', '.') ?></p>
+                                                <?php if ($hasDiscount): ?>
+                                                    <div class="mt-1 flex items-center gap-1.5 flex-wrap">
+                                                        <!-- Harga Coret -->
+                                                        <span class="text-xs text-gray-400 line-through">
+                                                            Rp <?= number_format($originalPrice * $item['quantity'], 0, ',', '.') ?>
+                                                        </span>
+                                                        <!-- Harga Final -->
+                                                        <span class="text-sm font-bold text-[#882426] ml-1">
+                                                            Rp <?= number_format($finalPrice * $item['quantity'], 0, ',', '.') ?>
+                                                        </span>
+                                                        <!-- Badge Diskon -->
+                                                        <span class="bg-red-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded-sm">
+                                                            <?php if ($item['discount_type'] === 'persen'): ?>
+                                                                -<?= intval($item['discount_value']) ?>%
+                                                            <?php else: ?>
+                                                                Diskon Rp <?= number_format($item['discount_value'], 0, ',', '.') ?>
+                                                            <?php endif; ?>
+                                                        </span>
+                                                    </div>
+
+                                                    <p class="text-xs text-green-600 font-medium mt-0.5">
+                                                        Hemat Rp <?= number_format($discountAmount * $item['quantity'], 0, ',', '.') ?>
+                                                    </p>
+                                                <?php else: ?>
+                                                    <p class="text-sm font-bold text-[#882426] mt-1">
+                                                        Rp <?= number_format($originalPrice * $item['quantity'], 0, ',', '.') ?>
+                                                    </p>
+                                                <?php endif; ?>
+
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
 
-                                <div class="border-t border-gray-100 pt-4 space-y-3">
+                                <div class="border-t border-gray-100 pt-4 space-y-3" id="orderSummaryDetails">
+                                    <?php if ($totalDiscount > 0): ?>
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-gray-600">Subtotal Produk</span>
+                                            <span class="font-medium text-gray-400 line-through">Rp <?= number_format($originalSubtotal, 0, ',', '.') ?></span>
+                                        </div>
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-green-600 font-medium">Diskon Produk</span>
+                                            <span class="font-medium text-green-600">- Rp <?= number_format($totalDiscount, 0, ',', '.') ?></span>
+                                        </div>
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-gray-600">Subtotal Setelah Diskon</span>
+                                            <span class="font-bold text-gray-900">Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-gray-600">Subtotal Produk</span>
+                                            <span class="font-medium">Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
+                                        </div>
+                                    <?php endif; ?>
                                     <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">Subtotal Produk</span>
-                                        <span class="font-medium">Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">PPN (11%)</span>
+                                        <span class="text-gray-600">Biaya Admin (PPN 11%)</span>
                                         <span class="font-medium">Rp <?= number_format($taxAmount, 0, ',', '.') ?></span>
                                     </div>
                                     <div class="flex justify-between text-sm" id="shippingCostRow">
@@ -348,9 +397,27 @@ include '../../components/users/head.php';
                                         <span class="font-medium text-gray-400" id="shippingCostDisplay">Belum dipilih</span>
                                     </div>
                                     <div class="flex justify-between text-sm hidden" id="packingCostRow">
-                                        <span class="text-gray-600">Biaya Packing</span>
+                                        <span class="text-gray-600" id="packingCostLabel">Biaya Packing</span>
                                         <span class="font-medium" id="packingCostDisplay">Rp 0</span>
                                     </div>
+                                    <div class="flex justify-between text-sm hidden" id="voucherDiscountRow">
+                                        <span class="text-green-600 font-medium">Diskon Voucher</span>
+                                        <span class="font-medium text-green-600" id="voucherDiscountDisplay">- Rp 0</span>
+                                    </div>
+
+                                    <div id="storeInfoSection" class="hidden mt-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                                        <div class="flex items-start gap-2">
+                                            <svg class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                            </svg>
+                                            <div>
+                                                <p class="text-xs text-blue-800 font-medium">Ambil di Toko:</p>
+                                                <p class="text-xs text-blue-700" id="storeInfoName">-</p>
+                                                <p class="text-xs text-blue-600" id="storeInfoAddress">-</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="border-t border-gray-100 pt-3 mt-3">
                                         <div class="flex justify-between">
                                             <span class="text-base font-bold text-gray-900">Total Pembayaran</span>

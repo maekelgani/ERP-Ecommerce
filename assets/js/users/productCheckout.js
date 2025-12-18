@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let shippingMethod = 'delivery';
     let selectedCourier = null;
     let selectedStore = null;
-    let extraPacking = false;
+    let bubbleWrap = false;
+    let packingKayu = false;
     let packingCost = 0;
     let shippingCost = 0;
     let selectedPayment = null;
@@ -194,11 +195,21 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
-        const extraPackingCheckbox = document.getElementById('extraPackingCheckbox');
-        if (extraPackingCheckbox) {
-            extraPackingCheckbox.addEventListener('change', function() {
-                extraPacking = this.checked;
-                packingCost = extraPacking ? 15000 : 0;
+        const bubbleWrapCheckbox = document.getElementById('bubbleWrapCheckbox');
+        const packingKayuCheckbox = document.getElementById('packingKayuCheckbox');
+        
+        if (bubbleWrapCheckbox) {
+            bubbleWrapCheckbox.addEventListener('change', function() {
+                bubbleWrap = this.checked;
+                updatePackingCost();
+                updateShippingDisplay();
+            });
+        }
+        
+        if (packingKayuCheckbox) {
+            packingKayuCheckbox.addEventListener('change', function() {
+                packingKayu = this.checked;
+                updatePackingCost();
                 updateShippingDisplay();
             });
         }
@@ -287,6 +298,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const btnApplyVoucher = document.getElementById('btnApplyVoucher');
         if (btnApplyVoucher) {
             btnApplyVoucher.addEventListener('click', handleApplyVoucher);
+        }
+        
+        initVoucherTabs();
+        
+        const btnRemoveVoucher = document.getElementById('btnRemoveVoucher');
+        if (btnRemoveVoucher) {
+            btnRemoveVoucher.addEventListener('click', handleRemoveVoucher);
         }
         
         const btnPlaceOrder = document.getElementById('btnPlaceOrder');
@@ -380,10 +398,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const packingCostRow = document.getElementById('packingCostRow');
         const packingCostDisplay = document.getElementById('packingCostDisplay');
         const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+        const voucherDiscountRow = document.getElementById('voucherDiscountRow');
+        const voucherDiscountDisplay = document.getElementById('voucherDiscountDisplay');
+        const storeInfoSection = document.getElementById('storeInfoSection');
+        const storeInfoName = document.getElementById('storeInfoName');
+        const storeInfoAddress = document.getElementById('storeInfoAddress');
         
         if (shippingCostDisplay) {
             if (shippingMethod === 'pickup') {
-                shippingCostDisplay.textContent = 'Gratis';
+                shippingCostDisplay.textContent = 'Gratis (Ambil di Toko)';
                 shippingCostDisplay.classList.remove('text-gray-400');
                 shippingCostDisplay.classList.add('text-green-600');
             } else if (selectedCourier) {
@@ -397,11 +420,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (packingCostRow && packingCostDisplay) {
-            if (extraPacking) {
+            const packingCostLabel = document.getElementById('packingCostLabel');
+            if (packingCost > 0) {
                 packingCostRow.classList.remove('hidden');
+                let packingLabels = [];
+                if (bubbleWrap) packingLabels.push('Bubble Wrap');
+                if (packingKayu) packingLabels.push('Packing Kayu');
+                if (packingCostLabel) {
+                    packingCostLabel.textContent = packingLabels.join(' + ');
+                }
                 packingCostDisplay.textContent = `Rp ${formatNumber(packingCost)}`;
             } else {
                 packingCostRow.classList.add('hidden');
+            }
+        }
+        
+        if (voucherDiscountRow && voucherDiscountDisplay) {
+            if (voucherDiscount > 0) {
+                voucherDiscountRow.classList.remove('hidden');
+                voucherDiscountDisplay.textContent = `- Rp ${formatNumber(voucherDiscount)}`;
+            } else {
+                voucherDiscountRow.classList.add('hidden');
+            }
+        }
+        
+        if (storeInfoSection) {
+            if (shippingMethod === 'pickup' && selectedStore) {
+                storeInfoSection.classList.remove('hidden');
+                if (storeInfoName) {
+                    storeInfoName.textContent = selectedStore.name;
+                }
+                if (storeInfoAddress) {
+                    const storeAddresses = {
+                        'store-jakarta': 'Jl. Mangga Dua Raya No. 123, Jakarta Pusat',
+                        'store-bekasi': 'Jl. Ahmad Yani No. 456, Bekasi Timur'
+                    };
+                    storeInfoAddress.textContent = storeAddresses[selectedStore.value] || 'Alamat tidak tersedia';
+                }
+            } else {
+                storeInfoSection.classList.add('hidden');
             }
         }
         
@@ -409,6 +466,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (grandTotalDisplay) {
             grandTotalDisplay.textContent = `Rp ${formatNumber(grandTotal)}`;
         }
+    }
+    
+    function updatePackingCost() {
+        packingCost = 0;
+        if (bubbleWrap) packingCost += 5000;
+        if (packingKayu) packingCost += 20000;
     }
     
     function updateBtnToStep3() {
@@ -512,9 +575,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (result.success) {
                 appliedVoucher = result.voucher;
                 voucherDiscount = result.discount;
-                voucherMessage.textContent = `Voucher berhasil! Diskon Rp ${formatNumber(voucherDiscount)}`;
-                voucherMessage.classList.remove('text-red-600');
-                voucherMessage.classList.add('text-green-600');
+                showAppliedVoucher(appliedVoucher.kode, voucherDiscount);
                 updateShippingDisplay();
                 updateBtnPlaceOrder();
             } else {
@@ -527,6 +588,238 @@ document.addEventListener('DOMContentLoaded', function() {
             voucherMessage.textContent = 'Terjadi kesalahan saat memvalidasi voucher';
             voucherMessage.classList.add('text-red-600');
         }
+    }
+    
+    function initVoucherTabs() {
+        const tabInputCode = document.getElementById('tabInputCode');
+        const tabSelectVoucher = document.getElementById('tabSelectVoucher');
+        const voucherInputSection = document.getElementById('voucherInputSection');
+        const voucherSelectSection = document.getElementById('voucherSelectSection');
+        
+        if (!tabInputCode || !tabSelectVoucher) return;
+        
+        tabInputCode.addEventListener('click', () => {
+            tabInputCode.classList.add('border-[#882426]', 'text-[#882426]');
+            tabInputCode.classList.remove('border-transparent', 'text-gray-500');
+            tabSelectVoucher.classList.remove('border-[#882426]', 'text-[#882426]');
+            tabSelectVoucher.classList.add('border-transparent', 'text-gray-500');
+            voucherInputSection.classList.remove('hidden');
+            voucherSelectSection.classList.add('hidden');
+        });
+        
+        tabSelectVoucher.addEventListener('click', () => {
+            tabSelectVoucher.classList.add('border-[#882426]', 'text-[#882426]');
+            tabSelectVoucher.classList.remove('border-transparent', 'text-gray-500');
+            tabInputCode.classList.remove('border-[#882426]', 'text-[#882426]');
+            tabInputCode.classList.add('border-transparent', 'text-gray-500');
+            voucherSelectSection.classList.remove('hidden');
+            voucherInputSection.classList.add('hidden');
+            loadAvailableVouchers();
+        });
+    }
+    
+    async function loadAvailableVouchers() {
+        const loading = document.getElementById('voucherListLoading');
+        const empty = document.getElementById('voucherListEmpty');
+        const container = document.getElementById('voucherListContainer');
+        
+        loading.classList.remove('hidden');
+        empty.classList.add('hidden');
+        container.classList.add('hidden');
+        
+        try {
+            const subtotal = checkoutData?.subtotal || 0;
+            const response = await fetch(`../../api/checkout/get-vouchers.php?subtotal=${subtotal}`);
+            const result = await response.json();
+            
+            loading.classList.add('hidden');
+            
+            if (result.success && result.vouchers.length > 0) {
+                container.innerHTML = '';
+                result.vouchers.forEach(voucher => {
+                    container.appendChild(createVoucherCard(voucher));
+                });
+                container.classList.remove('hidden');
+            } else {
+                empty.classList.remove('hidden');
+            }
+        } catch (error) {
+            console.error('Error loading vouchers:', error);
+            loading.classList.add('hidden');
+            empty.classList.remove('hidden');
+        }
+    }
+    
+    function createVoucherCard(voucher) {
+        const card = document.createElement('div');
+        const isDisabled = !voucher.can_use;
+        
+        card.className = `voucher-card border-2 rounded-xl p-4 cursor-pointer ${isDisabled ? 'disabled border-gray-200' : 'border-gray-200'}`;
+        card.dataset.voucherId = voucher.id;
+        card.dataset.voucherCode = voucher.kode;
+        
+        const discountText = getDiscountText(voucher);
+        const validityText = getValidityText(voucher);
+        const quotaHtml = getQuotaHtml(voucher);
+        
+        card.innerHTML = `
+            <div class="flex items-start gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#882426] to-[#a63032] rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <p class="font-bold text-gray-900 text-sm">${voucher.judul || voucher.kode}</p>
+                            <p class="text-[#882426] font-semibold text-base">${discountText}</p>
+                        </div>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-1 rounded-lg flex-shrink-0">${voucher.kode}</span>
+                    </div>
+                    ${voucher.deskripsi ? `<p class="text-xs text-gray-500 mt-1 line-clamp-2">${voucher.deskripsi}</p>` : ''}
+                    <div class="flex flex-wrap items-center gap-2 mt-2 text-xs text-gray-500">
+                        ${voucher.minimal_belanja > 0 ? `<span class="bg-gray-100 px-2 py-0.5 rounded">Min. Rp ${formatNumber(voucher.minimal_belanja)}</span>` : ''}
+                        ${voucher.maksimal_diskon ? `<span class="bg-gray-100 px-2 py-0.5 rounded">Maks. Rp ${formatNumber(voucher.maksimal_diskon)}</span>` : ''}
+                    </div>
+                    <div class="mt-2 flex items-center justify-between">
+                        <span class="text-xs ${isDisabled ? 'text-red-500' : 'text-gray-500'}">
+                            ${isDisabled ? voucher.reason : validityText}
+                        </span>
+                    </div>
+                    ${quotaHtml}
+                </div>
+            </div>
+        `;
+        
+        if (!isDisabled) {
+            card.addEventListener('click', () => selectVoucherFromList(voucher));
+        }
+        
+        return card;
+    }
+    
+    function getDiscountText(voucher) {
+        switch (voucher.jenis) {
+            case 'diskon_persen':
+                return `Diskon ${voucher.nilai}%`;
+            case 'diskon_nominal':
+                return `Diskon Rp ${formatNumber(voucher.nilai)}`;
+            case 'gratis_ongkir':
+                return 'Gratis Ongkir';
+            case 'cashback':
+                return `Cashback Rp ${formatNumber(voucher.nilai)}`;
+            default:
+                return `Diskon`;
+        }
+    }
+    
+    function getValidityText(voucher) {
+        if (!voucher.selesai_pada) return 'Tanpa batas waktu';
+        
+        const endDate = new Date(voucher.selesai_pada);
+        const now = new Date();
+        const diffDays = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays <= 0) return 'Berakhir hari ini';
+        if (diffDays <= 7) return `Berakhir dalam ${diffDays} hari`;
+        
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return `Berlaku hingga ${endDate.toLocaleDateString('id-ID', options)}`;
+    }
+    
+    function getQuotaHtml(voucher) {
+        if (!voucher.kuota_total) return '';
+        
+        const remaining = voucher.kuota_total - voucher.kuota_terpakai;
+        const percent = voucher.kuota_percent;
+        
+        return `
+            <div class="mt-2">
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+                    <span>Tersisa ${remaining} kuota</span>
+                    <span>${Math.round(percent)}% terpakai</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-[#882426] h-1.5 rounded-full transition-all" style="width: ${percent}%"></div>
+                </div>
+            </div>
+        `;
+    }
+    
+    async function selectVoucherFromList(voucher) {
+        try {
+            const response = await fetch('../../api/checkout/apply-voucher.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: voucher.kode,
+                    subtotal: checkoutData.subtotal
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                appliedVoucher = result.voucher;
+                voucherDiscount = result.discount;
+                showAppliedVoucher(voucher.kode, voucherDiscount);
+                updateShippingDisplay();
+                updateBtnPlaceOrder();
+                
+                document.querySelectorAll('.voucher-card').forEach(card => {
+                    card.classList.remove('selected');
+                    if (card.dataset.voucherCode === voucher.kode) {
+                        card.classList.add('selected');
+                    }
+                });
+            } else {
+                showToast(result.message || 'Gagal menerapkan voucher', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Terjadi kesalahan', 'error');
+        }
+    }
+    
+    function showAppliedVoucher(code, discount) {
+        const appliedSection = document.getElementById('appliedVoucherSection');
+        const appliedCode = document.getElementById('appliedVoucherCode');
+        const appliedDiscount = document.getElementById('appliedVoucherDiscount');
+        const voucherMessage = document.getElementById('voucherMessage');
+        
+        if (appliedSection) {
+            appliedCode.textContent = `Voucher ${code} diterapkan`;
+            appliedDiscount.textContent = `Hemat Rp ${formatNumber(discount)}`;
+            appliedSection.classList.remove('hidden');
+        }
+        
+        if (voucherMessage) {
+            voucherMessage.textContent = '';
+        }
+    }
+    
+    function handleRemoveVoucher() {
+        appliedVoucher = null;
+        voucherDiscount = 0;
+        
+        const appliedSection = document.getElementById('appliedVoucherSection');
+        const voucherInput = document.getElementById('voucherCode');
+        const voucherMessage = document.getElementById('voucherMessage');
+        
+        if (appliedSection) appliedSection.classList.add('hidden');
+        if (voucherInput) voucherInput.value = '';
+        if (voucherMessage) voucherMessage.textContent = '';
+        
+        document.querySelectorAll('.voucher-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        updateShippingDisplay();
+        updateBtnPlaceOrder();
+        showToast('Voucher dihapus', 'info');
     }
     
     async function handlePlaceOrder() {
@@ -547,7 +840,8 @@ document.addEventListener('DOMContentLoaded', function() {
             shipping_method: shippingMethod,
             courier: selectedCourier,
             store: selectedStore,
-            extra_packing: extraPacking,
+            bubble_wrap: bubbleWrap,
+            packing_kayu: packingKayu,
             packing_cost: packingCost,
             shipping_cost: shippingCost,
             payment: selectedPayment,
@@ -786,7 +1080,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function formatNumber(num) {
-        return new Intl.NumberFormat('id-ID').format(num);
+        return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(Math.round(num));
     }
     
     function showToast(message, type = 'info') {
