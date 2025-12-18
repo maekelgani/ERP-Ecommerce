@@ -311,6 +311,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btnPlaceOrder) {
             btnPlaceOrder.addEventListener('click', handlePlaceOrder);
         }
+        
+        const orderNotesInput = document.getElementById('orderNotes');
+        const orderNotesCount = document.getElementById('orderNotesCount');
+        if (orderNotesInput && orderNotesCount) {
+            orderNotesInput.addEventListener('input', () => {
+                orderNotesCount.textContent = orderNotesInput.value.length;
+            });
+        }
     }
     
     function goToStep(step) {
@@ -835,6 +843,9 @@ document.addEventListener('DOMContentLoaded', function() {
             Memproses...
         `;
         
+        const orderNotesEl = document.getElementById('orderNotes');
+        const orderNotes = orderNotesEl ? orderNotesEl.value.trim() : '';
+        
         const orderData = {
             address: selectedAddress,
             shipping_method: shippingMethod,
@@ -847,6 +858,7 @@ document.addEventListener('DOMContentLoaded', function() {
             payment: selectedPayment,
             voucher: appliedVoucher,
             voucher_discount: voucherDiscount,
+            order_notes: orderNotes,
             subtotal: checkoutData.subtotal,
             tax_amount: checkoutData.tax_amount,
             grand_total: checkoutData.subtotal + checkoutData.tax_amount + shippingCost + packingCost - voucherDiscount

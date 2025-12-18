@@ -245,6 +245,15 @@ try {
     ");
 
     $catatan_order = '';
+    $noteParts = [];
+
+    $userNotes = isset($input['order_notes']) ? trim($input['order_notes']) : '';
+    if (!empty($userNotes)) {
+        $userNotes = substr($userNotes, 0, 500);
+        $userNotes = htmlspecialchars($userNotes, ENT_QUOTES, 'UTF-8');
+        $noteParts[] = $userNotes;
+    }
+
     $packingNotes = [];
     if ($serverBubbleWrap) {
         $packingNotes[] = 'Bubble Wrap (+Rp ' . number_format($bubbleWrapCost, 0, ',', '.') . ')';
@@ -253,8 +262,10 @@ try {
         $packingNotes[] = 'Packing Kayu (+Rp ' . number_format($packingKayuCost, 0, ',', '.') . ')';
     }
     if (!empty($packingNotes)) {
-        $catatan_order = 'Extra Packing: ' . implode(', ', $packingNotes);
+        $noteParts[] = 'Extra Packing: ' . implode(', ', $packingNotes);
     }
+
+    $catatan_order = implode(' | ', $noteParts);
 
     $insertOrder->execute([
         ':id_order' => $orderId,

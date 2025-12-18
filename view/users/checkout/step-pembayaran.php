@@ -303,6 +303,24 @@
         </div>
 
         <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <div class="flex items-center gap-2 mb-3">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <span class="font-medium text-gray-700">Catatan Pesanan</span>
+                <span class="text-xs text-gray-400">(Opsional)</span>
+            </div>
+            <textarea
+                id="orderNotes"
+                name="order_notes"
+                rows="3"
+                maxlength="500"
+                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all resize-none"
+                placeholder="Contoh: Tolong packing rapi, barang fragile. Kirim setelah jam 5 sore."></textarea>
+            <p class="text-xs text-gray-400 mt-1 text-right"><span id="orderNotesCount">0</span>/500 karakter</p>
+        </div>
+
+        <div class="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
             <label class="flex items-start gap-3 cursor-pointer">
                 <input type="checkbox" id="agreeTerms" class="w-5 h-5 mt-0.5 rounded border-gray-300 text-[#882426] focus:ring-[#882426]">
                 <span class="text-sm text-gray-600">
