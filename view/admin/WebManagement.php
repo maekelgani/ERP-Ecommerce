@@ -219,6 +219,15 @@ include '../../components/admin/head.php';
                                 <h2 class="text-xl font-bold text-gray-800">Support Tickets</h2>
                                 <p class="text-sm text-gray-500">Kelola tiket bantuan dari pelanggan</p>
                             </div>
+                            <div class="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg border border-gray-200 flex-shrink-0">
+                                <select id="ticketPerPageSelect" onchange="changeTicketPerPage(this.value)" class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span class="text-sm text-gray-600">entries per page</span>
+                            </div>
                         </div>
                     </div>
 
@@ -270,6 +279,16 @@ include '../../components/admin/head.php';
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Pagination Info & Controls -->
+                    <div class="px-4 md:px-6 py-4 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
+                        <div class="text-sm text-gray-600" id="ticketPaginationInfo">
+                            Showing <span class="font-semibold text-gray-800">0</span> to <span class="font-semibold text-gray-800">0</span> of <span class="font-semibold text-gray-800">0</span> entries
+                        </div>
+
+                        <div class="flex items-center gap-1 flex-shrink-0" id="ticketPaginationNav">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -330,10 +349,21 @@ include '../../components/admin/head.php';
                                 <h2 class="text-xl font-bold text-gray-800">Blog & Artikel</h2>
                                 <p class="text-sm text-gray-500">Kelola konten blog dan artikel website</p>
                             </div>
-                            <button id="btnAddArticle" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
-                                <span class="material-symbols-outlined text-xl">add_circle</span>
-                                Tambah Artikel
-                            </button>
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg border border-gray-200 flex-shrink-0">
+                                    <select id="articlePerPageSelect" onchange="changeArticlePerPage(this.value)" class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    <span class="text-sm text-gray-600">entries per page</span>
+                                </div>
+                                <button id="btnAddArticle" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
+                                    <span class="material-symbols-outlined text-xl">add_circle</span>
+                                    Tambah Artikel
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -376,6 +406,16 @@ include '../../components/admin/head.php';
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Pagination Info & Controls -->
+                    <div class="px-4 md:px-6 py-4 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
+                        <div class="text-sm text-gray-600" id="articlePaginationInfo">
+                            Showing <span class="font-semibold text-gray-800">0</span> to <span class="font-semibold text-gray-800">0</span> of <span class="font-semibold text-gray-800">0</span> entries
+                        </div>
+
+                        <div class="flex items-center gap-1 flex-shrink-0" id="articlePaginationNav">
+                        </div>
                     </div>
                 </div>
             </div>

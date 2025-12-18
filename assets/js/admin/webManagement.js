@@ -6,6 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentDeleteType = null;
     let storeEditMode = false;
     let debounceTimer = null;
+    
+    // Pagination variables
+    let ticketPerPage = 10;
+    let ticketCurrentPage = 1;
+    let ticketAllData = [];
+    let articlePerPage = 10;
+    let articleCurrentPage = 1;
+    let articleAllData = [];
 
     initSelect2();
     loadStores();
@@ -13,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadArticles();
     loadArticleCategories();
     initDragDropThumbnail();
-    
+
 
     document.getElementById('btnAddStore').addEventListener('click', () => openStoreModal());
     document.getElementById('closeStoreModal').addEventListener('click', closeStoreModal);
@@ -189,12 +197,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!result.success || !result.data || result.data.length === 0) {
                 container.innerHTML = `
-                    <div class="col-span-full text-center py-12">
-                        <div class="w-10 h-10 bg-[#882426] backdrop-blur rounded-xl flex items-center justify-center">
-                            <span class="material-symbols-outlined text-white">store</span>
+                    <div class="col-span-full flex flex-col items-center justify-center py-16 text-center">
+                        <div class="w-12 h-12 bg-[#882426] rounded-xl flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-white text-2xl">store</span>
                         </div>
-                        <p class="text-gray-500">Belum ada lokasi toko</p>
-                        <p class="text-sm text-gray-400">Klik tombol "Tambah Toko" untuk menambahkan</p>
+                        <p class="text-gray-600 font-medium">
+                            Belum ada lokasi toko
+                        </p>
+                        <p class="text-sm text-gray-400 mt-1">
+                            Klik tombol <b>"Tambah Toko"</b> untuk menambahkan
+                        </p>
                     </div>
                 `;
                 return;
@@ -254,80 +266,60 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('storeModalTitle').textContent = storeEditMode ? 'Edit Lokasi Toko' : 'Tambah Lokasi Toko';
         document.getElementById('storeForm').reset();
 
-        if (storeData) {
-            document.getElementById('storeId').value = storeData.id_toko;
-            document.getElementById('namaToko').value = storeData.nama_toko || '';
-            document.getElementById('noTelepon').value = storeData.no_telepon || '';
-            document.getElementById('alamatToko').value = storeData.alamat || '';
-            document.getElementById('kodePos').value = storeData.kode_pos || '';
-            document.getElementById('jamBuka').value = storeData.jam_buka || '';
-            document.getElementById('jamTutup').value = storeData.jam_tutup || '';
-            document.getElementById('isActive').checked = storeData.is_active == 1;
-
-            // Load and set location dropdowns for editing
-            if (storeData.provinsi || storeData.kota_kabupaten) {
-                try {
-                    // Load all provinces first
-                    const provincesResponse = await fetch(`${WILAYAH_API}/provinces.json`);
-                    const provinces = await provincesResponse.json();
-                    
-                    // Find matching province by name
-                    const matchedProvince = provinces.find(p => p.name === storeData.provinsi);
-                    if (matchedProvince) {
-                        const provinsiSelect = document.getElementById('provinsiToko');
-                        
-                        // Set province value and trigger change
-                        $('#provinsiToko').val(matchedProvince.id).trigger('change');
-                        
-                        // Wait for cities to load
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                        
-                        // Load and set cities
-                        const citiesResponse = await fetch(`${WILAYAH_API}/regencies/${matchedProvince.id}.json`);
-                        const cities = await citiesResponse.json();
-                        const matchedCity = cities.find(c => c.name === storeData.kota_kabupaten);
-                        
-                        if (matchedCity) {
-                            $('#kotaToko').val(matchedCity.id).trigger('change');
-                            
-                            // Wait for districts to load
-                            await new Promise(resolve => setTimeout(resolve, 500));
-                            
-                            // Load and set districts if kecamatan exists
-                            if (storeData.kecamatan) {
-                                const districtsResponse = await fetch(`${WILAYAH_API}/districts/${matchedCity.id}.json`);
-                                const districts = await districtsResponse.json();
-                                const matchedDistrict = districts.find(d => d.name === storeData.kecamatan);
-                                
-                                if (matchedDistrict) {
-                                    $('#kecamatanToko').val(matchedDistrict.id).trigger('change');
-                                    
-                                    // Wait for villages to load
-                                    await new Promise(resolve => setTimeout(resolve, 500));
-                                    
-                                    // Load and set villages if kelurahan exists
-                                    if (storeData.kelurahan) {
-                                        const villagesResponse = await fetch(`${WILAYAH_API}/villages/${matchedDistrict.id}.json`);
-                                        const villages = await villagesResponse.json();
-                                        const matchedVillage = villages.find(v => v.name === storeData.kelurahan);
-                                        
-                                        if (matchedVillage) {
-                                            $('#kelurahanToko').val(matchedVillage.id).trigger('change');
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error loading location data for edit:', error);
-                }
-            }
-        }
-
         document.getElementById('storeModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+
+        if (!storeData) return;
+
+        // 🔹 isi field biasa (cepat)
+        document.getElementById('storeId').value = storeData.id_toko;
+        document.getElementById('namaToko').value = storeData.nama_toko || '';
+        document.getElementById('noTelepon').value = storeData.no_telepon || '';
+        document.getElementById('alamatToko').value = storeData.alamat || '';
+        document.getElementById('kodePos').value = storeData.kode_pos || '';
+        document.getElementById('jamBuka').value = storeData.jam_buka || '';
+        document.getElementById('jamTutup').value = storeData.jam_tutup || '';
+        document.getElementById('isActive').checked = storeData.is_active == 1;
+
+        // 🔄 LOAD WILAYAH ASYNC (TIDAK BLOK UI)
+        loadLocationForEdit(storeData);
+
     }
+
+    async function loadLocationForEdit(storeData) {
+        try {
+            const provinces = await fetch(`${WILAYAH_API}/provinces.json`).then(r => r.json());
+            const matchedProvince = provinces.find(p => p.name === storeData.provinsi);
+            if (!matchedProvince) return;
+
+            $('#provinsiToko').val(matchedProvince.id).trigger('change');
+
+            const cities = await fetch(`${WILAYAH_API}/regencies/${matchedProvince.id}.json`).then(r => r.json());
+            const matchedCity = cities.find(c => c.name === storeData.kota_kabupaten);
+            if (!matchedCity) return;
+
+            $('#kotaToko').val(matchedCity.id).trigger('change');
+
+            if (!storeData.kecamatan) return;
+
+            const districts = await fetch(`${WILAYAH_API}/districts/${matchedCity.id}.json`).then(r => r.json());
+            const matchedDistrict = districts.find(d => d.name === storeData.kecamatan);
+            if (!matchedDistrict) return;
+
+            $('#kecamatanToko').val(matchedDistrict.id).trigger('change');
+
+            if (!storeData.kelurahan) return;
+
+            const villages = await fetch(`${WILAYAH_API}/villages/${matchedDistrict.id}.json`).then(r => r.json());
+            const matchedVillage = villages.find(v => v.name === storeData.kelurahan);
+            if (matchedVillage) {
+                $('#kelurahanToko').val(matchedVillage.id).trigger('change');
+            }
+        } catch (err) {
+            console.error('Load wilayah gagal:', err);
+        }
+    }
+
 
     function closeStoreModal() {
         document.getElementById('storeModal').classList.add('hidden');
@@ -486,10 +478,26 @@ document.addEventListener('DOMContentLoaded', function() {
                         </td>
                     </tr>
                 `;
+                updateTicketPagination(0);
                 return;
             }
 
-            tbody.innerHTML = result.data.map(ticket => `
+            // Store all data and reset to page 1
+            ticketAllData = result.data;
+            ticketCurrentPage = 1;
+            renderTicketPage();
+        } catch (error) {
+            console.error('Error loading tickets:', error);
+            tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-12 text-center text-red-500">Error memuat data tiket</td></tr>`;
+        }
+    }
+
+    function renderTicketPage() {
+        const tbody = document.getElementById('ticketTableBody');
+        const offset = (ticketCurrentPage - 1) * ticketPerPage;
+        const paginatedData = ticketAllData.slice(offset, offset + ticketPerPage);
+
+        tbody.innerHTML = paginatedData.map(ticket => `
                 <tr data-ticket-id="${ticket.id_ticket}" class="hover:bg-gray-50">
                     <td class="px-4 py-3 font-mono text-sm font-medium text-gray-900">${ticket.id_ticket}</td>
                     <td class="px-4 py-3">
@@ -522,22 +530,90 @@ document.addEventListener('DOMContentLoaded', function() {
                     </td>
                 </tr>
             `).join('');
-        } catch (error) {
-            console.error('Error loading tickets:', error);
-            tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-12 text-center text-red-500">Error memuat data tiket</td></tr>`;
-        }
+        updateTicketPagination();
     }
+
+    function updateTicketPagination() {
+        const totalPages = Math.ceil(ticketAllData.length / ticketPerPage);
+        const offset = (ticketCurrentPage - 1) * ticketPerPage;
+        const endEntry = Math.min(offset + ticketPerPage, ticketAllData.length);
+        const startEntry = ticketAllData.length > 0 ? offset + 1 : 0;
+
+        document.getElementById('ticketPaginationInfo').innerHTML = `
+            Showing <span class="font-semibold text-gray-800">${startEntry}</span> to <span class="font-semibold text-gray-800">${endEntry}</span> of <span class="font-semibold text-gray-800">${ticketAllData.length}</span> entries
+        `;
+
+        const paginationNav = document.getElementById('ticketPaginationNav');
+        if (!paginationNav) return;
+
+        let paginationHTML = '';
+
+        if (ticketCurrentPage > 1) {
+            paginationHTML += `<button onclick="goToTicketPage(${ticketCurrentPage - 1})" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
+            </button>`;
+        } else {
+            paginationHTML += `<button disabled class="px-3 py-2 rounded-lg border border-gray-200 text-gray-300 cursor-not-allowed text-sm font-medium">
+                <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
+            </button>`;
+        }
+
+        const startPage = Math.max(1, ticketCurrentPage - 2);
+        const endPage = Math.min(totalPages, ticketCurrentPage + 2);
+
+        if (startPage > 1) {
+            paginationHTML += `<a onclick="goToTicketPage(1)" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium cursor-pointer">1</a>`;
+            if (startPage > 2) paginationHTML += `<span class="px-2 py-2 text-gray-400">...</span>`;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (i === ticketCurrentPage) {
+                paginationHTML += `<button class="px-3 py-2 rounded-lg text-white font-medium" style="background: #882426;">${i}</button>`;
+            } else {
+                paginationHTML += `<a onclick="goToTicketPage(${i})" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium cursor-pointer">${i}</a>`;
+            }
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) paginationHTML += `<span class="px-2 py-2 text-gray-400">...</span>`;
+            paginationHTML += `<a onclick="goToTicketPage(${totalPages})" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium cursor-pointer">${totalPages}</a>`;
+        }
+
+        if (ticketCurrentPage < totalPages) {
+            paginationHTML += `<button onclick="goToTicketPage(${ticketCurrentPage + 1})" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
+            </button>`;
+        } else {
+            paginationHTML += `<button disabled class="px-3 py-2 rounded-lg border border-gray-200 text-gray-300 cursor-not-allowed text-sm font-medium">
+                <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
+            </button>`;
+        }
+
+        paginationNav.innerHTML = paginationHTML;
+    }
+
+    window.goToTicketPage = function(page) {
+        ticketCurrentPage = page;
+        renderTicketPage();
+    };
+
+    window.changeTicketPerPage = function(value) {
+        ticketPerPage = parseInt(value);
+        ticketCurrentPage = 1;
+        renderTicketPage();
+    };
+
     function updateTicketTableStatus(ticketId, status) {
         const row = document.querySelector(`tr[data-ticket-id="${ticketId}"]`);
         if (!row) return;
-    
+
         const badge = row.querySelector('td:nth-child(5) span');
         if (!badge) return;
-    
+
         badge.textContent = status;
         badge.className = `px-2 py-1 text-xs rounded-full font-medium ${getStatusBadgeClass(status)}`;
     }
-    
+
     window.viewTicket = async function(id) {
         try {
             const response = await fetch(`${API_BASE}support-ticket.php?action=get&id=${id}`);
@@ -841,80 +917,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.deleteReply = async function (replyId, ticketId) {
         if (!confirm('Yakin ingin menghapus balasan ini?')) return;
-    
+
         const response = await fetch(`${API_BASE}support-ticket.php?action=deleteReply`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id_reply: replyId })
         });
-    
+
         const result = await response.json();
-    
+
         if (!result.success) {
             showToast(result.message || 'Terjadi kesalahan', 'error');
             return;
         }
-    
+
         document.querySelector(`[data-reply-id="${replyId}"]`)?.remove();
-    
+
         // 🔥 SINKRON STATUS & FAQ DARI SERVER
         const ticket = await refreshTicketMeta(ticketId);
-    
+
         if (ticket) {
             updateTicketTableStatus(ticketId, ticket.status);
         }
-    
+
         showToast('Balasan dihapus', 'success');
     };
 
     window.deleteAllReplies = async function (ticketId) {
         if (!confirm('Yakin ingin menghapus SEMUA balasan tiket ini?')) return;
-    
+
         const response = await fetch(`${API_BASE}support-ticket.php?action=deleteAllReplies`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id_ticket: ticketId })
         });
-    
+
         const result = await response.json();
-    
+
         if (!result.success) {
             showToast(result.message || 'Gagal menghapus balasan', 'error');
             return;
         }
-    
+
         document.getElementById('repliesList').innerHTML =
             '<p class="text-gray-500 text-sm">Belum ada balasan</p>';
-    
+
             updateStatusBadge('In Progress');
             syncStatusSelect('In Progress');
             updateFaqCheckboxState('In Progress', 0);
-            
+
             // 🔥 UPDATE TABEL
             updateTicketTableStatus(ticketId, 'In Progress');
-            
-    
+
+
         showToast('Semua balasan dihapus', 'success');
     };
-    
+
     async function refreshTicketMeta(ticketId) {
         const response = await fetch(`${API_BASE}support-ticket.php?action=get&id=${ticketId}`);
         const result = await response.json();
-    
+
         if (!result.success) return null;
-    
+
         const ticket = result.data;
-    
+
         updateStatusBadge(ticket.status);
         syncStatusSelect(ticket.status);
         updateFaqCheckboxState(ticket.status, ticket.is_faq);
-    
+
         return ticket; // 🔥 PENTING
     }    
 
     async function submitReply(event, ticketId) {
         event.preventDefault();
-    
+
         const formData = new FormData();
         const isFaq = document.getElementById('isFaqCheckbox')?.checked ? 1 : 0;
         formData.append('is_faq', isFaq);
@@ -929,50 +1005,50 @@ document.addEventListener('DOMContentLoaded', function() {
             'update_status',
             document.getElementById('updateStatusOnReply')?.value || ''
         );
-    
+
         // 🔥 INI KUNCI MASALAH KAMU
         formData.append(
             'is_faq',
             document.getElementById('isFaqCheckbox')?.checked ? 1 : 0
         );
-    
+
         const response = await fetch('../../api/admin/support-ticket.php?action=reply', {
             method: 'POST',
             body: formData
         });
-    
+
         const result = await response.json();
         // handle response...
     }    
-    
+
     window.submitReply = async function (e, ticketId) {
         e.preventDefault();
-    
+
         const messageEl = document.getElementById('replyMessage');
         const internalNoteEl = document.getElementById('internalNote');
         const updateStatusEl = document.getElementById('updateStatusOnReply');
         const faqCheckbox = document.getElementById('isFaqCheckbox');
-    
+
         const formData = new FormData();
         formData.append('id_ticket', ticketId);
         formData.append('message', messageEl.value);
         formData.append('is_internal_note', internalNoteEl.checked ? 1 : 0);
         formData.append('update_status', updateStatusEl.value);
         formData.append('is_faq', faqCheckbox?.checked ? 1 : 0);
-    
+
         try {
             const response = await fetch(`${API_BASE}support-ticket.php?action=reply`, {
                 method: 'POST',
                 body: formData
             });
-    
+
             const result = await response.json();
-    
+
             if (!result.success) {
                 showToast(result.message || 'Gagal mengirim balasan', 'error');
                 return;
             }
-    
+
             // 🔥 APPEND BALASAN TANPA REFRESH - include id_reply from server
             appendNewReply({
                 id_reply: result.id_reply,
@@ -986,10 +1062,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (updateStatusEl.value) {
                 updateStatusBadge(updateStatusEl.value);
                 syncStatusSelect(updateStatusEl.value);
-            
+
                 const autoFaq = ['Resolved', 'Closed'].includes(updateStatusEl.value) ? 1 : 0;
                 updateFaqCheckboxState(updateStatusEl.value, autoFaq);
-            
+
                 // 🔥 UPDATE TABEL
                 updateTicketTableStatus(ticketId, updateStatusEl.value);
             }
@@ -997,15 +1073,15 @@ document.addEventListener('DOMContentLoaded', function() {
             messageEl.value = '';
             internalNoteEl.checked = false;
             updateStatusEl.value = '';
-    
+
             showToast('Balasan berhasil dikirim', 'success');
-    
+
         } catch (error) {
             console.error(error);
             showToast('Terjadi kesalahan', 'error');
         }
     };
-    
+
 function appendNewReply(reply, ticketId) {
     const container = document.getElementById('repliesList');
     if (!container) return;
@@ -1049,7 +1125,7 @@ function appendNewReply(reply, ticketId) {
     `;
 
     container.appendChild(div);
-    
+
     const replyCountBadge = document.querySelector('.bg-gray-100.text-gray-600.rounded-full');
     if (replyCountBadge) {
         const currentCount = parseInt(replyCountBadge.textContent) || 0;
@@ -1057,19 +1133,19 @@ function appendNewReply(reply, ticketId) {
     }
 }
 
-    
+
     window.updateTicketStatus = async function (ticketId) {
         const statusSelect = document.getElementById('ticketStatusUpdate');
         const faqCheckbox = document.getElementById('isFaqCheckbox');
-    
+
         const status = statusSelect.value;
         let isFaq = faqCheckbox.checked ? 1 : 0;
-    
+
         // 🔒 RULE FRONTEND
         if (!['Resolved', 'Closed'].includes(status)) {
             isFaq = 0;
         }
-    
+
         const response = await fetch(`${API_BASE}support-ticket.php?action=updateStatus`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1079,20 +1155,20 @@ function appendNewReply(reply, ticketId) {
                 is_faq: isFaq
             })
         });
-    
+
         const result = await response.json();
-    
+
         if (!result.success) {
             showToast(result.message || 'Gagal update status', 'error');
             return;
         }
-    
+
         // 🔥 REALTIME SYNC
         updateStatusBadge(status);
         syncStatusSelect(status);
         updateFaqCheckboxState(status, isFaq);
         updateTicketTableStatus(ticketId, status);        
-    
+
         showToast('Status tiket diperbarui', 'success');
     };
 
@@ -1107,10 +1183,10 @@ function appendNewReply(reply, ticketId) {
     function updateTicketRowStatus(ticketId, status) {
         const row = document.querySelector(`tr td:first-child:textContent("${ticketId}")`);
         if (!row) return;
-    
+
         const badge = row.closest('tr')?.querySelector('td:nth-child(5) span');
         if (!badge) return;
-    
+
         badge.textContent = status;
         badge.className = `px-2 py-1 text-xs rounded-full font-medium ${getStatusBadgeClass(status)}`;
     }    
@@ -1118,7 +1194,7 @@ function appendNewReply(reply, ticketId) {
     function updateStatusBadge(status) {
         const badge = document.querySelector('[data-ticket-status]');
         if (!badge) return;
-    
+
         badge.textContent = status;
         badge.className = `px-3 py-1 text-xs font-semibold rounded-full ${getStatusBadgeClass(status)}`;
     }    
@@ -1128,23 +1204,23 @@ function appendNewReply(reply, ticketId) {
         if (!select) return;
         select.value = status;
     }
-    
+
 
     function updateFaqCheckboxState(status, isFaqFromServer = null) {
         const faqCheckbox = document.getElementById('isFaqCheckbox');
         if (!faqCheckbox) return;
-    
+
         const allowed = ['Resolved', 'Closed'].includes(status);
-    
+
         if (!allowed) {
             faqCheckbox.checked = false;
             faqCheckbox.disabled = true;
             faqCheckbox.dataset.autoUnchecked = '1';
             return;
         }
-    
+
         faqCheckbox.disabled = false;
-    
+
         // 🔥 AUTO CHECK
         if (isFaqFromServer !== null) {
             faqCheckbox.checked = !!isFaqFromServer;
@@ -1330,10 +1406,26 @@ function appendNewReply(reply, ticketId) {
                         </td>
                     </tr>
                 `;
+                updateArticlePagination();
                 return;
             }
 
-            tbody.innerHTML = result.data.map(article => `
+            // Store all data and reset to page 1
+            articleAllData = result.data;
+            articleCurrentPage = 1;
+            renderArticlePage();
+        } catch (error) {
+            console.error('Error loading articles:', error);
+            tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-12 text-center text-red-500">Error memuat data artikel</td></tr>`;
+        }
+    }
+
+    function renderArticlePage() {
+        const tbody = document.getElementById('articleTableBody');
+        const offset = (articleCurrentPage - 1) * articlePerPage;
+        const paginatedData = articleAllData.slice(offset, offset + articlePerPage);
+
+        tbody.innerHTML = paginatedData.map(article => `
                 <tr class="hover:bg-gray-50/50 transition-colors">
                     <td class="px-4 py-4">
                         <div class="relative group cursor-pointer" ${article.thumbnail ? `onclick="openLightbox('../../uploads/blog/${article.thumbnail}')"` : ''}>
@@ -1378,11 +1470,78 @@ function appendNewReply(reply, ticketId) {
                     </td>
                 </tr>
             `).join('');
-        } catch (error) {
-            console.error('Error loading articles:', error);
-            tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-12 text-center text-red-500">Error memuat data artikel</td></tr>`;
-        }
+        updateArticlePagination();
     }
+
+    function updateArticlePagination() {
+        const totalPages = Math.ceil(articleAllData.length / articlePerPage);
+        const offset = (articleCurrentPage - 1) * articlePerPage;
+        const endEntry = Math.min(offset + articlePerPage, articleAllData.length);
+        const startEntry = articleAllData.length > 0 ? offset + 1 : 0;
+
+        document.getElementById('articlePaginationInfo').innerHTML = `
+            Showing <span class="font-semibold text-gray-800">${startEntry}</span> to <span class="font-semibold text-gray-800">${endEntry}</span> of <span class="font-semibold text-gray-800">${articleAllData.length}</span> entries
+        `;
+
+        const paginationNav = document.getElementById('articlePaginationNav');
+        if (!paginationNav) return;
+
+        let paginationHTML = '';
+
+        if (articleCurrentPage > 1) {
+            paginationHTML += `<button onclick="goToArticlePage(${articleCurrentPage - 1})" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
+            </button>`;
+        } else {
+            paginationHTML += `<button disabled class="px-3 py-2 rounded-lg border border-gray-200 text-gray-300 cursor-not-allowed text-sm font-medium">
+                <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
+            </button>`;
+        }
+
+        const startPage = Math.max(1, articleCurrentPage - 2);
+        const endPage = Math.min(totalPages, articleCurrentPage + 2);
+
+        if (startPage > 1) {
+            paginationHTML += `<a onclick="goToArticlePage(1)" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium cursor-pointer">1</a>`;
+            if (startPage > 2) paginationHTML += `<span class="px-2 py-2 text-gray-400">...</span>`;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (i === articleCurrentPage) {
+                paginationHTML += `<button class="px-3 py-2 rounded-lg text-white font-medium" style="background: #882426;">${i}</button>`;
+            } else {
+                paginationHTML += `<a onclick="goToArticlePage(${i})" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium cursor-pointer">${i}</a>`;
+            }
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) paginationHTML += `<span class="px-2 py-2 text-gray-400">...</span>`;
+            paginationHTML += `<a onclick="goToArticlePage(${totalPages})" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium cursor-pointer">${totalPages}</a>`;
+        }
+
+        if (articleCurrentPage < totalPages) {
+            paginationHTML += `<button onclick="goToArticlePage(${articleCurrentPage + 1})" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
+            </button>`;
+        } else {
+            paginationHTML += `<button disabled class="px-3 py-2 rounded-lg border border-gray-200 text-gray-300 cursor-not-allowed text-sm font-medium">
+                <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
+            </button>`;
+        }
+
+        paginationNav.innerHTML = paginationHTML;
+    }
+
+    window.goToArticlePage = function(page) {
+        articleCurrentPage = page;
+        renderArticlePage();
+    };
+
+    window.changeArticlePerPage = function(value) {
+        articlePerPage = parseInt(value);
+        articleCurrentPage = 1;
+        renderArticlePage();
+    };
 
     function openArticleModal(articleData = null) {
         articleEditMode = !!articleData;
@@ -1391,7 +1550,7 @@ function appendNewReply(reply, ticketId) {
 
         document.getElementById('articleModalTitle').textContent = articleEditMode ? 'Edit Artikel' : 'Tambah Artikel';
         document.getElementById('articleForm').reset();
-        
+
         document.getElementById('articleId').value = '';
         document.getElementById('articleTitle').value = '';
         document.getElementById('articleCategory').value = '';
@@ -1424,7 +1583,7 @@ function appendNewReply(reply, ticketId) {
         document.getElementById('articleModal').classList.add('hidden');
         document.body.style.overflow = '';
         document.getElementById('articleForm').reset();
-        
+
         document.getElementById('articleId').value = '';
         document.getElementById('thumbnailFilename').value = '';
         thumbnailRemoved = false;
