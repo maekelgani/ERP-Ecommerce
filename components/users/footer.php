@@ -9,7 +9,6 @@
 </head>
 
 <body>
-    <hr class="text-gray-200">
     <footer class="bg-white mt-4 w-full px-5 md:px-8 lg:px-20">
         <div class="py-8 w-full">
             <div class="grid grid-cols-1 gap-8 xl:grid-cols-4">

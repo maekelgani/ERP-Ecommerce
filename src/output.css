@@ -88,7 +88,6 @@
     --color-rose-50: oklch(96.9% 0.015 12.422);
     --color-rose-500: oklch(64.5% 0.246 16.439);
     --color-rose-600: oklch(58.6% 0.253 17.585);
-    --color-slate-50: oklch(98.4% 0.003 247.858);
     --color-slate-200: oklch(92.9% 0.013 255.508);
     --color-gray-50: oklch(98.5% 0.002 247.839);
     --color-gray-100: oklch(96.7% 0.003 264.542);
@@ -157,7 +156,6 @@
     --animate-spin: spin 1s linear infinite;
     --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     --blur-sm: 8px;
-    --blur-md: 12px;
     --blur-lg: 16px;
     --blur-3xl: 64px;
     --aspect-video: 16 / 9;
@@ -730,9 +728,6 @@
   .ml-4 {
     margin-left: calc(var(--spacing) * 4);
   }
-  .ml-6 {
-    margin-left: calc(var(--spacing) * 6);
-  }
   .ml-8 {
     margin-left: calc(var(--spacing) * 8);
   }
@@ -865,6 +860,9 @@
   }
   .h-36 {
     height: calc(var(--spacing) * 36);
+  }
+  .h-38 {
+    height: calc(var(--spacing) * 38);
   }
   .h-40 {
     height: calc(var(--spacing) * 40);
@@ -1575,6 +1573,10 @@
     border-style: var(--tw-border-style);
     border-width: 1px;
   }
+  .border-0 {
+    border-style: var(--tw-border-style);
+    border-width: 0px;
+  }
   .border-2 {
     border-style: var(--tw-border-style);
     border-width: 2px;
@@ -1748,9 +1750,6 @@
   }
   .border-l-blue-400 {
     border-left-color: var(--color-blue-400);
-  }
-  .border-l-gray-800 {
-    border-left-color: var(--color-gray-800);
   }
   .\!bg-primary\/60 {
     background-color: color-mix(in srgb, #882426 60%, transparent) !important;
@@ -4537,11 +4536,6 @@
       border-color: var(--color-blue-500);
     }
   }
-  .focus\:border-gray-800 {
-    &:focus {
-      border-color: var(--color-gray-800);
-    }
-  }
   .focus\:border-primary {
     &:focus {
       border-color: var(--color-primary);
@@ -4623,11 +4617,6 @@
   .focus\:ring-gray-500 {
     &:focus {
       --tw-ring-color: var(--color-gray-500);
-    }
-  }
-  .focus\:ring-gray-800 {
-    &:focus {
-      --tw-ring-color: var(--color-gray-800);
     }
   }
   .focus\:ring-primary {
@@ -5122,6 +5111,16 @@
       height: calc(var(--spacing) * 44);
     }
   }
+  .md\:h-48 {
+    @media (width >= 48rem) {
+      height: calc(var(--spacing) * 48);
+    }
+  }
+  .md\:h-64 {
+    @media (width >= 48rem) {
+      height: calc(var(--spacing) * 64);
+    }
+  }
   .md\:h-\[280px\] {
     @media (width >= 48rem) {
       height: 280px;
@@ -5259,6 +5258,11 @@
   .md\:p-12 {
     @media (width >= 48rem) {
       padding: calc(var(--spacing) * 12);
+    }
+  }
+  .md\:px-4 {
+    @media (width >= 48rem) {
+      padding-inline: calc(var(--spacing) * 4);
     }
   }
   .md\:px-6 {
