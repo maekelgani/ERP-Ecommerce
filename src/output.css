@@ -429,9 +429,6 @@
   .top-0 {
     top: calc(var(--spacing) * 0);
   }
-  .top-0\.5 {
-    top: calc(var(--spacing) * 0.5);
-  }
   .top-1 {
     top: calc(var(--spacing) * 1);
   }
@@ -536,9 +533,6 @@
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
-  }
-  .left-0\.5 {
-    left: calc(var(--spacing) * 0.5);
   }
   .left-1 {
     left: calc(var(--spacing) * 1);
@@ -3005,6 +2999,9 @@
   .pr-5 {
     padding-right: calc(var(--spacing) * 5);
   }
+  .pr-8 {
+    padding-right: calc(var(--spacing) * 8);
+  }
   .pr-10 {
     padding-right: calc(var(--spacing) * 10);
   }
@@ -3363,9 +3360,6 @@
   }
   .text-purple-900 {
     color: var(--color-purple-900);
-  }
-  .text-red-50 {
-    color: var(--color-red-50);
   }
   .text-red-400 {
     color: var(--color-red-400);
@@ -4237,23 +4231,6 @@
       @media (hover: hover) {
         --tw-ring-color: var(--color-amber-200);
       }
-    }
-  }
-  .peer-checked\:left-6 {
-    &:is(:where(.peer):checked ~ *) {
-      left: calc(var(--spacing) * 6);
-    }
-  }
-  .peer-checked\:translate-x-5 {
-    &:is(:where(.peer):checked ~ *) {
-      --tw-translate-x: calc(var(--spacing) * 5);
-      translate: var(--tw-translate-x) var(--tw-translate-y);
-    }
-  }
-  .peer-checked\:translate-x-6 {
-    &:is(:where(.peer):checked ~ *) {
-      --tw-translate-x: calc(var(--spacing) * 6);
-      translate: var(--tw-translate-x) var(--tw-translate-y);
     }
   }
   .peer-checked\:bg-\[\#882426\] {

@@ -129,32 +129,39 @@ include '../../components/admin/head.php';
                 </div>
 
                 <div class="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="material-symbols-outlined text-blue-500">shopping_bag</span>
+                    <!-- Total Orders Card -->
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-blue-500" style="font-size: 20px;">shopping_bag</span>
                         </div>
-                        <p class="text-2xl font-bold text-gray-800"><?= $orderStats['total_orders'] ?? 0 ?></p>
+                        <p class="text-2xl font-bold text-gray-800 mb-1"><?= $orderStats['total_orders'] ?? 0 ?></p>
                         <p class="text-sm text-gray-500">Total Orders</p>
                     </div>
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="material-symbols-outlined text-green-500">check_circle</span>
+
+                    <!-- Selesai Card -->
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-green-500" style="font-size: 20px;">check_circle</span>
                         </div>
-                        <p class="text-2xl font-bold text-gray-800"><?= $orderStats['completed_orders'] ?? 0 ?></p>
+                        <p class="text-2xl font-bold text-gray-800 mb-1"><?= $orderStats['completed_orders'] ?? 0 ?></p>
                         <p class="text-sm text-gray-500">Selesai</p>
                     </div>
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="material-symbols-outlined text-red-500">cancel</span>
+
+                    <!-- Dibatalkan Card -->
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-red-500" style="font-size: 20px;">cancel</span>
                         </div>
-                        <p class="text-2xl font-bold text-gray-800"><?= $orderStats['cancelled_orders'] ?? 0 ?></p>
+                        <p class="text-2xl font-bold text-gray-800 mb-1"><?= $orderStats['cancelled_orders'] ?? 0 ?></p>
                         <p class="text-sm text-gray-500">Dibatalkan</p>
                     </div>
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="material-symbols-outlined text-purple-500">payments</span>
+
+                    <!-- Total Belanja Card -->
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-purple-500" style="font-size: 20px;">payments</span>
                         </div>
-                        <p class="text-lg font-bold text-gray-800">Rp <?= number_format($orderStats['total_completed_value'] ?? 0, 0, ',', '.') ?></p>
+                        <p class="text-xl font-bold text-gray-800 mb-1">Rp <?= number_format($orderStats['total_completed_value'] ?? 0, 0, ',', '.') ?></p>
                         <p class="text-sm text-gray-500">Total Belanja</p>
                     </div>
                 </div>
@@ -301,9 +308,33 @@ include '../../components/admin/head.php';
                                 <div class="flex-1">
                                     <p class="font-medium text-gray-800"><?= htmlspecialchars($review['nama_product']) ?></p>
                                     <div class="flex items-center gap-1 my-1">
-                                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                                            <span class="material-symbols-outlined text-xs <?= $i <= $review['rating'] ? 'text-yellow-400' : 'text-gray-300' ?>">star</span>
-                                        <?php endfor; ?>
+                                        <?php
+                                        $rating = (float)$review['rating'];
+                                        $fullStars = floor($rating);
+                                        $fractionalPart = $rating - $fullStars;
+                                        $uniqueId = uniqid('star_cd_');
+                                        for ($i = 1; $i <= 5; $i++):
+                                            if ($i <= $fullStars): ?>
+                                                <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                </svg>
+                                            <?php elseif ($i == $fullStars + 1 && $fractionalPart > 0):
+                                                $percentage = round($fractionalPart * 100); ?>
+                                                <svg class="w-4 h-4" viewBox="0 0 24 24">
+                                                    <defs>
+                                                        <linearGradient id="grad_<?= $uniqueId ?>_<?= $i ?>">
+                                                            <stop offset="<?= $percentage ?>%" stop-color="#FBBF24" />
+                                                            <stop offset="<?= $percentage ?>%" stop-color="#D1D5DB" />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <path fill="url(#grad_<?= $uniqueId ?>_<?= $i ?>)" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                </svg>
+                                            <?php else: ?>
+                                                <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                </svg>
+                                        <?php endif;
+                                        endfor; ?>
                                         <span class="text-xs text-gray-500 ml-1"><?= date('d M Y', strtotime($review['tanggal_review'])) ?></span>
                                     </div>
                                     <?php if (!empty($review['komentar'])): ?>

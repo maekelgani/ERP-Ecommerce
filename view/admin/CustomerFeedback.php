@@ -138,9 +138,33 @@ include '../../components/admin/head.php';
                                                 <p class="font-medium text-gray-800"><?= htmlspecialchars($review['nama_product']) ?></p>
                                                 <div class="flex items-center gap-2 mt-1">
                                                     <div class="flex items-center gap-0.5">
-                                                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                            <span class="material-symbols-outlined text-sm <?= $i <= $review['rating'] ? 'text-yellow-400' : 'text-gray-300' ?>">star</span>
-                                                        <?php endfor; ?>
+                                                        <?php
+                                                        $rating = (float)$review['rating'];
+                                                        $fullStars = floor($rating);
+                                                        $fractionalPart = $rating - $fullStars;
+                                                        $uniqueId = uniqid('star_cf_');
+                                                        for ($i = 1; $i <= 5; $i++):
+                                                            if ($i <= $fullStars): ?>
+                                                                <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+                                                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                                </svg>
+                                                            <?php elseif ($i == $fullStars + 1 && $fractionalPart > 0):
+                                                                $percentage = round($fractionalPart * 100); ?>
+                                                                <svg class="w-4 h-4" viewBox="0 0 24 24">
+                                                                    <defs>
+                                                                        <linearGradient id="grad_<?= $uniqueId ?>_<?= $i ?>">
+                                                                            <stop offset="<?= $percentage ?>%" stop-color="#FBBF24" />
+                                                                            <stop offset="<?= $percentage ?>%" stop-color="#D1D5DB" />
+                                                                        </linearGradient>
+                                                                    </defs>
+                                                                    <path fill="url(#grad_<?= $uniqueId ?>_<?= $i ?>)" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                                </svg>
+                                                            <?php else: ?>
+                                                                <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                                </svg>
+                                                        <?php endif;
+                                                        endfor; ?>
                                                     </div>
                                                     <span class="text-sm text-gray-500"><?= $review['rating'] ?>/5</span>
                                                 </div>

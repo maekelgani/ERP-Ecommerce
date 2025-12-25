@@ -8,8 +8,10 @@ AuthMiddleware::requireAdminLoginFromView();
 
 $orderRepo = new OrderRepository();
 
+// Modified: Added perPage variable like CustomerList.php
+$perPage = (int)($_GET['per_page'] ?? 10);
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$limit = isset($_GET['limit']) ? max(5, min(50, intval($_GET['limit']))) : 10;
+$limit = $perPage;
 
 $filters = [
     'search' => $_GET['search'] ?? '',
@@ -25,6 +27,10 @@ $totalPages = $result['total_pages'];
 $totalOrders = $result['total'];
 
 $stats = $orderRepo->getOrderStats();
+
+// Added: Calculate startEntry and endEntry early
+$startEntry = $totalOrders > 0 ? (($page - 1) * $limit) + 1 : 0;
+$endEntry = min($page * $limit, $totalOrders);
 
 $pageTitle = "Incoming Orders";
 include '../../components/admin/head.php';
@@ -162,19 +168,35 @@ function getShipmentStatusBadge($status)
             </div>
 
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <!-- Modified: Header section like CustomerList.php with entries per page -->
                 <div class="p-4 md:p-6 border-b border-gray-100">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div>
-                            <h2 class="text-lg font-semibold text-gray-800">Daftar Pesanan Masuk</h2>
-                            <p class="text-sm text-gray-500 mt-1">Pesanan yang perlu dikonfirmasi dan diproses</p>
+                    <div class="flex flex-col gap-4">
+                        <div class="min-w-0">
+                            <h2 class="text-lg font-bold text-gray-800">Daftar Pesanan Masuk</h2>
+                            <p class="text-sm text-gray-500 mt-1">Menampilkan <?= $startEntry ?> - <?= $endEntry ?> dari <?= $totalOrders ?> pesanan</p>
                         </div>
-                        <div class="text-sm text-gray-500">
-                            Total: <span class="font-semibold text-gray-800"><?= $totalOrders ?></span> pesanan
+                        <!-- KONTROL -->
+                        <div class="flex items-center justify-between gap-4">
+                            <!-- LEFT: Entries per page -->
+                            <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                                <span class="material-symbols-outlined text-gray-400 text-sm">view_list</span>
+                                <select onchange="window.location.href='?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>&per_page=' + this.value"
+                                    class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
+                                    <?php foreach ([5, 10, 20, 50] as $option): ?>
+                                        <option value="<?= $option ?>" <?= $perPage === $option ? 'selected' : '' ?>>
+                                            <?= $option ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <span class="text-sm text-gray-600">entries per page</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <form method="GET" class="p-4 border-b border-gray-100 bg-gray-50/50">
+                    <!-- Hidden input to preserve per_page when filtering -->
+                    <input type="hidden" name="per_page" value="<?= $perPage ?>">
                     <div class="flex flex-wrap items-end gap-3">
                         <div class="flex-1 min-w-[200px]">
                             <label class="block text-xs font-medium text-gray-600 mb-1">Cari Pesanan</label>
@@ -227,22 +249,23 @@ function getShipmentStatusBadge($status)
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-200">
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Order ID</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Items</th>
-                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Total</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Pembayaran</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Status Order</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Pengiriman</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
+                            <tr class="bg-gray-50 border-b border-gray-100">
+                                <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-12">No</th>
+                                <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Order ID</th>
+                                <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Customer</th>
+                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Items</th>
+                                <th class="px-5 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Total</th>
+                                <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Pembayaran</th>
+                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status Order</th>
+                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Pengiriman</th>
+                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <?php if (empty($orders)): ?>
                                 <tr>
-                                    <td colspan="9" class="px-4 py-12 text-center">
+                                    <td colspan="10" class="px-4 py-12 text-center">
                                         <div class="flex flex-col items-center">
                                             <span class="material-symbols-outlined text-6xl text-gray-300 mb-3">inbox</span>
                                             <p class="text-gray-500 font-medium">Tidak ada pesanan masuk</p>
@@ -251,8 +274,12 @@ function getShipmentStatusBadge($status)
                                     </td>
                                 </tr>
                             <?php else: ?>
-                                <?php foreach ($orders as $order): ?>
-                                    <tr class="hover:bg-gray-50 transition-colors" data-order-id="<?= htmlspecialchars($order['id_order']) ?>">
+                                <?php $no = (($page - 1) * $limit) + 1;
+                                foreach ($orders as $order): ?>
+                                    <tr class="hover:bg-orange-50 transition-colors" data-order-id="<?= htmlspecialchars($order['id_order']) ?>">
+                                        <td class="px-4 py-3 text-center font-medium text-gray-700">
+                                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#882426]/10 text-[#882426]"><?= $no++ ?></span>
+                                        </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm font-mono font-medium text-[#882426]">#<?= htmlspecialchars(substr($order['id_order'], -8)) ?></span>
@@ -340,39 +367,63 @@ function getShipmentStatusBadge($status)
                     </table>
                 </div>
 
-                <?php if ($totalPages > 1): ?>
-                    <div class="px-4 py-4 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div class="text-sm text-gray-500">
-                            Halaman <?= $page ?> dari <?= $totalPages ?> (<?= $totalOrders ?> total)
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <?php if ($page > 1): ?>
-                                <a href="?page=<?= $page - 1 ?>&<?= http_build_query(array_filter($filters)) ?>"
-                                    class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition">
-                                    <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
-                                </a>
-                            <?php endif; ?>
-
-                            <?php
-                            $startPage = max(1, $page - 2);
-                            $endPage = min($totalPages, $page + 2);
-                            for ($i = $startPage; $i <= $endPage; $i++):
-                            ?>
-                                <a href="?page=<?= $i ?>&<?= http_build_query(array_filter($filters)) ?>"
-                                    class="px-3 py-1.5 border rounded-lg text-sm transition <?= $i === $page ? 'bg-[#882426] text-white border-[#882426]' : 'border-gray-300 hover:bg-gray-50' ?>">
-                                    <?= $i ?>
-                                </a>
-                            <?php endfor; ?>
-
-                            <?php if ($page < $totalPages): ?>
-                                <a href="?page=<?= $page + 1 ?>&<?= http_build_query(array_filter($filters)) ?>"
-                                    class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition">
-                                    <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
-                                </a>
-                            <?php endif; ?>
+                <!-- Modified: Pagination Info & Controls with per_page support -->
+                <div class="px-4 md:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50/50">
+                    <div class="flex items-center gap-4">
+                        <div class="text-sm text-gray-600">
+                            Showing <span class="font-semibold text-gray-800"><?= $startEntry ?></span> to <span class="font-semibold text-gray-800"><?= $endEntry ?></span> of <span class="font-semibold text-gray-800"><?= $totalOrders ?></span> entries
                         </div>
                     </div>
-                <?php endif; ?>
+
+                    <!-- Pagination Navigation -->
+                    <div class="flex items-center gap-1 flex-shrink-0">
+                        <?php if ($page > 1): ?>
+                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                                <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
+                            </a>
+                        <?php else: ?>
+                            <button disabled class="px-3 py-2 rounded-lg border border-gray-200 text-gray-300 cursor-not-allowed text-sm font-medium">
+                                <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
+                            </button>
+                        <?php endif; ?>
+
+                        <?php
+                        $startPage = max(1, $page - 2);
+                        $endPage = min($totalPages, $page + 2);
+                        if ($startPage > 1):
+                        ?>
+                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">1</a>
+                            <?php if ($startPage > 2): ?>
+                                <span class="px-2 py-2 text-gray-400">...</span>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+                            <?php if ($i === $page): ?>
+                                <button class="px-3 py-2 rounded-lg text-white font-medium" style="background: #882426;"><?= $i ?></button>
+                            <?php else: ?>
+                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium"><?= $i ?></a>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+
+                        <?php if ($endPage < $totalPages): ?>
+                            <?php if ($endPage < $totalPages - 1): ?>
+                                <span class="px-2 py-2 text-gray-400">...</span>
+                            <?php endif; ?>
+                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $totalPages, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium"><?= $totalPages ?></a>
+                        <?php endif; ?>
+
+                        <?php if ($page < $totalPages): ?>
+                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                                <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
+                            </a>
+                        <?php else: ?>
+                            <button disabled class="px-3 py-2 rounded-lg border border-gray-200 text-gray-300 cursor-not-allowed text-sm font-medium">
+                                <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
