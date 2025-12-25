@@ -1,232 +1,299 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- Footer Component - Modern E-commerce Style -->
+<footer class="relative w-full overflow-hidden">
+    <!-- Gradient Background with Pattern -->
+    <div class="absolute inset-0 bg-[#882426]"></div>
+    <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,<svg width=\" 60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\">
+        <g fill=\"none\" fill-rule=\"evenodd\">
+            <g fill=\"%23ffffff\" fill-opacity=\"1\">
+                <path d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\" />
+            </g>
+        </g></svg>');">
+    </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/../../src/output.css">
-    <title>Footer</title>
-</head>
+    <div class="relative z-10">
+        <!-- Main Footer Content -->
+        <div class="w-full mx-auto px-5 md:px-8 lg:px-20 py-8">
+            <div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
 
-<body>
-    <footer class="bg-white mt-4 w-full px-5 md:px-8 lg:px-20">
-        <div class="py-8 w-full">
-            <div class="grid grid-cols-1 gap-8 xl:grid-cols-4">
-                <div>
-                    <div class="flex justify-center text-xl gap-2 items-center text-red-nano font-bold sm:justify-start">
-                        <img alt=""
-                            src="../../assets/img/logo-nano.png"
-                            class="w-8 h-8">
-                        <h2>Nano Komputer</h2>
+                <!-- Brand Section -->
+                <div class="lg:col-span-4 space-y-6">
+                    <!-- Logo -->
+                    <div class="flex items-center gap-3 group cursor-pointer">
+                        <div class="relative">
+                            <div class="absolute -inset-1 bg-white/20 rounded-xl blur-sm group-hover:bg-white/30 transition-all duration-300"></div>
+                            <img alt="Nano Komputer Logo" src="../../assets/img/logo-nano.png"
+                                class="relative w-12 h-12 rounded-xl object-contain bg-white/10 p-1.5 group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white tracking-tight">Nano Komputer</h2>
+                            <p class="text-white/60 text-xs font-medium tracking-wider uppercase">Your Tech Partner</p>
+                        </div>
                     </div>
 
-                    <!-- Deskripsi Singkat perusahaan -->
-                    <p class="mt-6 max-w text-center justify-center items-center leading-relaxed text-gray-500 sm:max-w-xs sm:text-left">
-                        Di Nano Komputer, kami memahami pentingnya kualitas dan keamanan dalam setiap pembelian. Oleh karena itu, kami hanya menyediakan produk 100% original dan bergaransi resmi.
+                    <!-- Description -->
+                    <p class="text-white/70 leading-relaxed text-sm max-w-sm">
+                        Di Nano Komputer, kami memahami pentingnya kualitas dan keamanan dalam setiap pembelian.
+                        Kami hanya menyediakan produk <span class="text-white font-semibold">100% original</span>
+                        dan <span class="text-white font-semibold">bergaransi resmi</span>.
                     </p>
 
-                    <!-- Link Sosial Media -->
-                    <ul class="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
-                        <li>
-                            <a href="https://www.facebook.com/nanokomputerindonesia" rel="noreferrer" target="_blank" class="text-red-nano transition hover:text-red-nano/75">
-                                <span class="sr-only">Facebook</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                                    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951" />
-                                </svg>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="https://www.instagram.com/nanokomputer" rel="noreferrer" target="_blank" class="text-red-nano transition hover:text-red-nano/75">
-                                <span class="sr-only">Instagram</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
-                                    <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334" />
-                                </svg>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="https://youtube.com/@nanokomputerofficial" rel="noreferrer" target="_blank" class="text-red-nano transition hover:text-red-nano/75">
-                                <span class="sr-only">Youtube</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-youtube" viewBox="0 0 16 16">
-                                    <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z" />
-                                </svg>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="https://www.tiktok.com/@nanokomputerofficial" rel="noreferrer" target="_blank" class="text-red-nano transition hover:text-red-nano/75">
-                                <span class="sr-only">Tiktok</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-tiktok" viewBox="0 0 16 16">
-                                    <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z" />
-                                </svg>
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-
-                <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:col-span-2">
-                    <div class="text-center sm:text-left">
-                        <p class="text-lg font-medium text-gray-900">Tautan Cepat</p>
-
-                        <ul class="mt-8 space-y-4 text-sm">
-                            <li>
-                                <a class="text-gray-700 transition hover:text-gray-700/75" href="aboutContact.php">
-                                    Tentang Kami
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="text-gray-700 transition hover:text-gray-700/75" href="privacyPolicy.php">
-                                    Kebijakan Privasi
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="text-gray-700 transition hover:text-gray-700/75" href="termsConditions.php">
-                                    Syarat & Ketentuan
-                                </a>
-                            </li>
-                            <li>
-                                <a class="text-gray-700 transition hover:text-gray-700/75" href="faq.php">
-                                    FAQ'S
-                                </a>
-                            </li>
-                            <li>
-                                <a class="text-gray-700 transition hover:text-gray-700/75" href="blogNews.php">
-                                    Blog & Artikel
-                                </a>
-                            </li>
-
-                        </ul>
+                    <!-- Trust Badges -->
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
+                            <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-white/80 text-xs font-medium">100% Original</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
+                            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="text-white/80 text-xs font-medium">Garansi Resmi</span>
+                        </div>
                     </div>
 
-                    <div class="text-center sm:text-left">
-                        <p class="text-lg font-medium text-gray-900 mb-4">Pengiriman</p>
+                    <!-- Social Media Links -->
+                    <div class="pt-4">
+                        <p class="text-white/50 text-xs font-medium uppercase tracking-wider mb-4">Ikuti Kami</p>
+                        <div class="flex gap-3">
+                            <a href="https://www.facebook.com/nanokomputerindonesia" rel="noreferrer" target="_blank"
+                                class="group relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 hover:bg-[#1877F2] hover:border-[#1877F2] transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[#1877F2]/30">
+                                <svg class="w-5 h-5 text-white/70 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                </svg>
+                            </a>
+                            <a href="https://www.instagram.com/nanokomputer" rel="noreferrer" target="_blank"
+                                class="group relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 hover:bg-gradient-to-br hover:from-[#833AB4] hover:via-[#FD1D1D] hover:to-[#F77737] hover:border-transparent transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-pink-500/30">
+                                <svg class="w-5 h-5 text-white/70 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                            </a>
+                            <a href="https://youtube.com/@nanokomputerofficial" rel="noreferrer" target="_blank"
+                                class="group relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 hover:bg-[#FF0000] hover:border-[#FF0000] transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-red-500/30">
+                                <svg class="w-5 h-5 text-white/70 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                </svg>
+                            </a>
+                            <a href="https://www.tiktok.com/@nanokomputerofficial" rel="noreferrer" target="_blank"
+                                class="group relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 hover:bg-black hover:border-black transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-black/30">
+                                <svg class="w-5 h-5 text-white/70 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
-                        <div class="grid grid-cols-3 gap-3">
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="AnterAja"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="../../assets/img/payment/anteraja.png">
-                            </div>
+                <!-- Links Section -->
+                <div class="lg:col-span-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
 
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="Grab Express"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="../../assets/img/payment/grab-express.png">
-                            </div>
+                        <!-- Quick Links -->
+                        <div>
+                            <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
+                                <span class="w-8 h-0.5 bg-white"></span>
+                                Tautan Cepat
+                            </h3>
+                            <ul class="space-y-4">
+                                <li>
+                                    <a href="aboutContact.php" class="group flex items-center gap-2 text-white/60 hover:text-white transition-all duration-300">
+                                        <span class="w-0 group-hover:w-2 h-0.5 bg-white transition-all duration-300"></span>
+                                        <span>Tentang Kami</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="privacyPolicy.php" class="group flex items-center gap-2 text-white/60 hover:text-white transition-all duration-300">
+                                        <span class="w-0 group-hover:w-2 h-0.5 bg-white transition-all duration-300"></span>
+                                        <span>Kebijakan Privasi</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="termsConditions.php" class="group flex items-center gap-2 text-white/60 hover:text-white transition-all duration-300">
+                                        <span class="w-0 group-hover:w-2 h-0.5 bg-white transition-all duration-300"></span>
+                                        <span>Syarat & Ketentuan</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="faq.php" class="group flex items-center gap-2 text-white/60 hover:text-white transition-all duration-300">
+                                        <span class="w-0 group-hover:w-2 h-0.5 bg-white transition-all duration-300"></span>
+                                        <span>FAQ's</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="blogNews.php" class="group flex items-center gap-2 text-white/60 hover:text-white transition-all duration-300">
+                                        <span class="w-0 group-hover:w-2 h-0.5 bg-white transition-all duration-300"></span>
+                                        <span>Blog & Artikel</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
 
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="GoSend"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="../../assets/img/payment/gosend-gojek.png">
-                            </div>
+                        <!-- Contact Info -->
+                        <div>
+                            <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
+                                <span class="w-8 h-0.5 bg-white"></span>
+                                Kontak Kami
+                            </h3>
+                            <ul class="space-y-5">
+                                <li>
+                                    <a href="mailto:cs@nanokomputer.com" class="group flex items-start gap-3 text-white/60 hover:text-white transition-all duration-300">
+                                        <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/20 transition-colors">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-white/40 mb-0.5">Email</p>
+                                            <span class="text-sm">cs@nanokomputer.com</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="group flex items-start gap-3 text-white/60 hover:text-white transition-all duration-300">
+                                        <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/20 transition-colors">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-white/40 mb-0.5">Telepon</p>
+                                            <span class="text-sm">(021) 623-09578</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="flex items-start gap-3 text-white/60">
+                                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-white/40 mb-0.5">Alamat Toko</p>
+                                        <address class="text-sm not-italic leading-relaxed">
+                                            Mangga Dua Mall, Lt. 2<br>
+                                            Jl. Mangga Dua Raya No.47A-B<br>
+                                            Jakarta Pusat, 10730
+                                        </address>
+                                        <p class="text-xs text-white/40 mt-2 flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Senin - Minggu, 09.00 - 17.00 WIB
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
 
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="SiCepat Express"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="../../assets/img/payment/sicepat_merah.svg">
-                            </div>
+                        <!-- Newsletter -->
+                        <div>
+                            <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
+                                <span class="w-8 h-0.5 bg-white"></span>
+                                Newsletter
+                            </h3>
+                            <p class="text-white/60 text-sm mb-5 leading-relaxed">
+                                Dapatkan info promo eksklusif dan produk terbaru langsung ke email Anda.
+                            </p>
+                            <form action="" class="space-y-3">
+                                <div class="relative">
+                                    <input type="email" placeholder="Masukkan email Anda"
+                                        class="w-full px-4 py-3.5 bg-white/10 backdrop-blur-sm text-white placeholder-white/40 border border-white/20 rounded-xl focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all duration-300 text-sm">
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <svg class="w-5 h-5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                    class="w-full py-3.5 bg-white text-[#882426] font-semibold rounded-xl hover:bg-white/90 hover:shadow-lg hover:shadow-white/20 transition-all duration-300 text-sm flex items-center justify-center gap-2 group">
+                                    <span>Berlangganan Sekarang</span>
+                                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </button>
+                            </form>
 
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="ID Express"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="../../assets/img/payment/id-express.png">
-                            </div>
-
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="JNE"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="https://upload.wikimedia.org/wikipedia/commons/9/92/New_Logo_JNE.png">
-                            </div>
-
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="J&T Express"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="https://upload.wikimedia.org/wikipedia/commons/0/01/J%26T_Express_logo.svg">
-                            </div>
-
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="Ninja Xpress"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="../../assets/img/payment/ninja-xpress.png">
-                            </div>
-
-                            <div class="border border-gray-200 rounded-lg p-3 bg-white hover:border-gray-300 transition flex items-center justify-center">
-                                <img alt="Sicepat Halu"
-                                    class="w-full h-auto object-contain max-h-10"
-                                    src="../../assets/img/payment/sap-express-courier.png">
+                            <!-- Security Badge -->
+                            <div class="mt-5 flex items-center gap-2 text-white/40 text-xs">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                <span>Data Anda aman & tidak akan dishare</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="text-center sm:text-left">
-                        <p class="text-lg font-medium text-gray-900">Kontak Kami</p>
-
-                        <ul class="mt-8 space-y-4 text-sm">
-                            <li>
-                                <a class="flex items-center justify-center gap-1.5 ltr:sm:justify-start rtl:sm:justify-end" href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5 shrink-0 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                    </svg>
-
-                                    <span class="text-gray-700">cs@nanokomputer.com</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="flex items-center justify-center gap-1.5 ltr:sm:justify-start rtl:sm:justify-end" href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5 shrink-0 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                                    </svg>
-
-                                    <span class="text-gray-700">(021) 623-09578</span>
-                                </a>
-                            </li>
-
-                            <li class="flex items-start justify-center gap-1.5 ltr:sm:justify-start rtl:sm:justify-end">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="size-5 shrink-0 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-
-                                <address class="-mt-0.5 text-gray-700 not-italic">
-                                    Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 2, Mangga Dua Sel., Kecamatan Sawah Besar, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10730
-                                    <p class="text-gray-400">Senin - Minggu pukul 09.00 - 17.00 WIB</p>
-                                </address>
-                            </li>
-                        </ul>
+                    <!-- Shipping Partners -->
+                    <div class="mt-12 pt-8 border-t border-white/10">
+                        <h3 class="text-white/50 text-xs font-medium uppercase tracking-wider mb-5 text-center lg:text-left">Mitra Pengiriman</h3>
+                        <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-3">
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="Paxel" class="w-full h-full object-cover" src="../../assets/img/payment/paxel.png">
+                            </div>
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="Grab Express" class="w-full h-full object-contain" src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Grab_Logo.svg">
+                            </div>
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="GoSend" class="w-full h-full object-cover" src="../../assets/img/payment/gosend-gojek.png">
+                            </div>
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="SiCepat" class="w-full h-full object-contain" src="../../assets/img/payment/sicepat_merah.svg">
+                            </div>
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="ID Express" class="w-full h-full object-contain" src="../../assets/img/payment/id-express.png">
+                            </div>
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="JNE" class="w-full h-full object-contain" src="https://upload.wikimedia.org/wikipedia/commons/9/92/New_Logo_JNE.png">
+                            </div>
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="J&T Express" class="w-full h-full object-contain" src="https://upload.wikimedia.org/wikipedia/commons/0/01/J%26T_Express_logo.svg">
+                            </div>
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="Lion Parcel" class="w-full h-full object-contain" src="../../assets/img/payment/LogoLionParcel.svg.png">
+                            </div>
+                            <div class="bg-white/95 rounded-lg p-2.5 flex items-center justify-center h-12 hover:bg-white hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <img alt="SAP Express" class="w-full h-full object-contain" src="../../assets/img/payment/sap-express-courier.png">
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="text-center sm:text-left">
-                    <p class="text-lg font-medium text-gray-900">Berlangganan Sekarang</p>
-
-                    <ul class="mt-8 space-y-4 text-sm">
-                        <p class="mt-6 max-w-md text-center leading-relaxed text-gray-500 sm:max-w-xs sm:text-left">
-                            Dapatkan info promo dan produk terbaru langsung ke email anda
-                        </p>
-                        <form action="">
-                            <input type="email" placeholder="email.anda@gmail.com"
-                                class="w-full p-1 bg-white text-black shadow-xs border border-gray-200 rounded-lg focus:outline focus:outline-red-nano">
-                            <button
-                                class="bg-primary text-white w-full py-2 mt-2 font-semibold rounded-lg hover:bg-[#A14646]/75 transition duration-200">Berlangganan</button>
-                        </form>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="mt-12 border-t border-gray-100 pt-6">
-                <div class="text-center">
-                    <p class="mt-4 text-sm text-gray-500 sm:order-first sm:mt-0">
-                        © 2025 Nano Komputer. All rights reserved.
-                    </p>
                 </div>
             </div>
         </div>
-    </footer>
-</body>
 
-</html>
+        <!-- Bottom Bar -->
+        <div class="border-t border-white/10 bg-black/20 backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-5">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p class="text-white/50 text-sm text-center md:text-left">
+                        © 2025 <span class="text-white/70 font-medium">Nano Komputer</span>. All rights reserved.
+                    </p>
+                    <div class="flex items-center gap-6">
+                        <a href="privacyPolicy.php" class="text-white/50 hover:text-white text-xs transition-colors">Privasi</a>
+                        <a href="termsConditions.php" class="text-white/50 hover:text-white text-xs transition-colors">Ketentuan</a>
+                        <a href="aboutContact.php#lokasiMap" class="text-white/50 hover:text-white text-xs transition-colors">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    /* Smooth hover animations */
+    footer a,
+    footer button {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Focus states for accessibility */
+    footer input:focus {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+
+    footer button:focus {
+        box-shadow: 0 0 0 3px rgba(136, 36, 38, 0.3);
+        outline: none;
+    }
+</style>

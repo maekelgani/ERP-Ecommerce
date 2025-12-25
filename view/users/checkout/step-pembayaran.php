@@ -282,23 +282,38 @@
                 </div>
             </div>
 
-            <div class="payment-category hidden" id="codCategory">
-                <label class="payment-card block relative cursor-pointer">
-                    <input type="radio" name="payment_method" value="cod" class="sr-only" data-type="cod" data-name="Bayar di Tempat (COD)">
-                    <div class="border-2 rounded-xl p-4 transition-all duration-200 border-gray-200 hover:border-[#882426]/50">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-900">Bayar di Tempat (COD)</p>
-                                <p class="text-xs text-gray-500">Bayar saat barang diterima (khusus area tertentu)</p>
+            <div class="payment-category">
+                <button type="button" class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors payment-category-toggle" data-category="cod">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <span class="font-semibold text-gray-900">Bayar di Tempat (COD)</span>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div class="payment-options hidden mt-3 space-y-2 pl-4" data-category="cod">
+                    <label class="payment-card block relative cursor-pointer">
+                        <input type="radio" name="payment_method" value="cod" class="sr-only" data-type="cod" data-name="Bayar di Tempat (COD)">
+                        <div class="border-2 rounded-xl p-4 transition-all duration-200 border-gray-200 hover:border-[#882426]/50">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-900">Bayar di Tempat (COD)</p>
+                                    <p class="text-xs text-gray-500">Bayar saat barang diterima (khusus area tertentu)</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </label>
+                    </label>
+                </div>
             </div>
         </div>
 

@@ -39,13 +39,12 @@ include '../../components/users/head.php';
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<body class="w-full bg-gray-100 min-h-screen" data-customer-id="<?= $customerId ?>" data-customer-logged-in="true">
+<body class="w-full min-h-screen" data-customer-id="<?= $customerId ?>" data-customer-logged-in="true">
     <header>
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
 
-    <div id="navbarSpacer" class="transition-all duration-300" style="height: 160px;"></div>
-
+    <div id="navbarSpacer" class="transition-all duration-300 pt-16 md:pt-40 lg:pt-[172px]"></div>
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-16">
         <div class="mb-8">
             <?php
@@ -132,6 +131,19 @@ include '../../components/users/head.php';
                                 <div class="flex-1 min-w-0">
                                     <span class="nav-label font-medium text-gray-600 block transition-all duration-200">Wishlist</span>
                                     <span class="nav-desc text-xs text-gray-400 transition-colors duration-200">Produk favorit Anda</span>
+                                </div>
+                                <span class="material-symbols-outlined text-gray-400 text-lg">arrow_forward</span>
+                            </a>
+
+                            <a href="myOrder.php" class="nav-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-left transition-all duration-200 hover:bg-gray-50">
+                                <div class="nav-icon w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center transition-all duration-200">
+                                    <span class="material-symbols-outlined text-gray-500 transition-colors duration-200">
+                                        assignment
+                                    </span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <span class="nav-label font-medium text-gray-600 block transition-all duration-200">Pesanan Saya</span>
+                                    <span class="nav-desc text-xs text-gray-400 transition-colors duration-200">Lacak & kelola pesanan</span>
                                 </div>
                                 <span class="material-symbols-outlined text-gray-400 text-lg">arrow_forward</span>
                             </a>
@@ -715,7 +727,7 @@ include '../../components/users/head.php';
                                             <span class="material-symbols-outlined text-blue-600">mail</span>
                                         </div>
                                         <div>
-                                            <p class="font-semibold text-gray-900">Notifikasi Email</p>
+                                            <p class="font-semibold text-gray-900">Notifikasi Pesanan</p>
                                             <p class="text-sm text-gray-500 mt-0.5">Terima update via email</p>
                                         </div>
                                     </div>
@@ -731,7 +743,7 @@ include '../../components/users/head.php';
                                             <span class="material-symbols-outlined text-green-600">local_shipping</span>
                                         </div>
                                         <div>
-                                            <p class="font-semibold text-gray-900">Update Pesanan</p>
+                                            <p class="font-semibold text-gray-900">Update Pengiriman</p>
                                             <p class="text-sm text-gray-500 mt-0.5">Notifikasi status pengiriman</p>
                                         </div>
                                     </div>
@@ -763,8 +775,8 @@ include '../../components/users/head.php';
                                             <span class="material-symbols-outlined text-red-500">favorite</span>
                                         </div>
                                         <div>
-                                            <p class="font-semibold text-gray-900">Wishlist Updates</p>
-                                            <p class="text-sm text-gray-500 mt-0.5">Notifikasi harga produk wishlist</p>
+                                            <p class="font-semibold text-gray-900">Pembayaran</p>
+                                            <p class="text-sm text-gray-500 mt-0.5">Notifikasi Pembayaran</p>
                                         </div>
                                     </div>
                                     <label class="relative inline-flex items-center cursor-pointer">

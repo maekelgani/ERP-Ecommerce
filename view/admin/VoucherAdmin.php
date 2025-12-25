@@ -60,7 +60,7 @@ include '../../components/admin/head.php';
                                 <div class="ml-4 space-y-1 text-blue-800">
                                     <p><strong>1. Generate Kode:</strong> Klik "Tambah Voucher" → Isi atau generate kode unik (misal: SUMMER50, WELCOME20)</p>
                                     <p><strong>2. Beri Judul & Deskripsi:</strong> Isi judul voucher dan syarat/ketentuan penggunaan</p>
-                                    <p><strong>3. Pilih Jenis Voucher:</strong> Tentukan tipe benefit (Diskon Persen, Diskon Nominal, Gratis Ongkir, atau Cashback)</p>
+                                    <p><strong>3. Pilih Jenis Voucher:</strong> Tentukan tipe benefit (Diskon Persen atau Diskon Nominal)</p>
                                     <p><strong>4. Tentukan Nilai:</strong> Masukkan nilai sesuai jenis (% untuk persen, Rp untuk nominal)</p>
                                     <p><strong>5. Atur Kuota & Limit:</strong> Tentukan total kuota voucher dan maksimal penggunaan per pengguna</p>
                                     <p><strong>6. Set Periode & Status:</strong> Tentukan tanggal berlaku dan pilih status (Terjadwal/Aktif/Nonaktif)</p>
@@ -72,8 +72,6 @@ include '../../components/admin/head.php';
                                 <div class="ml-4 space-y-1 text-blue-800">
                                     <p><strong>Diskon Persen:</strong> Memberikan potongan harga dalam bentuk persentase dari harga total (misal 20% dari Rp 100.000 = Rp 20.000)</p>
                                     <p><strong>Diskon Nominal:</strong> Memberikan potongan harga tetap dalam rupiah (misal Rp 50.000 potongan langsung)</p>
-                                    <p><strong>Gratis Ongkir:</strong> Menghapuskan biaya pengiriman atau memberikan gratis ongkir untuk area tertentu</p>
-                                    <p><strong>Cashback:</strong> Mengembalikan uang ke saldo akun/wallet pengguna, bukan potongan harga langsung</p>
                                 </div>
                             </div>
 
@@ -91,7 +89,7 @@ include '../../components/admin/head.php';
                                 <h4 class="font-semibold text-blue-900 mb-1">PARAMETER PENTING YANG PERLU DIPERHATIKAN:</h4>
                                 <div class="ml-4 space-y-1 text-blue-800">
                                     <p><strong>Kode Voucher:</strong> Harus unik, tidak boleh sama dengan voucher lain. Format umum: UPPERCASE tanpa spasi</p>
-                                    <p><strong>Jenis Voucher:</strong> Persen menghitung dari subtotal/total, Nominal adalah potongan tetap, Gratis Ongkir menghapus ongkos kirim</p>
+                                    <p><strong>Jenis Voucher:</strong> Persen menghitung dari subtotal/total, Nominal adalah potongan tetap</p>
                                     <p><strong>Kuota Total:</strong> Jumlah kali maksimal voucher bisa digunakan. Jika habis, voucher tidak bisa digunakan lagi</p>
                                     <p><strong>Limit Per User:</strong> Batasan jumlah kali satu pengguna bisa menggunakan voucher yang sama</p>
                                     <p><strong>Min Pembelian:</strong> Minimal nominal pembelian agar voucher berlaku (optional, untuk kontrol kualitas transaksi)</p>
@@ -186,8 +184,6 @@ include '../../components/admin/head.php';
                             <option value="">Semua Jenis</option>
                             <option value="diskon_persen">Diskon Persen</option>
                             <option value="diskon_nominal">Diskon Nominal</option>
-                            <option value="gratis_ongkir">Gratis Ongkir</option>
-                            <option value="cashback">Cashback</option>
                         </select>
                         <select id="filterStatus" class="px-4 py-2 border border-gray-200 rounded-lg">
                             <option value="">Semua Status</option>
@@ -261,8 +257,6 @@ include '../../components/admin/head.php';
                         <select name="jenis" id="jenis" required class="w-full px-4 py-2 border border-gray-200 rounded-lg">
                             <option value="diskon_persen">Diskon Persen (%)</option>
                             <option value="diskon_nominal">Diskon Nominal (Rp)</option>
-                            <option value="gratis_ongkir">Gratis Ongkir</option>
-                            <option value="cashback">Cashback</option>
                         </select>
                     </div>
                     <div id="nilaiContainer">
@@ -362,17 +356,10 @@ include '../../components/admin/head.php';
         }
 
         function toggleNilaiField() {
-            const jenis = document.getElementById('jenis').value;
             const container = document.getElementById('nilaiContainer');
             const input = document.getElementById('nilai');
-
-            if (jenis === 'gratis_ongkir') {
-                container.style.display = 'none';
-                input.removeAttribute('required');
-            } else {
-                container.style.display = 'block';
-                input.setAttribute('required', 'required');
-            }
+            container.style.display = 'block';
+            input.setAttribute('required', 'required');
         }
 
         async function loadVouchers() {
@@ -442,15 +429,15 @@ include '../../components/admin/head.php';
             const jenisLabels = {
                 'diskon_persen': 'Diskon %',
                 'diskon_nominal': 'Diskon Rp',
-                'gratis_ongkir': 'Gratis Ongkir',
-                'cashback': 'Cashback'
+                'gratis_ongkir': 'Gratis Ongkir (Legacy)',
+                'cashback': 'Cashback (Legacy)'
             };
 
             const jenisColors = {
                 'diskon_persen': 'bg-blue-50 text-blue-600',
                 'diskon_nominal': 'bg-green-50 text-green-600',
-                'gratis_ongkir': 'bg-green-50 text-green-600',
-                'cashback': 'bg-purple-50 text-purple-600'
+                'gratis_ongkir': 'bg-gray-50 text-gray-500',
+                'cashback': 'bg-gray-50 text-gray-500'
             };
 
             tbody.innerHTML = vouchers.map(v => {
@@ -458,7 +445,7 @@ include '../../components/admin/head.php';
                     day: 'numeric',
                     month: 'short'
                 }) : '-';
-                const nilai = v.jenis === 'gratis_ongkir' ? '-' : (v.jenis === 'diskon_persen' || v.jenis === 'cashback' ? v.nilai + '%' : 'Rp ' + Number(v.nilai).toLocaleString('id-ID'));
+                const nilai = v.jenis === 'diskon_persen' ? v.nilai + '%' : (v.jenis === 'gratis_ongkir' ? '-' : 'Rp ' + Number(v.nilai).toLocaleString('id-ID'));
 
                 return `
                         <tr class="hover:bg-gray-50">

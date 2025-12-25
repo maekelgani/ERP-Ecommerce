@@ -121,13 +121,30 @@ include '../../components/admin/head.php';
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-4 md:p-6 border-b border-gray-100">
-                    <div class="flex items-center justify-between gap-3">
+                    <div class="flex flex-col gap-4">
                         <div class="min-w-0">
                             <h2 class="text-lg font-bold text-gray-800">Daftar Pelanggan</h2>
-                            <p class="text-xs text-gray-500">Menampilkan <?= $startEntry ?> - <?= $endEntry ?> dari <?= $totalCustomers ?> pelanggan</p>
+                            <p class="text-sm text-gray-500 mt-1">Menampilkan <?= $startEntry ?> - <?= $endEntry ?> dari <?= $totalCustomers ?> pelanggan</p>
                         </div>
+                        <!-- KONTROL -->
+                        <div class="flex items-center justify-between gap-4">
+                            <!-- LEFT: Entries per page -->
+                            <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                                <span class="material-symbols-outlined text-gray-400 text-sm">
+                                    view_list
+                                </span>
+                                <select onchange="window.location.href='?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>&per_page=' + this.value"
+                                    class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
+                                    <?php foreach ([5, 10, 20, 50] as $option): ?>
+                                        <option value="<?= $option ?>" <?= $perPage === $option ? 'selected' : '' ?>>
+                                            <?= $option ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <span class="text-sm text-gray-600">entries per page</span>
+                            </div>
 
-                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <!-- RIGHT: Tambah User -->
                             <?php if ($canManageCustomers): ?>
                                 <button onclick="openAddModal()" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap"
                                     style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
@@ -303,15 +320,6 @@ include '../../components/admin/head.php';
                         <div class="text-sm text-gray-600">
                             Showing <span class="font-semibold text-gray-800"><?= $startEntry ?></span> to <span class="font-semibold text-gray-800"><?= $endEntry ?></span> of <span class="font-semibold text-gray-800"><?= $totalCustomers ?></span> entries
                         </div>
-                        <div class="flex items-center gap-2">
-                            <label class="text-sm text-gray-600">Per page:</label>
-                            <select onchange="window.location.href='?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>&per_page=' + this.value"
-                                class="px-2 py-1 border border-gray-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none">
-                                <?php foreach ([5, 10, 20, 50] as $option): ?>
-                                    <option value="<?= $option ?>" <?= $perPage === $option ? 'selected' : '' ?>><?= $option ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
                     </div>
 
                     <!-- Pagination Navigation -->
@@ -374,60 +382,224 @@ include '../../components/admin/head.php';
         <img id="lightbox-image" src="" alt="Preview" class="max-w-[90%] max-h-[85vh] object-contain rounded-lg shadow-2xl">
     </div>
 
+    <!-- Enhanced Customer Modal - Consistent with ReturnAdmin.php -->
     <div id="customerModal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/50" onclick="closeModal()"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-xl shadow-xl">
-            <form id="customerForm" method="POST" action="../../app/controllers/CustomerController.php">
-                <input type="hidden" name="action" id="formAction" value="add">
-                <input type="hidden" name="id_customer" id="customerId">
-
-                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
-                    <h3 class="text-lg font-semibold" id="modalTitle">Tambah Pelanggan</h3>
-                    <button type="button" onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all animate-modal-in">
+                <!-- Modern Header with Solid Primary Color -->
+                <div class="bg-[#882426] px-6 py-5 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
+                            <span class="material-symbols-outlined text-white text-2xl" id="modalIcon">person_add</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white" id="modalTitle">Tambah Pelanggan</h3>
+                            <p class="text-white/70 text-sm mt-0.5" id="modalSubtitle">Isi data pelanggan baru</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200">
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>
 
-                <div class="p-4 space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap *</label>
-                        <input type="text" name="nama_lengkap" id="namaLengkap" required
-                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                        <input type="email" name="email" id="email" required
-                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">No. Telepon</label>
-                        <input type="text" name="no_telp" id="noTelp"
-                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Password <span id="passwordNote">(wajib untuk pelanggan baru)</span></label>
-                        <input type="password" name="password" id="password"
-                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="is_active" id="isActive" value="1" checked class="w-4 h-4 rounded border-gray-300 text-blue-600">
-                            <span class="text-sm text-gray-700">Aktif</span>
-                        </label>
-                    </div>
-                </div>
+                <!-- Modal Body -->
+                <form id="customerForm" method="POST" action="../../app/controllers/CustomerController.php">
+                    <input type="hidden" name="action" id="formAction" value="add">
+                    <input type="hidden" name="id_customer" id="customerId">
 
-                <div class="p-4 border-t border-gray-100 flex items-center justify-end gap-2">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-                        Batal
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
-                        Simpan
-                    </button>
-                </div>
-            </form>
+                    <div class="p-6 bg-gray-50 space-y-5 max-h-[60vh] overflow-y-auto" id="customerFormContent">
+                        <!-- Info Alert -->
+                        <div class="p-4 rounded-xl border-l-4 border-[#882426] bg-[#882426]/5">
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-[#882426] text-xl flex-shrink-0">info</span>
+                                <div>
+                                    <p class="text-sm text-gray-700 font-medium" id="formInfoText">Lengkapi data pelanggan dengan benar untuk proses registrasi.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nama Lengkap -->
+                        <div>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                <span class="material-symbols-outlined text-[#882426] text-lg">badge</span>
+                                Nama Lengkap <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="nama_lengkap" id="namaLengkap" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 placeholder:text-gray-400"
+                                placeholder="Masukkan nama lengkap pelanggan...">
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                <span class="material-symbols-outlined text-[#882426] text-lg">mail</span>
+                                Email <span class="text-red-500">*</span>
+                            </label>
+                            <input type="email" name="email" id="email" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 placeholder:text-gray-400"
+                                placeholder="contoh@email.com">
+                        </div>
+
+                        <!-- No. Telepon -->
+                        <div>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                <span class="material-symbols-outlined text-[#882426] text-lg">phone</span>
+                                No. Telepon
+                            </label>
+                            <input type="text" name="no_telp" id="noTelp"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 placeholder:text-gray-400"
+                                placeholder="08xxxxxxxxxx">
+                        </div>
+
+                        <!-- Password -->
+                        <div>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                <span class="material-symbols-outlined text-[#882426] text-lg">lock</span>
+                                Password <span id="passwordNote" class="text-xs font-normal text-gray-500">(wajib untuk pelanggan baru)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="password" name="password" id="password"
+                                    class="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 placeholder:text-gray-400"
+                                    placeholder="Masukkan password...">
+                                <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                                    <span class="material-symbols-outlined text-lg" id="togglePasswordIcon">visibility_off</span>
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">lightbulb</span>
+                                Minimal 6 karakter kombinasi huruf dan angka
+                            </p>
+                        </div>
+
+                        <!-- Status Aktif -->
+                        <!-- Status Aktif -->
+                        <div class="p-4 bg-white rounded-xl border-2 border-gray-200">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" name="is_active" id="isActive" value="1" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-semibold text-gray-700">Status Aktif</span>
+                                    <p class="text-xs text-gray-500 mt-0.5">Pelanggan dapat login dan bertransaksi</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <style>
+                            .toggle-switch {
+                                position: relative;
+                                width: 56px;
+                                height: 32px;
+                                flex-shrink: 0;
+                            }
+
+                            .toggle-switch input {
+                                opacity: 0;
+                                width: 0;
+                                height: 0;
+                            }
+
+                            .toggle-slider {
+                                position: absolute;
+                                cursor: pointer;
+                                top: 0;
+                                left: 0;
+                                right: 0;
+                                bottom: 0;
+                                background-color: #e5e7eb;
+                                border-radius: 9999px;
+                                transition: all 0.3s ease;
+                            }
+
+                            .toggle-slider::before {
+                                position: absolute;
+                                content: "";
+                                height: 24px;
+                                width: 24px;
+                                left: 4px;
+                                top: 4px;
+                                background-color: white;
+                                border-radius: 50%;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                                transition: transform 0.3s ease;
+                            }
+
+                            .toggle-switch input:checked+.toggle-slider {
+                                background-color: #882426;
+                            }
+
+                            .toggle-switch input:checked+.toggle-slider::before {
+                                transform: translateX(24px);
+                            }
+                        </style>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
+                        <button type="button" onclick="closeModal()"
+                            class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
+                            <span class="material-symbols-outlined text-lg">close</span>
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-[#6d1a1c] transition-all duration-200 shadow-lg shadow-[#882426]/30">
+                            <span class="material-symbols-outlined text-lg">check_circle</span>
+                            <span id="submitBtnText">Simpan</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+
+    <!-- Custom Modal Styles -->
+    <style>
+        @keyframes modal-in {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .animate-modal-in {
+            animation: modal-in 0.3s ease-out forwards;
+        }
+
+        /* Custom Scrollbar for Modal */
+        #customerFormContent::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #customerFormContent::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #customerFormContent::-webkit-scrollbar-thumb {
+            background: #882426;
+            border-radius: 10px;
+        }
+
+        #customerFormContent::-webkit-scrollbar-thumb:hover {
+            background: #6d1a1c;
+        }
+
+        /* Custom Toggle Switch */
+        #isActive:checked+div {
+            background-color: #882426;
+        }
+
+        #isActive:checked~div:last-child {
+            transform: translateX(20px);
+        }
+    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -459,8 +631,24 @@ include '../../components/admin/head.php';
             }
         });
 
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePasswordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = 'visibility_off';
+            }
+        }
+
         function openAddModal() {
             document.getElementById('modalTitle').textContent = 'Tambah Pelanggan';
+            document.getElementById('modalSubtitle').textContent = 'Isi data pelanggan baru';
+            document.getElementById('modalIcon').textContent = 'person_add';
+            document.getElementById('formInfoText').textContent = 'Lengkapi data pelanggan dengan benar untuk proses registrasi.';
+            document.getElementById('submitBtnText').textContent = 'Simpan';
             document.getElementById('formAction').value = 'add';
             document.getElementById('customerId').value = '';
             document.getElementById('namaLengkap').value = '';
@@ -468,13 +656,20 @@ include '../../components/admin/head.php';
             document.getElementById('noTelp').value = '';
             document.getElementById('password').value = '';
             document.getElementById('password').required = true;
+            document.getElementById('password').type = 'password';
+            document.getElementById('togglePasswordIcon').textContent = 'visibility_off';
             document.getElementById('passwordNote').textContent = '(wajib untuk pelanggan baru)';
             document.getElementById('isActive').checked = true;
             document.getElementById('customerModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function openEditModal(customer) {
             document.getElementById('modalTitle').textContent = 'Edit Pelanggan';
+            document.getElementById('modalSubtitle').textContent = 'Perbarui data pelanggan';
+            document.getElementById('modalIcon').textContent = 'edit';
+            document.getElementById('formInfoText').textContent = 'Ubah data pelanggan sesuai kebutuhan. Password kosongkan jika tidak ingin mengubah.';
+            document.getElementById('submitBtnText').textContent = 'Update';
             document.getElementById('formAction').value = 'edit';
             document.getElementById('customerId').value = customer.id_customer;
             document.getElementById('namaLengkap').value = customer.nama_lengkap;
@@ -482,14 +677,28 @@ include '../../components/admin/head.php';
             document.getElementById('noTelp').value = customer.no_telp || '';
             document.getElementById('password').value = '';
             document.getElementById('password').required = false;
+            document.getElementById('password').type = 'password';
+            document.getElementById('togglePasswordIcon').textContent = 'visibility_off';
             document.getElementById('passwordNote').textContent = '(kosongkan jika tidak ingin mengubah)';
             document.getElementById('isActive').checked = customer.is_active == 1;
             document.getElementById('customerModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('customerModal').classList.add('hidden');
+            document.body.style.overflow = '';
         }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('customerModal');
+                if (!modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            }
+        });
 
         function confirmToggleStatus(customer) {
             const profileImage = customer.profile_image ?

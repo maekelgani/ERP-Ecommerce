@@ -1,41 +1,153 @@
 <?php
 $pageTitle = "Syarat & Ketentuan";
 require_once __DIR__ . '/../../config/config.php';
+
+$isLoggedIn = \App\Auth\CustomerAuthMiddleware::isLoggedIn();
+$customer = \App\Auth\CustomerAuthMiddleware::getCurrentCustomer();
+
 include '../../components/users/head.php';
 
 $breadcrumbs = [
     ['label' => 'Home', 'url' => 'landingPage.php'],
     ['label' => 'Syarat & Ketentuan', 'url' => null]
 ];
+
+$lastUpdated = "1 Desember 2025";
 ?>
 
-<body class="w-full bg-gray-50 min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
+<!-- jsPDF Library for PDF Generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+    :root {
+        --background: #fafafa;
+        --foreground: #0f172a;
+        --card: #ffffff;
+        --card-foreground: #0f172a;
+        --primary: #882426;
+        --primary-foreground: #ffffff;
+        --secondary: #f1f5f9;
+        --secondary-foreground: #0f172a;
+        --muted: #f1f5f9;
+        --muted-foreground: #64748b;
+        --accent: #fce8e8;
+        --accent-foreground: #882426;
+        --border: #e2e8f0;
+        --success: #22c55e;
+        --success-foreground: #ffffff;
+        --warning: #f59e0b;
+        --radius: 0.75rem;
+    }
+
+    /* Toast Notification */
+    .toast {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        background-color: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem 1.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transform: translateX(120%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
+
+    .toast.show {
+        transform: translateX(0);
+    }
+
+    .toast.success {
+        border-left: 4px solid var(--success);
+    }
+
+    .toast.error {
+        border-left: 4px solid #ef4444;
+    }
+
+    .toast-title {
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .toast-message {
+        font-size: 0.8125rem;
+        color: var(--muted-foreground);
+    }
+
+    /* Download Button Styles */
+    .btn-download {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        text-decoration: none;
+    }
+
+    .btn-download-primary {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-download-primary:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-download-primary:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-download-secondary {
+        background: linear-gradient(135deg, #882426 0%, #a52d2f 100%);
+        color: white;
+    }
+
+    .btn-download-secondary:hover {
+        background: linear-gradient(135deg, #a52d2f 0%, #b73436 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(136, 36, 38, 0.3);
+    }
+
+    .btn-download-secondary:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Spinner animation */
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .animate-spin {
+        animation: spin 1s linear infinite;
+    }
+</style>
+
+<body class="w-full min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
     <header>
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
-
-    <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoBanner = document.getElementById('promoBanner');
-            const navbarSpacer = document.getElementById('navbarSpacer');
-
-            function updateSpacerHeight() {
-                if (window.innerWidth >= 768 && promoBanner) {
-                    navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
-                } else {
-                    navbarSpacer.style.height = '112px';
-                }
-            }
-
-            updateSpacerHeight();
-            window.addEventListener('scroll', updateSpacerHeight);
-            window.addEventListener('resize', updateSpacerHeight);
-        });
-    </script>
-
-    <main class="max-w-full mb-10">
+    <main class="max-w-full mb-10 pt-16 md:pt-40 lg:pt-[165px]">
         <section class="bg-[#882426] py-12 md:py-16 mb-8 relative overflow-hidden">
             <div class="absolute inset-0 opacity-10">
                 <div class="absolute top-20 right-20 w-40 h-40 border-4 border-white rounded-full"></div>
@@ -52,12 +164,13 @@ $breadcrumbs = [
                 <p class="text-white/80 text-lg max-w-2xl mx-auto">
                     Harap membaca syarat dan ketentuan ini dengan saksama sebelum melakukan transaksi di Nano Komputer.
                 </p>
-                <div class="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-white/70">
+
+                <div class="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-white/70">
                     <span class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        Terakhir diperbarui: 1 Desember 2025
+                        Terakhir diperbarui: <?= $lastUpdated ?>
                     </span>
                     <span class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,12 +222,13 @@ $breadcrumbs = [
                             </a>
                         </nav>
 
-                        <div class="mt-6 pt-6 border-t border-gray-100">
-                            <button onclick="window.print()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors text-sm font-medium">
+                        <div class="mt-6 pt-6 border-t border-gray-100 space-y-3">
+                            <!-- Download PDF Button -->
+                            <button onclick="generatePDF('sidebar')" id="downloadPdfBtnSidebar" class="w-full btn-download btn-download-secondary">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                 </svg>
-                                Cetak Halaman
+                                <span>Unduh PDF</span>
                             </button>
                         </div>
                     </div>
@@ -414,6 +528,14 @@ $breadcrumbs = [
 
     <?php include '../../components/users/footer.php'; ?>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div>
+            <div class="toast-title" id="toast-title">Berhasil</div>
+            <div class="toast-message" id="toast-message">Pesan sukses</div>
+        </div>
+    </div>
+
     <script>
         function scrollToSection(sectionId) {
             const element = document.getElementById(sectionId);
@@ -468,6 +590,258 @@ $breadcrumbs = [
             window.addEventListener('scroll', updateActiveNav);
             updateActiveNav();
         });
+
+        // Show toast notification
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastTitle = document.getElementById('toast-title');
+            const toastMessage = document.getElementById('toast-message');
+
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Generate PDF for Terms & Conditions
+        function generatePDF(source = 'sidebar') {
+            const btnId = source === 'hero' ? 'downloadPdfBtnHero' : 'downloadPdfBtnSidebar';
+            const btn = document.getElementById(btnId);
+            const btnText = btn.querySelector('span');
+            const originalText = btnText.textContent;
+
+            btn.disabled = true;
+            btnText.textContent = 'Membuat PDF...';
+
+            try {
+                const {
+                    jsPDF
+                } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const margin = 20;
+                const contentWidth = pageWidth - margin * 2;
+                let yPosition = 20;
+
+                // Header with Nano Komputer branding
+                doc.setFillColor(136, 36, 38);
+                doc.rect(0, 0, pageWidth, 45, 'F');
+
+                // Company name
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                doc.text('NANO KOMPUTER', pageWidth / 2, 15, {
+                    align: 'center'
+                });
+
+                // Document title
+                doc.setFontSize(24);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Syarat & Ketentuan', pageWidth / 2, 28, {
+                    align: 'center'
+                });
+
+                // Subtitle
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Dokumen Resmi - www.nanokomputer.com', pageWidth / 2, 38, {
+                    align: 'center'
+                });
+
+                yPosition = 55;
+
+                // Last updated info
+                doc.setTextColor(100, 100, 100);
+                doc.setFontSize(10);
+                doc.text('Terakhir diperbarui: <?= $lastUpdated ?>', margin, yPosition);
+                yPosition += 15;
+
+                // Content sections for Terms & Conditions
+                const sections = [{
+                        title: '1. Pendahuluan',
+                        content: [
+                            'Selamat datang di Nano Komputer. Syarat & ketentuan berikut menjelaskan',
+                            'peraturan dan ketentuan penggunaan Website Nano Komputer.',
+                            '',
+                            'Dengan menggunakan layanan kami, Anda dianggap telah menyetujui seluruh',
+                            'ketentuan yang berlaku di halaman ini.',
+                            '',
+                            'Kami berhak untuk mengubah, memodifikasi, menambah, atau menghapus bagian',
+                            'dari syarat dan ketentuan ini kapan saja tanpa pemberitahuan sebelumnya.'
+                        ]
+                    },
+                    {
+                        title: '2. Pemesanan & Pembayaran',
+                        content: [
+                            'Ketersediaan Stok:',
+                            '• Stok produk di website bersifat dinamis',
+                            '• Konfirmasi ketersediaan barang sangat disarankan sebelum pembayaran',
+                            '',
+                            'Perubahan Harga:',
+                            '• Harga produk dapat berubah sewaktu-waktu mengikuti nilai tukar mata uang',
+                            '• Mengikuti kebijakan distributor resmi tanpa pemberitahuan sebelumnya',
+                            '',
+                            'Pembayaran:',
+                            '• Kami menerima Transfer Bank, E-Wallet, dan Kartu Kredit',
+                            '• Pesanan akan diproses setelah pembayaran terverifikasi (maksimal 1x24 jam)',
+                            '',
+                            'Pembatalan Otomatis:',
+                            '• Pesanan yang belum dibayar dalam waktu 24 jam akan otomatis dibatalkan'
+                        ]
+                    },
+                    {
+                        title: '3. Pengiriman & Jasa Rakit',
+                        content: [
+                            'PENTING - Asuransi Pengiriman:',
+                            '• Untuk produk bernilai tinggi (VGA, Monitor, CPU, Laptop), pembeli WAJIB',
+                            '  menggunakan asuransi pengiriman',
+                            '• Kehilangan/kerusakan tanpa asuransi adalah tanggung jawab ekspedisi & pembeli',
+                            '',
+                            'Waktu Proses:',
+                            '• Pesanan komponen lepas dikirim H+1 setelah pembayaran terverifikasi',
+                            '• Pemesanan Full PC Build membutuhkan waktu 2-3 hari kerja',
+                            '',
+                            'Packing Kayu:',
+                            '• Pengiriman PC Rakitan ke luar Jakarta WAJIB menggunakan Packing Kayu',
+                            '• Biaya packing kayu ditambahkan pada total ongkos kirim'
+                        ]
+                    },
+                    {
+                        title: '4. Garansi & Pengembalian (RMA)',
+                        content: [
+                            'WAJIB VIDEO UNBOXING:',
+                            '• Komplain kekurangan barang, cacat fisik, atau barang tidak sesuai TIDAK',
+                            '  AKAN DITERIMA tanpa video unboxing utuh (tanpa cut/edit)',
+                            '• Video harus memperlihatkan label pengiriman hingga barang dibuka & dites',
+                            '',
+                            'Ketentuan Garansi:',
+                            '• Barang bergaransi resmi distributor Indonesia (kecuali tertulis "Garansi Toko")',
+                            '• Klaim garansi dapat diserahkan ke toko kami atau Service Center distributor',
+                            '• Biaya ongkir PP ditanggung pembeli',
+                            '',
+                            'Garansi Batal (Void) Jika:',
+                            '• Cacat fisik (patah, bengkok, korosi, terbakar)',
+                            '• Segel garansi rusak/hilang',
+                            '• Kesalahan penggunaan (Human Error)',
+                            '• Modifikasi BIOS yang gagal'
+                        ]
+                    },
+                    {
+                        title: '5. Kebijakan Privasi',
+                        content: [
+                            'Nano Komputer menghargai privasi Anda. Informasi pribadi yang Anda berikan',
+                            '(Nama, Alamat, No. Telepon) hanya digunakan untuk keperluan pemrosesan',
+                            'pesanan dan pengiriman.',
+                            '',
+                            'Kami tidak akan menjual, menyewakan, atau membagikan informasi pribadi Anda',
+                            'kepada pihak ketiga manapun tanpa persetujuan Anda, kecuali jika diwajibkan',
+                            'oleh hukum atau untuk keperluan logistik (Ekspedisi).',
+                            '',
+                            'Keamanan Data:',
+                            '• Enkripsi SSL pada seluruh transaksi',
+                            '• Data tidak dibagikan ke pihak ketiga',
+                            '• Penyimpanan data sesuai standar keamanan'
+                        ]
+                    },
+                    {
+                        title: '6. Hubungi Kami',
+                        content: [
+                            'Jika Anda memiliki pertanyaan tentang Syarat & Ketentuan ini:',
+                            '',
+                            'Email: cs@nanokomputer.com',
+                            'Telepon: (021) 623-09578',
+                            'WhatsApp: +62 812-8888-9578',
+                            'Alamat: Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B',
+                            'Lantai 2, Jakarta Pusat 10730',
+                            '',
+                            'Jam Operasional:',
+                            'Senin - Sabtu: 09.00 - 18.00 WIB',
+                            'Minggu & Hari Libur: Tutup'
+                        ]
+                    }
+                ];
+
+                doc.setTextColor(50, 50, 50);
+
+                sections.forEach((section) => {
+                    // Check if we need a new page
+                    if (yPosition > 250) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+
+                    // Section title
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(136, 36, 38);
+                    doc.text(section.title, margin, yPosition);
+                    yPosition += 8;
+
+                    // Section content
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(60, 60, 60);
+
+                    section.content.forEach((line) => {
+                        if (yPosition > 270) {
+                            doc.addPage();
+                            yPosition = 20;
+                        }
+
+                        const splitText = doc.splitTextToSize(line, contentWidth);
+                        splitText.forEach((textLine) => {
+                            doc.text(textLine, margin, yPosition);
+                            yPosition += 5;
+                        });
+                    });
+
+                    yPosition += 8;
+                });
+
+                // Footer on all pages
+                const pageCount = doc.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+
+                    // Footer line
+                    doc.setDrawColor(136, 36, 38);
+                    doc.setLineWidth(0.5);
+                    doc.line(margin, 282, pageWidth - margin, 282);
+
+                    // Footer text
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text(
+                        'Halaman ' + i + ' dari ' + pageCount + ' | © 2025 Nano Komputer - Syarat & Ketentuan',
+                        pageWidth / 2,
+                        288, {
+                            align: 'center'
+                        }
+                    );
+                }
+
+                doc.save('Syarat-Ketentuan-Nano-Komputer.pdf');
+
+                showToast('PDF Berhasil Dibuat', 'Dokumen Syarat & Ketentuan telah diunduh.', 'success');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                showToast('Gagal Membuat PDF', 'Terjadi kesalahan saat membuat dokumen PDF.', 'error');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = originalText;
+            }
+        }
     </script>
 
     <style>

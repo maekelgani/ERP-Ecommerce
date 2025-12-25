@@ -23,28 +23,7 @@ $breadcrumbs = [
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
 
-    <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoBanner = document.getElementById('promoBanner');
-            const navbarSpacer = document.getElementById('navbarSpacer');
-
-            function updateSpacerHeight() {
-                if (window.innerWidth >= 768 && promoBanner) {
-                    navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
-                } else {
-                    navbarSpacer.style.height = '112px';
-                }
-            }
-
-            updateSpacerHeight();
-            window.addEventListener('scroll', updateSpacerHeight);
-            window.addEventListener('resize', updateSpacerHeight);
-        });
-    </script>
-
-    <main class="max-w-full mb-10">
+    <main class="max-w-full mb-10 pt-16 md:pt-40 lg:pt-[172px]">
         <div class="w-full px-4 md:px-8 lg:px-20 py-6">
 
             <?php include '../../components/users/breadcrumb.php'; ?>

@@ -13,6 +13,7 @@ $cartCount = 0;
 $wishlistCount = 0;
 $notificationCount = 0;
 $profileImage = null;
+$recentNotifications = [];
 
 if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
     try {
@@ -30,12 +31,60 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
         $stmtNotif->execute([':id' => $currentCustomer['id_customer']]);
         $notificationCount = (int)$stmtNotif->fetch()['count'];
 
+        $stmtRecentNotif = $db->prepare("SELECT id_notifikasi, id_order, tipe_notifikasi, judul_pesan, isi_pesan, status_baca, tanggal_dikirim FROM notification WHERE id_customer = :id ORDER BY tanggal_dikirim DESC LIMIT 5");
+        $stmtRecentNotif->execute([':id' => $currentCustomer['id_customer']]);
+        $recentNotifications = $stmtRecentNotif->fetchAll(PDO::FETCH_ASSOC);
+
         $stmtProfile = $db->prepare("SELECT profile_image FROM customers WHERE id_customer = :id");
         $stmtProfile->execute([':id' => $currentCustomer['id_customer']]);
         $profileData = $stmtProfile->fetch();
         $profileImage = $profileData['profile_image'] ?? null;
     } catch (Exception $e) {
         error_log('Navbar count error: ' . $e->getMessage());
+    }
+}
+
+if (!function_exists('getNotificationIcon')) {
+    function getNotificationIcon($type)
+    {
+        $icons = [
+            'order' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>',
+            'payment' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>',
+            'shipment' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7h4a1 1 0 011 1v7a1 1 0 01-1 1h-.05a2.5 2.5 0 00-4.9 0H12V8a1 1 0 011-1z"/>',
+            'promo' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>',
+            'system' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'
+        ];
+        return $icons[$type] ?? $icons['system'];
+    }
+}
+
+if (!function_exists('getNotificationColor')) {
+    function getNotificationColor($type)
+    {
+        $colors = [
+            'order' => 'bg-blue-100 text-blue-600',
+            'payment' => 'bg-green-100 text-green-600',
+            'shipment' => 'bg-indigo-100 text-indigo-600',
+            'promo' => 'bg-orange-100 text-orange-600',
+            'system' => 'bg-gray-100 text-gray-600'
+        ];
+        return $colors[$type] ?? $colors['system'];
+    }
+}
+
+if (!function_exists('formatTimeAgo')) {
+    function formatTimeAgo($datetime)
+    {
+        $now = new DateTime();
+        $past = new DateTime($datetime);
+        $diff = $now->diff($past);
+
+        if ($diff->y > 0) return $diff->y . ' tahun lalu';
+        if ($diff->m > 0) return $diff->m . ' bulan lalu';
+        if ($diff->d > 0) return $diff->d . ' hari lalu';
+        if ($diff->h > 0) return $diff->h . ' jam lalu';
+        if ($diff->i > 0) return $diff->i . ' menit lalu';
+        return 'Baru saja';
     }
 }
 ?>
@@ -63,6 +112,26 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
 
     .animate-pulse-scale {
         animation: pulse-scale 0.6s ease-in-out;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media (max-width: 1023px) {
+        .nav-link-compact {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .nav-link-compact span {
+            font-size: 0.8125rem;
+        }
     }
 </style>
 
@@ -119,8 +188,8 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
                     </div>
                 </form>
 
-                <div class="flex items-center gap-2 sm:gap-3 ml-auto">
-                    <button type="button" id="mobileSearchBtn" class="lg:hidden p-2 text-gray-600 hover:text-[#882426] hover:bg-[#882426]/5 rounded-lg transition-all">
+                <div class="flex items-center gap-1 sm:gap-2 md:gap-3 ml-auto">
+                    <button type="button" id="mobileSearchBtn" class="md:hidden p-2 text-gray-600 hover:text-[#882426] hover:bg-[#882426]/5 rounded-lg transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
@@ -141,14 +210,79 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
                             <span class="cart-count-badge absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 text-[10px] font-bold text-white bg-[#882426] rounded-full ring-2 ring-white <?= $cartCount > 0 ? '' : 'hidden' ?>"><?= $cartCount ?></span>
                         </a>
 
-                        <button type="button" id="notificationBtn" class="hidden md:flex relative p-2 text-gray-600 hover:text-[#882426] hover:bg-[#882426]/5 rounded-lg transition-all group">
-                            <svg class="w-5 h-5 group-hover:scale-110 group-hover:rotate-12 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
-                            <?php if ($notificationCount > 0): ?>
-                                <span class="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 text-[10px] font-bold text-white bg-[#882426] rounded-full ring-2 ring-white"><?= $notificationCount ?></span>
-                            <?php endif; ?>
-                        </button>
+                        <div class="hidden md:block relative" id="notificationDropdown">
+                            <button type="button" id="notificationBtn" class="flex relative p-2 text-gray-600 hover:text-[#882426] hover:bg-[#882426]/5 rounded-lg transition-all group">
+                                <svg class="w-5 h-5 group-hover:scale-110 group-hover:rotate-12 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                                <?php if ($notificationCount > 0): ?>
+                                    <span id="notifBadge" class="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 text-[10px] font-bold text-white bg-[#882426] rounded-full ring-2 ring-white"><?= $notificationCount ?></span>
+                                <?php endif; ?>
+                            </button>
+
+                            <div id="notificationMenu" class="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transform scale-95 opacity-0 invisible transition-all duration-200 origin-top-right z-50">
+                                <div class="px-4 py-3 bg-gradient-to-r from-[#882426] to-[#6a1c1e] flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                        </svg>
+                                        <h3 class="text-white font-semibold">Notifikasi</h3>
+                                        <?php if ($notificationCount > 0): ?>
+                                            <span class="px-2 py-0.5 text-[10px] font-bold text-[#882426] bg-white rounded-full"><?= $notificationCount ?> baru</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php if ($notificationCount > 0): ?>
+                                        <button type="button" onclick="markAllNotificationsRead()" class="text-xs text-white/80 hover:text-white transition-colors">
+                                            Tandai semua dibaca
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="max-h-80 overflow-y-auto">
+                                    <?php if (empty($recentNotifications)): ?>
+                                        <div class="py-12 px-4 text-center">
+                                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-gray-500 text-sm">Belum ada notifikasi</p>
+                                        </div>
+                                    <?php else: ?>
+                                        <?php foreach ($recentNotifications as $notif): ?>
+                                            <a href="<?= !empty($notif['id_order']) ? '../../view/users/detailOrder.php?id=' . urlencode($notif['id_order']) : '../../view/users/notifications.php' ?>"
+                                                onclick="markNotificationRead('<?= $notif['id_notifikasi'] ?>')"
+                                                class="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 <?= $notif['status_baca'] === 'belum_dibaca' ? 'bg-[#882426]/5' : '' ?>">
+                                                <div class="flex-shrink-0 w-10 h-10 rounded-full <?= getNotificationColor($notif['tipe_notifikasi']) ?> flex items-center justify-center">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <?= getNotificationIcon($notif['tipe_notifikasi']) ?>
+                                                    </svg>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="flex items-start justify-between gap-2">
+                                                        <p class="text-sm font-semibold text-gray-900 line-clamp-1"><?= htmlspecialchars($notif['judul_pesan']) ?></p>
+                                                        <?php if ($notif['status_baca'] === 'belum_dibaca'): ?>
+                                                            <span class="flex-shrink-0 w-2 h-2 bg-[#882426] rounded-full mt-1.5"></span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <p class="text-xs text-gray-500 line-clamp-2 mt-0.5"><?= htmlspecialchars($notif['isi_pesan']) ?></p>
+                                                    <p class="text-[10px] text-gray-400 mt-1"><?= formatTimeAgo($notif['tanggal_dikirim']) ?></p>
+                                                </div>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
+                                    <a href="../../view/users/notifications.php" class="flex items-center justify-center gap-2 text-sm font-medium text-[#882426] hover:text-[#6a1c1e] transition-colors">
+                                        Lihat Semua Notifikasi
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="hidden md:flex items-center px-2 sm:px-3">
                             <div class="w-px h-8 bg-gray-200"></div>
@@ -251,7 +385,7 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
                         </div>
                     <?php endif; ?>
 
-                    <button type="button" id="mobileMenuBtn" class="lg:hidden p-2 text-gray-600 hover:text-[#882426] hover:bg-[#882426]/5 rounded-lg transition-all" aria-label="Toggle Menu" aria-expanded="false">
+                    <button type="button" id="mobileMenuBtn" class="md:hidden p-2 text-gray-600 hover:text-[#882426] hover:bg-[#882426]/5 rounded-lg transition-all" aria-label="Toggle Menu" aria-expanded="false">
                         <svg class="w-6 h-6 hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -263,53 +397,53 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
             </div>
         </div>
 
-        <div class="hidden lg:block border-t border-gray-100">
+        <div class="hidden md:block border-t border-gray-100">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <nav class="flex items-center justify-center gap-1 py-2">
-                    <a href="../../view/users/categoryCollection.php" class="group relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200">
-                        <span class="relative z-10 flex items-center gap-1.5">
+                <nav class="flex items-center justify-center gap-0.5 md:gap-1 py-2 overflow-x-auto scrollbar-hide">
+                    <a href="../../view/users/categoryCollection.php" class="nav-link-compact group relative px-3 lg:px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200 flex-shrink-0">
+                        <span class="relative z-10 flex items-center gap-1 lg:gap-1.5">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                             </svg>
-                            Kategori
+                            <span class="hidden sm:inline">Kategori</span>
                         </span>
                         <span class="absolute inset-0 bg-[#882426]/5 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-200"></span>
                     </a>
-                    <a href="../../view/users/PromoPage.php" class="group relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200">
-                        <span class="relative z-10 flex items-center gap-2">
+                    <a href="../../view/users/PromoPage.php" class="nav-link-compact group relative px-3 lg:px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200 flex-shrink-0">
+                        <span class="relative z-10 flex items-center gap-1 lg:gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
-                            <span>Flash Sale</span>
-                            <span class="px-2 py-0.5 text-[9px] font-bold text-white bg-[#882426] rounded-full animate-pulse whitespace-nowrap">HOT</span>
+                            <span class="hidden sm:inline">Flash Sale</span>
+                            <span class="px-1.5 lg:px-2 py-0.5 text-[8px] lg:text-[9px] font-bold text-white bg-[#882426] rounded-full animate-pulse whitespace-nowrap">HOT</span>
                         </span>
                         <span class="absolute inset-0 bg-[#882426]/5 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-200"></span>
                     </a>
-                    <a href="../../view/users/productCollection.php?sort=best" class="group relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200">
-                        <span class="relative z-10 flex items-center gap-1.5">
+                    <a href="../../view/users/productCollection.php?sort=best" class="nav-link-compact group relative px-3 lg:px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200 flex-shrink-0">
+                        <span class="relative z-10 flex items-center gap-1 lg:gap-1.5">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                             </svg>
-                            Best Seller
+                            <span class="hidden sm:inline">Best Seller</span>
                         </span>
                         <span class="absolute inset-0 bg-[#882426]/5 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-200"></span>
                     </a>
-                    <a href="../../view/users/productCollection.php?sort=newest" class="group relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200">
-                        <span class="relative z-10 flex items-center gap-2">
+                    <a href="../../view/users/productCollection.php?sort=newest" class="nav-link-compact group relative px-3 lg:px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200 flex-shrink-0">
+                        <span class="relative z-10 flex items-center gap-1 lg:gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
-                            <span>Produk Baru</span>
-                            <span class="px-2 py-0.5 text-[9px] font-bold text-[#882426] bg-[#882426]/10 rounded-full animate-pulse whitespace-nowrap">NEW</span>
+                            <span class="hidden sm:inline">Produk Baru</span>
+                            <span class="px-1.5 lg:px-2 py-0.5 text-[8px] lg:text-[9px] font-bold text-[#882426] bg-[#882426]/10 rounded-full animate-pulse whitespace-nowrap">NEW</span>
                         </span>
                         <span class="absolute inset-0 bg-[#882426]/5 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-200"></span>
                     </a>
-                    <a href="../../view/users/brandCollection.php" class="group relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200">
-                        <span class="relative z-10 flex items-center gap-1.5">
+                    <a href="../../view/users/brandCollection.php" class="nav-link-compact group relative px-3 lg:px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 hover:text-[#882426] rounded-lg transition-all duration-200 flex-shrink-0">
+                        <span class="relative z-10 flex items-center gap-1 lg:gap-1.5">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
-                            Brand Pilihan
+                            <span class="hidden sm:inline">Brand</span>
                         </span>
                         <span class="absolute inset-0 bg-[#882426]/5 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-200"></span>
                     </a>
@@ -472,6 +606,15 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
                         </svg>
                         <span class="font-medium">Wishlist</span>
                         <span class="wishlist-count-badge ml-auto px-2 py-0.5 text-xs font-medium text-[#882426] bg-[#882426]/10 rounded-full <?= $wishlistCount > 0 ? '' : 'hidden' ?>"><?= $wishlistCount ?></span>
+                    </a>
+                    <a href="../../view/users/notifications.php" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-[#882426] hover:bg-[#882426]/5 rounded-xl transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="font-medium">Notifikasi</span>
+                        <?php if ($notificationCount > 0): ?>
+                            <span class="ml-auto px-2 py-0.5 text-xs font-medium text-white bg-[#882426] rounded-full"><?= $notificationCount ?></span>
+                        <?php endif; ?>
                     </a>
                 </div>
 
@@ -776,7 +919,34 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
             if (accountDropdown && !accountDropdown.contains(e.target) && isAccountOpen) {
                 toggleAccountMenu();
             }
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            if (notificationDropdown && !notificationDropdown.contains(e.target) && isNotificationOpen) {
+                toggleNotificationMenu();
+            }
         });
+
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationMenu = document.getElementById('notificationMenu');
+        let isNotificationOpen = false;
+
+        function toggleNotificationMenu() {
+            isNotificationOpen = !isNotificationOpen;
+            if (isNotificationOpen) {
+                notificationMenu.classList.remove('scale-95', 'opacity-0', 'invisible');
+                notificationMenu.classList.add('scale-100', 'opacity-100', 'visible');
+                if (isAccountOpen) toggleAccountMenu();
+            } else {
+                notificationMenu.classList.add('scale-95', 'opacity-0', 'invisible');
+                notificationMenu.classList.remove('scale-100', 'opacity-100', 'visible');
+            }
+        }
+
+        if (notificationBtn) {
+            notificationBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleNotificationMenu();
+            });
+        }
 
         const navbarMain = document.getElementById('navbarMain');
         const promoBanner = document.getElementById('promoBanner');
@@ -902,6 +1072,46 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
             modal.classList.remove('show');
             document.body.style.overflow = '';
         }
+    }
+
+    function markNotificationRead(notificationId) {
+        fetch('../../api/notifications/mark-read.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                notification_id: notificationId
+            })
+        }).catch(err => console.error('Error marking notification as read:', err));
+    }
+
+    function markAllNotificationsRead() {
+        fetch('../../api/notifications/mark-read.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mark_all: true
+                })
+            })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    const badge = document.getElementById('notifBadge');
+                    if (badge) badge.remove();
+                    const unreadItems = document.querySelectorAll('#notificationMenu .bg-\\[\\#882426\\]\\/5');
+                    unreadItems.forEach(item => item.classList.remove('bg-[#882426]/5'));
+                    const unreadDots = document.querySelectorAll('#notificationMenu .w-2.h-2.bg-\\[\\#882426\\]');
+                    unreadDots.forEach(dot => dot.remove());
+                    const newBadge = document.querySelector('#notificationMenu .px-2.py-0\\.5');
+                    if (newBadge) newBadge.remove();
+                    const markAllBtn = document.querySelector('#notificationMenu button[onclick*="markAllNotificationsRead"]');
+                    if (markAllBtn) markAllBtn.remove();
+                }
+            })
+            .catch(err => console.error('Error marking all notifications as read:', err));
     }
 
     async function confirmNavbarLogout() {

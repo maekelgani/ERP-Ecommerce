@@ -1,21 +1,43 @@
 <?php
-function renderProductCard(array $product, \App\Helper\ProductLandingHelper $productHelper): string {
+function renderProductCard(array $product, \App\Helper\ProductLandingHelper $productHelper): string
+{
     $svgPlaceholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23f3f4f6'/%3E%3Cpath d='M200 120c-44.18 0-80 35.82-80 80s35.82 80 80 80 80-35.82 80-80-35.82-80-80-80zm0 140c-33.14 0-60-26.86-60-60s26.86-60 60-60 60 26.86 60 60-26.86 60-60 60z' fill='%23d1d5db'/%3E%3Cpath d='M200 160c-22.09 0-40 17.91-40 40s17.91 40 40 40 40-17.91 40-40-17.91-40-40-40z' fill='%23d1d5db'/%3E%3C/svg%3E";
-    
+
     $imagePath = !empty($product['gambar']) ? '../../uploads/products/' . htmlspecialchars($product['gambar']) : $svgPlaceholder;
     $productName = htmlspecialchars($product['nama_product']);
     $productId = $product['id_product'] ?? '';
     $description = htmlspecialchars(substr($product['deskripsi_speksifikasi'] ?? '', 0, 100));
     $stockBadge = $productHelper->getStockBadge($product['stok'], $product['status_produk']);
-    
+
     $hasDiscount = !empty($product['has_discount']);
     $originalPrice = $productHelper->formatPrice($product['harga_asli'] ?? $product['harga']);
     $finalPrice = $productHelper->formatPrice($product['harga_final'] ?? $product['harga']);
     $discountBadge = htmlspecialchars($product['discount_badge'] ?? '');
-    
+
     $disabledClass = !$stockBadge['available'] ? 'opacity-50 cursor-not-allowed' : '';
     $disabledAttr = !$stockBadge['available'] ? 'disabled' : '';
-    
+
+    $avgRating = (float)($product['avg_rating'] ?? 0);
+    $totalReviews = (int)($product['total_reviews'] ?? 0);
+    $totalTerjual = (int)($product['total_terjual'] ?? 0);
+
+    $ratingHtml = '';
+    if ($totalReviews > 0 || $totalTerjual > 0) {
+        $stars = '';
+        for ($i = 1; $i <= 5; $i++) {
+            $color = $i <= round($avgRating) ? 'text-yellow-400' : 'text-gray-200';
+            $stars .= "<svg class=\"w-3.5 h-3.5 {$color}\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path d=\"M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z\" /></svg>";
+        }
+        $terjualText = $totalTerjual > 0 ? "<span class=\"text-gray-300 mx-1\">|</span><span class=\"text-[10px] text-gray-500\">Terjual {$totalTerjual}</span>" : "";
+        $ratingHtml = <<<HTML
+            <div class="mt-1.5 flex items-center gap-1">
+                <div class="flex items-center">{$stars}</div>
+                <span class="text-[10px] text-gray-500">({$totalReviews})</span>
+                {$terjualText}
+            </div>
+HTML;
+    }
+
     $html = <<<HTML
     <li class="group bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full overflow-hidden">
         <a href="productDetail.php?id={$productId}" class="block">
@@ -64,6 +86,7 @@ HTML;
                 <a href="productDetail.php?id={$productId}">
                     <h3 class="mt-1.5 text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors">{$productName}</h3>
                 </a>
+                {$ratingHtml}
 HTML;
 
     if (!empty($description)) {

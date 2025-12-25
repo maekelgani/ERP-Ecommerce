@@ -147,15 +147,18 @@ include '../../components/admin/head.php';
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-4 md:p-6 border-b border-gray-100">
-                    <div class="flex items-center justify-between gap-3">
+                    <div class="flex flex-col gap-4">
                         <div class="min-w-0">
                             <h2 class="text-lg font-bold text-gray-800">Daftar Produk</h2>
-                            <p class="text-xs text-gray-500">Menampilkan <?= count($products) ?> produk</p>
+                            <p class="text-gray-500 text-sm mt-1">Menampilkan <?= count($products) ?> produk</p>
                         </div>
 
-                        <div class="flex items-center gap-2 flex-shrink-0">
-                            <div class="flex items-center gap-1 bg-gray-100 px-3 py-2 rounded-lg border border-gray-200">
-                                <select id="per-page-select" onchange="changePerPage(this.value)" class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <!-- LEFT: Entries per page -->
+                            <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                                <span class="material-symbols-outlined text-gray-400 text-sm">view_list</span>
+                                <select id="per-page-select" onchange="changePerPage(this.value)"
+                                    class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
                                     <option value="10" <?= $perPage === 10 ? 'selected' : '' ?>>10</option>
                                     <option value="25" <?= $perPage === 25 ? 'selected' : '' ?>>25</option>
                                     <option value="50" <?= $perPage === 50 ? 'selected' : '' ?>>50</option>
@@ -164,22 +167,31 @@ include '../../components/admin/head.php';
                                 <span class="text-sm text-gray-600">entries per page</span>
                             </div>
 
-                            <a href="add-product.php" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap"
-                                style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
-                                <span class="material-symbols-outlined text-base">add_circle</span>
-                                <span>Tambah Porduk</span>
-                            </a>
+                            <!-- RIGHT: Tambah Produk + View Toggle -->
+                            <div class="flex items-center gap-3">
+                                <!-- Tambah Produk -->
+                                <a href="add-product.php"
+                                    class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap"
+                                    style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                                    <span class="material-symbols-outlined text-base">add_circle</span>
+                                    <span>Tambah Produk</span>
+                                </a>
 
-                            <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
-                                <button id="view-table" class="view-toggle px-2 py-1.5 rounded-md text-sm font-medium transition-all active"
-                                    style="background: #882426; color: white;">
-                                    <span class="material-symbols-outlined text-base align-middle">table_rows</span>
-                                </button>
-                                <button id="view-grid" class="view-toggle px-2 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-200 transition-all">
-                                    <span class="material-symbols-outlined text-base align-middle">grid_view</span>
-                                </button>
+                                <!-- View Toggle -->
+                                <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
+                                    <button id="view-table"
+                                        class="view-toggle px-2 py-1.5 rounded-md text-sm font-medium transition-all active"
+                                        style="background: #882426; color: white;">
+                                        <span class="material-symbols-outlined text-base align-middle">table_rows</span>
+                                    </button>
+                                    <button id="view-grid"
+                                        class="view-toggle px-2 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-200 transition-all">
+                                        <span class="material-symbols-outlined text-base align-middle">grid_view</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 

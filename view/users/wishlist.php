@@ -11,6 +11,147 @@ if (!$isLoggedIn) {
 }
 
 include '../../components/users/head.php';
+?>
+
+<style>
+    #customToastContainer {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: none;
+    }
+
+    .custom-toast {
+        position: relative;
+        min-width: 320px;
+        max-width: 330px;
+        padding: 16px 20px;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateX(120%);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        pointer-events: auto;
+    }
+
+    .custom-toast.show {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .custom-toast.hiding {
+        transform: translateX(120%);
+        opacity: 0;
+        margin-top: -70px;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), margin-top 0.3s ease 0.2s;
+    }
+
+    .custom-toast.success {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
+    }
+
+    .custom-toast.warning {
+        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+        color: white;
+    }
+
+    .custom-toast.info {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        color: white;
+    }
+
+    .custom-toast-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .custom-toast-content {
+        flex: 1;
+    }
+
+    .custom-toast-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+    }
+
+    .custom-toast-message {
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+    .custom-toast-close {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .custom-toast-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .custom-toast-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 0 0 12px 12px;
+        animation: toast-progress 4s linear forwards;
+    }
+
+    @keyframes toast-progress {
+        from {
+            width: 100%;
+        }
+
+        to {
+            width: 0%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #customToastContainer {
+            left: 10px;
+            right: 10px;
+            top: 10px;
+        }
+
+        .custom-toast {
+            min-width: unset;
+            max-width: unset;
+            width: 100%;
+        }
+    }
+</style>
+
+<?php
 
 use App\Helper\ProductLandingHelper;
 use App\Helper\DiscountHelper;
@@ -39,7 +180,10 @@ if (isset($customer['id_customer'])) {
                 pd.selesai_pada as diskon_berakhir,
                 pd.status as diskon_status,
                 pd.stok_promo,
-                pd.label as diskon_label
+                pd.label as diskon_label,
+                (SELECT SUM(od.jumlah) FROM order_detail od JOIN orders o ON od.id_order = o.id_order WHERE od.id_product = p.id_product AND o.status_order = 'selesai') as total_terjual,
+                (SELECT AVG(r.rating) FROM review r WHERE r.id_product = p.id_product AND r.status_review = 'approved') as avg_rating,
+                (SELECT COUNT(r.id_review) FROM review r WHERE r.id_product = p.id_product AND r.status_review = 'approved') as total_reviews
             FROM wishlist w
             JOIN products p ON w.id_product = p.id_product
             LEFT JOIN kategori k ON p.id_kategori = k.id_kategori
@@ -85,28 +229,7 @@ $breadcrumbs = [
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
 
-    <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoBanner = document.getElementById('promoBanner');
-            const navbarSpacer = document.getElementById('navbarSpacer');
-
-            function updateSpacerHeight() {
-                if (window.innerWidth >= 768 && promoBanner) {
-                    navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
-                } else {
-                    navbarSpacer.style.height = '112px';
-                }
-            }
-
-            updateSpacerHeight();
-            window.addEventListener('scroll', updateSpacerHeight);
-            window.addEventListener('resize', updateSpacerHeight);
-        });
-    </script>
-
-    <main class="max-w-full mb-10">
+    <main class="max-w-full mb-10 pt-16 md:pt-40 lg:pt-[172px]">
         <div class="w-full px-4 md:px-8 lg:px-20 py-6">
             <?php include '../../components/users/breadcrumb.php'; ?>
 
@@ -214,6 +337,10 @@ $breadcrumbs = [
                         $categoryName = htmlspecialchars($product['nama_kategori'] ?? '');
                         $brandName = htmlspecialchars($product['nama_brand'] ?? '');
                         $diskonLabel = htmlspecialchars($product['diskon_label'] ?? '');
+
+                        $avgRating = (float)($product['avg_rating'] ?? 0);
+                        $totalReviews = (int)($product['total_reviews'] ?? 0);
+                        $totalTerjual = (int)($product['total_terjual'] ?? 0);
                         ?>
                         <div class="wishlist-item group bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full overflow-hidden"
                             data-product-id="<?= $productId ?>"
@@ -288,6 +415,22 @@ $breadcrumbs = [
                                     <a href="productDetail.php?id=<?= urlencode($productId) ?>">
                                         <h3 class="mt-1.5 text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors"><?= $productName ?></h3>
                                     </a>
+
+                                    <div class="mt-1.5 flex items-center gap-2">
+                                        <div class="flex items-center">
+                                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                <svg class="w-3.5 h-3.5 <?= $i <= round($avgRating) ? 'text-yellow-400' : 'text-gray-200' ?>" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                            <?php endfor; ?>
+                                        </div>
+                                        <span class="text-[10px] text-gray-500">(<?= $totalReviews ?>)</span>
+                                        <?php if ($totalTerjual > 0): ?>
+                                            <span class="text-gray-300">|</span>
+                                            <span class="text-[10px] text-gray-500">Terjual <?= number_format($totalTerjual) ?></span>
+                                        <?php endif; ?>
+                                    </div>
+
                                     <?php if (!empty($description)): ?>
                                         <p class="mt-2 text-gray-500 text-xs sm:text-sm line-clamp-2"><?= $description ?>...</p>
                                     <?php endif; ?>
@@ -353,29 +496,65 @@ $breadcrumbs = [
 
     <?php include '../../components/users/footer.php'; ?>
     <script>
-        function showNotification(message, type = 'success') {
-            const existing = document.querySelector('.notification-toast');
-            if (existing) existing.remove();
+        function ensureToastContainer() {
+            let container = document.getElementById('customToastContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'customToastContainer';
+                document.body.appendChild(container);
+            }
+            return container;
+        }
 
+        function showCustomToast(message, type = 'success', title = '') {
+            const container = ensureToastContainer();
             const toast = document.createElement('div');
-            toast.className = `notification-toast fixed top-24 right-4 z-50 px-6 py-4 rounded-xl shadow-lg transform translate-x-full transition-transform duration-300 flex items-center gap-3 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
+            toast.className = `custom-toast ${type}`;
 
-            const icon = type === 'success' ?
-                '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' :
-                '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+            const icons = {
+                success: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+                error: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',
+                warning: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>',
+                info: '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>'
+            };
 
-            toast.innerHTML = icon + '<span>' + message + '</span>';
-            document.body.appendChild(toast);
+            toast.innerHTML = `
+                <div class="custom-toast-icon">
+                    ${icons[type] || icons.info}
+                </div>
+                <div class="custom-toast-content">
+                    ${title ? `<div class="custom-toast-title">${title}</div>` : ''}
+                    <div class="custom-toast-message">${message}</div>
+                </div>
+                <button class="custom-toast-close" onclick="this.closest('.custom-toast').remove()">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+                <div class="custom-toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
 
             requestAnimationFrame(() => {
-                toast.classList.remove('translate-x-full');
+                toast.classList.add('show');
             });
 
-            setTimeout(() => {
-                toast.classList.add('translate-x-full');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            const autoClose = setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 400);
+            }, 4000);
+
+            toast.querySelector('.custom-toast-close').addEventListener('click', () => {
+                clearTimeout(autoClose);
+                toast.classList.remove('show');
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 400);
+            });
         }
+
+        window.showCustomToast = showCustomToast;
 
         function updateWishlistCounter() {
             const count = document.querySelectorAll('.wishlist-item:not(.hidden)').length;
@@ -419,14 +598,14 @@ $breadcrumbs = [
                                 }
                             }, 300);
                         }
-                        showNotification(data.message || 'Produk dihapus dari wishlist', 'success');
+                        showCustomToast(data.message || 'Produk dihapus dari wishlist', 'success', 'Dihapus');
                     } else {
-                        showNotification(data.message || 'Gagal menghapus dari wishlist', 'error');
+                        showCustomToast(data.message || 'Gagal menghapus dari wishlist', 'error', 'Error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showNotification('Terjadi kesalahan', 'error');
+                    showCustomToast('Terjadi kesalahan', 'error', 'Error');
                 });
         }
 
@@ -442,15 +621,15 @@ $breadcrumbs = [
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        showNotification(data.message || 'Semua produk dihapus dari wishlist', 'success');
-                        setTimeout(() => location.reload(), 1000);
+                        showCustomToast(data.message || 'Semua produk dihapus dari wishlist', 'success', 'Berhasil');
+                        setTimeout(() => location.reload(), 1500);
                     } else {
-                        showNotification(data.message || 'Gagal menghapus wishlist', 'error');
+                        showCustomToast(data.message || 'Gagal menghapus wishlist', 'error', 'Error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showNotification('Terjadi kesalahan', 'error');
+                    showCustomToast('Terjadi kesalahan', 'error', 'Error');
                 });
         }
 
@@ -468,7 +647,7 @@ $breadcrumbs = [
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        showNotification(data.message || 'Produk berhasil ditambahkan ke keranjang!', 'success');
+                        showCustomToast(data.message || 'Produk berhasil ditambahkan ke keranjang!', 'success', 'Ditambahkan');
                         if (data.cart_count !== undefined) {
                             const cartBadges = document.querySelectorAll('.cart-count-badge');
                             cartBadges.forEach(badge => {
@@ -481,12 +660,12 @@ $breadcrumbs = [
                             });
                         }
                     } else {
-                        showNotification(data.message || 'Gagal menambahkan ke keranjang', 'error');
+                        showCustomToast(data.message || 'Gagal menambahkan ke keranjang', 'error', 'Error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showNotification('Terjadi kesalahan', 'error');
+                    showCustomToast('Terjadi kesalahan', 'error', 'Error');
                 });
         }
 

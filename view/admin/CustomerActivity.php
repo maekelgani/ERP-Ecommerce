@@ -21,7 +21,9 @@ $filters = [
     'date_to' => $_GET['date_to'] ?? null,
     'limit' => 100
 ];
-$filters = array_filter($filters, function($v) { return $v !== null && $v !== ''; });
+$filters = array_filter($filters, function ($v) {
+    return $v !== null && $v !== '';
+});
 
 $activities = $activityRepo->getAllActivities($filters);
 $stats = $activityRepo->getActivityStats();
@@ -84,16 +86,16 @@ include '../../components/admin/head.php';
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Dari Tanggal</label>
-                            <input type="date" name="date_from" value="<?= htmlspecialchars($filters['date_from'] ?? '') ?>" 
+                            <input type="date" name="date_from" value="<?= htmlspecialchars($filters['date_from'] ?? '') ?>"
                                 class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex-1">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Sampai Tanggal</label>
-                            <input type="date" name="date_to" value="<?= htmlspecialchars($filters['date_to'] ?? '') ?>" 
+                            <input type="date" name="date_to" value="<?= htmlspecialchars($filters['date_to'] ?? '') ?>"
                                 class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex items-end gap-2">
-                            <button type="submit" class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                            <button type="submit" class="px-6 py-2 bg-[#882426] text-white rounded-lg hover:bg-gray-700 transition-colors">
                                 Filter
                             </button>
                             <?php if (!empty($filters['date_from']) || !empty($filters['date_to'])): ?>
@@ -113,29 +115,29 @@ include '../../components/admin/head.php';
                         </div>
                     <?php else: ?>
                         <div class="space-y-4">
-                            <?php 
+                            <?php
                             $currentDate = '';
-                            foreach ($activities as $activity): 
+                            foreach ($activities as $activity):
                                 $activityDate = date('Y-m-d', strtotime($activity['date']));
                                 if ($currentDate !== $activityDate):
                                     $currentDate = $activityDate;
                             ?>
-                                <div class="flex items-center gap-2 py-2">
-                                    <div class="h-px flex-1 bg-gray-200"></div>
-                                    <span class="text-sm font-medium text-gray-500 px-2">
-                                        <?php 
-                                        if ($activityDate === date('Y-m-d')) {
-                                            echo 'Hari Ini';
-                                        } elseif ($activityDate === date('Y-m-d', strtotime('-1 day'))) {
-                                            echo 'Kemarin';
-                                        } else {
-                                            echo date('d F Y', strtotime($activityDate));
-                                        }
-                                        ?>
-                                    </span>
-                                    <div class="h-px flex-1 bg-gray-200"></div>
-                                </div>
-                            <?php endif; ?>
+                                    <div class="flex items-center gap-2 py-2">
+                                        <div class="h-px flex-1 bg-gray-200"></div>
+                                        <span class="text-sm font-medium text-gray-500 px-2">
+                                            <?php
+                                            if ($activityDate === date('Y-m-d')) {
+                                                echo 'Hari Ini';
+                                            } elseif ($activityDate === date('Y-m-d', strtotime('-1 day'))) {
+                                                echo 'Kemarin';
+                                            } else {
+                                                echo date('d F Y', strtotime($activityDate));
+                                            }
+                                            ?>
+                                        </span>
+                                        <div class="h-px flex-1 bg-gray-200"></div>
+                                    </div>
+                                <?php endif; ?>
 
                                 <div class="flex items-start gap-4 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
                                     <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0
@@ -172,4 +174,5 @@ include '../../components/admin/head.php';
         </main>
     </div>
 </body>
+
 </html>

@@ -59,84 +59,248 @@ $chartDataJson = json_encode([
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-6 hover:shadow-lg transition-shadow">
-                    <div class="flex items-center justify-between mb-2">
-                        <h2 class="text-sm text-gray-500 font-medium">Total Pendapatan</h2>
-                        <span class="material-symbols-outlined text-[#882426]">payments</span>
-                    </div>
-                    <p class="font-bold text-2xl md:text-3xl text-gray-800 mb-2">Rp. <?= number_format($totalRevenue['value'], 0, ',', '.') ?></p>
-                    <?php if ($period !== 'all' && $totalRevenue['change'] != 0): ?>
-                        <p class="text-sm flex items-center <?= $totalRevenue['isIncrease'] ? 'text-green-600' : 'text-red-600' ?>">
-                            <span class="material-symbols-outlined text-base mr-1">
-                                <?= $totalRevenue['isIncrease'] ? 'trending_up' : 'trending_down' ?>
+            <!-- Stats Card Grid - Consistent with DashboardAdmin.php -->
+            <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-6">
+                <!-- Total Pendapatan Card -->
+                <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-lg bg-[#882426]/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[#882426] text-2xl">payments</span>
+                        </div>
+                        <?php if ($period !== 'all' && $totalRevenue['change'] != 0): ?>
+                            <span class="text-xs px-2 py-1 rounded-full <?= $totalRevenue['isIncrease'] ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
+                                <?= $totalRevenue['isIncrease'] ? '+' : '' ?><?= abs($totalRevenue['change']) ?>%
                             </span>
-                            <?= abs($totalRevenue['change']) ?>% dari periode sebelumnya
-                        </p>
-                    <?php else: ?>
-                        <p class="text-sm text-gray-400">Total keseluruhan</p>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <h2 class="text-sm text-gray-500 mb-1 font-medium">Total Pendapatan</h2>
+                    <p class="font-bold text-2xl text-gray-800">Rp <?= number_format($totalRevenue['value'], 0, ',', '.') ?></p>
+                    <p class="text-xs text-gray-400 mt-1"><?= $period === 'all' ? 'Total keseluruhan' : 'Dari periode sebelumnya' ?></p>
                 </div>
 
-                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-6 hover:shadow-lg transition-shadow">
-                    <div class="flex items-center justify-between mb-2">
-                        <h2 class="text-sm text-gray-500 font-medium">Rata-rata Harga Pembelian</h2>
-                        <span class="material-symbols-outlined text-blue-600">shopping_cart</span>
-                    </div>
-                    <p class="font-bold text-2xl md:text-3xl text-gray-800 mb-2">Rp. <?= number_format($avgPurchase['value'], 0, ',', '.') ?></p>
-                    <?php if ($period !== 'all' && $avgPurchase['change'] != 0): ?>
-                        <p class="text-sm flex items-center <?= $avgPurchase['isIncrease'] ? 'text-green-600' : 'text-red-600' ?>">
-                            <span class="material-symbols-outlined text-base mr-1">
-                                <?= $avgPurchase['isIncrease'] ? 'trending_up' : 'trending_down' ?>
+                <!-- Rata-rata Harga Pembelian Card -->
+                <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-blue-600 text-2xl">shopping_cart</span>
+                        </div>
+                        <?php if ($period !== 'all' && $avgPurchase['change'] != 0): ?>
+                            <span class="text-xs px-2 py-1 rounded-full <?= $avgPurchase['isIncrease'] ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
+                                <?= $avgPurchase['isIncrease'] ? '+' : '' ?><?= abs($avgPurchase['change']) ?>%
                             </span>
-                            <?= abs($avgPurchase['change']) ?>% dari periode sebelumnya
-                        </p>
-                    <?php else: ?>
-                        <p class="text-sm text-gray-400">Rata-rata per transaksi</p>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <h2 class="text-sm text-gray-500 mb-1 font-medium">Rata-rata Pembelian</h2>
+                    <p class="font-bold text-2xl text-gray-800">Rp <?= number_format($avgPurchase['value'], 0, ',', '.') ?></p>
+                    <p class="text-xs text-gray-400 mt-1"><?= $period === 'all' ? 'Rata-rata per transaksi' : 'Dari periode sebelumnya' ?></p>
                 </div>
 
-                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-6 hover:shadow-lg transition-shadow">
-                    <div class="flex items-center justify-between mb-2">
-                        <h2 class="text-sm text-gray-500 font-medium">Produk Terjual</h2>
-                        <span class="material-symbols-outlined text-green-600">inventory_2</span>
-                    </div>
-                    <p class="font-bold text-2xl md:text-3xl text-gray-800 mb-2"><?= number_format($productsSold['value']) ?></p>
-                    <?php if ($period !== 'all' && $productsSold['change'] != 0): ?>
-                        <p class="text-sm flex items-center <?= $productsSold['isIncrease'] ? 'text-green-600' : 'text-red-600' ?>">
-                            <span class="material-symbols-outlined text-base mr-1">
-                                <?= $productsSold['isIncrease'] ? 'trending_up' : 'trending_down' ?>
+                <!-- Produk Terjual Card -->
+                <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-lg bg-green-50 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-green-600 text-2xl">inventory_2</span>
+                        </div>
+                        <?php if ($period !== 'all' && $productsSold['change'] != 0): ?>
+                            <span class="text-xs px-2 py-1 rounded-full <?= $productsSold['isIncrease'] ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
+                                <?= $productsSold['isIncrease'] ? '+' : '' ?><?= abs($productsSold['change']) ?>%
                             </span>
-                            <?= abs($productsSold['change']) ?>% dari periode sebelumnya
-                        </p>
-                    <?php else: ?>
-                        <p class="text-sm text-gray-400">Total unit terjual</p>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <h2 class="text-sm text-gray-500 mb-1 font-medium">Produk Terjual</h2>
+                    <p class="font-bold text-2xl text-gray-800"><?= number_format($productsSold['value']) ?></p>
+                    <p class="text-xs text-gray-400 mt-1"><?= $period === 'all' ? 'Total unit terjual' : 'Dari periode sebelumnya' ?></p>
                 </div>
 
-                <div class="rounded-lg border border-gray-200 bg-white shadow-md p-6 hover:shadow-lg transition-shadow">
-                    <div class="flex items-center justify-between mb-2">
-                        <h2 class="text-sm text-gray-500 font-medium">Rata-rata Rating Produk</h2>
-                        <span class="material-symbols-outlined text-amber-500">star</span>
+                <!-- Rata-rata Rating Produk Card - Enhanced with Fractional Fill -->
+                <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow group rating-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-lg bg-amber-50 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-amber-500 text-2xl star-icon-main">star</span>
+                        </div>
+                        <?php
+                        $rating = floatval($avgRating['value']);
+                        // Determine badge based on rating
+                        if ($rating >= 4.5) {
+                            $badgeClass = 'bg-emerald-100 text-emerald-700';
+                            $badgeText = 'Excellent';
+                        } elseif ($rating >= 3.5) {
+                            $badgeClass = 'bg-amber-100 text-amber-700';
+                            $badgeText = 'Sangat Baik';
+                        } elseif ($rating >= 2.5) {
+                            $badgeClass = 'bg-yellow-100 text-yellow-700';
+                            $badgeText = 'Baik';
+                        } elseif ($rating >= 1.5) {
+                            $badgeClass = 'bg-orange-100 text-orange-700';
+                            $badgeText = 'Cukup';
+                        } else {
+                            $badgeClass = 'bg-red-100 text-red-700';
+                            $badgeText = 'Perlu Perbaikan';
+                        }
+                        ?>
+                        <span class="text-xs px-2 py-1 rounded-full font-medium <?= $badgeClass ?>">
+                            <?= $badgeText ?>
+                        </span>
                     </div>
-                    <div class="flex items-baseline gap-2 mb-2">
-                        <p class="font-bold text-2xl md:text-3xl text-gray-800"><?= $avgRating['value'] ?></p>
-                        <span class="text-lg text-gray-500">/ 5</span>
+                    <h2 class="text-sm text-gray-500 mb-1 font-medium">Rata-rata Rating</h2>
+                    <div class="flex items-baseline gap-1 mb-2">
+                        <p class="font-bold text-2xl text-gray-800"><?= number_format($avgRating['value'], 1) ?></p>
+                        <span class="text-sm text-gray-400">/ 5</span>
                     </div>
-                    <div class="flex items-center gap-1">
-                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                            <?php if ($i <= floor($avgRating['value'])): ?>
-                                <span class="material-symbols-outlined text-amber-400 text-lg">star</span>
-                            <?php elseif ($i - 0.5 <= $avgRating['value']): ?>
-                                <span class="material-symbols-outlined text-amber-400 text-lg">star_half</span>
-                            <?php else: ?>
-                                <span class="material-symbols-outlined text-gray-300 text-lg">star</span>
-                            <?php endif; ?>
+
+                    <!-- Enhanced Star Rating Display with Fractional Fill -->
+                    <div class="star-rating-container flex items-center gap-1 mb-2">
+                        <?php
+                        for ($i = 1; $i <= 5; $i++):
+                            // Calculate fill percentage for each star
+                            if ($rating >= $i) {
+                                $fillPercent = 100; // Full star
+                            } elseif ($rating > $i - 1) {
+                                $fillPercent = ($rating - ($i - 1)) * 100; // Partial fill
+                            } else {
+                                $fillPercent = 0; // Empty star
+                            }
+                        ?>
+                            <div class="star-item" style="animation-delay: <?= ($i - 1) * 0.1 ?>s">
+                                <svg class="star-svg" width="20" height="20" viewBox="0 0 24 24">
+                                    <defs>
+                                        <linearGradient id="starGradient<?= $i ?>" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="<?= $fillPercent ?>%" style="stop-color:#FBBF24;stop-opacity:1" />
+                                            <stop offset="<?= $fillPercent ?>%" style="stop-color:#E5E7EB;stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path fill="url(#starGradient<?= $i ?>)" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    <path fill="none" stroke="#FBBF24" stroke-width="0.5" stroke-opacity="0.5" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                </svg>
+                            </div>
                         <?php endfor; ?>
-                        <span class="text-sm text-gray-400 ml-1">(<?= $avgRating['total_reviews'] ?> ulasan)</span>
                     </div>
                 </div>
             </div>
+
+            <!-- Quick Insights Section - Like Today Stats in Dashboard -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="rounded-xl bg-[#882426] text-white p-5 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-symbols-outlined text-white/80">trending_up</span>
+                        <span class="text-white/80 text-sm font-medium">Conversion Rate</span>
+                    </div>
+                    <p class="text-3xl font-bold"><?= number_format(($productsSold['value'] > 0 && $avgRating['total_reviews'] > 0) ? min(($avgRating['total_reviews'] / $productsSold['value']) * 100, 100) : 0, 1) ?>%</p>
+                    <p class="text-white/70 text-sm">tingkat ulasan per produk</p>
+                </div>
+                <div class="rounded-xl bg-[#882426] text-white p-5 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-symbols-outlined text-white/80">receipt_long</span>
+                        <span class="text-white/80 text-sm font-medium">Total Transaksi</span>
+                    </div>
+                    <p class="text-3xl font-bold"><?= number_format($totalRevenue['value'] > 0 && $avgPurchase['value'] > 0 ? round($totalRevenue['value'] / $avgPurchase['value']) : 0) ?></p>
+                    <p class="text-white/70 text-sm">transaksi berhasil</p>
+                </div>
+                <div class="rounded-xl bg-[#882426] text-white p-5 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-symbols-outlined text-white/80">local_shipping</span>
+                        <span class="text-white/80 text-sm font-medium">Avg. Produk/Order</span>
+                    </div>
+                    <?php
+                    $totalTransactions = ($totalRevenue['value'] > 0 && $avgPurchase['value'] > 0) ? round($totalRevenue['value'] / $avgPurchase['value']) : 1;
+                    $avgProductsPerOrder = $totalTransactions > 0 ? number_format($productsSold['value'] / $totalTransactions, 1) : 0;
+                    ?>
+                    <p class="text-3xl font-bold"><?= $avgProductsPerOrder ?></p>
+                    <p class="text-white/70 text-sm">produk per pesanan</p>
+                </div>
+                <div class="rounded-xl bg-[#882426] text-white p-5 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-symbols-outlined text-white/80">thumb_up</span>
+                        <span class="text-white/80 text-sm font-medium">Kepuasan</span>
+                    </div>
+                    <p class="text-3xl font-bold"><?= number_format(($rating / 5) * 100, 0) ?>%</p>
+                    <p class="text-white/70 text-sm">tingkat kepuasan pelanggan</p>
+                </div>
+            </div>
+
+            <style>
+                /* Enhanced Star Rating Animations */
+                .rating-card .star-icon-main {
+                    animation: pulse-star 2s ease-in-out infinite;
+                }
+
+                @keyframes pulse-star {
+
+                    0%,
+                    100% {
+                        transform: scale(1);
+                    }
+
+                    50% {
+                        transform: scale(1.1);
+                    }
+                }
+
+                .star-rating-container .star-item {
+                    animation: star-pop-in 0.4s ease-out forwards;
+                    opacity: 0;
+                    transform: scale(0);
+                }
+
+                @keyframes star-pop-in {
+                    0% {
+                        opacity: 0;
+                        transform: scale(0) rotate(-180deg);
+                    }
+
+                    60% {
+                        transform: scale(1.2) rotate(10deg);
+                    }
+
+                    100% {
+                        opacity: 1;
+                        transform: scale(1) rotate(0deg);
+                    }
+                }
+
+                .star-svg {
+                    filter: drop-shadow(0 1px 2px rgba(251, 191, 36, 0.3));
+                    transition: transform 0.2s ease, filter 0.2s ease;
+                }
+
+                .star-item:hover .star-svg {
+                    transform: scale(1.3);
+                    filter: drop-shadow(0 2px 4px rgba(251, 191, 36, 0.5));
+                }
+
+                .rating-card:hover .star-svg {
+                    animation: star-twinkle 0.5s ease-in-out;
+                }
+
+                @keyframes star-twinkle {
+
+                    0%,
+                    100% {
+                        transform: scale(1);
+                    }
+
+                    25% {
+                        transform: scale(1.1) rotate(5deg);
+                    }
+
+                    50% {
+                        transform: scale(0.95) rotate(-5deg);
+                    }
+
+                    75% {
+                        transform: scale(1.05) rotate(3deg);
+                    }
+                }
+
+                /* Quick Insights Cards Animation */
+                .grid>[class*="bg-[#882426]"] {
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                }
+
+                .grid>[class*="bg-[#882426]"]:hover {
+                    transform: translateY(-2px);
+                }
+            </style>
 
             <div class="flex flex-wrap mb-6">
                 <nav class="bg-gray-100 rounded-lg p-1 font-semibold text-sm gap-2 flex">
@@ -147,20 +311,30 @@ $chartDataJson = json_encode([
 
             <div id="content-pendapatan" class="tab-content-analitik">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div class="rounded-lg border border-gray-200 bg-white shadow-md p-6">
-                        <div class="mb-4">
-                            <h2 class="text-xl font-bold text-gray-800">Pendapatan Toko</h2>
-                            <p class="text-gray-500 text-sm">Grafik pendapatan bulanan selama 6 bulan terakhir</p>
+                    <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">Pendapatan Toko</h2>
+                                <p class="text-gray-500 text-sm">Grafik pendapatan bulanan 6 bulan terakhir</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-[#882426]/10 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[#882426]">bar_chart</span>
+                            </div>
                         </div>
                         <div class="h-72">
                             <canvas id="chartPendapatan"></canvas>
                         </div>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 bg-white shadow-md p-6">
-                        <div class="mb-4">
-                            <h2 class="text-xl font-bold text-gray-800">Order dan Users</h2>
-                            <p class="text-gray-500 text-sm">Grafik perbandingan total order dan total users</p>
+                    <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">Order dan Users</h2>
+                                <p class="text-gray-500 text-sm">Perbandingan total order dan users</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-blue-600">groups</span>
+                            </div>
                         </div>
                         <div class="h-72">
                             <canvas id="chartUserVsOrder"></canvas>
@@ -171,20 +345,30 @@ $chartDataJson = json_encode([
 
             <div id="content-produk" class="tab-content-analitik hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div class="rounded-lg border border-gray-200 bg-white shadow-md p-6">
-                        <div class="mb-4">
-                            <h2 class="text-xl font-bold text-gray-800">Kategori Terpopuler</h2>
-                            <p class="text-gray-500 text-sm">Distribusi penjualan berdasarkan kategori</p>
+                    <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">Kategori Terpopuler</h2>
+                                <p class="text-gray-500 text-sm">Distribusi penjualan berdasarkan kategori</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-amber-600">category</span>
+                            </div>
                         </div>
                         <div class="h-72 flex items-center justify-center">
                             <canvas id="chartCategorySales"></canvas>
                         </div>
                     </div>
 
-                    <div class="rounded-lg border border-gray-200 bg-white shadow-md p-6">
-                        <div class="mb-4">
-                            <h2 class="text-xl font-bold text-gray-800">Produk Terpopuler</h2>
-                            <p class="text-gray-500 text-sm">Produk dengan penjualan tertinggi</p>
+                    <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">Produk Terpopuler</h2>
+                                <p class="text-gray-500 text-sm">Produk dengan penjualan tertinggi</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-green-600">trending_up</span>
+                            </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full">

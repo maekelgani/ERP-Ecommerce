@@ -40,33 +40,13 @@ $breadcrumbs = [
 include '../../components/users/head.php';
 ?>
 
-<body class="w-full bg-gray-50 min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
+<body class="w-full bg-no-repeat min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
     <header>
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
 
-    <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoBanner = document.getElementById('promoBanner');
-            const navbarSpacer = document.getElementById('navbarSpacer');
-
-            function updateSpacerHeight() {
-                if (window.innerWidth >= 768 && promoBanner) {
-                    navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
-                } else {
-                    navbarSpacer.style.height = '112px';
-                }
-            }
-
-            updateSpacerHeight();
-            window.addEventListener('scroll', updateSpacerHeight);
-            window.addEventListener('resize', updateSpacerHeight);
-        });
-    </script>
-
-    <main class="max-w-full mb-10">
+    <!-- Main content with responsive padding: Mobile 64px, Tablet 160px, Desktop 172px (promo + navbar + category nav) -->
+    <main class="max-w-full mb-10 pt-16 md:pt-40 lg:pt-[172px]">
         <section class="bg-[#882426] py-12 md:py-16 mb-8 relative overflow-hidden">
             <div class="absolute inset-0 overflow-hidden opacity-10">
                 <div class="absolute top-10 left-10 w-32 h-32 border-4 border-white rounded-full"></div>

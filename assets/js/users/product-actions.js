@@ -5,28 +5,39 @@ function getApiUrl(endpoint) {
     return '../../api/' + endpoint;
 }
 
-function showNotification(message, type = 'success') {
-    const existing = document.querySelector('.notification-toast');
-    if (existing) existing.remove();
+function showNotification(message, type = 'success', title = null) {
+    if (typeof window.showCustomToast === 'function') {
+        window.showCustomToast(message, type, title);
+        return;
+    }
 
-    const toast = document.createElement('div');
-    toast.className = `notification-toast fixed top-24 right-4 z-50 px-6 py-4 rounded-xl shadow-lg transform translate-x-full transition-transform duration-300 flex items-center gap-3 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
+    const typeMap = {
+        'success': 'success',
+        'error': 'danger',
+        'warning': 'warning',
+        'info': 'info'
+    };
 
-    const icon = type === 'success' 
-        ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'
-        : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+    const mappedType = typeMap[type] || 'info';
+    
+    const titleMap = {
+        'success': 'Berhasil!',
+        'danger': 'Gagal!',
+        'warning': 'Perhatian!',
+        'info': 'Info'
+    };
 
-    toast.innerHTML = icon + '<span>' + message + '</span>';
-    document.body.appendChild(toast);
+    const notificationTitle = title || titleMap[mappedType];
 
-    requestAnimationFrame(() => {
-        toast.classList.remove('translate-x-full');
+    const event = new CustomEvent('notify', {
+        detail: {
+            variant: mappedType,
+            title: notificationTitle,
+            message: message
+        }
     });
 
-    setTimeout(() => {
-        toast.classList.add('translate-x-full');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    window.dispatchEvent(event);
 }
 
 function checkLoginRequired(actionType = 'default') {

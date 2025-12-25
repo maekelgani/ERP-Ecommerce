@@ -94,6 +94,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    let shippingRatesLoaded = false;
+    let shippingRatesData = [];
+    
     function initStep2() {
         const shippingMethodCards = document.querySelectorAll('.shipping-method-card');
         shippingMethodCards.forEach(card => {
@@ -140,33 +143,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
-        const courierCards = document.querySelectorAll('.courier-card');
-        courierCards.forEach(card => {
-            card.addEventListener('click', function() {
-                courierCards.forEach(c => {
-                    c.classList.remove('selected');
-                    c.querySelector('div').classList.remove('border-[#882426]', 'bg-[#882426]/5');
-                    c.querySelector('div').classList.add('border-gray-200');
-                });
-                
-                this.classList.add('selected');
-                this.querySelector('div').classList.add('border-[#882426]', 'bg-[#882426]/5');
-                this.querySelector('div').classList.remove('border-gray-200');
-                
-                const radio = this.querySelector('input[type="radio"]');
-                radio.checked = true;
-                
-                selectedCourier = {
-                    value: radio.value,
-                    cost: parseInt(radio.dataset.cost),
-                    days: radio.dataset.days
-                };
-                shippingCost = selectedCourier.cost;
-                
-                updateShippingDisplay();
-                updateBtnToStep3();
+        const btnRetryShipping = document.getElementById('btnRetryShipping');
+        if (btnRetryShipping) {
+            btnRetryShipping.addEventListener('click', () => {
+                if (selectedAddress && selectedAddress.kode_pos) {
+                    loadShippingRates(selectedAddress.kode_pos);
+                }
             });
-        });
+        }
+        
+        initCourierCardListeners();
         
         const storeCards = document.querySelectorAll('.store-card');
         storeCards.forEach(card => {
@@ -357,6 +343,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (step === 2 && selectedAddress) {
             updateAddressPreview();
+            if (!shippingRatesLoaded && selectedAddress.kode_pos) {
+                loadShippingRates(selectedAddress.kode_pos);
+            }
         }
         
         if (step === 3) {
@@ -391,7 +380,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (previewCourier) {
             if (shippingMethod === 'delivery' && selectedCourier) {
-                const courierLabel = selectedCourier.value.replace('-', ' ').toUpperCase();
+                const courierLabel = selectedCourier.courier_name 
+                    ? `${selectedCourier.courier_name} ${selectedCourier.courier_service || ''}`
+                    : selectedCourier.value.replace('-', ' ').toUpperCase();
                 previewCourier.textContent = courierLabel;
                 previewEstimasi.textContent = `Estimasi ${selectedCourier.days} hari kerja - Rp ${formatNumber(selectedCourier.cost)}`;
             } else if (shippingMethod === 'pickup' && selectedStore) {
@@ -455,15 +446,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (storeInfoSection) {
             if (shippingMethod === 'pickup' && selectedStore) {
                 storeInfoSection.classList.remove('hidden');
-                if (storeInfoName) {
-                    storeInfoName.textContent = selectedStore.name;
+                const storeRadio = document.querySelector(`.store-card input[type="radio"][value="${selectedStore.value}"]`);
+                if (storeRadio && storeInfoName) {
+                    storeInfoName.textContent = storeRadio.dataset.name || selectedStore.name;
                 }
-                if (storeInfoAddress) {
-                    const storeAddresses = {
-                        'store-jakarta': 'Jl. Mangga Dua Raya No. 123, Jakarta Pusat',
-                        'store-bekasi': 'Jl. Ahmad Yani No. 456, Bekasi Timur'
-                    };
-                    storeInfoAddress.textContent = storeAddresses[selectedStore.value] || 'Alamat tidak tersedia';
+                if (storeRadio && storeInfoAddress) {
+                    storeInfoAddress.textContent = storeRadio.dataset.address || 'Alamat tidak tersedia';
                 }
             } else {
                 storeInfoSection.classList.add('hidden');
@@ -480,6 +468,157 @@ document.addEventListener('DOMContentLoaded', function() {
         packingCost = 0;
         if (bubbleWrap) packingCost += 5000;
         if (packingKayu) packingCost += 20000;
+    }
+    
+    async function loadShippingRates(postalCode) {
+        const courierLoading = document.getElementById('courierLoading');
+        const courierError = document.getElementById('courierError');
+        const courierList = document.getElementById('courierList');
+        const courierFallbackNotice = document.getElementById('courierFallbackNotice');
+        const courierWeightInfo = document.getElementById('courierWeightInfo');
+        
+        courierLoading?.classList.remove('hidden');
+        courierError?.classList.add('hidden');
+        courierList?.classList.add('hidden');
+        courierFallbackNotice?.classList.add('hidden');
+        
+        selectedCourier = null;
+        shippingCost = 0;
+        shippingRatesLoaded = false;
+        updateBtnToStep3();
+        
+        const requestData = {
+            postal_code: postalCode,
+            kecamatan: selectedAddress?.kecamatan || '',
+            kota: selectedAddress?.kota || '',
+            provinsi: selectedAddress?.provinsi || '',
+            area_id: selectedAddress?.biteship_area_id || ''
+        };
+        
+        try {
+            const response = await fetch('../../ajax/get-shipping-rates.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+            
+            const result = await response.json();
+            
+            courierLoading?.classList.add('hidden');
+            
+            if (result.success && result.rates && result.rates.length > 0) {
+                shippingRatesData = result.rates;
+                shippingRatesLoaded = true;
+                renderCourierCards(result.rates);
+                courierList?.classList.remove('hidden');
+                
+                if (result.total_weight && courierWeightInfo) {
+                    const weightKg = (result.total_weight / 1000).toFixed(1);
+                    const weightText = document.getElementById('courierWeightText');
+                    if (weightText) {
+                        weightText.textContent = `Total berat: ${weightKg} kg`;
+                    }
+                    courierWeightInfo.classList.remove('hidden');
+                }
+                
+                if (result.is_fallback) {
+                    courierFallbackNotice?.classList.remove('hidden');
+                    if (result.message) {
+                        const fallbackMsg = courierFallbackNotice.querySelector('span');
+                        if (fallbackMsg) fallbackMsg.textContent = result.message;
+                    }
+                }
+            } else {
+                courierError?.classList.remove('hidden');
+                document.getElementById('courierErrorMessage').textContent = result.message || 'Tidak ada jasa pengiriman tersedia.';
+            }
+        } catch (error) {
+            console.error('Error loading shipping rates:', error);
+            courierLoading?.classList.add('hidden');
+            courierError?.classList.remove('hidden');
+            document.getElementById('courierErrorMessage').textContent = 'Terjadi kesalahan saat mengambil data ongkir.';
+        }
+    }
+    
+    function renderCourierCards(rates) {
+        const courierList = document.getElementById('courierList');
+        if (!courierList) return;
+        
+        courierList.innerHTML = '';
+        
+        rates.forEach(rate => {
+            const card = document.createElement('label');
+            card.className = 'courier-card block relative cursor-pointer';
+            
+            const logoHtml = rate.logo 
+                ? `<img src="${rate.logo}" alt="${rate.courier_name}" class="h-8 w-auto object-contain" onerror="this.parentElement.innerHTML='<span class=\\'text-white text-xs font-bold\\'>${rate.courier_code.toUpperCase()}</span>'">`
+                : `<span class="text-white text-xs font-bold">${rate.courier_code.toUpperCase()}</span>`;
+            
+            card.innerHTML = `
+                <input type="radio" name="courier" value="${rate.rate_id}" class="sr-only" 
+                    data-cost="${rate.price}" 
+                    data-days="${rate.duration_days}"
+                    data-courier-code="${rate.courier_code}"
+                    data-courier-name="${rate.courier_name}"
+                    data-courier-service="${rate.courier_service}">
+                <div class="border-2 rounded-xl p-4 transition-all duration-200 border-gray-200 hover:border-[#882426]/50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-8 bg-gray-100 rounded flex items-center justify-center overflow-hidden">
+                                ${logoHtml}
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-900">${rate.courier_name} ${rate.courier_service}</p>
+                                <p class="text-sm text-gray-500">Estimasi ${rate.duration_days} hari kerja</p>
+                                ${rate.description ? `<p class="text-xs text-gray-400">${rate.description}</p>` : ''}
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-[#882426]">Rp ${formatNumber(rate.price)}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            courierList.appendChild(card);
+        });
+        
+        initCourierCardListeners();
+    }
+    
+    function initCourierCardListeners() {
+        const courierCards = document.querySelectorAll('.courier-card');
+        courierCards.forEach(card => {
+            card.addEventListener('click', function() {
+                courierCards.forEach(c => {
+                    c.classList.remove('selected');
+                    c.querySelector('div').classList.remove('border-[#882426]', 'bg-[#882426]/5');
+                    c.querySelector('div').classList.add('border-gray-200');
+                });
+                
+                this.classList.add('selected');
+                this.querySelector('div').classList.add('border-[#882426]', 'bg-[#882426]/5');
+                this.querySelector('div').classList.remove('border-gray-200');
+                
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                selectedCourier = {
+                    value: radio.value,
+                    cost: parseInt(radio.dataset.cost),
+                    days: radio.dataset.days,
+                    courier_code: radio.dataset.courierCode,
+                    courier_name: radio.dataset.courierName,
+                    courier_service: radio.dataset.courierService
+                };
+                shippingCost = selectedCourier.cost;
+                
+                updateShippingDisplay();
+                updateBtnToStep3();
+            });
+        });
     }
     
     function updateBtnToStep3() {
@@ -714,9 +853,9 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'diskon_nominal':
                 return `Diskon Rp ${formatNumber(voucher.nilai)}`;
             case 'gratis_ongkir':
-                return 'Gratis Ongkir';
+                return 'Gratis Ongkir (Legacy)';
             case 'cashback':
-                return `Cashback Rp ${formatNumber(voucher.nilai)}`;
+                return `Cashback (Legacy)`;
             default:
                 return `Diskon`;
         }

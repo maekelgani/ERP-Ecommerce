@@ -1,124 +1,238 @@
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // Grafik untuk pendapatan toko
-    (function(){
-        const orderChartLabels = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"];
-        const orderChartData = [10, 25, 18, 32, 22, 40];
+(function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        initCustomToast();
+        initCartOperations();
+    });
 
-        const ctx = document.getElementById('chartPendapatan');
-        if (!ctx) return;
+    function initCustomToast() {
+        if (document.getElementById('customToastContainer')) return;
+        
+        const container = document.createElement('div');
+        container.id = 'customToastContainer';
+        document.body.appendChild(container);
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: orderChartLabels,
-                datasets: [{
-                    label: 'Total Order per Bulan',
-                    data: orderChartData,
-                    borderWidth: 2,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    })();
+        window.showCustomToast = function(message, type = 'success', title = null, duration = 4000) {
+            const container = document.getElementById('customToastContainer');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type}`;
 
-    // Grafik untuk total users | total orders
-    (function () {
-        const ctxBar = document.getElementById('chartUserVsOrder');
-        if (!ctxBar) return;
+            const icons = {
+                success: 'check_circle',
+                error: 'error',
+                warning: 'warning',
+                info: 'info'
+            };
+            const titles = {
+                success: 'Berhasil!',
+                error: 'Gagal!',
+                warning: 'Perhatian!',
+                info: 'Informasi'
+            };
 
-        // Data dummy sek 
-        const barChartLabels = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"];
-        const registeredUsersData = [50, 80, 120, 150, 170, 200];
-        const ordersData = [10, 25, 40, 60, 55, 75];
+            toast.innerHTML = `
+            <div class="custom-toast-icon">
+                <span class="material-symbols-outlined">${icons[type]}</span>
+            </div>
+            <div class="custom-toast-content">
+                <div class="custom-toast-title">${title || titles[type]}</div>
+                <div class="custom-toast-message">${message}</div>
+            </div>
+            <button class="custom-toast-close">
+                <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+            </button>
+            <div class="custom-toast-progress" style="animation-duration: ${duration}ms;"></div>
+        `;
 
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: barChartLabels,
-                datasets: [
-                    {
-                        label: "User Terdaftar",
-                        data: registeredUsersData,
-                        borderWidth: 1,
-                        backgroundColor: "rgba(54, 162, 235, 0.7)",
-                        borderColor: "rgba(54, 162, 235, 1)"
-                    },
-                    {
-                        label: "Total Order",
-                        data: ordersData,
-                        borderWidth: 1,
-                        backgroundColor: "rgba(255, 99, 132, 0.7)",
-                        borderColor: "rgba(255, 99, 132, 1)"
+            const closeBtn = toast.querySelector('.custom-toast-close');
+            closeBtn.addEventListener('click', () => removeToast(toast));
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    toast.classList.add('show');
+                });
+            });
+
+            const timeoutId = setTimeout(() => removeToast(toast), duration);
+            toast.dataset.timeoutId = timeoutId;
+
+            function removeToast(toastElement) {
+                if (toastElement.classList.contains('hiding')) return;
+
+                clearTimeout(parseInt(toastElement.dataset.timeoutId));
+                toastElement.classList.add('hiding');
+                toastElement.classList.remove('show');
+
+                setTimeout(() => {
+                    if (toastElement.parentNode) {
+                        toastElement.remove();
                     }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 20
-                        }
-                    }
-                }
+                }, 500);
             }
-        });
-    })();
 
-    // Grafik categoty terlaris
-    (function () {
-        const ctxPie = document.getElementById('chartCategorySales');
-        if (!ctxPie) return;
+            return toast;
+        };
+    }
 
-        // Dummy wak
-        const categoryLabels = ["CPU", "PC Bundling", "Monitor", "Periferal", "RAM"];
-        const categoryData = [120, 90, 150, 80, 40];
+    function initCartOperations() {
+        window.updateQuantity = function(cartId, change, maxStock) {
+            const input = document.querySelector(`input[data-cart-id="${cartId}"]`);
+            if (!input) return;
 
-        new Chart(ctxPie, {
-            type: 'pie',
-            data: {
-                labels: categoryLabels,
-                datasets: [{
-                    label: "Sales by Category",
-                    data: categoryData,
-                    backgroundColor: [
-                        "rgba(255, 99, 132, 0.8)",
-                        "rgba(54, 162, 235, 0.8)",
-                        "rgba(255, 206, 86, 0.8)",
-                        "rgba(75, 192, 192, 0.8)",
-                        "rgba(153, 102, 255, 0.8)"
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                animation: {
-                    animateRotate: true,
-                    animateScale: true,
-                    duration: 1800,
-                    easing: "easeOutQuart"
-                },
-                plugins: {
-                    legend: {
-                        position: "right"
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: (context) =>
-                                `${context.label}: ${context.raw} penjualan`
-                        }
-                    }
-                }
+            let newQty = parseInt(input.value) + change;
+            if (newQty < 1) newQty = 1;
+            if (newQty > maxStock) newQty = maxStock;
+
+            input.value = newQty;
+            updateCartQuantity(cartId, newQty);
+        };
+
+        window.updateQuantityDirect = function(cartId, value, maxStock) {
+            let qty = parseInt(value);
+            if (isNaN(qty) || qty < 1) {
+                window.showCustomToast('Jumlah tidak valid', 'error');
+                return;
             }
+            if (qty > maxStock) {
+                window.showCustomToast(`Stok maksimal ${maxStock} item`, 'warning');
+                return;
+            }
+            updateCartQuantity(cartId, qty);
+        };
+
+        window.moveToWishlist = function(productId, cartId, isInWishlist) {
+            const btn = document.querySelector(`[data-product-id="${productId}"][data-in-wishlist]`);
+            
+            if (isInWishlist) {
+                removeFromWishlist(productId, btn);
+            } else {
+                addToWishlist(productId, cartId, btn);
+            }
+        };
+
+        window.removeFromCart = function(cartId) {
+            fetch('../../ajax/cart/remove-item.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cart_id: cartId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const item = document.querySelector(`[data-cart-id="${cartId}"]`);
+                    if (item) {
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateX(-100%)';
+                        setTimeout(() => item.remove(), 300);
+                    }
+                    window.showCustomToast('Produk dihapus dari keranjang', 'success', 'Dihapus');
+                    setTimeout(() => location.reload(), 500);
+                } else {
+                    window.showCustomToast(data.message || 'Gagal menghapus produk', 'error');
+                }
+            })
+            .catch(() => {
+                window.showCustomToast('Terjadi kesalahan saat menghapus', 'error');
+            });
+        };
+
+        window.removeAllOutOfStock = function() {
+            fetch('../../ajax/cart/remove-all-unavailable.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.showCustomToast('Semua produk tidak tersedia telah dihapus', 'success', 'Dihapus');
+                    setTimeout(() => location.reload(), 500);
+                } else {
+                    window.showCustomToast(data.message || 'Gagal menghapus produk', 'error');
+                }
+            })
+            .catch(() => {
+                window.showCustomToast('Terjadi kesalahan saat menghapus', 'error');
+            });
+        };
+    }
+
+    function updateCartQuantity(cartId, newQty) {
+        fetch('../../ajax/cart/update-quantity.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cart_id: cartId, quantity: newQty })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const item = document.querySelector(`[data-cart-id="${cartId}"]`);
+                if (item) {
+                    const pricePerItem = parseFloat(item.dataset.price);
+                    const newTotal = pricePerItem * newQty;
+                    item.querySelector('.item-total').textContent = formatPrice(newTotal);
+                }
+                window.showCustomToast('Jumlah produk diperbarui', 'info');
+            } else {
+                window.showCustomToast(data.message || 'Gagal mengupdate jumlah', 'error');
+            }
+        })
+        .catch(() => {
+            window.showCustomToast('Terjadi kesalahan saat mengupdate', 'error');
         });
-    })();
-});
+    }
+
+    function addToWishlist(productId, cartId, btn) {
+        fetch('../../ajax/wishlist/add-wishlist.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                btn.setAttribute('data-in-wishlist', 'true');
+                btn.classList.add('text-[#882426]');
+                btn.classList.remove('text-gray-600', 'hover:text-[#882426]');
+                btn.querySelector('svg').classList.add('fill-[#882426]');
+                window.showCustomToast('Produk ditambahkan ke wishlist', 'success', 'Ditambahkan');
+            } else {
+                window.showCustomToast(data.message || 'Gagal menambahkan ke wishlist', 'error');
+            }
+        })
+        .catch(() => {
+            window.showCustomToast('Terjadi kesalahan saat menambahkan ke wishlist', 'error');
+        });
+    }
+
+    function removeFromWishlist(productId, btn) {
+        fetch('../../ajax/wishlist/remove-wishlist.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                btn.setAttribute('data-in-wishlist', 'false');
+                btn.classList.remove('text-[#882426]');
+                btn.classList.add('text-gray-600', 'hover:text-[#882426]');
+                btn.querySelector('svg').classList.remove('fill-[#882426]');
+                window.showCustomToast('Produk dihapus dari wishlist', 'success', 'Dihapus');
+            } else {
+                window.showCustomToast(data.message || 'Gagal menghapus dari wishlist', 'error');
+            }
+        })
+        .catch(() => {
+            window.showCustomToast('Terjadi kesalahan saat menghapus dari wishlist', 'error');
+        });
+    }
+
+    function formatPrice(price) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(price);
+    }
+})();

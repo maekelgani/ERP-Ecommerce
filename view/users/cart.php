@@ -135,33 +135,150 @@ $breadcrumbs = [
 include '../../components/users/head.php';
 ?>
 
+<style>
+    #customToastContainer {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: none;
+    }
+
+    .custom-toast {
+        position: relative;
+        min-width: 320px;
+        max-width: 400px;
+        padding: 16px 20px;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateX(120%);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        pointer-events: auto;
+    }
+
+    .custom-toast.show {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .custom-toast.hiding {
+        transform: translateX(120%);
+        opacity: 0;
+        margin-top: -70px;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), margin-top 0.3s ease 0.2s;
+    }
+
+    .custom-toast.success {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
+    }
+
+    .custom-toast.warning {
+        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+        color: white;
+    }
+
+    .custom-toast.info {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        color: white;
+    }
+
+    .custom-toast-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .custom-toast-content {
+        flex: 1;
+    }
+
+    .custom-toast-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+    }
+
+    .custom-toast-message {
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+    .custom-toast-close {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .custom-toast-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .custom-toast-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 0 0 12px 12px;
+        animation: toast-progress 4s linear forwards;
+    }
+
+    @keyframes toast-progress {
+        from {
+            width: 100%;
+        }
+
+        to {
+            width: 0%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #customToastContainer {
+            left: 10px;
+            right: 10px;
+            top: 10px;
+        }
+
+        .custom-toast {
+            min-width: unset;
+            max-width: unset;
+            width: 100%;
+        }
+    }
+</style>
+
 <body class="w-full bg-gray-50 min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
     <header>
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
 
-    <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoBanner = document.getElementById('promoBanner');
-            const navbarSpacer = document.getElementById('navbarSpacer');
-
-            function updateSpacerHeight() {
-                if (window.innerWidth >= 768 && promoBanner) {
-                    navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
-                } else {
-                    navbarSpacer.style.height = '112px';
-                }
-            }
-
-            updateSpacerHeight();
-            window.addEventListener('scroll', updateSpacerHeight);
-            window.addEventListener('resize', updateSpacerHeight);
-        });
-    </script>
-
-    <main class="max-w-full mb-10">
+    <main class="max-w-full mb-10 pt-16 md:pt-40 lg:pt-[172px]">
         <div class="w-full px-4 md:px-8 lg:px-20 py-6">
             <?php include '../../components/users/breadcrumb.php'; ?>
 
@@ -569,7 +686,7 @@ include '../../components/users/head.php';
                                     </div>
                                 </div>
 
-                                <div class="p-4 bg-gray-50 rounded-xl">
+                                <!-- <div class="p-4 bg-gray-50 rounded-xl">
                                     <p class="text-sm font-semibold text-gray-900 mb-3">Metode Pembayaran</p>
                                     <div class="flex flex-wrap items-center gap-2">
                                         <div class="px-3 py-2 bg-white rounded-lg border border-gray-200 shadow-sm">
@@ -597,7 +714,7 @@ include '../../components/users/head.php';
                                             <span class="text-xs font-bold text-red-600">ShopeePay</span>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -725,30 +842,83 @@ include '../../components/users/head.php';
             return 'Rp ' + Math.round(price).toLocaleString('id-ID').replace(/,/g, '.');
         }
 
-        function showNotification(message, type = 'success') {
-            const container = document.getElementById('notificationContainer');
-            const notification = document.createElement('div');
+        // Initialize toast notification system
+        function initCustomToast() {
+            if (document.getElementById('customToastContainer')) return;
 
-            const bgColor = type === 'success' ? 'bg-emerald-500' : type === 'error' ? 'bg-red-500' : 'bg-amber-500';
-            const icon = type === 'success' ?
-                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>' :
-                type === 'error' ?
-                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>' :
-                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>';
+            const container = document.createElement('div');
+            container.id = 'customToastContainer';
+            document.body.appendChild(container);
 
-            notification.className = `${bgColor} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 slide-in max-w-sm`;
-            notification.innerHTML = `
-                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">${icon}</svg>
-                <span class="text-sm font-medium">${message}</span>
+            window.showCustomToast = function(message, type = 'success', title = null, duration = 4000) {
+                const container = document.getElementById('customToastContainer');
+                const toast = document.createElement('div');
+                toast.className = `custom-toast ${type}`;
+
+                const icons = {
+                    success: 'check_circle',
+                    error: 'error',
+                    warning: 'warning',
+                    info: 'info'
+                };
+                const titles = {
+                    success: 'Berhasil!',
+                    error: 'Gagal!',
+                    warning: 'Perhatian!',
+                    info: 'Informasi'
+                };
+
+                toast.innerHTML = `
+                <div class="custom-toast-icon">
+                    <span class="material-symbols-outlined">${icons[type]}</span>
+                </div>
+                <div class="custom-toast-content">
+                    <div class="custom-toast-title">${title || titles[type]}</div>
+                    <div class="custom-toast-message">${message}</div>
+                </div>
+                <button class="custom-toast-close">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+                </button>
+                <div class="custom-toast-progress" style="animation-duration: ${duration}ms;"></div>
             `;
 
-            container.appendChild(notification);
+                const closeBtn = toast.querySelector('.custom-toast-close');
+                closeBtn.addEventListener('click', () => removeToast(toast));
 
-            setTimeout(() => {
-                notification.classList.remove('slide-in');
-                notification.classList.add('slide-out');
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
+                container.appendChild(toast);
+
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        toast.classList.add('show');
+                    });
+                });
+
+                const timeoutId = setTimeout(() => removeToast(toast), duration);
+                toast.dataset.timeoutId = timeoutId;
+
+                function removeToast(toastElement) {
+                    if (toastElement.classList.contains('hiding')) return;
+
+                    clearTimeout(parseInt(toastElement.dataset.timeoutId));
+                    toastElement.classList.add('hiding');
+                    toastElement.classList.remove('show');
+
+                    setTimeout(() => {
+                        if (toastElement.parentNode) {
+                            toastElement.remove();
+                        }
+                    }, 500);
+                }
+
+                return toast;
+            };
+        }
+
+        // Wrapper function for backward compatibility
+        function showNotification(message, type = 'success') {
+            if (typeof window.showCustomToast === 'function') {
+                window.showCustomToast(message, type);
+            }
         }
 
         function recalculateTotals() {
@@ -1456,6 +1626,8 @@ include '../../components/users/head.php';
                 closeDeleteModal();
             }
         });
+        // Initialize toast on page load
+        document.addEventListener('DOMContentLoaded', initCustomToast);
     </script>
 </body>
 

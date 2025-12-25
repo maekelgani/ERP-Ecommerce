@@ -7,6 +7,150 @@ $customer = \App\Auth\CustomerAuthMiddleware::getCurrentCustomer();
 
 use App\Helper\ProductLandingHelper;
 use App\Helper\DiscountHelper;
+?>
+
+<style>
+    #customToastContainer {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: none;
+    }
+
+    .custom-toast {
+        position: relative;
+        width: 320px;
+        /* FIXED width */
+        max-width: 320px;
+        /* jangan pakai 400px */
+        padding: 14px 16px;
+        /* lebih compact */
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transform: translateX(120%);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        pointer-events: auto;
+    }
+
+    .custom-toast.show {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .custom-toast.hiding {
+        transform: translateX(120%);
+        opacity: 0;
+        margin-top: -70px;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), margin-top 0.3s ease 0.2s;
+    }
+
+    .custom-toast.success {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
+    }
+
+    .custom-toast.warning {
+        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+        color: white;
+    }
+
+    .custom-toast.info {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        color: white;
+    }
+
+    .custom-toast-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .custom-toast-content {
+        flex: 1;
+    }
+
+    .custom-toast-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+    }
+
+    .custom-toast-message {
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+    .custom-toast-close {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .custom-toast-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .custom-toast-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 0 0 12px 12px;
+        animation: toast-progress 4s linear forwards;
+    }
+
+    @keyframes toast-progress {
+        from {
+            width: 100%;
+        }
+
+        to {
+            width: 0%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #customToastContainer {
+            left: 10px;
+            right: 10px;
+            top: 10px;
+        }
+
+        .custom-toast {
+            min-width: unset;
+            max-width: unset;
+            width: 100%;
+        }
+    }
+</style>
+
+<?php
 
 function buildQueryString($params)
 {
@@ -36,6 +180,26 @@ if ($searchQuery) $filters['search'] = $searchQuery;
 
 $result = $productHelper->getAllProducts($filters, $sortBy, $currentPage, $perPage);
 $products = $discountHelper->applyDiscountsToProducts($result['products']);
+
+// Enrich products with sold count and rating
+$db = \App\Database\DatabaseConnection::getInstance()->getConnection();
+foreach ($products as &$product) {
+    $pId = $product['id_product'];
+
+    // Sold count
+    $sStmt = $db->prepare("SELECT SUM(od.jumlah) as total FROM order_detail od JOIN orders o ON od.id_order = o.id_order WHERE od.id_product = ? AND o.status_order = 'selesai'");
+    $sStmt->execute([$pId]);
+    $product['total_terjual'] = (int)($sStmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
+
+    // Rating
+    $rStmt = $db->prepare("SELECT AVG(rating) as avg, COUNT(*) as count FROM review WHERE id_product = ? AND status_review = 'approved'");
+    $rStmt->execute([$pId]);
+    $rData = $rStmt->fetch(PDO::FETCH_ASSOC);
+    $product['avg_rating'] = (float)($rData['avg'] ?? 0);
+    $product['total_reviews'] = (int)($rData['count'] ?? 0);
+}
+unset($product);
+
 $pagination = $result['pagination'];
 
 $categories = $productHelper->getAllCategories();
@@ -70,33 +234,13 @@ include '../../components/users/head.php';
 include '../../components/users/productCard.php';
 ?>
 
-<body class="w-full bg-gray-50 min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
+<body class="w-full bg-no-repeat min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
     <header>
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
 
-    <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoBanner = document.getElementById('promoBanner');
-            const navbarSpacer = document.getElementById('navbarSpacer');
-
-            function updateSpacerHeight() {
-                if (window.innerWidth >= 768 && promoBanner) {
-                    navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
-                } else {
-                    navbarSpacer.style.height = '112px';
-                }
-            }
-
-            updateSpacerHeight();
-            window.addEventListener('scroll', updateSpacerHeight);
-            window.addEventListener('resize', updateSpacerHeight);
-        });
-    </script>
-
-    <main class="max-w-full mb-10">
+    <!-- Main content with responsive padding: Mobile 64px, Tablet 160px, Desktop 172px (promo + navbar + category nav) -->
+    <main class="max-w-full mb-10 pt-16 md:pt-40 lg:pt-[172px]">
         <div class="w-full px-5 md:px-8 lg:px-20 py-6">
 
             <?php include '../../components/users/breadcrumb.php'; ?>
@@ -264,6 +408,7 @@ include '../../components/users/productCard.php';
                             <span class="text-sm text-gray-500">Urutkan:</span>
                             <select id="sortSelect" class="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none cursor-pointer">
                                 <option value="newest" <?= $sortBy === 'newest' ? 'selected' : '' ?>>Terbaru</option>
+                                <option value="best_seller" <?= $sortBy === 'best_seller' ? 'selected' : '' ?>>Terlaris</option>
                                 <option value="price_low" <?= $sortBy === 'price_low' ? 'selected' : '' ?>>Harga: Rendah ke Tinggi</option>
                                 <option value="price_high" <?= $sortBy === 'price_high' ? 'selected' : '' ?>>Harga: Tinggi ke Rendah</option>
                                 <option value="name_asc" <?= $sortBy === 'name_asc' ? 'selected' : '' ?>>Nama: A-Z</option>
@@ -541,9 +686,146 @@ include '../../components/users/productCard.php';
     </div>
 
     <?php include '../../components/users/footer.php'; ?>
+    <div id="customToastContainer"></div>
     <?php include '../../components/users/loginRequiredModal.php'; ?>
 
     <style>
+        #customToastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .custom-toast {
+            position: relative;
+            min-width: 320px;
+            max-width: 400px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: auto;
+        }
+
+        .custom-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .custom-toast.hiding {
+            transform: translateX(120%);
+            opacity: 0;
+            margin-top: -70px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), margin-top 0.3s ease 0.2s;
+        }
+
+        .custom-toast.success {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        .custom-toast.error {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: white;
+        }
+
+        .custom-toast.warning {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            color: white;
+        }
+
+        .custom-toast.info {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .custom-toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .custom-toast-content {
+            flex: 1;
+        }
+
+        .custom-toast-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+        }
+
+        .custom-toast-message {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .custom-toast-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .custom-toast-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .custom-toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 0 0 12px 12px;
+            animation: toast-progress 4s linear forwards;
+        }
+
+        @keyframes toast-progress {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #customToastContainer {
+                left: 10px;
+                right: 10px;
+                top: 10px;
+            }
+
+            .custom-toast {
+                min-width: unset;
+                max-width: unset;
+                width: 100%;
+            }
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -667,6 +949,59 @@ include '../../components/users/productCard.php';
                 closeMobileDrawer();
             }
         });
+
+        function showCustomToast(message, type = 'success', title = null) {
+            const container = document.getElementById('customToastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type}`;
+
+            const titleMap = {
+                'success': 'Berhasil!',
+                'error': 'Gagal!',
+                'warning': 'Perhatian!',
+                'info': 'Info'
+            };
+
+            const iconMap = {
+                'success': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>',
+                'error': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>',
+                'warning': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>',
+                'info': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+            };
+
+            const toastTitle = title || titleMap[type] || 'Info';
+            const toastIcon = iconMap[type] || iconMap['info'];
+
+            toast.innerHTML = `
+                <div class="custom-toast-icon">
+                    ${toastIcon}
+                </div>
+                <div class="custom-toast-content">
+                    <div class="custom-toast-title">${toastTitle}</div>
+                    <div class="custom-toast-message">${message}</div>
+                </div>
+                <button class="custom-toast-close" onclick="this.parentElement.remove()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+                <div class="custom-toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            const timer = setTimeout(() => {
+                hideToast(toast);
+            }, 4000);
+
+            function hideToast(el) {
+                el.classList.add('hiding');
+                el.classList.remove('show');
+                setTimeout(() => el.remove(), 400);
+            }
+        }
     </script>
     <script>
         window.APP_CONFIG = {

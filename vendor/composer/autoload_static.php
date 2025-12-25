@@ -20,6 +20,10 @@ class ComposerStaticInit5cd48b6645860e6f71f44390d4549abe
         array (
             'phpseclib3\\' => 11,
         ),
+        'S' => 
+        array (
+            'SnapBi\\' => 7,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -31,6 +35,7 @@ class ComposerStaticInit5cd48b6645860e6f71f44390d4549abe
         'M' => 
         array (
             'Monolog\\' => 8,
+            'Midtrans\\' => 9,
         ),
         'G' => 
         array (
@@ -51,6 +56,10 @@ class ComposerStaticInit5cd48b6645860e6f71f44390d4549abe
         'phpseclib3\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+        ),
+        'SnapBi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/midtrans/midtrans-php/SnapBi',
         ),
         'Psr\\Log\\' => 
         array (
@@ -76,6 +85,10 @@ class ComposerStaticInit5cd48b6645860e6f71f44390d4549abe
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Midtrans\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/midtrans/midtrans-php/Midtrans',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

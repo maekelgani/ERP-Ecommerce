@@ -269,10 +269,13 @@ include '../../components/users/head.php';
                             valueText = `Diskon Rp ${Number(voucher.nilai).toLocaleString('id-ID')}`;
                             break;
                         case 'gratis_ongkir':
-                            valueText = 'Gratis Ongkir';
+                            valueText = 'Gratis Ongkir (Legacy)';
                             break;
                         case 'cashback':
-                            valueText = `Cashback ${voucher.nilai}%`;
+                            valueText = `Cashback (Legacy)`;
+                            break;
+                        default:
+                            valueText = 'Diskon';
                             break;
                     }
 

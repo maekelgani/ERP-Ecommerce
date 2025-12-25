@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../config/config.php';
 
 use App\Auth\SessionManager;
 use App\Auth\AdminRepository;
+use App\Repository\NotificationRepository;
 
 $currentAdmin = SessionManager::getCurrentAdmin();
 
@@ -26,6 +27,10 @@ $adminRole = $currentAdmin['role_name'] ?? 'admin';
 if (!file_exists(__DIR__ . '../../' . ltrim($adminPhoto, '/'))) {
     $adminPhoto = '../../assets/img/profil/default-profil.png';
 }
+
+// Ambil data notifikasi untuk badge
+$notificationRepo = new NotificationRepository();
+$unreadCount = $notificationRepo->getUnreadCount();
 ?>
 
 <header class="sticky top-0 z-30 bg-gradient-to-r from-white to-gray-50 border-b border-gray-200 shadow-sm">
@@ -73,34 +78,25 @@ if (!file_exists(__DIR__ . '../../' . ltrim($adminPhoto, '/'))) {
             <div class="relative">
                 <button class="icon-button" id="notification-btn" title="Notifikasi">
                     <span class="material-symbols-outlined">notifications_active</span>
-                    <span class="notification-badge" id="notification-badge">3</span>
+                    <span class="notification-badge" id="notification-badge" <?= $unreadCount === 0 ? 'class="notification-badge hidden"' : '' ?>>
+                        <?= $unreadCount > 99 ? '99+' : $unreadCount; ?>
+                    </span>
                 </button>
                 <!-- Notification Dropdown -->
                 <div id="notification-dropdown" class="dropdown-menu hidden">
-                    <div class="px-4 py-3 font-semibold text-sm border-b border-gray-200">
-                        Notifikasi (3)
+                    <div class="px-4 py-3 font-semibold text-sm border-b border-gray-200 flex justify-between items-center">
+                        <span>Notifikasi <span id="notif-count">(<?= $unreadCount; ?>)</span></span>
+                        <?php if ($unreadCount > 0): ?>
+                            <button id="mark-all-as-read-btn" class="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                                Tandai Dibaca
+                            </button>
+                        <?php endif; ?>
                     </div>
-                    <div class="max-h-64 overflow-y-auto">
-                        <div class="dropdown-item">
-                            <span class="material-symbols-outlined text-orange-500">shopping_cart</span>
-                            <div>
-                                <p class="text-sm font-medium">Pesanan Baru</p>
-                                <p class="text-xs text-gray-500">5 menit yang lalu</p>
-                            </div>
-                        </div>
-                        <div class="dropdown-item">
-                            <span class="material-symbols-outlined text-red-500">warning</span>
-                            <div>
-                                <p class="text-sm font-medium">Stok Rendah</p>
-                                <p class="text-xs text-gray-500">15 menit yang lalu</p>
-                            </div>
-                        </div>
-                        <div class="dropdown-item">
-                            <span class="material-symbols-outlined text-blue-500">info</span>
-                            <div>
-                                <p class="text-sm font-medium">Update Sistem</p>
-                                <p class="text-xs text-gray-500">1 jam yang lalu</p>
-                            </div>
+                    <div class="max-h-64 overflow-y-auto" id="notifications-container">
+                        <!-- Notification items akan dimuat via JavaScript -->
+                        <div class="px-4 py-8 text-center text-gray-500">
+                            <span class="material-symbols-outlined block text-3xl mb-2">notifications_none</span>
+                            <p class="text-sm">Memuat notifikasi...</p>
                         </div>
                     </div>
                 </div>
@@ -191,6 +187,7 @@ if (!file_exists(__DIR__ . '../../' . ltrim($adminPhoto, '/'))) {
     </div>
 </div>
 
+<script src="../../assets/js/notifications.js"></script>
 <script>
     function updateTime() {
         const now = new Date();
@@ -214,17 +211,15 @@ if (!file_exists(__DIR__ . '../../' . ltrim($adminPhoto, '/'))) {
     updateTime();
 
     document.addEventListener('DOMContentLoaded', function() {
-        const notificationBtn = document.getElementById('notification-btn');
-        const notificationDropdown = document.getElementById('notification-dropdown');
         const settingsBtn = document.getElementById('settings-btn');
         const settingsDropdown = document.getElementById('settings-dropdown');
         const profileBtn = document.getElementById('profile-btn');
         const profileDropdown = document.getElementById('profile-dropdown');
 
         function closeAllDropdowns() {
-            if (notificationDropdown) notificationDropdown.classList.add('hidden');
             if (settingsDropdown) settingsDropdown.classList.add('hidden');
             if (profileDropdown) profileDropdown.classList.add('hidden');
+            // Note: Notification dropdown is handled by NotificationManager class
         }
 
         function toggleDropdown(dropdown) {
@@ -233,13 +228,6 @@ if (!file_exists(__DIR__ . '../../' . ltrim($adminPhoto, '/'))) {
             if (isHidden) {
                 dropdown.classList.remove('hidden');
             }
-        }
-
-        if (notificationBtn && notificationDropdown) {
-            notificationBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleDropdown(notificationDropdown);
-            });
         }
 
         if (settingsBtn && settingsDropdown) {
@@ -258,7 +246,8 @@ if (!file_exists(__DIR__ . '../../' . ltrim($adminPhoto, '/'))) {
 
         document.addEventListener('click', function(e) {
             const isClickInsideDropdown = e.target.closest('.dropdown-menu');
-            if (!isClickInsideDropdown) {
+            const isClickInsideNotification = e.target.closest('[id*="notification"]');
+            if (!isClickInsideDropdown && !isClickInsideNotification) {
                 closeAllDropdowns();
             }
         });

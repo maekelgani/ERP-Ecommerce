@@ -13,33 +13,12 @@ $breadcrumbs = [
 ];
 ?>
 
-<body class="w-full bg-gray-50 min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
+<body class="w-full min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
     <header>
         <?php include '../../components/users/navbarUsers.php'; ?>
     </header>
 
-    <div id="navbarSpacer" class="transition-all duration-300 h-32 md:h-44"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoBanner = document.getElementById('promoBanner');
-            const navbarSpacer = document.getElementById('navbarSpacer');
-
-            function updateSpacerHeight() {
-                if (window.innerWidth >= 768 && promoBanner) {
-                    navbarSpacer.style.height = window.scrollY > 50 ? '112px' : '156px';
-                } else {
-                    navbarSpacer.style.height = '112px';
-                }
-            }
-
-            updateSpacerHeight();
-            window.addEventListener('scroll', updateSpacerHeight);
-            window.addEventListener('resize', updateSpacerHeight);
-        });
-    </script>
-
-    <main class="max-w-full mb-10">
+    <main class="max-w-full mb-10 pt-16 md:pt-40 lg:pt-[165px]">
         <section class="relative h-[200px] md:h-[280px] bg-[#882426] overflow-hidden mb-8">
             <div class="absolute inset-0 overflow-hidden opacity-10">
                 <div class="absolute top-6 right-6 w-24 h-24 border-4 border-white rounded-full"></div>
@@ -336,7 +315,7 @@ $breadcrumbs = [
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <div>
+                                <div id="lokasiMap">
                                     <h4 class="font-medium text-gray-900 text-sm">Email</h4>
                                     <p class="text-gray-600 text-xs mt-0.5">cs@nanokomputer.com</p>
                                     <p class="text-gray-600 text-xs">support@nanokomputer.com</p>

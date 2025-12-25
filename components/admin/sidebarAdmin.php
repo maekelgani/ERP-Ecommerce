@@ -1,4 +1,28 @@
 <?php
+
+/**
+ * ============================================================================
+ * ADMIN SIDEBAR NAVIGATION
+ * ============================================================================
+ * File        : sidebarAdmin.php
+ * Description : Komponen sidebar navigasi untuk admin dashboard
+ * Version     : 1.0.0
+ * Author      : Nano Komputer Development Team
+ * 
+ * STRUKTUR MENU:
+ * - Beranda (Dashboard)
+ * - Analitik
+ * - Produk (Inventori, Kategori, Merek)
+ * - Pesanan (Pesanan Masuk, Semua Pesanan)
+ * - Promosi & Diskon (Kampanye, Diskon Produk, Voucher, Monitoring, Laporan)
+ * - Pengembalian Produk
+ * - Manajemen Pelanggan (Dashboard CRM, Data Pelanggan, Aktivitas, Feedback)
+ * - Kelola Akses (Dashboard Akses, Manajemen User, Role & Izin)
+ * - Manajemen Website
+ * - Laporan
+ * ============================================================================
+ */
+
 $current_page = basename($_SERVER['PHP_SELF']);
 
 use App\Auth\PermissionHelper;
@@ -7,47 +31,73 @@ use App\Auth\SessionManager;
 $currentAdmin = SessionManager::getCurrentAdmin();
 $isSuperAdmin = PermissionHelper::isSuperAdmin();
 
+// Definisi halaman untuk setiap grup menu
 $product_pages = ['ProductAdmin.php', 'CategoryAdmin.php', 'BrandAdmin.php', 'add-product.php', 'edit-product.php', 'product-details.php', 'add-category.php', 'edit-category.php', 'add-brand.php', 'edit-brand.php'];
 $order_pages = ['IncomingOrdersAdmin.php', 'OrderAdmin.php'];
 $promo_pages = ['CampaignAdmin.php', 'PromoDiskonAdmin.php', 'VoucherAdmin.php', 'PromoMonitoringAdmin.php', 'PromoReportAdmin.php'];
 $access_pages = ['HakAksesAdmin.php', 'UserManagementAdmin.php', 'RoleManagementAdmin.php'];
 $crm_pages = ['CrmAdmin.php', 'CrmDashboard.php', 'CustomerList.php', 'CustomerDetail.php', 'CustomerActivity.php', 'CustomerFeedback.php'];
 
+// Menentukan menu mana yang harus expand
 $should_expand_products = in_array($current_page, $product_pages);
 $should_expand_orders = in_array($current_page, $order_pages);
 $should_expand_promo = in_array($current_page, $promo_pages);
 $should_expand_access = in_array($current_page, $access_pages);
 $should_expand_crm = in_array($current_page, $crm_pages);
 
+// Menentukan menu aktif berdasarkan halaman saat ini
 $active_menu = null;
 if ($should_expand_products) {
     if (in_array($current_page, ['ProductAdmin.php', 'add-product.php', 'edit-product.php', 'product-details.php'])) {
-        $active_menu = ['parent' => 'Products', 'submenu' => 'Inventori'];
+        $active_menu = ['parent' => 'Produk', 'submenu' => 'Inventori'];
     } elseif (in_array($current_page, ['CategoryAdmin.php', 'add-category.php', 'edit-category.php'])) {
-        $active_menu = ['parent' => 'Products', 'submenu' => 'Kategori'];
+        $active_menu = ['parent' => 'Produk', 'submenu' => 'Kategori'];
     } elseif (in_array($current_page, ['BrandAdmin.php', 'add-brand.php', 'edit-brand.php'])) {
-        $active_menu = ['parent' => 'Products', 'submenu' => 'Brand'];
+        $active_menu = ['parent' => 'Produk', 'submenu' => 'Merek'];
     }
 }
 if ($should_expand_orders) {
     if ($current_page === 'IncomingOrdersAdmin.php') {
-        $active_menu = ['parent' => 'Orders', 'submenu' => 'Incoming Orders'];
+        $active_menu = ['parent' => 'Pesanan', 'submenu' => 'Pesanan Masuk'];
     } elseif ($current_page === 'OrderAdmin.php') {
-        $active_menu = ['parent' => 'Orders', 'submenu' => 'All Orders'];
+        $active_menu = ['parent' => 'Pesanan', 'submenu' => 'Semua Pesanan'];
     }
 }
 if ($should_expand_crm) {
     if (in_array($current_page, ['CrmAdmin.php', 'CrmDashboard.php'])) {
-        $active_menu = ['parent' => 'CRM', 'submenu' => 'Dashboard'];
+        $active_menu = ['parent' => 'Pelanggan', 'submenu' => 'Dashboard CRM'];
     } elseif (in_array($current_page, ['CustomerList.php', 'CustomerDetail.php'])) {
-        $active_menu = ['parent' => 'CRM', 'submenu' => 'Pelanggan'];
+        $active_menu = ['parent' => 'Pelanggan', 'submenu' => 'Data Pelanggan'];
     } elseif ($current_page === 'CustomerActivity.php') {
-        $active_menu = ['parent' => 'CRM', 'submenu' => 'Aktivitas'];
+        $active_menu = ['parent' => 'Pelanggan', 'submenu' => 'Aktivitas'];
     } elseif ($current_page === 'CustomerFeedback.php') {
-        $active_menu = ['parent' => 'CRM', 'submenu' => 'Feedback'];
+        $active_menu = ['parent' => 'Pelanggan', 'submenu' => 'Umpan Balik'];
+    }
+}
+if ($should_expand_promo) {
+    if ($current_page === 'CampaignAdmin.php') {
+        $active_menu = ['parent' => 'Promosi', 'submenu' => 'Kampanye'];
+    } elseif ($current_page === 'PromoDiskonAdmin.php') {
+        $active_menu = ['parent' => 'Promosi', 'submenu' => 'Diskon Produk'];
+    } elseif ($current_page === 'VoucherAdmin.php') {
+        $active_menu = ['parent' => 'Promosi', 'submenu' => 'Voucher'];
+    } elseif ($current_page === 'PromoMonitoringAdmin.php') {
+        $active_menu = ['parent' => 'Promosi', 'submenu' => 'Pemantauan'];
+    } elseif ($current_page === 'PromoReportAdmin.php') {
+        $active_menu = ['parent' => 'Promosi', 'submenu' => 'Laporan Promo'];
+    }
+}
+if ($should_expand_access) {
+    if ($current_page === 'HakAksesAdmin.php') {
+        $active_menu = ['parent' => 'Akses', 'submenu' => 'Dashboard Akses'];
+    } elseif ($current_page === 'UserManagementAdmin.php') {
+        $active_menu = ['parent' => 'Akses', 'submenu' => 'Manajemen Pengguna'];
+    } elseif ($current_page === 'RoleManagementAdmin.php') {
+        $active_menu = ['parent' => 'Akses', 'submenu' => 'Role & Izin'];
     }
 }
 
+// Permission checks
 $canViewDashboard = $isSuperAdmin || PermissionHelper::canViewDashboard();
 $canViewAnalytics = $isSuperAdmin || PermissionHelper::canViewAnalytics();
 $canManageProducts = $isSuperAdmin || PermissionHelper::canManageProducts();
@@ -73,6 +123,7 @@ $canAssignRolePermissions = $isSuperAdmin || PermissionHelper::canAssignRolePerm
 $canManageWebManagement = $isSuperAdmin || PermissionHelper::canManageWebManagement();
 $canViewReports = $isSuperAdmin || PermissionHelper::canViewReports();
 
+// Menentukan visibility menu group
 $showProductsMenu = $canManageProducts || $canManageCategories || $canManageBrands;
 $showOrdersMenu = $canViewOrders || $canManageOrders;
 $showPromoMenu = $canManageCampaigns || $canManageProductDiscounts || $canManageVouchers || $canViewPromoMonitoring || $canViewPromoReports;
@@ -81,6 +132,9 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
 ?>
 
 <style>
+    /* ============================================
+       SIDEBAR SCROLLBAR
+       ============================================ */
     .scrollbar-hide {
         -ms-overflow-style: none;
         scrollbar-width: none;
@@ -90,6 +144,9 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         display: none;
     }
 
+    /* ============================================
+       DROPDOWN ANIMATION
+       ============================================ */
     .sidebar-dropdown {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         max-height: 500px;
@@ -109,6 +166,9 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         transform: rotate(180deg);
     }
 
+    /* ============================================
+       MENU ITEM ACTIVE STATE
+       ============================================ */
     .menu-item.active {
         background-color: #c94449;
         color: white;
@@ -130,6 +190,9 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
 
+    /* ============================================
+       ICON SIZING
+       ============================================ */
     #sidebarDesktop .material-symbols-outlined:not(.arrow-icon),
     #mobileDrawer .material-symbols-outlined:not(.arrow-icon) {
         font-size: 24px;
@@ -148,6 +211,9 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         height: 20px;
     }
 
+    /* ============================================
+       SIDEBAR FOOTER
+       ============================================ */
     .sidebar-footer {
         padding: 0.625rem;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -300,7 +366,7 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         text-transform: uppercase;
     }
 
-    /* Idle Status Styling */
+    /* Status Tidak Aktif */
     .sidebar-footer-status.idle {
         background: rgba(255, 197, 15, 0.2);
         border-color: rgba(255, 197, 15, 0.3);
@@ -334,6 +400,9 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         letter-spacing: 0.2px;
     }
 
+    /* ============================================
+       SIDEBAR COLLAPSED STATE
+       ============================================ */
     #sidebarDesktop {
         transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -453,6 +522,9 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* ============================================
+       MOBILE DRAWER OVERLAY
+       ============================================ */
     #mobileDrawerOverlay {
         transition: opacity 0.3s ease-in-out;
         opacity: 0;
@@ -467,40 +539,110 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
             width: 100%;
         }
     }
+
+    /* ============================================
+       MENU SECTION LABELS
+       ============================================ */
+    .menu-section-label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: rgba(255, 255, 255, 0.4);
+        padding: 0.75rem 1rem 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    #sidebarDesktop.collapsed .menu-section-label {
+        display: none;
+    }
+
+    /* ============================================
+       TOOLTIP FOR COLLAPSED STATE
+       ============================================ */
+    .sidebar-tooltip {
+        position: absolute;
+        left: calc(100% + 10px);
+        top: 50%;
+        transform: translateY(-50%);
+        background: #1f2937;
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease;
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .sidebar-tooltip::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 6px solid transparent;
+        border-right-color: #1f2937;
+        border-left: none;
+    }
+
+    #sidebarDesktop.collapsed .menu-item:hover .sidebar-tooltip,
+    #sidebarDesktop.collapsed .toggle-btn:hover .sidebar-tooltip {
+        opacity: 1;
+        visibility: visible;
+    }
 </style>
 
-<!-- SIDEBAR DESKTOP -->
+<!-- ============================================
+     SIDEBAR DESKTOP
+     ============================================ -->
 <aside id="sidebarDesktop" class="hidden lg:flex left-0 top-0 h-screen sticky border-r border-[#a83236] z-40 w-[250px] bg-gradient-to-b from-[#882426] to-[#6d1a1c] text-white flex-col shadow-lg">
+    <!-- Logo Section -->
     <div class="logo-section flex items-center justify-between p-5 border-b border-[#a83236]">
         <div class="logo-container flex items-center gap-3 overflow-hidden w-full">
-            <img class="h-8 w-8 rounded-lg flex-shrink-0 bg-white" src="../../assets/img/logo-nano.png" alt="Nano Logo">
+            <img class="h-8 w-8 rounded-lg flex-shrink-0 bg-white" src="../../assets/img/logo-nano.png" alt="Logo Nano Komputer">
             <span class="logo-text font-bold text-md text-white whitespace-nowrap">NANO KOMPUTER</span>
         </div>
     </div>
 
-    <nav id="sidebarMenuDesktop" class="flex-1 overflow-y-auto p-4 space-y-2 scrollbar-hide">
+    <!-- Navigation Menu -->
+    <nav id="sidebarMenuDesktop" class="flex-1 overflow-y-auto p-4 space-y-1 scrollbar-hide">
+
+        <!-- ========== MENU UTAMA ========== -->
+        <div class="menu-section-label">Menu Utama</div>
+
         <?php if ($canViewDashboard): ?>
-            <a href="../../view/admin/DashboardAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'DashboardAdmin.php' ? 'active' : '' ?>" data-permission="view_dashboard">
+            <a href="../../view/admin/DashboardAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'DashboardAdmin.php' ? 'active' : '' ?> relative" data-permission="view_dashboard">
                 <span class="material-symbols-outlined text-lg flex-shrink-0">home</span>
                 <span class="menu-text font-medium whitespace-nowrap">Dashboard</span>
+                <span class="sidebar-tooltip">Dashboard</span>
             </a>
         <?php endif; ?>
 
         <?php if ($canViewAnalytics): ?>
-            <a href="../../view/admin/AnalitikAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'AnalitikAdmin.php' ? 'active' : '' ?>" data-permission="view_analytics">
+            <a href="../../view/admin/AnalitikAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'AnalitikAdmin.php' ? 'active' : '' ?> relative" data-permission="view_analytics">
                 <span class="material-symbols-outlined text-lg flex-shrink-0">analytics</span>
                 <span class="menu-text font-medium whitespace-nowrap">Analitik</span>
+                <span class="sidebar-tooltip">Analitik</span>
             </a>
         <?php endif; ?>
 
+        <!-- ========== MANAJEMEN PRODUK ========== -->
+        <div class="menu-section-label">Manajemen Produk</div>
+
         <?php if ($showProductsMenu): ?>
             <div class="dropdown-section" data-dropdown="products">
-                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
+                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white relative" type="button">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <span class="material-symbols-outlined text-lg flex-shrink-0">inventory_2</span>
-                        <span class="menu-text font-medium whitespace-nowrap">Products</span>
+                        <span class="menu-text font-medium whitespace-nowrap">Produk</span>
                     </div>
                     <span class="arrow-icon material-symbols-outlined transition-transform duration-300 flex-shrink-0 <?= $should_expand_products ? 'rotate-180' : '' ?>">expand_more</span>
+                    <span class="sidebar-tooltip">Produk</span>
                 </button>
                 <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_products ? '' : 'hidden' ?>">
                     <?php if ($canManageProducts): ?>
@@ -516,7 +658,7 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                         </a>
                     <?php endif; ?>
                     <?php if ($canManageBrands): ?>
-                        <a href="../../view/admin/BrandAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Brand') ? 'active' : '' ?>" data-permission="manage_brands">
+                        <a href="../../view/admin/BrandAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Merek') ? 'active' : '' ?>" data-permission="manage_brands">
                             <span class="material-symbols-outlined text-sm flex-shrink-0">handshake</span>
                             <span class="menu-text text-sm whitespace-nowrap">Brand</span>
                         </a>
@@ -525,68 +667,28 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
             </div>
         <?php endif; ?>
 
+        <!-- ========== TRANSAKSI ========== -->
+        <div class="menu-section-label">Transaksi</div>
+
         <?php if ($showOrdersMenu): ?>
             <div class="dropdown-section" data-dropdown="orders">
-                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
+                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white relative" type="button">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <span class="material-symbols-outlined text-lg flex-shrink-0">shopping_cart</span>
-                        <span class="menu-text font-medium whitespace-nowrap">Orders</span>
+                        <span class="menu-text font-medium whitespace-nowrap">Pesanan</span>
                     </div>
                     <span class="arrow-icon material-symbols-outlined transition-transform duration-300 flex-shrink-0 <?= $should_expand_orders ? 'rotate-180' : '' ?>">expand_more</span>
+                    <span class="sidebar-tooltip">Pesanan</span>
                 </button>
                 <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_orders ? '' : 'hidden' ?>">
                     <?php if ($canViewOrders || $canManageOrders): ?>
-                        <a href="../../view/admin/IncomingOrdersAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Incoming Orders') ? 'active' : '' ?>" data-permission="view_orders">
+                        <a href="../../view/admin/IncomingOrdersAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Pesanan Masuk') ? 'active' : '' ?>" data-permission="view_orders">
                             <span class="material-symbols-outlined text-sm flex-shrink-0">inbox</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Incoming Orders</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Pesanan Masuk</span>
                         </a>
-                        <a href="../../view/admin/OrderAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'All Orders') ? 'active' : '' ?>" data-permission="view_orders">
+                        <a href="../../view/admin/OrderAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Semua Pesanan') ? 'active' : '' ?>" data-permission="view_orders">
                             <span class="material-symbols-outlined text-sm flex-shrink-0">list_alt</span>
-                            <span class="menu-text text-sm whitespace-nowrap">All Orders</span>
-                        </a>
-                    <?php endif; ?>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($showPromoMenu): ?>
-            <div class="dropdown-section" data-dropdown="promo">
-                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <span class="material-symbols-outlined text-lg flex-shrink-0">local_offer</span>
-                        <span class="menu-text font-medium whitespace-nowrap">Promo & Diskon</span>
-                    </div>
-                    <span class="arrow-icon material-symbols-outlined transition-transform duration-300 flex-shrink-0 <?= $should_expand_promo ? 'rotate-180' : '' ?>">expand_more</span>
-                </button>
-                <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_promo ? '' : 'hidden' ?>">
-                    <?php if ($canManageCampaigns): ?>
-                        <a href="../../view/admin/CampaignAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'CampaignAdmin.php' ? 'active' : '' ?>" data-permission="manage_campaigns">
-                            <span class="material-symbols-outlined text-sm flex-shrink-0">campaign</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Campaign</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($canManageProductDiscounts): ?>
-                        <a href="../../view/admin/PromoDiskonAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'PromoDiskonAdmin.php' ? 'active' : '' ?>" data-permission="manage_product_discounts">
-                            <span class="material-symbols-outlined text-sm flex-shrink-0">percent</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Diskon Produk</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($canManageVouchers): ?>
-                        <a href="../../view/admin/VoucherAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'VoucherAdmin.php' ? 'active' : '' ?>" data-permission="manage_vouchers">
-                            <span class="material-symbols-outlined text-sm flex-shrink-0">confirmation_number</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Voucher</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($canViewPromoMonitoring): ?>
-                        <a href="../../view/admin/PromoMonitoringAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'PromoMonitoringAdmin.php' ? 'active' : '' ?>" data-permission="view_promo_monitoring">
-                            <span class="material-symbols-outlined text-sm flex-shrink-0">monitoring</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Monitoring</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($canViewPromoReports): ?>
-                        <a href="../../view/admin/PromoReportAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'PromoReportAdmin.php' ? 'active' : '' ?>" data-permission="view_promo_reports">
-                            <span class="material-symbols-outlined text-sm flex-shrink-0">summarize</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Laporan</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Semua Pesanan</span>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -594,32 +696,85 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         <?php endif; ?>
 
         <?php if ($canManageReturnProducts): ?>
-            <a href="../../view/admin/ReturnAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'ReturnAdmin.php' ? 'active' : '' ?>" data-permission="manage_return_products">
+            <a href="../../view/admin/ReturnAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'ReturnAdmin.php' ? 'active' : '' ?> relative" data-permission="manage_return_products">
                 <span class="material-symbols-outlined text-lg flex-shrink-0">keyboard_return</span>
-                <span class="menu-text font-medium whitespace-nowrap">Return Product</span>
+                <span class="menu-text font-medium whitespace-nowrap">Pengembalian</span>
+                <span class="sidebar-tooltip">Pengembalian</span>
             </a>
         <?php endif; ?>
 
+        <!-- ========== PEMASARAN ========== -->
+        <div class="menu-section-label">Pemasaran</div>
+
+        <?php if ($showPromoMenu): ?>
+            <div class="dropdown-section" data-dropdown="promo">
+                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white relative" type="button">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <span class="material-symbols-outlined text-lg flex-shrink-0">local_offer</span>
+                        <span class="menu-text font-medium whitespace-nowrap">Promosi & Diskon</span>
+                    </div>
+                    <span class="arrow-icon material-symbols-outlined transition-transform duration-300 flex-shrink-0 <?= $should_expand_promo ? 'rotate-180' : '' ?>">expand_more</span>
+                    <span class="sidebar-tooltip">Promosi & Diskon</span>
+                </button>
+                <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_promo ? '' : 'hidden' ?>">
+                    <?php if ($canManageCampaigns): ?>
+                        <a href="../../view/admin/CampaignAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Kampanye') ? 'active' : '' ?>" data-permission="manage_campaigns">
+                            <span class="material-symbols-outlined text-sm flex-shrink-0">campaign</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Kampanye</span>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($canManageProductDiscounts): ?>
+                        <a href="../../view/admin/PromoDiskonAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Diskon Produk') ? 'active' : '' ?>" data-permission="manage_product_discounts">
+                            <span class="material-symbols-outlined text-sm flex-shrink-0">percent</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Diskon Produk</span>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($canManageVouchers): ?>
+                        <a href="../../view/admin/VoucherAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Voucher') ? 'active' : '' ?>" data-permission="manage_vouchers">
+                            <span class="material-symbols-outlined text-sm flex-shrink-0">confirmation_number</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Voucher</span>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($canViewPromoMonitoring): ?>
+                        <a href="../../view/admin/PromoMonitoringAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Pemantauan') ? 'active' : '' ?>" data-permission="view_promo_monitoring">
+                            <span class="material-symbols-outlined text-sm flex-shrink-0">monitoring</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Pemantauan</span>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($canViewPromoReports): ?>
+                        <a href="../../view/admin/PromoReportAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Laporan Promo') ? 'active' : '' ?>" data-permission="view_promo_reports">
+                            <span class="material-symbols-outlined text-sm flex-shrink-0">summarize</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Laporan Promo</span>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- ========== MANAJEMEN PELANGGAN ========== -->
+        <div class="menu-section-label">Manajemen Pelanggan</div>
+
         <?php if ($showCrmMenu): ?>
             <div class="dropdown-section" data-dropdown="crm">
-                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
+                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white relative" type="button">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <span class="material-symbols-outlined text-lg flex-shrink-0">support_agent</span>
-                        <span class="menu-text font-medium whitespace-nowrap">CRM</span>
+                        <span class="menu-text font-medium whitespace-nowrap">Pelanggan</span>
                     </div>
                     <span class="arrow-icon material-symbols-outlined transition-transform duration-300 flex-shrink-0 <?= $should_expand_crm ? 'rotate-180' : '' ?>">expand_more</span>
+                    <span class="sidebar-tooltip">Pelanggan</span>
                 </button>
                 <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_crm ? '' : 'hidden' ?>">
                     <?php if ($canViewCrmDashboard || $canManageCrm): ?>
-                        <a href="../../view/admin/CrmDashboard.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Dashboard') ? 'active' : '' ?>" data-permission="view_crm_dashboard">
+                        <a href="../../view/admin/CrmDashboard.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Dashboard CRM') ? 'active' : '' ?>" data-permission="view_crm_dashboard">
                             <span class="material-symbols-outlined text-sm flex-shrink-0">dashboard</span>
                             <span class="menu-text text-sm whitespace-nowrap">Dashboard CRM</span>
                         </a>
                     <?php endif; ?>
                     <?php if ($canViewCustomers || $canManageCustomers): ?>
-                        <a href="../../view/admin/CustomerList.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Pelanggan') ? 'active' : '' ?>" data-permission="view_customers">
+                        <a href="../../view/admin/CustomerList.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Data Pelanggan') ? 'active' : '' ?>" data-permission="view_customers">
                             <span class="material-symbols-outlined text-sm flex-shrink-0">group</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Pelanggan</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Data Pelanggan</span>
                         </a>
                     <?php endif; ?>
                     <?php if ($canViewCustomerActivity): ?>
@@ -629,39 +784,43 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                         </a>
                     <?php endif; ?>
                     <?php if ($canViewCustomerFeedback): ?>
-                        <a href="../../view/admin/CustomerFeedback.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Feedback') ? 'active' : '' ?>" data-permission="view_customer_feedback">
+                        <a href="../../view/admin/CustomerFeedback.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Umpan Balik') ? 'active' : '' ?>" data-permission="view_customer_feedback">
                             <span class="material-symbols-outlined text-sm flex-shrink-0">rate_review</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Feedback</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Umpan Balik</span>
                         </a>
                     <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
 
+        <!-- ========== PENGATURAN SISTEM ========== -->
+        <div class="menu-section-label">Pengaturan Sistem</div>
+
         <?php if ($showAccessMenu): ?>
             <div class="dropdown-section" data-dropdown="access">
-                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
+                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white relative" type="button">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <span class="material-symbols-outlined text-lg flex-shrink-0">admin_panel_settings</span>
                         <span class="menu-text font-medium whitespace-nowrap">Kelola Akses</span>
                     </div>
                     <span class="arrow-icon material-symbols-outlined transition-transform duration-300 flex-shrink-0 <?= $should_expand_access ? 'rotate-180' : '' ?>">expand_more</span>
+                    <span class="sidebar-tooltip">Kelola Akses</span>
                 </button>
                 <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_access ? '' : 'hidden' ?>">
-                    <a href="../../view/admin/HakAksesAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'HakAksesAdmin.php' ? 'active' : '' ?>" data-permission="manage_access">
+                    <a href="../../view/admin/HakAksesAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Dashboard Akses') ? 'active' : '' ?>" data-permission="manage_access">
                         <span class="material-symbols-outlined text-sm flex-shrink-0">dashboard</span>
                         <span class="menu-text text-sm whitespace-nowrap">Dashboard Akses</span>
                     </a>
                     <?php if ($canManageUsers): ?>
-                        <a href="../../view/admin/UserManagementAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'UserManagementAdmin.php' ? 'active' : '' ?>" data-permission="manage_admin_users">
+                        <a href="../../view/admin/UserManagementAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Manajemen Pengguna') ? 'active' : '' ?>" data-permission="manage_admin_users">
                             <span class="material-symbols-outlined text-sm flex-shrink-0">people</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Manajemen User</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Manajemen Pengguna</span>
                         </a>
                     <?php endif; ?>
                     <?php if ($canManageRoles || $canAssignRolePermissions): ?>
-                        <a href="../../view/admin/RoleManagementAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'RoleManagementAdmin.php' ? 'active' : '' ?>" data-permission="manage_roles">
+                        <a href="../../view/admin/RoleManagementAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Role & Izin') ? 'active' : '' ?>" data-permission="manage_roles">
                             <span class="material-symbols-outlined text-sm flex-shrink-0">security</span>
-                            <span class="menu-text text-sm whitespace-nowrap">Role & Permission</span>
+                            <span class="menu-text text-sm whitespace-nowrap">Role & Izin</span>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -669,30 +828,33 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         <?php endif; ?>
 
         <?php if ($canManageWebManagement): ?>
-            <a href="../../view/admin/WebManagement.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'WebManagement.php' ? 'active' : '' ?>" data-permission="manage_web_management">
+            <a href="../../view/admin/WebManagement.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'WebManagement.php' ? 'active' : '' ?> relative" data-permission="manage_web_management">
                 <span class="material-symbols-outlined text-lg flex-shrink-0">construction</span>
-                <span class="menu-text font-medium whitespace-nowrap">Web Management</span>
+                <span class="menu-text font-medium whitespace-nowrap">Manajemen Website</span>
+                <span class="sidebar-tooltip">Manajemen Website</span>
             </a>
         <?php endif; ?>
 
         <?php if ($canViewReports): ?>
-            <a href="../../view/admin/ReportAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'ReportAdmin.php' ? 'active' : '' ?>" data-permission="view_reports">
+            <a href="../../view/admin/ReportAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'ReportAdmin.php' ? 'active' : '' ?> relative" data-permission="view_reports">
                 <span class="material-symbols-outlined text-lg flex-shrink-0">picture_as_pdf</span>
-                <span class="menu-text font-medium whitespace-nowrap">Report</span>
+                <span class="menu-text font-medium whitespace-nowrap">Laporan</span>
+                <span class="sidebar-tooltip">Laporan</span>
             </a>
         <?php endif; ?>
     </nav>
 
+    <!-- Sidebar Footer -->
     <div class="sidebar-footer">
         <div class="sidebar-footer-divider"></div>
         <div class="sidebar-footer-content">
             <div class="sidebar-footer-brand">
                 <div class="footer-icon-wrapper">
-                    <span class="material-symbols-outlined">storefront</span>
+                    <img class="h-8 w-8 rounded-lg flex-shrink-0 object-contain" src="../../assets/img/logo-nano.png" alt="Logo Nano Komputer">
                 </div>
                 <div class="sidebar-footer-brand-text menu-text">
                     <span class="sidebar-footer-brand-name">Nano Komputer</span>
-                    <span class="sidebar-footer-brand-tagline">Admin Dashboard</span>
+                    <span class="sidebar-footer-brand-tagline">Panel Admin</span>
                 </div>
             </div>
             <div class="sidebar-footer-middle-divider"></div>
@@ -707,30 +869,40 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                 </div>
             </div>
         </div>
-        <div class="sidebar-footer-copyright">© 2024 Nano Komputer. All rights reserved.</div>
+        <div class="sidebar-footer-copyright">© 2024 Nano Komputer. Hak cipta dilindungi.</div>
     </div>
 </aside>
 
-<!-- MOBILE DRAWER OVERLAY -->
+<!-- ============================================
+     MOBILE DRAWER OVERLAY
+     ============================================ -->
 <div id="mobileDrawerOverlay" class="fixed inset-0 bg-black/50 hidden z-30 lg:hidden"></div>
 
-<!-- MOBILE DRAWER -->
+<!-- ============================================
+     MOBILE DRAWER
+     ============================================ -->
 <aside id="mobileDrawer" class="fixed left-0 top-0 h-screen w-64 bg-gradient-to-b from-[#882426] to-[#6d1a1c] text-white transform -translate-x-full transition-transform duration-300 z-30 lg:hidden flex flex-col shadow-lg">
+    <!-- Mobile Header -->
     <div class="flex items-center justify-between p-5 py-4 border-b border-[#a83236]">
         <div class="flex items-center gap-3">
-            <img class="h-8 w-8 rounded-lg bg-white" src="../../assets/img/logo-nano.png" alt="Nano Logo">
+            <img class="h-8 w-8 rounded-lg bg-white" src="../../assets/img/logo-nano.png" alt="Logo Nano Komputer">
             <span class="font-bold text-sm">NANO KOMPUTER</span>
         </div>
-        <button id="closeDrawerBtn" type="button" class="h-8 w-8 flex items-center justify-center text-white/90 hover:bg-white/10 rounded-md transition-colors">
+        <button id="closeDrawerBtn" type="button" class="h-8 w-8 flex items-center justify-center text-white/90 hover:bg-white/10 rounded-md transition-colors" aria-label="Tutup menu">
             <span class="material-symbols-outlined text-[24px]">close</span>
         </button>
     </div>
 
-    <nav id="sidebarMenuMobile" class="flex-1 overflow-y-auto p-4 space-y-2 scrollbar-hide">
+    <!-- Mobile Navigation Menu -->
+    <nav id="sidebarMenuMobile" class="flex-1 overflow-y-auto p-4 space-y-1 scrollbar-hide">
+
+        <!-- ========== MENU UTAMA ========== -->
+        <div class="menu-section-label">Menu Utama</div>
+
         <?php if ($canViewDashboard): ?>
             <a href="../../view/admin/DashboardAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'DashboardAdmin.php' ? 'active' : '' ?>">
                 <span class="material-symbols-outlined text-lg">home</span>
-                <span class="font-medium">Dashboard</span>
+                <span class="font-medium">Beranda</span>
             </a>
         <?php endif; ?>
 
@@ -741,12 +913,15 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
             </a>
         <?php endif; ?>
 
+        <!-- ========== MANAJEMEN PRODUK ========== -->
+        <div class="menu-section-label">Manajemen Produk</div>
+
         <?php if ($showProductsMenu): ?>
             <div class="dropdown-section" data-dropdown="products">
                 <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-lg">inventory_2</span>
-                        <span class="font-medium">Products</span>
+                        <span class="font-medium">Produk</span>
                     </div>
                     <span class="arrow-icon material-symbols-outlined transition-transform duration-300 <?= $should_expand_products ? 'rotate-180' : '' ?>">expand_more</span>
                 </button>
@@ -764,77 +939,36 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                         </a>
                     <?php endif; ?>
                     <?php if ($canManageBrands): ?>
-                        <a href="../../view/admin/BrandAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Brand') ? 'active' : '' ?>">
+                        <a href="../../view/admin/BrandAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Merek') ? 'active' : '' ?>">
                             <span class="material-symbols-outlined text-sm">handshake</span>
-                            <span class="text-sm">Brand</span>
+                            <span class="text-sm">Merek</span>
                         </a>
                     <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
+
+        <!-- ========== TRANSAKSI ========== -->
+        <div class="menu-section-label">Transaksi</div>
 
         <?php if ($showOrdersMenu): ?>
             <div class="dropdown-section" data-dropdown="orders">
                 <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-lg">shopping_cart</span>
-                        <span class="font-medium">Orders</span>
+                        <span class="font-medium">Pesanan</span>
                     </div>
                     <span class="arrow-icon material-symbols-outlined transition-transform duration-300 <?= $should_expand_orders ? 'rotate-180' : '' ?>">expand_more</span>
                 </button>
                 <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_orders ? '' : 'hidden' ?>">
                     <?php if ($canViewOrders || $canManageOrders): ?>
-                        <a href="../../view/admin/IncomingOrdersAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Incoming Orders') ? 'active' : '' ?>">
+                        <a href="../../view/admin/IncomingOrdersAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Pesanan Masuk') ? 'active' : '' ?>">
                             <span class="material-symbols-outlined text-sm">inbox</span>
-                            <span class="text-sm">Incoming Orders</span>
+                            <span class="text-sm">Pesanan Masuk</span>
                         </a>
-                        <a href="../../view/admin/OrderAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'All Orders') ? 'active' : '' ?>">
+                        <a href="../../view/admin/OrderAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Semua Pesanan') ? 'active' : '' ?>">
                             <span class="material-symbols-outlined text-sm">list_alt</span>
-                            <span class="text-sm">All Orders</span>
-                        </a>
-                    <?php endif; ?>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($showPromoMenu): ?>
-            <div class="dropdown-section" data-dropdown="promo">
-                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined text-lg">local_offer</span>
-                        <span class="font-medium">Promo & Diskon</span>
-                    </div>
-                    <span class="arrow-icon material-symbols-outlined transition-transform duration-300 <?= $should_expand_promo ? 'rotate-180' : '' ?>">expand_more</span>
-                </button>
-                <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_promo ? '' : 'hidden' ?>">
-                    <?php if ($canManageCampaigns): ?>
-                        <a href="../../view/admin/CampaignAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'CampaignAdmin.php' ? 'active' : '' ?>">
-                            <span class="material-symbols-outlined text-sm">campaign</span>
-                            <span class="text-sm">Campaign</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($canManageProductDiscounts): ?>
-                        <a href="../../view/admin/PromoDiskonAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'PromoDiskonAdmin.php' ? 'active' : '' ?>">
-                            <span class="material-symbols-outlined text-sm">percent</span>
-                            <span class="text-sm">Diskon Produk</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($canManageVouchers): ?>
-                        <a href="../../view/admin/VoucherAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'VoucherAdmin.php' ? 'active' : '' ?>">
-                            <span class="material-symbols-outlined text-sm">confirmation_number</span>
-                            <span class="text-sm">Voucher</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($canViewPromoMonitoring): ?>
-                        <a href="../../view/admin/PromoMonitoringAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'PromoMonitoringAdmin.php' ? 'active' : '' ?>">
-                            <span class="material-symbols-outlined text-sm">monitoring</span>
-                            <span class="text-sm">Monitoring</span>
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($canViewPromoReports): ?>
-                        <a href="../../view/admin/PromoReportAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'PromoReportAdmin.php' ? 'active' : '' ?>">
-                            <span class="material-symbols-outlined text-sm">summarize</span>
-                            <span class="text-sm">Laporan</span>
+                            <span class="text-sm">Semua Pesanan</span>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -844,30 +978,80 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         <?php if ($canManageReturnProducts): ?>
             <a href="../../view/admin/ReturnAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'ReturnAdmin.php' ? 'active' : '' ?>">
                 <span class="material-symbols-outlined text-lg">keyboard_return</span>
-                <span class="font-medium">Return Product</span>
+                <span class="font-medium">Pengembalian</span>
             </a>
         <?php endif; ?>
+
+        <!-- ========== PEMASARAN ========== -->
+        <div class="menu-section-label">Pemasaran</div>
+
+        <?php if ($showPromoMenu): ?>
+            <div class="dropdown-section" data-dropdown="promo">
+                <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-lg">local_offer</span>
+                        <span class="font-medium">Promosi & Diskon</span>
+                    </div>
+                    <span class="arrow-icon material-symbols-outlined transition-transform duration-300 <?= $should_expand_promo ? 'rotate-180' : '' ?>">expand_more</span>
+                </button>
+                <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_promo ? '' : 'hidden' ?>">
+                    <?php if ($canManageCampaigns): ?>
+                        <a href="../../view/admin/CampaignAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Kampanye') ? 'active' : '' ?>">
+                            <span class="material-symbols-outlined text-sm">campaign</span>
+                            <span class="text-sm">Kampanye</span>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($canManageProductDiscounts): ?>
+                        <a href="../../view/admin/PromoDiskonAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Diskon Produk') ? 'active' : '' ?>">
+                            <span class="material-symbols-outlined text-sm">percent</span>
+                            <span class="text-sm">Diskon Produk</span>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($canManageVouchers): ?>
+                        <a href="../../view/admin/VoucherAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Voucher') ? 'active' : '' ?>">
+                            <span class="material-symbols-outlined text-sm">confirmation_number</span>
+                            <span class="text-sm">Voucher</span>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($canViewPromoMonitoring): ?>
+                        <a href="../../view/admin/PromoMonitoringAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Pemantauan') ? 'active' : '' ?>">
+                            <span class="material-symbols-outlined text-sm">monitoring</span>
+                            <span class="text-sm">Pemantauan</span>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($canViewPromoReports): ?>
+                        <a href="../../view/admin/PromoReportAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Laporan Promo') ? 'active' : '' ?>">
+                            <span class="material-symbols-outlined text-sm">summarize</span>
+                            <span class="text-sm">Laporan Promo</span>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- ========== MANAJEMEN PELANGGAN ========== -->
+        <div class="menu-section-label">Manajemen Pelanggan</div>
 
         <?php if ($showCrmMenu): ?>
             <div class="dropdown-section" data-dropdown="crm">
                 <button class="toggle-btn flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white" type="button">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-lg">support_agent</span>
-                        <span class="font-medium">CRM</span>
+                        <span class="font-medium">Pelanggan</span>
                     </div>
                     <span class="arrow-icon material-symbols-outlined transition-transform duration-300 <?= $should_expand_crm ? 'rotate-180' : '' ?>">expand_more</span>
                 </button>
                 <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_crm ? '' : 'hidden' ?>">
                     <?php if ($canViewCrmDashboard || $canManageCrm): ?>
-                        <a href="../../view/admin/CrmDashboard.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Dashboard') ? 'active' : '' ?>">
+                        <a href="../../view/admin/CrmDashboard.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Dashboard CRM') ? 'active' : '' ?>">
                             <span class="material-symbols-outlined text-sm">dashboard</span>
-                            <span class="text-sm">Dashboard</span>
+                            <span class="text-sm">Dashboard CRM</span>
                         </a>
                     <?php endif; ?>
                     <?php if ($canViewCustomers || $canManageCustomers): ?>
-                        <a href="../../view/admin/CustomerList.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Pelanggan') ? 'active' : '' ?>">
+                        <a href="../../view/admin/CustomerList.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Data Pelanggan') ? 'active' : '' ?>">
                             <span class="material-symbols-outlined text-sm">group</span>
-                            <span class="text-sm">Pelanggan</span>
+                            <span class="text-sm">Data Pelanggan</span>
                         </a>
                     <?php endif; ?>
                     <?php if ($canViewCustomerActivity): ?>
@@ -877,14 +1061,17 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                         </a>
                     <?php endif; ?>
                     <?php if ($canViewCustomerFeedback): ?>
-                        <a href="../../view/admin/CustomerFeedback.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Feedback') ? 'active' : '' ?>">
+                        <a href="../../view/admin/CustomerFeedback.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Umpan Balik') ? 'active' : '' ?>">
                             <span class="material-symbols-outlined text-sm">rate_review</span>
-                            <span class="text-sm">Feedback</span>
+                            <span class="text-sm">Umpan Balik</span>
                         </a>
                     <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
+
+        <!-- ========== PENGATURAN SISTEM ========== -->
+        <div class="menu-section-label">Pengaturan Sistem</div>
 
         <?php if ($showAccessMenu): ?>
             <div class="dropdown-section" data-dropdown="access">
@@ -896,20 +1083,20 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                     <span class="arrow-icon material-symbols-outlined transition-transform duration-300 <?= $should_expand_access ? 'rotate-180' : '' ?>">expand_more</span>
                 </button>
                 <div class="sidebar-dropdown ml-8 mt-1 space-y-2 <?= $should_expand_access ? '' : 'hidden' ?>">
-                    <a href="../../view/admin/HakAksesAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'HakAksesAdmin.php' ? 'active' : '' ?>">
+                    <a href="../../view/admin/HakAksesAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Dashboard Akses') ? 'active' : '' ?>">
                         <span class="material-symbols-outlined text-sm">dashboard</span>
                         <span class="text-sm">Dashboard Akses</span>
                     </a>
                     <?php if ($canManageUsers): ?>
-                        <a href="../../view/admin/UserManagementAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'UserManagementAdmin.php' ? 'active' : '' ?>">
+                        <a href="../../view/admin/UserManagementAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Manajemen Pengguna') ? 'active' : '' ?>">
                             <span class="material-symbols-outlined text-sm">people</span>
-                            <span class="text-sm">Manajemen User</span>
+                            <span class="text-sm">Manajemen Pengguna</span>
                         </a>
                     <?php endif; ?>
                     <?php if ($canManageRoles || $canAssignRolePermissions): ?>
-                        <a href="../../view/admin/RoleManagementAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= $current_page === 'RoleManagementAdmin.php' ? 'active' : '' ?>">
+                        <a href="../../view/admin/RoleManagementAdmin.php" class="menu-item submenu-item flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-200 hover:bg-[#a83236] hover:text-white transition-all <?= ($active_menu && $active_menu['submenu'] === 'Role & Izin') ? 'active' : '' ?>">
                             <span class="material-symbols-outlined text-sm">security</span>
-                            <span class="text-sm">Role & Permission</span>
+                            <span class="text-sm">Role & Izin</span>
                         </a>
                     <?php endif; ?>
                 </div>
@@ -919,18 +1106,19 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         <?php if ($canManageWebManagement): ?>
             <a href="../../view/admin/WebManagement.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'WebManagement.php' ? 'active' : '' ?>">
                 <span class="material-symbols-outlined text-lg">construction</span>
-                <span class="font-medium">Web Management</span>
+                <span class="font-medium">Manajemen Website</span>
             </a>
         <?php endif; ?>
 
         <?php if ($canViewReports): ?>
             <a href="../../view/admin/ReportAdmin.php" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-gray-100 hover:bg-[#a83236] hover:text-white <?= $current_page === 'ReportAdmin.php' ? 'active' : '' ?>">
                 <span class="material-symbols-outlined text-lg">picture_as_pdf</span>
-                <span class="font-medium">Report</span>
+                <span class="font-medium">Laporan</span>
             </a>
         <?php endif; ?>
     </nav>
 
+    <!-- Mobile Footer -->
     <div class="sidebar-footer">
         <div class="sidebar-footer-divider"></div>
         <div class="sidebar-footer-content">
@@ -940,7 +1128,7 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                 </div>
                 <div class="sidebar-footer-brand-text menu-text">
                     <span class="sidebar-footer-brand-name">Nano Komputer</span>
-                    <span class="sidebar-footer-brand-tagline">Admin Dashboard</span>
+                    <span class="sidebar-footer-brand-tagline">Panel Admin</span>
                 </div>
             </div>
             <div class="sidebar-footer-middle-divider"></div>
@@ -955,11 +1143,16 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                 </div>
             </div>
         </div>
-        <div class="sidebar-footer-copyright">© 2024 Nano Komputer. All rights reserved.</div>
+        <div class="sidebar-footer-copyright">© 2024 Nano Komputer. Hak cipta dilindungi.</div>
     </div>
 </aside>
 
 <script>
+    /**
+     * ============================================================================
+     * MOBILE DRAWER FUNCTIONALITY
+     * ============================================================================
+     */
     document.addEventListener('DOMContentLoaded', function() {
         const menuBtn = document.getElementById('menuBtn');
         const mobileDrawer = document.getElementById('mobileDrawer');
@@ -982,6 +1175,7 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
         if (mobileDrawerOverlay) mobileDrawerOverlay.addEventListener('click', closeDrawer);
 
+        // Mobile dropdown toggle
         document.querySelectorAll('#mobileDrawer .dropdown-section .toggle-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 const dropdown = this.nextElementSibling;
@@ -994,7 +1188,12 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         });
     });
 
-    // Real-time Online/Idle Status Tracker
+    /**
+     * ============================================================================
+     * REAL-TIME ONLINE/IDLE STATUS TRACKER
+     * ============================================================================
+     * Melacak aktivitas pengguna dan menampilkan status online/tidak aktif
+     */
     (function() {
         const IDLE_TIMEOUT = 1 * 60 * 1000; // 1 menit
         const STATUS_ELEMENTS = document.querySelectorAll('.sidebar-footer-status');
@@ -1004,7 +1203,7 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         let idleCheckInterval = null;
         let isIdle = false;
 
-        // Function untuk update status di UI
+        // Update status di UI
         function updateStatus(idle) {
             STATUS_ELEMENTS.forEach(el => {
                 if (idle) {
@@ -1021,30 +1220,28 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
             isIdle = idle;
         }
 
-        // Function untuk handle user activity
+        // Handle aktivitas pengguna
         function recordActivity() {
             lastActivityTime = Date.now();
 
-            // Jika sedang idle, kembalikan ke online
+            // Jika sedang tidak aktif, kembalikan ke aktif
             if (isIdle) {
                 updateStatus(false);
             }
         }
 
-        // Function untuk check idle status
+        // Cek status tidak aktif
         function checkIdleStatus() {
             const timeSinceLastActivity = Date.now() - lastActivityTime;
 
             if (timeSinceLastActivity >= IDLE_TIMEOUT && !isIdle) {
-                // Ubah ke IDLE
                 updateStatus(true);
             } else if (timeSinceLastActivity < IDLE_TIMEOUT && isIdle) {
-                // Ubah ke ONLINE
                 updateStatus(false);
             }
         }
 
-        // Event listeners untuk detect activity
+        // Event listeners untuk mendeteksi aktivitas
         const activityEvents = [
             'mousemove',
             'mousedown',
@@ -1054,7 +1251,7 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
             'click'
         ];
 
-        // Add event listeners dengan debounce untuk performance
+        // Tambah event listeners dengan debounce untuk performa
         let debounceTimer = null;
 
         function handleActivityWithDebounce() {
@@ -1063,20 +1260,20 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
             }
             debounceTimer = setTimeout(() => {
                 recordActivity();
-            }, 100); // Debounce 100ms
+            }, 100);
         }
 
         activityEvents.forEach(event => {
             document.addEventListener(event, handleActivityWithDebounce, true);
         });
 
-        // Cek idle status setiap 1 detik
+        // Cek status tidak aktif setiap 1 detik
         idleCheckInterval = setInterval(checkIdleStatus, 1000);
 
-        // Initialize status sebagai ONLINE
+        // Inisialisasi status sebagai AKTIF
         updateStatus(false);
 
-        // Cleanup saat page unload
+        // Cleanup saat halaman ditutup
         window.addEventListener('beforeunload', () => {
             if (idleCheckInterval) {
                 clearInterval(idleCheckInterval);

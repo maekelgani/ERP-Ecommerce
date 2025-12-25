@@ -81,8 +81,6 @@ try {
             }
             break;
         case 'gratis_ongkir':
-            $discount = 0;
-            break;
         case 'cashback':
             $discount = 0;
             break;

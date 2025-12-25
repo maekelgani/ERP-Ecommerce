@@ -82,36 +82,26 @@ class PromoService
 
             if ($voucherResult['valid']) {
                 $voucher = $voucherResult['voucher'];
+                $voucherDiscount = $voucherResult['discount_amount'];
 
-                if ($voucher['jenis'] === 'gratis_ongkir') {
-                    $result['shipping_discount'] = $cart['shipping_cost'] ?? 0;
-                    $result['breakdown'][] = [
-                        'type' => 'shipping_discount',
-                        'discount' => $result['shipping_discount'],
-                        'label' => 'Gratis Ongkir'
-                    ];
-                } else {
-                    $voucherDiscount = $voucherResult['discount_amount'];
-
-                    if (!$this->allowStacking && $result['total_discount'] > 0) {
-                        if ($voucherDiscount > $result['total_discount']) {
-                            $result['product_discounts'] = [];
-                            $result['breakdown'] = array_filter($result['breakdown'], fn($b) => $b['type'] !== 'product_discount');
-                            $result['total_discount'] = $voucherDiscount;
-                            $result['voucher_discount'] = $voucherDiscount;
-                        }
-                    } else {
+                if (!$this->allowStacking && $result['total_discount'] > 0) {
+                    if ($voucherDiscount > $result['total_discount']) {
+                        $result['product_discounts'] = [];
+                        $result['breakdown'] = array_filter($result['breakdown'], fn($b) => $b['type'] !== 'product_discount');
+                        $result['total_discount'] = $voucherDiscount;
                         $result['voucher_discount'] = $voucherDiscount;
-                        $result['total_discount'] += $voucherDiscount;
                     }
+                } else {
+                    $result['voucher_discount'] = $voucherDiscount;
+                    $result['total_discount'] += $voucherDiscount;
+                }
 
-                    if ($result['voucher_discount'] > 0) {
-                        $result['breakdown'][] = [
-                            'type' => 'voucher_discount',
-                            'discount' => $result['voucher_discount'],
-                            'label' => $voucher['judul'] ?? $voucher['kode']
-                        ];
-                    }
+                if ($result['voucher_discount'] > 0) {
+                    $result['breakdown'][] = [
+                        'type' => 'voucher_discount',
+                        'discount' => $result['voucher_discount'],
+                        'label' => $voucher['judul'] ?? $voucher['kode']
+                    ];
                 }
 
                 $result['applied_voucher'] = $voucher;

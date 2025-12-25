@@ -174,10 +174,8 @@ class VoucherRepository
                 $discount = $voucher['nilai'];
                 break;
             case 'gratis_ongkir':
-                $discount = 0;
-                break;
             case 'cashback':
-                $discount = min($cartTotal * ($voucher['nilai'] / 100), $voucher['maksimal_diskon'] ?? $cartTotal);
+                $discount = 0;
                 break;
         }
 
@@ -423,8 +421,8 @@ class VoucherRepository
         $jenisMap = [
             'diskon_persen' => ['label' => 'Diskon Persen', 'icon' => 'percent', 'class' => 'bg-blue-100 text-blue-700'],
             'diskon_nominal' => ['label' => 'Diskon Nominal', 'icon' => 'payments', 'class' => 'bg-green-100 text-green-700'],
-            'gratis_ongkir' => ['label' => 'Gratis Ongkir', 'icon' => 'local_shipping', 'class' => 'bg-teal-100 text-teal-700'],
-            'cashback' => ['label' => 'Cashback', 'icon' => 'account_balance_wallet', 'class' => 'bg-purple-100 text-purple-700']
+            'gratis_ongkir' => ['label' => 'Gratis Ongkir (Legacy)', 'icon' => 'local_shipping', 'class' => 'bg-gray-100 text-gray-500'],
+            'cashback' => ['label' => 'Cashback (Legacy)', 'icon' => 'account_balance_wallet', 'class' => 'bg-gray-100 text-gray-500']
         ];
         return $jenisMap[$jenis] ?? $jenisMap['diskon_persen'];
     }
@@ -439,19 +437,17 @@ class VoucherRepository
             return ['success' => false, 'message' => 'Kode voucher minimal 4 karakter'];
         }
 
-        $validJenis = ['diskon_persen', 'diskon_nominal', 'gratis_ongkir', 'cashback'];
+        $validJenis = ['diskon_persen', 'diskon_nominal'];
         if (empty($data['jenis']) || !in_array($data['jenis'], $validJenis)) {
-            return ['success' => false, 'message' => 'Jenis voucher tidak valid'];
+            return ['success' => false, 'message' => 'Jenis voucher tidak valid. Pilih Diskon Persen atau Diskon Nominal'];
         }
 
-        if ($data['jenis'] !== 'gratis_ongkir') {
-            if (!isset($data['nilai']) || !is_numeric($data['nilai']) || $data['nilai'] <= 0) {
-                return ['success' => false, 'message' => 'Nilai voucher harus berupa angka positif'];
-            }
+        if (!isset($data['nilai']) || !is_numeric($data['nilai']) || $data['nilai'] <= 0) {
+            return ['success' => false, 'message' => 'Nilai voucher harus berupa angka positif'];
+        }
 
-            if ($data['jenis'] === 'diskon_persen' && $data['nilai'] > 100) {
-                return ['success' => false, 'message' => 'Diskon persen maksimal 100%'];
-            }
+        if ($data['jenis'] === 'diskon_persen' && $data['nilai'] > 100) {
+            return ['success' => false, 'message' => 'Diskon persen maksimal 100%'];
         }
 
         if (!empty($data['mulai_pada']) && !empty($data['selesai_pada'])) {

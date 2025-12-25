@@ -50,7 +50,7 @@ include '../../components/admin/head.php';
             <div class="mb-6">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Manajemen Brand</h1>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Manajemen Brand Produk</h1>
                         <p class="text-gray-500 text-sm md:text-base mt-1">Kelola semua brand produk yang tersedia</p>
                     </div>
                 </div>
@@ -113,14 +113,16 @@ include '../../components/admin/head.php';
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="p-5 border-b border-gray-100">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div>
+                <div class="p-4 md:p-6 border-b border-gray-100">
+                    <div class="flex flex-col gap-4">
+                        <div class="min-w-0">
                             <h2 class="text-lg font-bold text-gray-800">Daftar Brand</h2>
-                            <p class="text-gray-500 text-sm">Menampilkan <?= count($brands) ?> brand</p>
+                            <p class="text-gray-500 text-sm mt-1">Menampilkan <?= count($brands) ?> brand</p>
                         </div>
-                        <div class="flex gap-2 items-center flex-wrap">
-                            <div class="flex items-center gap-1 bg-gray-100 px-3 py-2 rounded-lg border border-gray-200">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <!-- LEFT: Entries per page -->
+                            <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                                <span class="material-symbols-outlined text-gray-400 text-sm">view_list</span>
                                 <select id="per-page-select" onchange="changePerPage(this.value)" class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
                                     <option value="10" <?= $perPage === 10 ? 'selected' : '' ?>>10</option>
                                     <option value="25" <?= $perPage === 25 ? 'selected' : '' ?>>25</option>
@@ -129,28 +131,33 @@ include '../../components/admin/head.php';
                                 </select>
                                 <span class="text-sm text-gray-600">entries per page</span>
                             </div>
-                            <form method="GET" class="flex gap-2">
-                                <div class="relative">
-                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                                    <input type="text" name="search" value="<?= htmlspecialchars($filters['search']) ?>"
-                                        placeholder="Cari brand..."
-                                        class="pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none w-64">
-                                </div>
-                                <button type="submit" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap" style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
-                                    Cari
-                                </button>
-                                <?php if (!empty($filters['search'])): ?>
-                                    <a href="BrandAdmin.php" class="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-                                        Reset
-                                    </a>
-                                <?php endif; ?>
-                            </form>
+                            <div class="flex flex-wrap items-center gap-3 justify-end">
 
-                            <a href="add-brand.php" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap"
-                                style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
-                                <span class="material-symbols-outlined text-base">add_circle</span>
-                                <span>Tambah Brand</span>
-                            </a>
+                                <form method="GET" class="flex gap-2">
+                                    <div class="relative">
+                                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                                        <input type="text" name="search" value="<?= htmlspecialchars($filters['search']) ?>"
+                                            placeholder="Cari brand..."
+                                            class="pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none w-64">
+                                    </div>
+                                    <button type="submit" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap" style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                                        <span class="material-symbols-outlined text-base">search</span>
+                                        Cari
+                                    </button>
+                                    <?php if (!empty($filters['search'])): ?>
+                                        <a href="BrandAdmin.php" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors whitespace-nowrap">
+                                            <span class="material-symbols-outlined text-base">close</span>
+                                            Reset
+                                        </a>
+                                    <?php endif; ?>
+                                </form>
+
+                                <a href="add-brand.php" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap"
+                                    style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                                    <span class="material-symbols-outlined text-base">add_circle</span>
+                                    <span>Tambah Brand</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

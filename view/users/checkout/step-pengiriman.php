@@ -75,98 +75,62 @@
 
         <div id="deliveryOptions">
             <h3 class="text-base font-bold text-gray-900 mb-4">Pilih Jasa Pengiriman</h3>
+
+            <div id="courierLoading" class="hidden">
+                <div class="flex items-center justify-center p-8 bg-gray-50 rounded-xl">
+                    <div class="flex flex-col items-center gap-3">
+                        <svg class="w-10 h-10 text-[#882426] animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                        </svg>
+                        <p class="text-gray-600 font-medium">Mengambil ongkos kirim...</p>
+                        <p class="text-sm text-gray-400">Mohon tunggu sebentar</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="courierError" class="hidden">
+                <div class="p-6 bg-red-50 rounded-xl border border-red-100">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-medium text-red-800">Gagal memuat ongkos kirim</p>
+                            <p class="text-sm text-red-600 mt-1" id="courierErrorMessage">Terjadi kesalahan saat mengambil data ongkir.</p>
+                            <button type="button" id="btnRetryShipping" class="mt-3 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
+                                Coba Lagi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="courierWeightInfo" class="hidden mb-4">
+                <div class="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                        </svg>
+                        <p class="text-sm text-blue-700 font-medium" id="courierWeightText">Total berat: - kg</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="courierFallbackNotice" class="hidden mb-4">
+                <div class="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span class="text-sm text-amber-700">Menggunakan estimasi ongkir standar. Ongkir aktual akan dikonfirmasi saat pemrosesan pesanan.</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="space-y-3" id="courierList">
-                <label class="courier-card block relative cursor-pointer">
-                    <input type="radio" name="courier" value="jne-reg" class="sr-only" data-cost="25000" data-days="2-3">
-                    <div class="border-2 rounded-xl p-4 transition-all duration-200 border-gray-200 hover:border-[#882426]/50">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/JNE_logo.svg" alt="JNE" class="h-8 w-auto object-contain">
-                                <div>
-                                    <p class="font-bold text-gray-900">JNE REG</p>
-                                    <p class="text-sm text-gray-500">Estimasi 2-3 hari kerja</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-[#882426]">Rp 25.000</p>
-                            </div>
-                        </div>
-                    </div>
-                </label>
-
-                <label class="courier-card block relative cursor-pointer">
-                    <input type="radio" name="courier" value="jne-yes" class="sr-only" data-cost="40000" data-days="1">
-                    <div class="border-2 rounded-xl p-4 transition-all duration-200 border-gray-200 hover:border-[#882426]/50">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/JNE_logo.svg" alt="JNE" class="h-8 w-auto object-contain">
-                                <div>
-                                    <p class="font-bold text-gray-900">JNE YES</p>
-                                    <p class="text-sm text-gray-500">Estimasi 1 hari kerja</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-[#882426]">Rp 40.000</p>
-                            </div>
-                        </div>
-                    </div>
-                </label>
-
-                <label class="courier-card block relative cursor-pointer">
-                    <input type="radio" name="courier" value="jnt-reg" class="sr-only" data-cost="22000" data-days="2-4">
-                    <div class="border-2 rounded-xl p-4 transition-all duration-200 border-gray-200 hover:border-[#882426]/50">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/J%26T_Express_logo.svg" alt="J&T" class="h-8 w-auto object-contain">
-                                <div>
-                                    <p class="font-bold text-gray-900">J&T Express</p>
-                                    <p class="text-sm text-gray-500">Estimasi 2-4 hari kerja</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-[#882426]">Rp 22.000</p>
-                            </div>
-                        </div>
-                    </div>
-                </label>
-
-                <label class="courier-card block relative cursor-pointer">
-                    <input type="radio" name="courier" value="sicepat-reg" class="sr-only" data-cost="20000" data-days="2-3">
-                    <div class="border-2 rounded-xl p-4 transition-all duration-200 border-gray-200 hover:border-[#882426]/50">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/SiCepat_Ekspres_logo.svg" alt="SiCepat" class="h-8 w-auto object-contain">
-                                <div>
-                                    <p class="font-bold text-gray-900">SiCepat REG</p>
-                                    <p class="text-sm text-gray-500">Estimasi 2-3 hari kerja</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-[#882426]">Rp 20.000</p>
-                            </div>
-                        </div>
-                    </div>
-                </label>
-
-                <label class="courier-card block relative cursor-pointer">
-                    <input type="radio" name="courier" value="gosend-instant" class="sr-only" data-cost="35000" data-days="Hari Ini">
-                    <div class="border-2 rounded-xl p-4 transition-all duration-200 border-gray-200 hover:border-[#882426]/50">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-8 bg-green-500 rounded flex items-center justify-center">
-                                    <span class="text-white text-xs font-bold">GoSend</span>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-gray-900">GoSend Instant</p>
-                                    <p class="text-sm text-gray-500">Sampai hari ini (Jabodetabek)</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-[#882426]">Rp 35.000</p>
-                            </div>
-                        </div>
-                    </div>
-                </label>
             </div>
         </div>
 
@@ -314,7 +278,6 @@
         color: white !important;
     }
 
-    /* Store card tidak mengubah warna teks untuk menjaga warna asli nama toko dan detail */
     .store-card.selected .bg-[#882426]\/10 {
         background: rgba(136, 36, 38, 0.1) !important;
     }

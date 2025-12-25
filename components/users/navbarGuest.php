@@ -105,7 +105,7 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
                 <form class="hidden lg:flex flex-1 mx-6" action="../../view/users/productCollection.php" method="GET">
                     <div class="relative w-full group">
                         <div class="absolute inset-0 bg-[#882426]/5 rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
-                        <input type="text" name="search" placeholder="Cari produk, brand, atau kategori..."
+                        <input type="text" name="search" placeholder="Cari produk..."
                             class="relative w-full h-10 pl-10 pr-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-[#882426]/50 focus:ring-2 focus:ring-[#882426]/10 transition-all" />
                         <button type="submit" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#882426] transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,11 +156,11 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
 
                         <div class="hidden md:block relative" id="accountDropdown">
                             <button type="button" id="accountBtn" class="flex items-center gap-2 px-2 sm:px-3 py-2 text-gray-700 hover:bg-[#882426]/5 rounded-xl transition-all duration-200 group">
-                                <div class="relative">
+                                <div class="relative" id="navbarProfileContainer" data-initial="<?= $userInitial ?>">
                                     <?php if ($profileImage): ?>
-                                        <img src="../../uploads/customers/<?= htmlspecialchars($profileImage) ?>" alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-sm">
+                                        <img id="navbarProfilePhoto" src="../../uploads/customers/<?= htmlspecialchars($profileImage) ?>" alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-sm" data-profile-photo="navbar">
                                     <?php else: ?>
-                                        <div class="w-8 h-8 rounded-full bg-[#882426] flex items-center justify-center text-white text-sm font-semibold shadow-sm">
+                                        <div id="navbarProfileInitial" class="w-8 h-8 rounded-full bg-[#882426] flex items-center justify-center text-white text-sm font-semibold shadow-sm" data-profile-initial="navbar">
                                             <?= $userInitial ?>
                                         </div>
                                     <?php endif; ?>
@@ -177,11 +177,11 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
 
                             <div id="accountMenu" class="absolute right-0 mt-2 w-64 bg-[#882426] rounded-2xl shadow-2xl overflow-hidden transform scale-95 opacity-0 invisible transition-all duration-200 origin-top-right">
                                 <div class="px-5 py-4 bg-[#882426]">
-                                    <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-3" id="dropdownProfileContainer" data-initial="<?= $userInitial ?>">
                                         <?php if ($profileImage): ?>
-                                            <img src="../../uploads/customers/<?= htmlspecialchars($profileImage) ?>" alt="Profile" class="w-12 h-12 rounded-full object-cover ring-2 ring-white/30">
+                                            <img id="dropdownProfilePhoto" src="../../uploads/customers/<?= htmlspecialchars($profileImage) ?>" alt="Profile" class="w-12 h-12 rounded-full object-cover ring-2 ring-white/30" data-profile-photo="dropdown">
                                         <?php else: ?>
-                                            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white text-lg font-bold ring-2 ring-white/30">
+                                            <div id="dropdownProfileInitial" class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white text-lg font-bold ring-2 ring-white/30" data-profile-initial="dropdown">
                                                 <?= $userInitial ?>
                                             </div>
                                         <?php endif; ?>
@@ -245,7 +245,7 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
                             <a href="../../view/login.php" class="px-4 py-2 text-sm font-medium text-[#882426] hover:text-[#6a1c1e] hover:bg-[#882426]/5 rounded-lg transition-all duration-200">
                                 Masuk
                             </a>
-                            <a href="../../view/login.php?register=1" class="px-4 py-2.5 text-sm font-medium text-white bg-[#882426] hover:bg-[#6a1c1e] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                            <a href="../../view/login.php" class="px-4 py-2.5 text-sm font-medium text-white bg-[#882426] hover:bg-[#6a1c1e] rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
                                 Daftar
                             </a>
                         </div>
@@ -343,12 +343,12 @@ if ($isLoggedIn && isset($currentCustomer['id_customer'])) {
         <div class="absolute top-0 right-0 w-full max-w-sm h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-out overflow-y-auto" id="mobileMenuPanel">
             <div class="sticky top-0 z-10 bg-[#882426] px-5 py-6">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3" id="mobileMenuProfileContainer" data-initial="<?= $userInitial ?>">
                         <?php if ($isLoggedIn): ?>
                             <?php if ($profileImage): ?>
-                                <img src="../../uploads/customers/<?= htmlspecialchars($profileImage) ?>" alt="Profile" class="w-12 h-12 rounded-full object-cover ring-2 ring-white/30">
+                                <img id="mobileMenuProfilePhoto" src="../../uploads/customers/<?= htmlspecialchars($profileImage) ?>" alt="Profile" class="w-12 h-12 rounded-full object-cover ring-2 ring-white/30" data-profile-photo="mobile">
                             <?php else: ?>
-                                <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white text-lg font-bold ring-2 ring-white/30">
+                                <div id="mobileMenuProfileInitial" class="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white text-lg font-bold ring-2 ring-white/30" data-profile-initial="mobile">
                                     <?= $userInitial ?>
                                 </div>
                             <?php endif; ?>

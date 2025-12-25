@@ -3,133 +3,290 @@ require_once __DIR__ . '/../../config/config.php';
 
 use App\Auth\AuthMiddleware;
 
-// Check admin authentication and session expiration
 AuthMiddleware::requireAdminLoginFromView();
 
-// Definisikan title untuk halaman ini
 $pageTitle = "Report";
-// Include file head.php dari components/admin
 include '../../components/admin/head.php';
 ?>
 
 <body class="bg-gray-50 h-screen flex">
-    <!-- Sidebar Component -->
     <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
-    <!-- Main Content Area -->
     <div class="flex-1 flex flex-col overflow-hidden min-w-0">
-        <!-- Navbar -->
         <header class="h-[60px] sticky top-0 z-10">
             <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
-        <!-- Main Content -->
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
-            <div class="mb-4">
-                <h1 class="text-3xl font-bold"> Reports </h1>
-                <p class="text-gray-400">Buat dan Unduh laporan hari ini.</p>
+            <div class="mb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Reports</h1>
+                <p class="text-gray-500 mt-1">Buat dan unduh laporan bisnis Anda</p>
             </div>
 
-            <!-- Card pilih waktu dan format file -->
-            <div class="rounded-lg border border-gray-200 bg-white shadow-md p-4 mb-4 justify-center">
-                <div id="container-header" class="mb-4">
-                    <h2 class="text-2xl font-semibold">Generate Report</h2>
-                    <p class="text-gray-400">Select time period and download your reports</p>
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
+                <div class="mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800">Generate Report</h2>
+                    <p class="text-gray-500 text-sm">Pilih periode waktu dan format file untuk laporan Anda</p>
                 </div>
-                <div class="flex gap-4">
-                    <div class="w-[50%]">
-                        <select class="border bg-gray-100 w-full border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                            <option value="">Hari Ini</option>
-                            <option value="">Minggu ini</option>
-                            <option value="">Bulan ini</option>
-                            <option value="">Bulan Lalu</option>
-                            <option value="">6 Bulan terakhir</option>
-                            <option value="">Tahun ini</option>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Periode Waktu</label>
+                        <select id="periodSelect" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#882426] focus:border-[#882426] focus:outline-none">
+                            <option value="today">Hari Ini</option>
+                            <option value="week">Minggu Ini</option>
+                            <option value="month" selected>Bulan Ini</option>
+                            <option value="last_month">Bulan Lalu</option>
+                            <option value="6months">6 Bulan Terakhir</option>
+                            <option value="year">Tahun Ini</option>
                         </select>
                     </div>
-                    <div class="w-[50%]">
-                        <select class="border bg-gray-100 w-full border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                            <option value="">PDF</option>
-                            <option value="">Excel</option>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Format File</label>
+                        <select id="formatSelect" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#882426] focus:border-[#882426] focus:outline-none">
+                            <option value="pdf">PDF (Cetak)</option>
+                            <option value="excel">Excel / CSV</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <!-- DOWNLOAD LAPORAN -->
-            <!-- Laporan Penjualan -->
-            <div class="flex gap-4 mb-4">
-                <div class="rounded-lg border border-gray-200 w-full bg-white shadow-md p-4 transform ">
-                    <div class="flex gap-2 items-center mb-4 ">
-                        <div class="p-2 rounded-lg bg-blue-200 ">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#2854C5">
-                                <path d="M320-414v-306h120v306l-60-56-60 56Zm200 60v-526h120v406L520-354ZM120-216v-344h120v224L120-216Zm0 98 258-258 142 122 224-224h-64v-80h200v200h-80v-64L524-146 382-268 232-118H120Z" />
-                            </svg> <!--Buat iconnya-->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-blue-600">trending_up</span>
                         </div>
                         <div>
-                            <h2 class="text-lg font-semibold">Laporan Penjualan</h2>
-                            <p class="text-gray-400 text-sm">Detail mengenai data penjualan termasuk pendapatan, pembelian dan kategori yang sedang tren </p>
+                            <h3 class="text-lg font-semibold text-gray-800">Laporan Penjualan</h3>
+                            <p class="text-gray-500 text-sm">Detail mengenai data penjualan termasuk pendapatan, pembelian dan kategori yang sedang tren</p>
                         </div>
                     </div>
-                    <button class="text-base hover:bg-gray-600 cursor-pointer bg-gray-800 text-white p-2 w-full rounded-lg"> Download </button>
+                    <div id="salesSummary" class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-xs text-gray-500">Total Order</p>
+                            <p id="salesOrders" class="text-lg font-bold text-gray-800">-</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-xs text-gray-500">Pendapatan</p>
+                            <p id="salesRevenue" class="text-lg font-bold text-[#882426]">-</p>
+                        </div>
+                    </div>
+                    <button onclick="downloadReport('sales')" class="w-full bg-[#882426] hover:bg-[#6d1d1f] text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-lg">download</span>
+                        Download
+                    </button>
                 </div>
 
-                <!-- Laporan Pembelian -->
-                <div class="rounded-lg border border-gray-200 w-full bg-white shadow-md p-4">
-                    <div class="flex gap-2 items-center mb-4">
-                        <div class="p-2 rounded-lg bg-purple-100  ">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#8C1AF6">
-                                <path d="M221-120q-27 0-48-16.5T144-179L42-549q-5-19 6.5-35T80-600h190l176-262q5-8 14-13t19-5q10 0 19 5t14 13l176 262h192q20 0 31.5 16t6.5 35L816-179q-8 26-29 42.5T739-120H221Zm-1-80h520l88-320H132l88 320Zm260-80q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM367-600h225L479-768 367-600Zm113 240Z" />
-                            </svg> <!--Buat iconnya-->
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-purple-600">shopping_bag</span>
                         </div>
                         <div>
-                            <h2 class="text-lg font-semibold">Laporan Pembelian</h2>
-                            <p class="text-gray-400 text-sm">Detail lengkap penjualan dengan status dan detail lain</p>
+                            <h3 class="text-lg font-semibold text-gray-800">Laporan Pembelian</h3>
+                            <p class="text-gray-500 text-sm">Detail lengkap penjualan dengan status dan detail pengiriman</p>
                         </div>
                     </div>
-                    <button class=" text-base hover:bg-gray-600 cursor-pointer bg-gray-800 text-white p-2 w-full rounded-lg"> Download </button>
+                    <div id="ordersSummary" class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-xs text-gray-500">Total Pesanan</p>
+                            <p id="ordersCount" class="text-lg font-bold text-gray-800">-</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-xs text-gray-500">Selesai</p>
+                            <p id="ordersComplete" class="text-lg font-bold text-emerald-600">-</p>
+                        </div>
+                    </div>
+                    <button onclick="downloadReport('orders')" class="w-full bg-[#882426] hover:bg-[#6d1d1f] text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-lg">download</span>
+                        Download
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-amber-600">group</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Laporan Pelanggan</h3>
+                            <p class="text-gray-500 text-sm">Detail mengenai data customer termasuk pendaftaran dan riwayat pembelian</p>
+                        </div>
+                    </div>
+                    <div id="customersSummary" class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-xs text-gray-500">Total Pelanggan</p>
+                            <p id="customersCount" class="text-lg font-bold text-gray-800">-</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-xs text-gray-500">Pelanggan Aktif</p>
+                            <p id="customersActive" class="text-lg font-bold text-emerald-600">-</p>
+                        </div>
+                    </div>
+                    <button onclick="downloadReport('customers')" class="w-full bg-[#882426] hover:bg-[#6d1d1f] text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-lg">download</span>
+                        Download
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                            <span class="material-symbols-outlined text-emerald-600">inventory_2</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Laporan Persediaan</h3>
+                            <p class="text-gray-500 text-sm">Detail stok produk, status ketersediaan dan pergerakan stok</p>
+                        </div>
+                    </div>
+                    <div id="inventorySummary" class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-xs text-gray-500">Total Produk</p>
+                            <p id="inventoryProducts" class="text-lg font-bold text-gray-800">-</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-xs text-gray-500">Stok Menipis</p>
+                            <p id="inventoryLow" class="text-lg font-bold text-amber-600">-</p>
+                        </div>
+                    </div>
+                    <button onclick="downloadReport('inventory')" class="w-full bg-[#882426] hover:bg-[#6d1d1f] text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-lg">download</span>
+                        Download
+                    </button>
                 </div>
             </div>
 
-            <!-- Laporan Pelanggan -->
-            <div class="flex gap-4">
-                <div class="rounded-lg border border-gray-200 w-full bg-white shadow-md p-4">
-                    <div class="flex gap-2 items-center mb-4">
-                        <div class="p-2 rounded-lg bg-amber-50  ">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39">
-                                <path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z" />
-                            </svg> <!--Buat iconnya-->
-                        </div>
-                        <div>
-                            <h2 class="text-lg font-semibold">Laporan Pelanggan</h2>
-                            <p class="text-gray-400 text-sm">Detail mengenai data customer termasuk pendaftaran dan riwayat pembelian</p>
-                        </div>
-                    </div>
-                    <button class="text-base hover:bg-gray-600 cursor-pointer bg-gray-800 text-white p-2 w-full rounded-lg"> Download </button>
+            <div class="mt-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="font-semibold text-gray-800">Produk Terlaris</h2>
+                    <span class="text-sm text-gray-500">Berdasarkan periode terpilih</span>
                 </div>
-
-                <!-- Laporan Persediaan -->
-                <div class="rounded-lg border border-gray-200 w-full bg-white shadow-md p-4">
-                    <div class="flex gap-2 items-center mb-4">
-                        <div class="p-2 rounded-lg bg-green-100  ">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#48752C">
-                                <path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-80 92L160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11Zm200-528 77-44-237-137-78 45 238 136Zm-160 93 78-45-237-137-78 45 237 137Z" />
-                            </svg> <!--Buat iconnya-->
-                        </div>
-                        <div>
-                            <h2 class="text-lg font-semibold">Laporan Persediaan</h2>
-                            <p class="text-gray-400 text-sm">Detail Stok produk, status ketersediaan dan pergerakan stok</p>
-                        </div>
-                    </div>
-                    <button class="text-base hover:bg-gray-600 cursor-pointer bg-gray-800 text-white p-2 w-full rounded-lg"> Download </button>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">#</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Produk</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Kategori</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Harga</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Terjual</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Pendapatan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topProductsTable" class="divide-y divide-gray-100">
+                            <tr>
+                                <td colspan="6" class="px-4 py-8 text-center text-gray-400">Memuat data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
         </main>
     </div>
 
-    <!-- CHART JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadReportData();
+
+            document.getElementById('periodSelect').addEventListener('change', loadReportData);
+        });
+
+        async function loadReportData() {
+            const period = document.getElementById('periodSelect').value;
+
+            try {
+                const [salesRes, ordersRes, customersRes, inventoryRes, topProductsRes] = await Promise.all([
+                    fetch(`../../app/controllers/reportController.php?action=sales&period=${period}`),
+                    fetch(`../../app/controllers/reportController.php?action=orders&period=${period}`),
+                    fetch(`../../app/controllers/reportController.php?action=customers&period=${period}`),
+                    fetch(`../../app/controllers/reportController.php?action=inventory`),
+                    fetch(`../../app/controllers/reportController.php?action=top_products&period=${period}&limit=10`)
+                ]);
+
+                const [sales, orders, customers, inventory, topProducts] = await Promise.all([
+                    salesRes.json(),
+                    ordersRes.json(),
+                    customersRes.json(),
+                    inventoryRes.json(),
+                    topProductsRes.json()
+                ]);
+
+                if (sales.success) {
+                    document.getElementById('salesOrders').textContent = sales.data.summary.total_orders;
+                    document.getElementById('salesRevenue').textContent = formatRupiah(sales.data.summary.total_revenue);
+                }
+
+                if (orders.success) {
+                    document.getElementById('ordersCount').textContent = orders.data.orders.length;
+                    const complete = orders.data.status_breakdown.find(s => s.status_order === 'selesai');
+                    document.getElementById('ordersComplete').textContent = complete ? complete.count : 0;
+                }
+
+                if (customers.success) {
+                    document.getElementById('customersCount').textContent = customers.data.summary.total_customers;
+                    document.getElementById('customersActive').textContent = customers.data.summary.active_users;
+                }
+
+                if (inventory.success) {
+                    document.getElementById('inventoryProducts').textContent = inventory.data.summary.total_products;
+                    document.getElementById('inventoryLow').textContent = inventory.data.summary.low_stock;
+                }
+
+                if (topProducts.success) {
+                    renderTopProducts(topProducts.data);
+                }
+
+            } catch (error) {
+                console.error('Error loading report data:', error);
+            }
+        }
+
+        function renderTopProducts(products) {
+            const tbody = document.getElementById('topProductsTable');
+
+            if (!products || products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Belum ada data penjualan</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = products.map((p, i) => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3">
+                        <span class="w-6 h-6 rounded-full bg-[#882426] text-white text-xs font-bold flex items-center justify-center">${i + 1}</span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <p class="font-medium text-gray-800 truncate max-w-xs">${p.nama_product}</p>
+                    </td>
+                    <td class="px-4 py-3 text-gray-600">${p.nama_kategori || '-'}</td>
+                    <td class="px-4 py-3 text-right text-gray-600">${formatRupiah(p.harga)}</td>
+                    <td class="px-4 py-3 text-right">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            ${p.qty_sold} unit
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-right font-semibold text-[#882426]">${formatRupiah(p.revenue)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function downloadReport(type) {
+            const period = document.getElementById('periodSelect').value;
+            const format = document.getElementById('formatSelect').value;
+
+            const action = format === 'pdf' ? 'export_pdf' : 'export_excel';
+            const url = `../../app/controllers/reportController.php?action=${action}&type=${type}&period=${period}`;
+
+            if (format === 'pdf') {
+                window.open(url, '_blank');
+            } else {
+                window.location.href = url;
+            }
+        }
+
+        function formatRupiah(value) {
+            return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+        }
+    </script>
 </body>
 
 </html>

@@ -38,12 +38,16 @@ class ProductLandingHelper
     public function getBestSellers(int $limit = 4): array
     {
         $sql = "
-            SELECT p.*, k.nama_kategori, b.nama_brand, b.logo_brand
+            SELECT p.*, k.nama_kategori, b.nama_brand, b.logo_brand,
+                   COALESCE(SUM(CASE WHEN o.status_order = 'selesai' THEN od.jumlah ELSE 0 END), 0) as total_sold
             FROM products p 
             LEFT JOIN kategori k ON p.id_kategori = k.id_kategori 
             LEFT JOIN brand b ON p.id_brand = b.id_brand 
+            LEFT JOIN order_detail od ON p.id_product = od.id_product
+            LEFT JOIN orders o ON od.id_order = o.id_order
             WHERE p.status_produk = 'tersedia' AND p.stok > 0
-            ORDER BY p.harga DESC, p.tanggal_ditambahkan DESC
+            GROUP BY p.id_product, k.nama_kategori, b.nama_brand, b.logo_brand
+            ORDER BY total_sold DESC, p.tanggal_ditambahkan DESC
             LIMIT :limit
         ";
 
@@ -154,6 +158,47 @@ class ProductLandingHelper
         $sql = "SELECT COUNT(*) as total FROM products WHERE status_produk = 'tersedia' AND stok > 0";
         $stmt = $this->db->query($sql);
         return (int) $stmt->fetch()['total'];
+    }
+
+    public function getProductsSoldAndRatings(array $productIds): array
+    {
+        if (empty($productIds)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($productIds), '?'));
+
+        // Cek apakah tabel review atau reviews
+        $reviewTable = 'review'; // Default dari landingPage.php error trace sebelumnya
+
+        $sql = "
+            SELECT 
+                p.id_product,
+                COALESCE(SUM(CASE WHEN o.status_order = 'selesai' THEN od.jumlah ELSE 0 END), 0) as sold_count,
+                COALESCE(AVG(r.rating), 0) as avg_rating,
+                COUNT(DISTINCT r.id_review) as review_count
+            FROM products p
+            LEFT JOIN order_detail od ON p.id_product = od.id_product
+            LEFT JOIN orders o ON od.id_order = o.id_order
+            LEFT JOIN $reviewTable r ON p.id_product = r.id_product AND r.status_review = 'approved'
+            WHERE p.id_product IN ($placeholders)
+            GROUP BY p.id_product
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array_values($productIds));
+        $results = $stmt->fetchAll();
+
+        $data = [];
+        foreach ($results as $row) {
+            $data[$row['id_product']] = [
+                'sold_count' => (int)$row['sold_count'],
+                'avg_rating' => (float)$row['avg_rating'],
+                'review_count' => (int)$row['review_count']
+            ];
+        }
+
+        return $data;
     }
 
     public function formatPrice(float $price): string
@@ -383,20 +428,5 @@ class ProductLandingHelper
         $products = $stmt->fetchAll();
 
         return $this->discountHelper->applyDiscountsToProducts($products);
-    }
-
-    public function calculateDiscount(float $originalPrice, float $discountPercent = 0): array
-    {
-        $discountAmount = $originalPrice * ($discountPercent / 100);
-        $finalPrice = $originalPrice - $discountAmount;
-
-        return [
-            'original_price' => $originalPrice,
-            'discount_percent' => $discountPercent,
-            'discount_amount' => $discountAmount,
-            'final_price' => $finalPrice,
-            'formatted_original' => $this->formatPrice($originalPrice),
-            'formatted_final' => $this->formatPrice($finalPrice)
-        ];
     }
 }

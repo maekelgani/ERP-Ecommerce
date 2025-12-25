@@ -10,17 +10,13 @@ include '../../components/admin/head.php';
 ?>
 
 <body class="bg-gray-50 h-screen flex">
-    <!-- Sidebar Component -->
     <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
-    <!-- Main Content Area -->
     <div class="flex-1 flex flex-col overflow-hidden min-w-0">
-        <!-- Navbar -->
         <header class="h-[60px] sticky top-0 z-10">
             <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
-        <!-- Main Content -->
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div>
@@ -110,8 +106,7 @@ include '../../components/admin/head.php';
                     <p class="text-gray-500 text-center">Memuat data...</p>
                 </div>
             </div>
-    </div>
-    </main>
+        </main>
     </div>
 
     <script>
@@ -208,7 +203,7 @@ include '../../components/admin/head.php';
             const typeLabels = {
                 'diskon_persen': {
                     label: 'Diskon Persen',
-                    color: 'bg-blue-500'
+                    color: 'bg-[#882426]'
                 },
                 'diskon_nominal': {
                     label: 'Diskon Nominal',
@@ -216,54 +211,52 @@ include '../../components/admin/head.php';
                 },
                 'gratis_ongkir': {
                     label: 'Gratis Ongkir',
-                    color: 'bg-teal-500'
+                    color: 'bg-blue-500'
                 },
                 'cashback': {
                     label: 'Cashback',
-                    color: 'bg-purple-500'
+                    color: 'bg-amber-500'
                 }
             };
 
-            container.innerHTML = `
-                <div class="flex gap-2 h-8 rounded-lg overflow-hidden mb-4">
-                    ${byType.map(t => {
-                        const info = typeLabels[t.jenis] || { label: t.jenis, color: 'bg-gray-500' };
-                        const percentage = total > 0 ? (parseInt(t.count) / total * 100) : 0;
-                        return ` < div class = "${info.color}"
-            style = "width: ${percentage}%"
-            title = "${info.label}: ${t.count}" > < /div>`;
-        }).join('')
-        } <
-        /div> <
-        div class = "grid grid-cols-2 md:grid-cols-4 gap-4" >
-        $ {
-            byType.map(t => {
+            const bars = byType.map(t => {
+                const info = typeLabels[t.jenis] || {
+                    label: t.jenis,
+                    color: 'bg-gray-500'
+                };
+                const percentage = total > 0 ? (parseInt(t.count) / total * 100) : 0;
+                return `<div class="${info.color}" style="width: ${percentage}%" title="${info.label}: ${t.count}"></div>`;
+            }).join('');
+
+            const legends = byType.map(t => {
                 const info = typeLabels[t.jenis] || {
                     label: t.jenis,
                     color: 'bg-gray-500'
                 };
                 return `
-                            <div class="flex items-center gap-2">
-                                <div class="w-3 h-3 rounded ${info.color}"></div>
-                                <div>
-                                    <p class="text-sm font-medium">${info.label}</p>
-                                    <p class="text-xs text-gray-500">${t.count} penggunaan (Rp ${Number(t.total_discount || 0).toLocaleString('id-ID')})</p>
-                                </div>
-                            </div>
-                        `;
-            }).join('')
-        } <
-        /div>
-        `;
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded ${info.color}"></div>
+                        <div>
+                            <p class="text-sm font-medium">${info.label}</p>
+                            <p class="text-xs text-gray-500">${t.count} penggunaan (Rp ${Number(t.total_discount || 0).toLocaleString('id-ID')})</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="flex gap-2 h-8 rounded-lg overflow-hidden mb-4">${bars}</div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">${legends}</div>
+            `;
         }
-        
+
         async function loadCampaignPerformance() {
             try {
                 const response = await fetch('../../app/controllers/promoReportController.php?action=campaign_performance');
                 const data = await response.json();
-                
+
                 const tbody = document.getElementById('campaignPerformance');
-                
+
                 if (data.success && data.data.length > 0) {
                     const tipeLabels = {
                         'diskon_produk': 'Diskon Produk',
@@ -272,32 +265,20 @@ include '../../components/admin/head.php';
                         'bundle': 'Bundle',
                         'gratis_ongkir': 'Gratis Ongkir'
                     };
-                    
-                    tbody.innerHTML = data.data.map(c => ` <
-        tr class = "hover:bg-gray-50" >
-        <
-        td class = "px-4 py-3" >
-        <
-        p class = "font-medium" > $ {
-            c.judul
-        } < /p> <
-        span class = "text-xs text-gray-500" > $ {
-            c.status
-        } < /span> <
-        /td> <
-        td class = "px-4 py-3 text-sm text-gray-600" > $ {
-            tipeLabels[c.tipe] || c.tipe
-        } < /td> <
-        td class = "px-4 py-3 text-center" > $ {
-            c.total_produk || 0
-        } < /td> <
-        td class = "px-4 py-3 text-center" >
-        $ {
-            c.kuota_total ? `${c.kuota_terpakai || 0}/${c.kuota_total}` : (c.kuota_terpakai || 0)
-        } <
-        /td> <
-        /tr>
-        `).join('');
+
+                    tbody.innerHTML = data.data.map(c => `
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3">
+                                <p class="font-medium">${c.judul}</p>
+                                <span class="text-xs text-gray-500">${c.status}</span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-600">${tipeLabels[c.tipe] || c.tipe}</td>
+                            <td class="px-4 py-3 text-center">${c.total_produk || 0}</td>
+                            <td class="px-4 py-3 text-center">
+                                ${c.kuota_total ? `${c.kuota_terpakai || 0}/${c.kuota_total}` : (c.kuota_terpakai || 0)}
+                            </td>
+                        </tr>
+                    `).join('');
                 } else {
                     tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Tidak ada data</td></tr>';
                 }
@@ -305,14 +286,14 @@ include '../../components/admin/head.php';
                 console.error('Error:', error);
             }
         }
-        
+
         async function loadVoucherPerformance() {
             try {
                 const response = await fetch('../../app/controllers/promoReportController.php?action=voucher_performance');
                 const data = await response.json();
-                
+
                 const tbody = document.getElementById('voucherPerformance');
-                
+
                 if (data.success && data.data.length > 0) {
                     const jenisLabels = {
                         'diskon_persen': 'Persen',
@@ -320,34 +301,22 @@ include '../../components/admin/head.php';
                         'gratis_ongkir': 'Ongkir',
                         'cashback': 'Cashback'
                     };
-                    
-                    tbody.innerHTML = data.data.map(v => ` <
-        tr class = "hover:bg-gray-50" >
-        <
-        td class = "px-4 py-3" >
-        <
-        p class = "font-mono font-medium text-[#882426]" > $ {
-            v.kode
-        } < /p> <
-        span class = "text-xs text-gray-500" > $ {
-            v.judul || '-'
-        } < /span> <
-        /td> <
-        td class = "px-4 py-3 text-sm text-gray-600" > $ {
-            jenisLabels[v.jenis] || v.jenis
-        } < /td> <
-        td class = "px-4 py-3 text-center" >
-        $ {
-            v.kuota_total ? `${v.kuota_terpakai || 0}/${v.kuota_total}` : (v.total_penggunaan || 0)
-        } <
-        /td> <
-        td class = "px-4 py-3 text-right font-medium text-[#882426]" >
-        Rp $ {
-            Number(v.total_diskon || 0).toLocaleString('id-ID')
-        } <
-        /td> <
-        /tr>
-        `).join('');
+
+                    tbody.innerHTML = data.data.map(v => `
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3">
+                                <p class="font-mono font-medium text-[#882426]">${v.kode}</p>
+                                <span class="text-xs text-gray-500">${v.judul || '-'}</span>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-600">${jenisLabels[v.jenis] || v.jenis}</td>
+                            <td class="px-4 py-3 text-center">
+                                ${v.kuota_total ? `${v.kuota_terpakai || 0}/${v.kuota_total}` : (v.total_penggunaan || 0)}
+                            </td>
+                            <td class="px-4 py-3 text-right font-medium text-[#882426]">
+                                Rp ${Number(v.total_diskon || 0).toLocaleString('id-ID')}
+                            </td>
+                        </tr>
+                    `).join('');
                 } else {
                     tbody.innerHTML = '<tr><td colspan="4" class="px-4 py-8 text-center text-gray-500">Tidak ada data</td></tr>';
                 }
@@ -355,16 +324,11 @@ include '../../components/admin/head.php';
                 console.error('Error:', error);
             }
         }
-        
+
         function exportReport() {
             const dateFrom = document.getElementById('dateFrom').value;
             const dateTo = document.getElementById('dateTo').value;
-            window.location.href = `.. / .. / app / controllers / promoReportController.php ? action = export_report & date_from = $ {
-            dateFrom
-        } & date_to = $ {
-            dateTo
-        }
-        `;
+            window.location.href = `../../app/controllers/promoReportController.php?action=export_report&date_from=${dateFrom}&date_to=${dateTo}`;
         }
     </script>
 </body>

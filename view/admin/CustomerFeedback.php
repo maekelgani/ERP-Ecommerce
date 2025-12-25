@@ -91,7 +91,7 @@ include '../../components/admin/head.php';
                         <div class="flex-1">
                             <div class="relative">
                                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                                <input type="text" name="search" value="<?= htmlspecialchars($filters['search']) ?>" 
+                                <input type="text" name="search" value="<?= htmlspecialchars($filters['search']) ?>"
                                     placeholder="Cari pelanggan, produk, atau komentar..."
                                     class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             </div>
@@ -110,7 +110,7 @@ include '../../components/admin/head.php';
                             <option value="2" <?= $filters['rating'] === '2' ? 'selected' : '' ?>>2 Bintang</option>
                             <option value="1" <?= $filters['rating'] === '1' ? 'selected' : '' ?>>1 Bintang</option>
                         </select>
-                        <button type="submit" class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                        <button type="submit" class="px-6 py-2 bg-[#882426] text-white rounded-lg hover:bg-gray-700 transition-colors">
                             Filter
                         </button>
                         <?php if (!empty($filters['search']) || !empty($filters['status']) || !empty($filters['rating'])): ?>
@@ -182,7 +182,7 @@ include '../../components/admin/head.php';
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <?php if (!empty($review['komentar'])): ?>
                                             <p class="text-gray-600 mb-3"><?= nl2br(htmlspecialchars($review['komentar'])) ?></p>
                                         <?php endif; ?>
@@ -197,7 +197,7 @@ include '../../components/admin/head.php';
                                             <div class="flex items-center gap-3">
                                                 <div class="flex items-center gap-2">
                                                     <?php if (!empty($review['customer_image'])): ?>
-                                                        <img src="../../uploads/profiles/<?= htmlspecialchars($review['customer_image']) ?>" alt="" class="w-6 h-6 rounded-full object-cover">
+                                                        <img src="../../uploads/customers/<?= htmlspecialchars($review['customer_image']) ?>" alt="" class="w-6 h-6 rounded-full object-cover">
                                                     <?php else: ?>
                                                         <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
                                                             <span class="material-symbols-outlined text-gray-400 text-xs">person</span>
@@ -223,19 +223,19 @@ include '../../components/admin/head.php';
                         </p>
                         <div class="flex items-center gap-2">
                             <?php if ($currentPage > 1): ?>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $currentPage - 1])) ?>" 
+                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $currentPage - 1])) ?>"
                                     class="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50 text-sm">Sebelumnya</a>
                             <?php endif; ?>
-                            
+
                             <?php for ($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++): ?>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>" 
+                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"
                                     class="px-3 py-1 border rounded text-sm <?= $i === $currentPage ? 'bg-gray-800 text-white border-gray-800' : 'border-gray-200 hover:bg-gray-50' ?>">
                                     <?= $i ?>
                                 </a>
                             <?php endfor; ?>
-                            
+
                             <?php if ($currentPage < $totalPages): ?>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $currentPage + 1])) ?>" 
+                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $currentPage + 1])) ?>"
                                     class="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50 text-sm">Selanjutnya</a>
                             <?php endif; ?>
                         </div>
@@ -287,4 +287,5 @@ include '../../components/admin/head.php';
         }
     </script>
 </body>
+
 </html>

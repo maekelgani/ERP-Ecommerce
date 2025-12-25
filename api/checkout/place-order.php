@@ -19,15 +19,6 @@ if (empty($input['address']) || empty($input['payment'])) {
     exit;
 }
 
-$allowedCouriers = [
-    'jne-reg' => ['cost' => 25000, 'days' => '2-3'],
-    'jne-yes' => ['cost' => 40000, 'days' => '1'],
-    'jnt-reg' => ['cost' => 22000, 'days' => '2-4'],
-    'sicepat-reg' => ['cost' => 20000, 'days' => '2-3'],
-    'gosend-instant' => ['cost' => 35000, 'days' => 'Hari Ini']
-];
-
-$allowedStores = ['store-jakarta', 'store-bekasi'];
 $bubbleWrapCost = 5000;
 $packingKayuCost = 20000;
 $taxRate = 0.11;
@@ -50,7 +41,16 @@ try {
     }
 
     $currentTime = date('Y-m-d H:i:s');
-    $placeholders = implode(',', array_fill(0, count($productIds), '?'));
+
+    $placeholderNames = [];
+    $params = [':current_time1' => $currentTime, ':current_time2' => $currentTime];
+    foreach ($productIds as $i => $productId) {
+        $paramName = ':product_' . $i;
+        $placeholderNames[] = $paramName;
+        $params[$paramName] = $productId;
+    }
+    $placeholders = implode(',', $placeholderNames);
+
     $verifyStmt = $db->prepare("
         SELECT p.id_product, p.nama_product, p.harga, p.stok, p.status_produk,
                pd.id_diskon, pd.jenis as discount_type, pd.nilai as discount_value,
@@ -66,13 +66,12 @@ try {
         FROM products p
         LEFT JOIN promo_diskon pd ON p.id_product = pd.id_produk 
             AND pd.status = 'aktif' 
-            AND (pd.mulai_pada IS NULL OR ? >= pd.mulai_pada)
-            AND (pd.selesai_pada IS NULL OR ? <= pd.selesai_pada)
+            AND (pd.mulai_pada IS NULL OR :current_time1 >= pd.mulai_pada)
+            AND (pd.selesai_pada IS NULL OR :current_time2 <= pd.selesai_pada)
             AND (pd.stok_promo IS NULL OR pd.stok_promo > COALESCE(pd.stok_terpakai, 0))
         WHERE p.id_product IN ($placeholders)
     ");
-    $verifyParams = array_merge([$currentTime, $currentTime], $productIds);
-    $verifyStmt->execute($verifyParams);
+    $verifyStmt->execute($params);
     $dbProducts = $verifyStmt->fetchAll(PDO::FETCH_ASSOC);
     $dbProductMap = array_column($dbProducts, null, 'id_product');
 
@@ -132,22 +131,34 @@ try {
     $validatedStore = null;
 
     if ($shippingMethod === 'delivery') {
-        if (!$courier || !isset($courier['value']) || !isset($allowedCouriers[$courier['value']])) {
+        if (!$courier || !isset($courier['value']) || !isset($courier['cost'])) {
             throw new Exception('Jasa pengiriman tidak valid');
         }
-        $courierKey = $courier['value'];
-        $serverShippingCost = $allowedCouriers[$courierKey]['cost'];
+        $serverShippingCost = (int)$courier['cost'];
         $validatedCourier = [
-            'value' => $courierKey,
+            'value' => $courier['value'],
             'cost' => $serverShippingCost,
-            'days' => $allowedCouriers[$courierKey]['days']
+            'days' => $courier['days'] ?? '',
+            'courier_code' => $courier['courier_code'] ?? '',
+            'courier_name' => $courier['courier_name'] ?? '',
+            'courier_service' => $courier['courier_service'] ?? ''
         ];
     } else if ($shippingMethod === 'pickup') {
-        if (!$store || !isset($store['value']) || !in_array($store['value'], $allowedStores)) {
+        if (!$store || !isset($store['value'])) {
             throw new Exception('Lokasi toko tidak valid');
         }
+        $storeId = $store['value'];
+        $storeStmt = $db->prepare("SELECT id_toko, nama_toko FROM store_locations WHERE id_toko = :id AND is_active = 1");
+        $storeStmt->execute([':id' => $storeId]);
+        $storeData = $storeStmt->fetch(PDO::FETCH_ASSOC);
+        if (!$storeData) {
+            throw new Exception('Lokasi toko tidak ditemukan');
+        }
         $serverShippingCost = 0;
-        $validatedStore = $store;
+        $validatedStore = [
+            'value' => $storeId,
+            'name' => $storeData['nama_toko']
+        ];
     } else {
         throw new Exception('Metode pengiriman tidak valid');
     }
@@ -237,10 +248,10 @@ try {
     $insertOrder = $db->prepare("
         INSERT INTO orders (
             id_order, id_customer, total_harga, total_ongkir, total_diskon, total_bayar,
-            status_order, tanggal_order, catatan_order, bubble_wrap, packing_kayu, biaya_packing
+            status_order, tanggal_order, catatan_order, bubble_wrap, packing_kayu, biaya_packing, shipping_method, store_pickup_id
         ) VALUES (
             :id_order, :id_customer, :total_harga, :total_ongkir, :total_diskon, :total_bayar,
-            'pending', NOW(), :catatan_order, :bubble_wrap, :packing_kayu, :biaya_packing
+            'pending', NOW(), :catatan_order, :bubble_wrap, :packing_kayu, :biaya_packing, :shipping_method, :store_pickup_id
         )
     ");
 
@@ -277,14 +288,16 @@ try {
         ':catatan_order' => $catatan_order,
         ':bubble_wrap' => $serverBubbleWrap ? 1 : 0,
         ':packing_kayu' => $serverPackingKayu ? 1 : 0,
-        ':biaya_packing' => $serverPackingCost
+        ':biaya_packing' => $serverPackingCost,
+        ':shipping_method' => $shippingMethod,
+        ':store_pickup_id' => ($shippingMethod === 'pickup' && $validatedStore) ? $validatedStore['value'] : null
     ]);
 
     $insertDetail = $db->prepare("
         INSERT INTO order_detail (
-            id_detail, id_order, id_product, nama_product, jumlah, harga_satuan, diskon_satuan, subtotal
+            id_detail, id_order, id_product, nama_product, jumlah, harga_satuan, diskon_satuan, harga_setelah_diskon, subtotal
         ) VALUES (
-            :id_detail, :id_order, :id_product, :nama_product, :jumlah, :harga_satuan, :diskon_satuan, :subtotal
+            :id_detail, :id_order, :id_product, :nama_product, :jumlah, :harga_satuan, :diskon_satuan, :harga_setelah_diskon, :subtotal
         )
     ");
 
@@ -303,6 +316,7 @@ try {
             ':jumlah' => $item['quantity'],
             ':harga_satuan' => $item['harga_asli'],
             ':diskon_satuan' => $item['diskon_satuan'],
+            ':harga_setelah_diskon' => $item['harga_final'],
             ':subtotal' => $item['subtotal']
         ]);
 
@@ -330,20 +344,27 @@ try {
     $jasaPengiriman = '';
     $estimasiHari = null;
 
+    $courierCode = null;
+    $rateId = null;
+
     if ($shippingMethod === 'delivery' && $validatedCourier) {
-        $jasaPengiriman = strtoupper(str_replace('-', ' ', $validatedCourier['value']));
+        $courierCode = $validatedCourier['courier_code'] ?? '';
+        $courierName = $validatedCourier['courier_name'] ?? '';
+        $courierService = $validatedCourier['courier_service'] ?? '';
+        $rateId = $validatedCourier['value'] ?? '';
+
+        if ($courierName && $courierService) {
+            $jasaPengiriman = $courierName . ' ' . $courierService;
+        } else {
+            $jasaPengiriman = strtoupper(str_replace('-', ' ', $validatedCourier['value']));
+        }
+
         $estimasiDays = $validatedCourier['days'] ?? '';
         if (preg_match('/(\d+)/', $estimasiDays, $matches)) {
             $estimasiHari = intval($matches[1]);
         }
     } else if ($shippingMethod === 'pickup' && $validatedStore) {
-        $storeName = '';
-        if ($validatedStore['value'] === 'store-jakarta') {
-            $storeName = 'Nano Komputer Jakarta Pusat';
-        } else if ($validatedStore['value'] === 'store-bekasi') {
-            $storeName = 'Nano Komputer Bekasi';
-        }
-        $jasaPengiriman = 'Ambil di Toko - ' . $storeName;
+        $jasaPengiriman = 'Ambil di Toko - ' . ($validatedStore['name'] ?? '');
     }
 
     $alamatLengkap = ($address['alamat_lengkap'] ?? '') . ', ' .
@@ -357,11 +378,11 @@ try {
         INSERT INTO shipment (
             id_shipment, id_order, id_alamat, jasa_pengiriman, nama_penerima, 
             nomor_hp_penerima, alamat_pengiriman, kota, kode_pos, ongkir, 
-            estimasi_hari, status_pengiriman
+            estimasi_hari, status_pengiriman, courier_code, rate_id
         ) VALUES (
             :id_shipment, :id_order, :id_alamat, :jasa_pengiriman, :nama_penerima,
             :nomor_hp, :alamat_pengiriman, :kota, :kode_pos, :ongkir,
-            :estimasi_hari, 'pending'
+            :estimasi_hari, 'pending', :courier_code, :rate_id
         )
     ");
 
@@ -376,7 +397,9 @@ try {
         ':kota' => $address['kota'] ?? '',
         ':kode_pos' => $address['kode_pos'] ?? '',
         ':ongkir' => $serverShippingCost,
-        ':estimasi_hari' => $estimasiHari
+        ':estimasi_hari' => $estimasiHari,
+        ':courier_code' => $courierCode,
+        ':rate_id' => $rateId
     ]);
 
     $paymentId = 'PAY' . date('Ymd') . strtoupper(substr(md5(uniqid()), 0, 8));
@@ -431,8 +454,20 @@ try {
     }
 
     if ($checkoutData['source'] === 'cart') {
-        $deleteCart = $db->prepare("DELETE FROM cart WHERE id_customer = :customer_id");
-        $deleteCart->execute([':customer_id' => $customerId]);
+        $cartIds = array_column($checkoutData['items'], 'id_cart');
+        $cartIds = array_filter($cartIds);
+
+        if (!empty($cartIds)) {
+            $cartPlaceholders = [];
+            $cartParams = [':customer_id' => $customerId];
+            foreach ($cartIds as $idx => $cartId) {
+                $key = ':cart_id_' . $idx;
+                $cartPlaceholders[] = $key;
+                $cartParams[$key] = $cartId;
+            }
+            $deleteCart = $db->prepare("DELETE FROM cart WHERE id_customer = :customer_id AND id_cart IN (" . implode(',', $cartPlaceholders) . ")");
+            $deleteCart->execute($cartParams);
+        }
     }
 
     unset($_SESSION['checkout_data']);

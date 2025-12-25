@@ -147,7 +147,7 @@ include '../../components/admin/head.php';
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                         <div>
                             <h2 class="text-xl font-bold text-gray-800">Lokasi Toko</h2>
-                            <p class="text-sm text-gray-500">Kelola semua lokasi toko fisik Anda</p>
+                            <p class="text-sm text-gray-500 mt-1">Kelola semua lokasi toko fisik Anda</p>
                         </div>
                         <button id="btnAddStore" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
                             <span class="material-symbols-outlined text-xl">add_circle</span>
@@ -217,9 +217,12 @@ include '../../components/admin/head.php';
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                             <div>
                                 <h2 class="text-xl font-bold text-gray-800">Support Tickets</h2>
-                                <p class="text-sm text-gray-500">Kelola tiket bantuan dari pelanggan</p>
+                                <p class="text-sm text-gray-500 mt-1">Kelola tiket bantuan dari pelanggan</p>
                             </div>
-                            <div class="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg border border-gray-200 flex-shrink-0">
+                            <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                                <span class="material-symbols-outlined text-gray-400 text-sm">
+                                    view_list
+                                </span>
                                 <select id="ticketPerPageSelect" onchange="changeTicketPerPage(this.value)" class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
@@ -342,15 +345,16 @@ include '../../components/admin/head.php';
                     </div>
                 </div>
 
-                <div class="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                            <div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-4 md:p-6 border-b border-gray-100">
+                        <div class="flex flex-col gap-4">
+                            <div class="min-w-0">
                                 <h2 class="text-xl font-bold text-gray-800">Blog & Artikel</h2>
-                                <p class="text-sm text-gray-500">Kelola konten blog dan artikel website</p>
+                                <p class="text-sm text-gray-500 mt-1">Kelola konten blog dan artikel website</p>
                             </div>
-                            <div class="flex items-center gap-3">
-                                <div class="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg border border-gray-200 flex-shrink-0">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                                    <span class="material-symbols-outlined text-gray-400 text-sm">view_list</span>
                                     <select id="articlePerPageSelect" onchange="changeArticlePerPage(this.value)" class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
                                         <option value="10">10</option>
                                         <option value="25">25</option>

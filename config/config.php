@@ -46,6 +46,17 @@ require_once __DIR__ . '/../app/Helper/ProductLandingHelper.php';
 require_once __DIR__ . '/../app/Helper/BrandLandingHelper.php';
 require_once __DIR__ . '/../app/Repository/BlogCategoryRepository.php';
 require_once __DIR__ . '/../app/Repository/BlogPostRepository.php';
+require_once __DIR__ . '/../app/Repository/OrderRepository.php';
+require_once __DIR__ . '/../app/Repository/DashboardRepository.php';
+require_once __DIR__ . '/../app/Repository/ReportRepository.php';
+require_once __DIR__ . '/../app/Repository/NotificationRepository.php';
+
+// Include Services
+require_once __DIR__ . '/../app/Services/BiteshipService.php';
+require_once __DIR__ . '/../app/Services/MidtransService.php';
+
+// Load API Configuration
+require_once __DIR__ . '/api.php';
 
 // Google OAuth Configuration
 define('GOOGLE_CLIENT_ID', $_ENV['GOOGLE_CLIENT_ID'] ?? '');

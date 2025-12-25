@@ -10,17 +10,13 @@ include '../../components/admin/head.php';
 ?>
 
 <body class="bg-gray-50 h-screen flex">
-    <!-- Sidebar Component -->
     <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
-    <!-- Main Content Area -->
     <div class="flex-1 flex flex-col overflow-hidden min-w-0">
-        <!-- Navbar -->
         <header class="h-[60px] sticky top-0 z-10">
             <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
-        <!-- Main Content -->
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <div class="mb-6">
@@ -31,7 +27,7 @@ include '../../components/admin/head.php';
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
                     <div class="flex items-center justify-between mb-3">
-                        <span class="material-symbols-outlined text-2xl text-blue-500">campaign</span>
+                        <span class="material-symbols-outlined text-2xl text-[#882426]">campaign</span>
                         <span class="text-xs text-gray-400">Kampanye</span>
                     </div>
                     <p id="statCampaigns" class="text-3xl font-bold text-gray-800">0</p>
@@ -93,8 +89,7 @@ include '../../components/admin/head.php';
                     <p class="text-gray-500 text-center py-8">Memuat aktivitas...</p>
                 </div>
             </div>
-    </div>
-    </main>
+        </main>
     </div>
 
     <script>
