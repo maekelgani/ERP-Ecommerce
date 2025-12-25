@@ -23,17 +23,14 @@ use App\Helper\DiscountHelper;
 
     .custom-toast {
         position: relative;
-        width: 320px;
-        /* FIXED width */
-        max-width: 320px;
-        /* jangan pakai 400px */
-        padding: 14px 16px;
-        /* lebih compact */
+        min-width: 320px;
+        max-width: 400px;
+        padding: 16px 20px;
         border-radius: 12px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         transform: translateX(120%);
         opacity: 0;
         transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -182,21 +179,14 @@ $result = $productHelper->getAllProducts($filters, $sortBy, $currentPage, $perPa
 $products = $discountHelper->applyDiscountsToProducts($result['products']);
 
 // Enrich products with sold count and rating
-$db = \App\Database\DatabaseConnection::getInstance()->getConnection();
+$allProductIds = array_column($products, 'id_product');
+$soldRatings = $productHelper->getProductsSoldAndRatings($allProductIds);
+
 foreach ($products as &$product) {
-    $pId = $product['id_product'];
-
-    // Sold count
-    $sStmt = $db->prepare("SELECT SUM(od.jumlah) as total FROM order_detail od JOIN orders o ON od.id_order = o.id_order WHERE od.id_product = ? AND o.status_order = 'selesai'");
-    $sStmt->execute([$pId]);
-    $product['total_terjual'] = (int)($sStmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
-
-    // Rating
-    $rStmt = $db->prepare("SELECT AVG(rating) as avg, COUNT(*) as count FROM review WHERE id_product = ? AND status_review = 'approved'");
-    $rStmt->execute([$pId]);
-    $rData = $rStmt->fetch(PDO::FETCH_ASSOC);
-    $product['avg_rating'] = (float)($rData['avg'] ?? 0);
-    $product['total_reviews'] = (int)($rData['count'] ?? 0);
+    $pid = $product['id_product'];
+    $product['total_terjual'] = $soldRatings[$pid]['sold_count'] ?? 0;
+    $product['avg_rating'] = $soldRatings[$pid]['avg_rating'] ?? 0;
+    $product['total_reviews'] = $soldRatings[$pid]['review_count'] ?? 0;
 }
 unset($product);
 

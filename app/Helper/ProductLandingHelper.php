@@ -309,6 +309,7 @@ class ProductLandingHelper
             'price_high' => 'p.harga DESC',
             'name_asc' => 'p.nama_product ASC',
             'name_desc' => 'p.nama_product DESC',
+            'best_seller' => 'total_sold DESC, p.tanggal_ditambahkan DESC',
             default => 'p.tanggal_ditambahkan DESC'
         };
 
@@ -323,15 +324,38 @@ class ProductLandingHelper
         $totalPages = ceil($totalItems / $perPage);
         $offset = ($page - 1) * $perPage;
 
-        $sql = "
-            SELECT p.*, k.nama_kategori, b.nama_brand, b.logo_brand
-            FROM products p 
-            LEFT JOIN kategori k ON p.id_kategori = k.id_kategori 
-            LEFT JOIN brand b ON p.id_brand = b.id_brand 
-            WHERE {$whereClause}
-            ORDER BY {$orderBy}
-            LIMIT :limit OFFSET :offset
-        ";
+        // For best_seller sort, we need to join with order data
+        if ($sort === 'best_seller') {
+            $sql = "
+                SELECT p.*, k.nama_kategori, b.nama_brand, b.logo_brand,
+                       COALESCE(SUM(CASE WHEN o.status_order = 'selesai' THEN od.jumlah ELSE 0 END), 0) as total_sold
+                FROM products p 
+                LEFT JOIN kategori k ON p.id_kategori = k.id_kategori 
+                LEFT JOIN brand b ON p.id_brand = b.id_brand 
+                LEFT JOIN order_detail od ON p.id_product = od.id_product
+                LEFT JOIN orders o ON od.id_order = o.id_order
+                WHERE {$whereClause}
+                GROUP BY p.id_product, p.nama_product, p.deskripsi_speksifikasi, p.harga, p.stok, p.status_produk, 
+                         p.tanggal_ditambahkan, p.id_kategori, p.id_brand, p.gambar, 
+                         k.nama_kategori, b.nama_brand, b.logo_brand
+                ORDER BY {$orderBy}
+                LIMIT :limit OFFSET :offset
+            ";
+        } else {
+            $sql = "
+                SELECT p.*, k.nama_kategori, b.nama_brand, b.logo_brand,
+                       (SELECT COALESCE(SUM(od2.jumlah), 0) 
+                        FROM order_detail od2 
+                        JOIN orders o2 ON od2.id_order = o2.id_order 
+                        WHERE od2.id_product = p.id_product AND o2.status_order = 'selesai') as total_sold
+                FROM products p 
+                LEFT JOIN kategori k ON p.id_kategori = k.id_kategori 
+                LEFT JOIN brand b ON p.id_brand = b.id_brand 
+                WHERE {$whereClause}
+                ORDER BY {$orderBy}
+                LIMIT :limit OFFSET :offset
+            ";
+        }
 
         $stmt = $this->db->prepare($sql);
         foreach ($params as $key => $value) {
