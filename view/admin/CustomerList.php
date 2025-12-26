@@ -146,8 +146,7 @@ include '../../components/admin/head.php';
 
                             <!-- RIGHT: Tambah User -->
                             <?php if ($canManageCustomers): ?>
-                                <button onclick="openAddModal()" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap"
-                                    style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                                <button onclick="openAddModal()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
                                     <span class="material-symbols-outlined text-base">add_circle</span>
                                     <span>Tambah Pelanggan</span>
                                 </button>
@@ -176,8 +175,7 @@ include '../../components/admin/head.php';
                                 <option value="google" <?= $filters['login_type'] === 'google' ? 'selected' : '' ?>>Google</option>
                             </select>
 
-                            <button type="submit" class="px-5 py-2.5 text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg active:scale-95 flex items-center gap-2"
-                                style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                            <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
                                 <span class="material-symbols-outlined text-lg">filter_alt</span>
                                 <span class="hidden sm:inline">Filter</span>
                             </button>
@@ -289,18 +287,18 @@ include '../../components/admin/head.php';
                                         <td class="px-4 py-3">
                                             <div class="flex items-center justify-center gap-2">
                                                 <a href="CustomerDetail.php?id=<?= $customer['id_customer'] ?>"
-                                                    class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-white transition-all duration-300 hover:shadow-lg active:scale-95 bg-blue-500 hover:bg-blue-600"
+                                                    class="inline-flex items-center gap-1.5 px-3 py-2 text-purple-600 bg-purple-50 rounded-lg text-sm font-medium hover:bg-purple-100 transition-colors"
                                                     title="Lihat Detail">
                                                     <span class="material-symbols-outlined text-lg">visibility</span>
                                                 </a>
                                                 <?php if ($canManageCustomers): ?>
                                                     <button onclick="openEditModal(<?= htmlspecialchars(json_encode($customer)) ?>)"
-                                                        class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-white transition-all duration-300 hover:shadow-lg active:scale-95 bg-amber-500 hover:bg-amber-600"
+                                                        class="inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
                                                         title="Edit Pelanggan">
                                                         <span class="material-symbols-outlined text-lg">edit</span>
                                                     </button>
                                                     <button onclick="confirmToggleStatus(<?= htmlspecialchars(json_encode($customer)) ?>)"
-                                                        class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-white transition-all duration-300 hover:shadow-lg active:scale-95 <?= $customer['is_active'] ? 'bg-red-500 hover:bg-red-600' : 'bg-amber-500 hover:bg-amber-600' ?>"
+                                                        class="inline-flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-300 hover:shadow-lg active:scale-95 <?= $customer['is_active'] ? ' text-red-600 bg-red-50 hover:bg-red-100' : 'text-amber-600 bg-amber-50 hover:bg-amber-100' ?>"
                                                         title="<?= $customer['is_active'] ? 'Nonaktifkan Pelanggan' : 'Aktifkan Pelanggan' ?>">
                                                         <span class="material-symbols-outlined text-lg"><?= $customer['is_active'] ? 'person_off' : 'person_check' ?></span>
                                                     </button>

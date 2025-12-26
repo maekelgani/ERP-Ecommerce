@@ -476,13 +476,13 @@ include '../../components/admin/head.php';
                             </td>
                             <td class="px-4 py-3 text-center">
                                 <div class="flex items-center justify-center gap-1">
-                                    <button onclick="viewUsage('${v.id_voucher}')" class="p-1.5 text-gray-500 hover:bg-gray-100 rounded" title="Lihat Penggunaan">
+                                    <button onclick="viewUsage('${v.id_voucher}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-purple-600 bg-purple-50 rounded-lg text-sm font-medium hover:bg-purple-100 transition-colors rounded" title="Lihat Penggunaan">
                                         <span class="material-symbols-outlined text-lg">analytics</span>
                                     </button>
-                                    <button onclick="editVoucher('${v.id_voucher}')" class="p-1.5 text-gray-500 hover:bg-gray-100 rounded">
+                                    <button onclick="editVoucher('${v.id_voucher}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors rounded">
                                         <span class="material-symbols-outlined text-lg">edit</span>
                                     </button>
-                                    <button onclick="deleteVoucher('${v.id_voucher}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded">
+                                    <button onclick="deleteVoucher('${v.id_voucher}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-red-600 bg-red-50 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors rounded">
                                         <span class="material-symbols-outlined text-lg">delete</span>
                                     </button>
                                 </div>

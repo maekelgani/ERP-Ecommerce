@@ -408,12 +408,12 @@ function getPaymentMethodLabel($method)
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center justify-center gap-1">
-                                                <button class="btn-view-detail p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                                                <button class="btn-view-detail inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
                                                     data-order-id="<?= htmlspecialchars($order['id_order']) ?>" title="Lihat Detail">
                                                     <span class="material-symbols-outlined text-lg">visibility</span>
                                                 </button>
                                                 <?php if ($order['status_order'] !== 'selesai' && $order['status_order'] !== 'dibatalkan'): ?>
-                                                    <button class="btn-update-status p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition"
+                                                    <button class="btn-update-status inline-flex items-center gap-1.5 px-3 py-2 text-green-600 bg-green-50 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors"
                                                         data-order-id="<?= htmlspecialchars($order['id_order']) ?>"
                                                         data-current-status="<?= htmlspecialchars($order['status_order']) ?>"
                                                         title="Update Status">

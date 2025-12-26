@@ -614,10 +614,10 @@ include '../../components/admin/head.php';
                         </td>
                         <td class="px-4 py-3 text-center">
                             <div class="flex items-center justify-center gap-1">
-                                <button onclick="editDiskon('${d.id_diskon}')" class="p-1.5 text-gray-500 hover:bg-gray-100 rounded">
+                                <button onclick="editDiskon('${d.id_diskon}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
                                     <span class="material-symbols-outlined text-lg">edit</span>
                                 </button>
-                                <button onclick="deleteDiskon('${d.id_diskon}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded">
+                                <button onclick="deleteDiskon('${d.id_diskon}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-red-600 bg-red-50 rounded-lg text-sm font-medium hover:bg-red-100 transition-colorsd">
                                     <span class="material-symbols-outlined text-lg">delete</span>
                                 </button>
                             </div>

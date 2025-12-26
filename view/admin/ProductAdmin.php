@@ -171,8 +171,7 @@ include '../../components/admin/head.php';
                             <div class="flex items-center gap-3">
                                 <!-- Tambah Produk -->
                                 <a href="add-product.php"
-                                    class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap"
-                                    style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                                    class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap bg-[#882426] hover:bg-[#6d1d1f] transition-colors">
                                     <span class="material-symbols-outlined text-base">add_circle</span>
                                     <span>Tambah Produk</span>
                                 </a>
@@ -238,8 +237,7 @@ include '../../components/admin/head.php';
                                 <option value="stock-desc" <?= $filters['sort'] === 'stock-desc' ? 'selected' : '' ?>>Stok Tertinggi</option>
                             </select>
 
-                            <button type="submit" class="px-5 py-2.5 text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg active:scale-95 flex items-center gap-2"
-                                style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                            <button type="submit" class="px-5 py-2.5 text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg active:scale-95 flex items-center gap-2px-4 py-2 bg-[#882426] text-white rounded-lg text-sm font-medium hover:bg-[#6d1d1f] transition flex">
                                 <span class="material-symbols-outlined text-lg">filter_alt</span>
                                 <span class="hidden sm:inline">Filter</span>
                             </button>

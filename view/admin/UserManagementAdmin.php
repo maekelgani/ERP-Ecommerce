@@ -90,7 +90,7 @@ include '../../components/admin/head.php';
                                 <span class="text-sm text-gray-600">entries per page</span>
                             </div>
 
-                            <button onclick="openAddUserModal()" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap" style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                            <button onclick="openAddUserModal()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
                                 <span class="material-symbols-outlined text-base">add_circle</span>
                                 <span>Tambah User</span>
                             </button>
@@ -208,11 +208,11 @@ include '../../components/admin/head.php';
                                     </td>
                                     <td class="px-5 py-4 text-center">
                                         <div class="flex items-center justify-center gap-2">
-                                            <button onclick="editUser(<?= $user['id_admin'] ?>)" class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-white transition-all duration-300 hover:shadow-lg active:scale-95 bg-amber-500 hover:bg-amber-600" title="Edit User">
+                                            <button onclick="editUser(<?= $user['id_admin'] ?>)" class="inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors" title="Edit User">
                                                 <span class="material-symbols-outlined text-lg">edit</span>
                                             </button>
                                             <?php if ($user['role_name'] !== 'super_admin' || PermissionHelper::isSuperAdmin()): ?>
-                                                <button onclick="deleteUser(<?= $user['id_admin'] ?>, '<?= htmlspecialchars($user['nama_lengkap']) ?>')" class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-white transition-all duration-300 hover:shadow-lg active:scale-95 bg-red-500 hover:bg-red-600" title="Hapus User">
+                                                <button onclick="deleteUser(<?= $user['id_admin'] ?>, '<?= htmlspecialchars($user['nama_lengkap']) ?>')" class="inline-flex items-center gap-1.5 px-3 py-2 text-red-600 bg-red-50 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors" title="Hapus User">
                                                     <span class="material-symbols-outlined text-lg">delete</span>
                                                 </button>
                                             <?php endif; ?>
