@@ -170,6 +170,17 @@ function getShipmentStatusBadge($status)
 
 $pageTitle = "Detail Order - Return";
 include '../../components/admin/head.php';
+
+$backUrl = 'ReturnAdmin.php'; // default fallback
+
+if (!empty($_SERVER['HTTP_REFERER'])) {
+    if (str_contains($_SERVER['HTTP_REFERER'], 'DashboardAdmin.php')) {
+        $backUrl = 'DashboardAdmin.php';
+    } elseif (str_contains($_SERVER['HTTP_REFERER'], 'ReturnAdmin.php')) {
+        $backUrl = 'ReturnAdmin.php';
+    }
+}
+
 ?>
 
 <body class="bg-gray-50 h-screen flex">
@@ -185,7 +196,7 @@ include '../../components/admin/head.php';
             <div class="bg-gradient-to-r from-[#882426] to-[#6d1a1c] text-white rounded-xl">
                 <div class="px-4 md:px-6 py-6">
                     <div class="flex items-center gap-3 mb-4">
-                        <a href="ReturnAdmin.php"
+                        <a href="<?= $backUrl ?>"
                             class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
                             <span class="material-symbols-outlined">arrow_back</span>
                         </a>
