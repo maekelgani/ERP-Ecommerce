@@ -298,7 +298,7 @@ $chartDataJson = json_encode([
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-center">
-                                            <a href="AllOrderAdmin.php?search=<?= urlencode($order['id_order']) ?>" class="text-[#882426] hover:text-[#6d1d1f] font-medium text-sm transition-colors">
+                                            <a href="ReturnOrderDetailPage.php?id=<?= urlencode($order['id_order']) ?>" class="text-[#882426] hover:text-[#6d1d1f] font-medium text-sm transition-colors">
                                                 Detail
                                             </a>
                                         </td>

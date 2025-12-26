@@ -264,81 +264,84 @@ include '../../components/admin/head.php';
                     <!-- Recent Activity (Right Column - 2 cols) -->
                     <div class="lg:col-span-2">
                         <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
-                            <div class="flex items-center justify-between mb-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                                 <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
                                     <span class="material-symbols-outlined text-xl text-amber-600">schedule</span>
                                     Aktivitas Pengguna Terakhir
                                 </h3>
+
                                 <?php if ($canManageUsers && count($users) > 5): ?>
-                                    <a href="UserManagementAdmin.php" class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                                    <a href="UserManagementAdmin.php"
+                                        class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 self-start sm:self-auto">
                                         Lihat Semua
                                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                                     </a>
                                 <?php endif; ?>
                             </div>
 
-                            <div class="overflow-x-auto">
-                                <div class="space-y-3">
-                                    <?php
-                                    $recentUsers = array_slice($users, 0, 6);
-                                    foreach ($recentUsers as $user):
-                                        $initials = strtoupper(substr($user['nama_lengkap'], 0, 1));
-                                        $roleColor = match ($user['role_name'] ?? '') {
-                                            'super_admin' => 'text-blue-700 bg-blue-100',
-                                            'admin' => 'text-emerald-700 bg-emerald-100',
-                                            default => 'text-gray-700 bg-gray-100'
-                                        };
-                                    ?>
-                                        <div class="grid grid-cols-2 items-center p-4 rounded-lg border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all duration-300 group">
-                                            <div class="flex items-center flex-1 gap-4 min-w-0">
-                                                <div class="w-10 h-10 bg-[#882426] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-md">
-                                                    <?= $initials ?>
-                                                </div>
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="font-semibold text-gray-900 truncate"><?= htmlspecialchars($user['nama_lengkap']) ?></p>
-                                                    <p class="text-xs text-gray-500 truncate"><?= htmlspecialchars($user['email']) ?></p>
-                                                </div>
+                            <div class="space-y-3">
+                                <?php
+                                $recentUsers = array_slice($users, 0, 6);
+                                foreach ($recentUsers as $user):
+                                    $initials = strtoupper(substr($user['nama_lengkap'], 0, 1));
+                                    $roleColor = match ($user['role_name'] ?? '') {
+                                        'super_admin' => 'bg-blue-100 text-blue-700',
+                                        'admin' => 'bg-emerald-100 text-emerald-700',
+                                        default => 'bg-gray-100 text-gray-700'
+                                    };
+                                ?>
+                                    <div class="flex items-center justify-between p-4 rounded-xl
+                border border-gray-100 hover:border-blue-200 hover:bg-blue-50/40
+                transition-all duration-300">
+
+                                        <!-- LEFT -->
+                                        <div class="flex items-start gap-4 min-w-0">
+                                            <!-- Avatar -->
+                                            <div class="w-12 h-12 rounded-full bg-[#882426]
+                        flex items-center justify-center
+                        text-white font-bold shadow-md flex-shrink-0">
+                                                <?= $initials ?>
                                             </div>
 
-                                            <div class="grid grid-cols-3 items-center gap-6 flex-shrink-0 text-sm">
+                                            <!-- Name, Email, Role, Status -->
+                                            <div class="min-w-0">
+                                                <p class="font-semibold text-gray-900 leading-tight truncate">
+                                                    <?= htmlspecialchars($user['nama_lengkap']) ?>
+                                                </p>
+                                                <p class="text-xs text-gray-500 truncate mb-2">
+                                                    <?= htmlspecialchars($user['email']) ?>
+                                                </p>
 
-                                                <!-- ROLE -->
-                                                <div class="flex justify-center">
-                                                    <span class="px-3 py-1 text-xs font-bold rounded-lg <?= $roleColor ?> whitespace-nowrap">
+                                                <div class="flex items-center gap-3 flex-wrap">
+                                                    <span class="px-3 py-1 text-xs font-bold rounded-lg <?= $roleColor ?>">
                                                         <?= ucfirst(str_replace('_', ' ', $user['role_name'] ?? 'N/A')) ?>
                                                     </span>
-                                                </div>
 
-                                                <!-- STATUS -->
-                                                <div class="flex items-center justify-center gap-2">
-                                                    <?php if ($user['is_active']): ?>
-                                                        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                                                        <span class="text-emerald-600 font-semibold">Aktif</span>
-                                                    <?php else: ?>
-                                                        <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
-                                                        <span class="text-gray-500 font-semibold">Nonaktif</span>
-                                                    <?php endif; ?>
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                                                        <span class="text-emerald-600 text-xs font-semibold">Aktif</span>
+                                                    </div>
                                                 </div>
-
-                                                <!-- LAST LOGIN -->
-                                                <div class="text-right leading-tight">
-                                                    <p class="font-semibold text-gray-700">
-                                                        <?= $user['last_login'] ? date('d M Y', strtotime($user['last_login'])) : '-' ?>
-                                                    </p>
-                                                    <p class="text-xs text-gray-400">
-                                                        <?= $user['last_login'] ? date('H:i', strtotime($user['last_login'])) : 'Belum login' ?>
-                                                    </p>
-                                                </div>
-
                                             </div>
-
-
                                         </div>
-                                    <?php endforeach; ?>
-                                </div>
+
+                                        <!-- RIGHT -->
+                                        <div class="text-right flex-shrink-0 ml-4">
+                                            <p class="text-sm font-semibold text-gray-700">
+                                                <?= $user['last_login'] ? date('d M Y', strtotime($user['last_login'])) : '-' ?>
+                                            </p>
+                                            <p class="text-xs text-gray-400">
+                                                <?= $user['last_login'] ? date('H:i', strtotime($user['last_login'])) : 'Belum login' ?>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
+
                         </div>
                     </div>
+
                 </div>
 
                 <!-- System Security Overview -->

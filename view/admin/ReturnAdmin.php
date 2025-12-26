@@ -338,7 +338,7 @@ function formatTanggalAdmin($date)
                                             </span>
                                         </td>
                                         <td class="px-6 py-5">
-                                            <a href="orderDetail.php?id=<?= urlencode($return['id_order']) ?>"
+                                            <a href="ReturnOrderDetailPage.php?id=<?= urlencode($return['id_order']) ?>"
                                                 class="inline-flex items-center gap-1.5 text-[#882426] hover:text-[#6d1a1c] font-semibold transition-colors hover:underline">
                                                 <span><?= htmlspecialchars($return['id_order']) ?></span>
                                                 <span class="material-symbols-outlined text-base">open_in_new</span>
@@ -834,6 +834,7 @@ function formatTanggalAdmin($date)
                 </div>`;
             }
 
+            // Show loading state while fetching order details
             const content = `
                 <!-- Section: ID Cards -->
                 <div class="grid grid-cols-2 gap-4">
@@ -916,6 +917,25 @@ function formatTanggalAdmin($date)
                     <p class="text-gray-700 text-base leading-relaxed">${data.deskripsi_return}</p>
                 </div>
                 ` : ''}
+
+                <!-- Section: Order Details (Loading) -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="icon bg-green-600">
+                            <span class="material-symbols-outlined text-white text-base">receipt_long</span>
+                        </div>
+                        <h4>Detail Order</h4>
+                    </div>
+                    <div class="flex items-center justify-center py-6">
+                        <div class="flex flex-col items-center gap-3">
+                            <svg class="w-8 h-8 animate-spin text-[#882426]" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <p class="text-sm text-gray-600 font-medium">Memuat detail order...</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Section: Files -->
                 <div class="grid grid-cols-2 gap-4">
@@ -1006,6 +1026,180 @@ function formatTanggalAdmin($date)
             document.getElementById('detailContent').innerHTML = content;
             document.getElementById('detailModal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+
+            // Fetch order details with items via AJAX
+            fetchOrderDetailsForReturn(data.id_order);
+        }
+
+        async function fetchOrderDetailsForReturn(orderId) {
+            try {
+                const response = await fetch(`../../api/admin/get-order-detail-return.php?order_id=${encodeURIComponent(orderId)}`);
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const result = await response.json();
+                if (result.success && result.data) {
+                    const orderData = result.data;
+                    updateOrderDetailsSection(orderData);
+                }
+            } catch (error) {
+                console.error('Error fetching order details:', error);
+                updateOrderDetailsSection(null);
+            }
+        }
+
+        function formatRupiah(amount) {
+            return 'Rp ' + new Intl.NumberFormat('id-ID').format(amount);
+        }
+
+        function updateOrderDetailsSection(orderData) {
+            const detailContent = document.getElementById('detailContent');
+            if (!detailContent) return;
+
+            // Find and replace the loading Order Details section
+            const infoCards = detailContent.querySelectorAll('.info-card');
+            let orderDetailsCard = null;
+
+            for (let card of infoCards) {
+                const header = card.querySelector('.info-card-header h4');
+                if (header && header.textContent === 'Detail Order') {
+                    orderDetailsCard = card;
+                    break;
+                }
+            }
+
+            if (!orderDetailsCard && !orderData) return;
+
+            if (!orderData) {
+                if (orderDetailsCard) {
+                    orderDetailsCard.innerHTML = `
+                        <div class="flex items-center gap-2 text-red-600">
+                            <span class="material-symbols-outlined">error</span>
+                            <span class="text-sm">Gagal memuat detail order</span>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const order = orderData.order;
+            const items = orderData.items || [];
+
+            let itemsHtml = '<div class="space-y-2">';
+            if (items.length > 0) {
+                items.forEach((item, idx) => {
+                    itemsHtml += `
+                        <div class="border border-gray-200 rounded-lg p-3 bg-gray-50">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex-1">
+                                    <p class="text-sm font-semibold text-gray-900">${item.nama_product}</p>
+                                    <p class="text-xs text-gray-500 mt-1">Produk ID: ${item.id_product}</p>
+                                </div>
+                                <span class="text-sm font-bold text-[#882426]">x${item.jumlah}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-600">Harga Satuan: ${formatRupiah(item.harga_satuan)}</span>
+                                <span class="text-gray-900 font-semibold">Subtotal: ${formatRupiah(item.subtotal)}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                itemsHtml += '<p class="text-gray-500 text-sm">Tidak ada item dalam order ini</p>';
+            }
+            itemsHtml += '</div>';
+
+            const statusOrderMap = {
+                'pending': {
+                    label: 'Menunggu',
+                    color: 'bg-yellow-100 text-yellow-800'
+                },
+                'dikonfirmasi': {
+                    label: 'Dikonfirmasi',
+                    color: 'bg-blue-100 text-blue-800'
+                },
+                'diproses': {
+                    label: 'Diproses',
+                    color: 'bg-indigo-100 text-indigo-800'
+                },
+                'dikirim': {
+                    label: 'Dikirim',
+                    color: 'bg-purple-100 text-purple-800'
+                },
+                'selesai': {
+                    label: 'Selesai',
+                    color: 'bg-green-100 text-green-800'
+                },
+                'dibatalkan': {
+                    label: 'Dibatalkan',
+                    color: 'bg-red-100 text-red-800'
+                }
+            };
+            const statusOrder = statusOrderMap[order.status_order] || {
+                label: order.status_order,
+                color: 'bg-gray-100 text-gray-800'
+            };
+
+            const newContent = `
+                <div class="info-card-header">
+                    <div class="icon bg-green-600">
+                        <span class="material-symbols-outlined text-white text-base">receipt_long</span>
+                    </div>
+                    <h4>Detail Order</h4>
+                </div>
+                <div class="space-y-4">
+                    <!-- Order Items -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Daftar Produk</p>
+                        ${itemsHtml}
+                    </div>
+                    <!-- Order Summary -->
+                    <div class="border-t border-gray-200 pt-3">
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Total Harga</span>
+                                <span class="font-medium text-gray-900">${formatRupiah(order.total_harga)}</span>
+                            </div>
+                            ${parseFloat(order.total_diskon) > 0 ? `
+                            <div class="flex justify-between text-red-600">
+                                <span>Diskon</span>
+                                <span class="font-medium">-${formatRupiah(order.total_diskon)}</span>
+                            </div>
+                            ` : ''}
+                            ${parseFloat(order.biaya_packing) > 0 ? `
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Biaya Packing</span>
+                                <span class="font-medium text-gray-900">${formatRupiah(order.biaya_packing)}</span>
+                            </div>
+                            ` : ''}
+                            ${parseFloat(order.total_ongkir) > 0 ? `
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Ongkos Kirim</span>
+                                <span class="font-medium text-gray-900">${formatRupiah(order.total_ongkir)}</span>
+                            </div>
+                            ` : ''}
+                            <div class="flex justify-between border-t border-gray-200 pt-2">
+                                <span class="font-bold text-gray-900">Total Bayar</span>
+                                <span class="font-bold text-[#882426] text-lg">${formatRupiah(order.total_bayar)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Order Status & Date -->
+                    <div class="border-t border-gray-200 pt-3 space-y-2">
+                        <div>
+                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Status Order</p>
+                            <span class="text-xs font-bold px-3 py-1.5 rounded-full ${statusOrder.color}">${statusOrder.label}</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Tanggal Order</p>
+                            <p class="text-sm text-gray-700">${formatDate(order.tanggal_order)}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (orderDetailsCard) {
+                orderDetailsCard.innerHTML = newContent;
+            }
         }
 
         function closeDetailModal() {
