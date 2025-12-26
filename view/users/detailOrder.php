@@ -141,7 +141,7 @@ try {
 
     $detailQuery = $db->prepare("
         SELECT od.*, pr.gambar as foto_produk,
-               pd.nilai as diskon_persen, pd.jenis as diskon_jenis
+                pd.nilai as diskon_persen, pd.jenis as diskon_jenis
         FROM order_detail od
         LEFT JOIN products pr ON od.id_product = pr.id_product
         LEFT JOIN promo_diskon pd ON od.id_product = pd.id_produk 

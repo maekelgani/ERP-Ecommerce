@@ -221,7 +221,7 @@ if (!function_exists('formatTimeAgo')) {
                             </button>
 
                             <div id="notificationMenu" class="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transform scale-95 opacity-0 invisible transition-all duration-200 origin-top-right z-50">
-                                <div class="px-4 py-3 bg-gradient-to-r from-[#882426] to-[#6a1c1e] flex items-center justify-between">
+                                <div class="px-4 py-3 bg-[#882426] flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />

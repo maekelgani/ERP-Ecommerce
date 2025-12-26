@@ -69,7 +69,7 @@ try {
     $payment = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Fetch shipment info
-    $stmt = $db->prepare("
+    $shipmentQuery = $db->prepare("
         SELECT 
             s.*,
             ab.nama_penerima,
@@ -80,12 +80,47 @@ try {
         WHERE s.id_order = ?
         LIMIT 1
     ");
-    $stmt->execute([$orderId]);
-    $shipment = $stmt->fetch(PDO::FETCH_ASSOC);
+    $shipmentQuery->execute([$orderId]);
+    $shipment = $shipmentQuery->fetch(PDO::FETCH_ASSOC);
+
+    // Fetch voucher usage info
+    $voucherUsageQuery = $db->prepare("
+        SELECT pv.*, v.kode, v.judul, v.jenis, v.nilai as voucher_nilai, v.maksimal_diskon
+        FROM penggunaan_voucher pv
+        LEFT JOIN voucher v ON pv.id_voucher = v.id_voucher
+        WHERE pv.id_pesanan = :order_id
+        LIMIT 1
+    ");
+    $voucherUsageQuery->execute([':order_id' => $orderId]);
+    $voucherUsage = $voucherUsageQuery->fetch(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     error_log('ReturnOrderDetailPage Error: ' . $e->getMessage() . ' | Order ID: ' . $orderId);
     $errorMsg = 'Gagal memuat data order: ' . htmlspecialchars($e->getMessage());
 }
+
+// ================= RINGKASAN BIAYA =================
+$originalSubtotal = 0;
+$subtotalAfterDiscount = 0;
+$productDiscount = 0;
+
+foreach ($items as $item) {
+    $hargaAsli = floatval($item['harga_satuan'] ?? 0);
+    $diskonSatuan = floatval($item['diskon_satuan'] ?? 0);
+    $hargaFinal = floatval($item['harga_setelah_diskon'] ?? ($hargaAsli - $diskonSatuan));
+    $jumlah = intval($item['jumlah'] ?? 1);
+
+    $originalSubtotal += $hargaAsli * $jumlah;
+    $subtotalAfterDiscount += floatval($item['subtotal'] ?? ($hargaFinal * $jumlah));
+    $productDiscount += $diskonSatuan * $jumlah;
+}
+
+$taxRate = 0.11;
+$taxAmount = $subtotalAfterDiscount * $taxRate;
+$shippingCost = (float)($order['total_ongkir'] ?? 0);
+$packingCost = (float)($order['biaya_packing'] ?? 0);
+$voucherDiscount = $voucherUsage ? floatval($voucherUsage['jumlah_diskon'] ?? 0) : 0;
+$grandTotal = (float)($order['total_bayar'] ?? 0);
+
 
 if ($errorMsg) {
     // Show error page
@@ -311,67 +346,110 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
                         <span class="material-symbols-outlined text-[#882426]">calculate</span>
                         Ringkasan Biaya
                     </h2>
-                    <div class="space-y-2.5">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Total Harga</span>
-                            <span class="font-medium text-gray-900"><?= formatRupiah($order['total_harga']) ?></span>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-sm text-gray-600">
+                            <span>Subtotal (<?= count($items) ?> Barang)</span>
+                            <span class="font-semibold text-gray-900"><?= formatRupiah($originalSubtotal) ?></span>
                         </div>
-                        <?php if ((float)$order['total_diskon'] > 0): ?>
-                            <div class="flex justify-between text-sm text-red-600">
-                                <span>Diskon</span>
-                                <span class="font-medium">-<?= formatRupiah($order['total_diskon']) ?></span>
+                        <?php if ($productDiscount > 0): ?>
+                            <div class="flex justify-between items-center text-sm text-red-600">
+                                <span>Diskon Produk</span>
+                                <span class="font-semibold">-<?= formatRupiah($productDiscount) ?></span>
                             </div>
                         <?php endif; ?>
-                        <?php if ((float)$order['biaya_packing'] > 0): ?>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Packing</span>
-                                <span class="font-medium text-gray-900"><?= formatRupiah($order['biaya_packing']) ?></span>
+                        <div class="flex justify-between items-center text-sm text-gray-600">
+                            <span>Pajak (11%)</span>
+                            <span class="font-semibold text-gray-900"><?= formatRupiah($taxAmount) ?></span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm text-gray-600">
+                            <span>Ongkos Kirim</span>
+                            <span class="font-semibold text-gray-900"><?= formatRupiah($shippingCost) ?></span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm text-gray-600">
+                            <span>Biaya Pengemasan</span>
+                            <span class="font-semibold text-gray-900"><?= formatRupiah($packingCost) ?></span>
+                        </div>
+                        <?php if ($voucherDiscount > 0): ?>
+                            <div class="flex justify-between items-center text-sm text-green-600 font-medium">
+                                <span>Diskon Voucher <?= $voucherUsage ? '(' . htmlspecialchars($voucherUsage['kode']) . ')' : '' ?></span>
+                                <span class="font-semibold">-<?= formatRupiah($voucherDiscount) ?></span>
                             </div>
                         <?php endif; ?>
-                        <?php if ((float)$order['total_ongkir'] > 0): ?>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Ongkir</span>
-                                <span class="font-medium text-gray-900"><?= formatRupiah($order['total_ongkir']) ?></span>
-                            </div>
-                        <?php endif; ?>
-                        <div class="border-t border-gray-200 pt-3 mt-3">
-                            <div class="flex justify-between">
-                                <span class="font-bold text-gray-900">Total Bayar</span>
-                                <span class="font-bold text-lg text-[#882426]"><?= formatRupiah($order['total_bayar']) ?></span>
+                        <div class="border-t border-dashed border-gray-200 pt-4 mt-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-base font-bold text-gray-900">Total Bayar</span>
+                                <span class="text-xl font-bold text-[#882426]"><?= formatRupiah($payment['total_bayar']) ?></span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <?php if ($payment): ?>
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[#882426]">credit_card</span>
-                            Pembayaran
-                        </h2>
-                        <div class="space-y-3">
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Status</p>
-                                <?php $pb = getPaymentStatusBadge($payment['status_pembayaran']); ?>
-                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold <?= $pb['bg'] ?> <?= $pb['text'] ?>"><?= $pb['label'] ?></span>
-                            </div>
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Metode</p>
-                                <p class="text-sm font-medium text-gray-900"><?= ucwords(str_replace('_', ' ', $payment['metode_pembayaran'])) ?></p>
-                            </div>
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Total</p>
-                                <p class="text-sm font-bold text-gray-900"><?= formatRupiah($payment['total_bayar']) ?></p>
-                            </div>
-                            <?php if (!empty($payment['tanggal_pembayaran'])): ?>
-                                <div>
-                                    <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Tanggal Bayar</p>
-                                    <p class="text-sm text-gray-700"><?= formatDate($payment['tanggal_pembayaran']) ?></p>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <!-- Header dengan gradient -->
+                        <div class="bg-gradient-to-r from-[#882426] to-[#a62d30] px-6 py-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white">credit_card</span>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-lg font-bold text-white">Pembayaran</h2>
+                                        <p class="text-white/70 text-xs">Detail transaksi pembayaran</p>
+                                    </div>
                                 </div>
-                            <?php endif; ?>
+                                <?php $pb = getPaymentStatusBadge($payment['status_pembayaran']); ?>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm text-white border border-white/30">
+                                    <span class="w-2 h-2 rounded-full <?= $payment['status_pembayaran'] === 'berhasil' ? 'bg-green-400' : ($payment['status_pembayaran'] === 'pending' ? 'bg-yellow-400' : 'bg-red-400') ?> animate-pulse"></span>
+                                    <?= $pb['label'] ?>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-6">
+                            <!-- Payment Method Card -->
+                            <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-5 mb-5 relative overflow-hidden">
+                                <!-- Decorative circles -->
+                                <div class="absolute -right-6 -top-6 w-24 h-24 bg-white/5 rounded-full"></div>
+                                <div class="absolute -right-2 -bottom-8 w-32 h-32 bg-white/5 rounded-full"></div>
+
+                                <div class="relative">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span class="text-gray-400 text-xs font-medium uppercase tracking-wider">Metode Pembayaran</span>
+                                        <div class="flex gap-1">
+                                            <div class="w-6 h-4 bg-red-500 rounded-sm opacity-80"></div>
+                                            <div class="w-6 h-4 bg-yellow-500 rounded-sm opacity-80 -ml-2"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-white text-lg font-bold tracking-wide">
+                                        <?= ucwords(str_replace('_', ' ', $payment['metode_pembayaran'])) ?>
+                                    </p>
+                                    <?php if (!empty($payment['tanggal_pembayaran'])): ?>
+                                        <p class="text-gray-400 text-xs mt-2">
+                                            <span class="material-symbols-outlined text-sm align-middle mr-1">schedule</span>
+                                            <?= formatDate($payment['tanggal_pembayaran']) ?>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <!-- Total Payment -->
+                            <div class="bg-gradient-to-r from-[#882426]/5 to-[#882426]/10 rounded-xl p-5 border border-[#882426]/20">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Pembayaran</p>
+                                        <p class="text-2xl font-bold text-[#882426]"><?= formatRupiah($payment['total_bayar']) ?></p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-[#882426]/10 rounded-xl flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-[#882426] text-2xl">payments</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <?php endif; ?>
+
             </div>
 
             <!-- Shipment -->
@@ -462,8 +540,7 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
                 </div>
             <?php endif; ?>
 
-    </div>
-    </main>
+        </main>
     </div>
 </body>
 
