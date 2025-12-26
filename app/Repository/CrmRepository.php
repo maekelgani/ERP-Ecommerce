@@ -76,11 +76,12 @@ class CrmRepository
                 r.status_review,
                 r.foto_review,
                 c.id_customer,
-                c.nama_lengkap as customer_name,
-                c.email as customer_email,
+                c.nama_lengkap AS customer_name,
+                c.email AS customer_email,
+                c.profile_image,
                 p.id_product,
                 p.nama_product,
-                p.gambar as product_image
+                p.gambar AS product_image
             FROM review r
             JOIN customers c ON r.id_customer = c.id_customer
             JOIN products p ON r.id_product = p.id_product
@@ -181,10 +182,10 @@ class CrmRepository
             FROM customers c
             LEFT JOIN orders o ON c.id_customer = o.id_customer
         ";
-        
+
         $params = [];
         $where = [];
-        
+
         if (!empty($filters['search'])) {
             $search = '%' . strtolower($filters['search']) . '%';
             $where[] = "(LOWER(c.nama_lengkap) LIKE :search_nama OR LOWER(c.email) LIKE :search_email OR c.no_telp LIKE :search_telp)";
@@ -192,30 +193,30 @@ class CrmRepository
             $params['search_email'] = $search;
             $params['search_telp'] = $search;
         }
-        
+
         if (isset($filters['is_active']) && $filters['is_active'] !== '') {
             $where[] = "c.is_active = :is_active";
             $params['is_active'] = (int) $filters['is_active'];
         }
-        
+
         if (!empty($filters['login_type'])) {
             $where[] = "c.login_type = :login_type";
             $params['login_type'] = $filters['login_type'];
         }
-        
+
         if (!empty($where)) {
             $sql .= " WHERE " . implode(' AND ', $where);
         }
-        
+
         $sql .= " GROUP BY c.id_customer ORDER BY c.created_at DESC";
-        
+
         if (!empty($filters['limit'])) {
             $sql .= " LIMIT " . (int)$filters['limit'];
             if (!empty($filters['offset'])) {
                 $sql .= " OFFSET " . (int)$filters['offset'];
             }
         }
-        
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll();
@@ -224,10 +225,10 @@ class CrmRepository
     public function countCustomers(array $filters = []): int
     {
         $sql = "SELECT COUNT(*) as total FROM customers c";
-        
+
         $params = [];
         $where = [];
-        
+
         if (!empty($filters['search'])) {
             $search = '%' . strtolower($filters['search']) . '%';
             $where[] = "(LOWER(c.nama_lengkap) LIKE :search_nama OR LOWER(c.email) LIKE :search_email OR c.no_telp LIKE :search_telp)";
@@ -235,21 +236,21 @@ class CrmRepository
             $params['search_email'] = $search;
             $params['search_telp'] = $search;
         }
-        
+
         if (isset($filters['is_active']) && $filters['is_active'] !== '') {
             $where[] = "c.is_active = :is_active";
             $params['is_active'] = (int) $filters['is_active'];
         }
-        
+
         if (!empty($filters['login_type'])) {
             $where[] = "c.login_type = :login_type";
             $params['login_type'] = $filters['login_type'];
         }
-        
+
         if (!empty($where)) {
             $sql .= " WHERE " . implode(' AND ', $where);
         }
-        
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
         return (int) $stmt->fetch()['total'];
@@ -366,9 +367,9 @@ class CrmRepository
                 INSERT INTO customers (nama_lengkap, email, no_telp, password_hash, login_type, is_active)
                 VALUES (:nama, :email, :telp, :password, 'regular', :is_active)
             ");
-            
+
             $password = !empty($data['password']) ? password_hash($data['password'], PASSWORD_DEFAULT) : null;
-            
+
             $success = $stmt->execute([
                 'nama' => trim($data['nama_lengkap']),
                 'email' => trim($data['email']),

@@ -348,10 +348,13 @@ function renderStarRating($rating, $size = 'text-lg', $showNumber = true)
                                     <div class="p-4 rounded-xl border border-gray-100 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all duration-200">
                                         <div class="flex items-start justify-between gap-3 mb-3">
                                             <div class="flex items-center gap-3">
-                                                <?php if (!empty($customer['profile_image'])): ?>
-                                                    <img src="../../uploads/customers/<?= htmlspecialchars($customer['profile_image']) ?>" alt="" class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100">
+                                                <?php if (!empty($review['profile_image'])): ?>
+                                                    <img src="../../uploads/customers/<?= htmlspecialchars($review['profile_image']) ?>"
+                                                        alt=""
+                                                        class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100">
                                                 <?php else: ?>
-                                                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center ring-2 ring-gray-100">
+                                                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-blue-50
+                flex items-center justify-center ring-2 ring-gray-100">
                                                         <span class="material-symbols-outlined text-blue-600">person</span>
                                                     </div>
                                                 <?php endif; ?>

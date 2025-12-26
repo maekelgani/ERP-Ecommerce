@@ -429,6 +429,9 @@
   .top-0 {
     top: calc(var(--spacing) * 0);
   }
+  .top-0\.5 {
+    top: calc(var(--spacing) * 0.5);
+  }
   .top-1\/2 {
     top: calc(1/2 * 100%);
   }
@@ -530,6 +533,9 @@
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
+  }
+  .left-0\.5 {
+    left: calc(var(--spacing) * 0.5);
   }
   .left-1\/2 {
     left: calc(1/2 * 100%);
@@ -3593,6 +3599,9 @@
   .ring-\[\#882426\]\/5 {
     --tw-ring-color: color-mix(in oklab, #882426 5%, transparent);
   }
+  .ring-\[\#882426\]\/20 {
+    --tw-ring-color: color-mix(in oklab, #882426 20%, transparent);
+  }
   .ring-gray-100 {
     --tw-ring-color: var(--color-gray-100);
   }
@@ -4125,6 +4134,12 @@
       @media (hover: hover) {
         --tw-ring-color: var(--color-amber-200);
       }
+    }
+  }
+  .peer-checked\:translate-x-5 {
+    &:is(:where(.peer):checked ~ *) {
+      --tw-translate-x: calc(var(--spacing) * 5);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
     }
   }
   .peer-checked\:bg-\[\#882426\] {
