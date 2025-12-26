@@ -49,7 +49,7 @@ include '../../components/admin/head.php';
             <?php include '../../components/admin/breadcrumb.php'; ?>
 
             <div class="mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Manajemen User</h1>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Manajemen Pengguna</h1>
                 <p class="text-gray-500 mt-1">Kelola pengguna administrator sistem dengan mudah</p>
             </div>
 
@@ -283,87 +283,283 @@ include '../../components/admin/head.php';
         </main>
     </div>
 
-    <div id="userModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
-        <div class="absolute inset-0 bg-black/50" onclick="closeUserModal()"></div>
-        <div class="relative z-10 max-w-lg w-full rounded-2xl border border-gray-100 bg-white shadow-xl overflow-hidden">
-            <div class="p-6 border-b border-gray-100 flex items-center justify-between" style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
-                <div>
-                    <h2 class="text-xl font-bold text-white" id="modalTitle">Tambah User</h2>
-                    <p class="text-sm text-white/80">Masukkan data pengguna administrator</p>
+    <!-- Enhanced User Modal - Consistent with CustomerList.php -->
+    <div id="userModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeUserModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all animate-modal-in">
+                <!-- Modern Header with Solid Primary Color -->
+                <div class="bg-[#882426] px-6 py-5 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
+                            <span class="material-symbols-outlined text-white text-2xl" id="modalIcon">person_add</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white" id="modalTitle">Tambah User</h3>
+                            <p class="text-white/70 text-sm mt-0.5" id="modalSubtitle">Isi data pengguna administrator</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeUserModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
                 </div>
-                <button onclick="closeUserModal()" class="p-2 hover:bg-white/20 rounded-lg transition-colors text-white">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
+
+                <!-- Modal Body -->
+                <form id="userForm" onsubmit="submitUserForm(event)">
+                    <input type="hidden" id="userId" name="id_admin">
+
+                    <div class="p-6 bg-gray-50 space-y-5 max-h-[60vh] overflow-y-auto" id="userFormContent">
+                        <!-- Info Alert -->
+                        <div class="p-4 rounded-xl border-l-4 border-[#882426] bg-[#882426]/5">
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-[#882426] text-xl flex-shrink-0">info</span>
+                                <div>
+                                    <p class="text-sm text-gray-700 font-medium" id="formInfoText">Lengkapi data pengguna administrator dengan benar.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nama Lengkap -->
+                        <div>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                <span class="material-symbols-outlined text-[#882426] text-lg">badge</span>
+                                Nama Lengkap <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="userName" name="nama_lengkap" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 placeholder:text-gray-400"
+                                placeholder="Masukkan nama lengkap...">
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                <span class="material-symbols-outlined text-[#882426] text-lg">mail</span>
+                                Email <span class="text-red-500">*</span>
+                            </label>
+                            <input type="email" id="userEmail" name="email" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 placeholder:text-gray-400"
+                                placeholder="user@example.com">
+                        </div>
+
+                        <!-- No. Telepon -->
+                        <div>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                <span class="material-symbols-outlined text-[#882426] text-lg">phone</span>
+                                No. Telepon
+                            </label>
+                            <input type="text" id="userPhone" name="phone"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 placeholder:text-gray-400"
+                                placeholder="+62812345678">
+                        </div>
+
+                        <!-- Password -->
+                        <div>
+                            <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                <span class="material-symbols-outlined text-[#882426] text-lg">lock</span>
+                                Password <span id="passwordNote" class="text-xs font-normal text-gray-500">(wajib untuk pengguna baru)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="password" id="userPassword" name="password"
+                                    class="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 placeholder:text-gray-400"
+                                    placeholder="Masukkan password...">
+                                <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                                    <span class="material-symbols-outlined text-lg" id="togglePasswordIcon">visibility_off</span>
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2 flex items-center gap-1" id="passwordHint">
+                                <span class="material-symbols-outlined text-sm">lightbulb</span>
+                                Minimal 6 karakter
+                            </p>
+                        </div>
+
+                        <!-- Role & Status Grid -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Role -->
+                            <div>
+                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                    <span class="material-symbols-outlined text-[#882426] text-lg">admin_panel_settings</span>
+                                    Role <span class="text-red-500">*</span>
+                                </label>
+                                <select id="userRole" name="id_role" required
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 bg-white">
+                                    <?php foreach ($roles as $role): ?>
+                                        <option value="<?= $role['id_role'] ?>"><?= htmlspecialchars(ucfirst(str_replace('_', ' ', $role['role_name']))) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <!-- Status -->
+                            <div>
+                                <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
+                                    <span class="material-symbols-outlined text-[#882426] text-lg">toggle_on</span>
+                                    Status
+                                </label>
+                                <select id="userStatus" name="is_active"
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] transition-all duration-200 bg-white">
+                                    <option value="1">Aktif</option>
+                                    <option value="0">Nonaktif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
+                        <button type="button" onclick="closeUserModal()"
+                            class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
+                            <span class="material-symbols-outlined text-lg">close</span>
+                            Batal
+                        </button>
+                        <button type="submit" id="userSubmitBtn"
+                            class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-[#6d1a1c] transition-all duration-200 shadow-lg shadow-[#882426]/30">
+                            <span class="material-symbols-outlined text-lg">check_circle</span>
+                            <span id="submitBtnText">Simpan</span>
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <form id="userForm" onsubmit="submitUserForm(event)" class="p-6 space-y-5">
-                <input type="hidden" id="userId" name="id_admin">
-
-                <div>
-                    <label class="font-semibold text-sm text-gray-800 block mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
-                    <input type="text" id="userName" name="nama_lengkap" required class="w-full px-4 py-2.5 text-gray-900 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all" placeholder="Masukkan nama lengkap">
-                </div>
-
-                <div>
-                    <label class="font-semibold text-sm text-gray-800 block mb-2">Email <span class="text-red-500">*</span></label>
-                    <input type="email" id="userEmail" name="email" required class="w-full px-4 py-2.5 text-gray-900 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all" placeholder="user@example.com">
-                </div>
-
-                <div>
-                    <label class="font-semibold text-sm text-gray-800 block mb-2">No Telepon</label>
-                    <input type="text" id="userPhone" name="phone" class="w-full px-4 py-2.5 text-gray-900 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all" placeholder="+62812345678">
-                </div>
-
-                <div>
-                    <label class="font-semibold text-sm text-gray-800 block mb-2">Password <span class="text-red-500" id="passwordRequired">*</span></label>
-                    <input type="password" id="userPassword" name="password" class="w-full px-4 py-2.5 text-gray-900 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all" placeholder="••••••">
-                    <p class="text-xs text-gray-500 mt-2" id="passwordHint">Minimal 6 karakter</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="font-semibold text-sm text-gray-800 block mb-2">Role <span class="text-red-500">*</span></label>
-                        <select id="userRole" name="id_role" required class="w-full px-4 py-2.5 text-gray-900 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all">
-                            <?php foreach ($roles as $role): ?>
-                                <option value="<?= $role['id_role'] ?>"><?= htmlspecialchars(ucfirst(str_replace('_', ' ', $role['role_name']))) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="font-semibold text-sm text-gray-800 block mb-2">Status</label>
-                        <select id="userStatus" name="is_active" class="w-full px-4 py-2.5 text-gray-900 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all">
-                            <option value="1">Aktif</option>
-                            <option value="0">Nonaktif</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                    <button type="button" onclick="closeUserModal()" class="px-4 py-2.5 border border-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-50 transition-colors">Batal</button>
-                    <button type="submit" class="px-4 py-2.5 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg active:scale-95" style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">Simpan</button>
-                </div>
-            </form>
         </div>
     </div>
 
-    <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
-        <div class="absolute inset-0 bg-black/50" onclick="closeDeleteModal()"></div>
-        <div class="relative z-10 max-w-sm w-full rounded-2xl border border-gray-100 bg-white shadow-xl p-6">
-            <div class="text-center">
-                <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
-                    <span class="material-symbols-outlined text-red-500 text-3xl">error</span>
+    <!-- Enhanced Delete Modal - Consistent with CustomerList.php -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeDeleteModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all animate-modal-in">
+                <!-- Modern Header with Red Color for Delete -->
+                <div class="bg-red-600 px-6 py-5 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg animate-pulse-slow">
+                            <span class="material-symbols-outlined text-white text-2xl">warning</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Hapus User</h3>
+                            <p class="text-white/70 text-sm mt-0.5">Konfirmasi penghapusan pengguna</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeDeleteModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
                 </div>
-                <h2 class="text-xl font-bold text-gray-900 mb-2">Hapus User?</h2>
-                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus user <strong id="deleteUserName" class="text-gray-900"></strong>? Tindakan ini tidak dapat dibatalkan.</p>
-                <input type="hidden" id="deleteUserId">
-                <div class="flex justify-center gap-3">
-                    <button onclick="closeDeleteModal()" class="px-4 py-2.5 border border-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-50 transition-colors">Batal</button>
-                    <button onclick="confirmDelete()" class="px-4 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">Hapus</button>
+
+                <!-- Modal Body -->
+                <div class="p-6 bg-gray-50 space-y-5">
+                    <!-- User Profile Card -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center ring-4 ring-red-50">
+                            <span class="material-symbols-outlined text-red-500 text-4xl">person_remove</span>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-lg font-bold text-gray-800" id="deleteUserName"></p>
+                            <p class="text-sm text-gray-500">Administrator</p>
+                        </div>
+                    </div>
+
+                    <!-- Warning Alert -->
+                    <div class="p-4 rounded-xl border-l-4 border-red-500 bg-red-50">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-500 text-xl flex-shrink-0">error</span>
+                            <div>
+                                <p class="text-sm text-red-700 font-medium">Apakah Anda yakin ingin menghapus user ini?</p>
+                                <p class="text-xs text-red-600 mt-1">Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data terkait.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="deleteUserId">
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                        Batal
+                    </button>
+                    <button type="button" onclick="confirmDelete()" id="deleteConfirmBtn"
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30">
+                        <span class="material-symbols-outlined text-lg">delete_forever</span>
+                        Ya, Hapus!
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Custom Modal Styles -->
+    <style>
+        @keyframes modal-in {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes pulse-slow {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+
+        .animate-modal-in {
+            animation: modal-in 0.3s ease-out forwards;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 2s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar for Modal */
+        #userFormContent::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #userFormContent::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #userFormContent::-webkit-scrollbar-thumb {
+            background: #882426;
+            border-radius: 10px;
+        }
+
+        #userFormContent::-webkit-scrollbar-thumb:hover {
+            background: #6d1a1c;
+        }
+
+        /* Input Focus Animation */
+        input:focus,
+        select:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(136, 36, 38, 0.15);
+        }
+
+        /* Button Hover Effects */
+        button[type="submit"]:hover,
+        #deleteConfirmBtn:hover {
+            transform: translateY(-1px);
+        }
+
+        button[type="submit"]:active,
+        #deleteConfirmBtn:active {
+            transform: translateY(0) scale(0.98);
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const API_URL = '../../app/controllers/accessController.php';
         let isEditMode = false;
@@ -375,23 +571,53 @@ include '../../components/admin/head.php';
             window.location.href = '?' + params.toString();
         }
 
+        function togglePassword() {
+            const passwordInput = document.getElementById('userPassword');
+            const toggleIcon = document.getElementById('togglePasswordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = 'visibility_off';
+            }
+        }
+
         function openAddUserModal() {
             isEditMode = false;
             document.getElementById('modalTitle').textContent = 'Tambah User';
+            document.getElementById('modalSubtitle').textContent = 'Isi data pengguna administrator';
+            document.getElementById('modalIcon').textContent = 'person_add';
+            document.getElementById('formInfoText').textContent = 'Lengkapi data pengguna administrator dengan benar.';
+            document.getElementById('submitBtnText').textContent = 'Simpan';
             document.getElementById('userForm').reset();
             document.getElementById('userId').value = '';
             document.getElementById('userPassword').required = true;
-            document.getElementById('passwordRequired').classList.remove('hidden');
-            document.getElementById('passwordHint').textContent = 'Minimal 6 karakter';
+            document.getElementById('passwordNote').textContent = '(wajib untuk pengguna baru)';
+            document.getElementById('passwordHint').innerHTML = '<span class="material-symbols-outlined text-sm">lightbulb</span> Minimal 6 karakter';
+            document.getElementById('userPassword').type = 'password';
+            document.getElementById('togglePasswordIcon').textContent = 'visibility_off';
             document.getElementById('userModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function editUser(id) {
             isEditMode = true;
             document.getElementById('modalTitle').textContent = 'Edit User';
+            document.getElementById('modalSubtitle').textContent = 'Perbarui data pengguna';
+            document.getElementById('modalIcon').textContent = 'edit';
+            document.getElementById('formInfoText').textContent = 'Ubah data pengguna sesuai kebutuhan. Password kosongkan jika tidak ingin mengubah.';
+            document.getElementById('submitBtnText').textContent = 'Update';
             document.getElementById('userPassword').required = false;
-            document.getElementById('passwordRequired').classList.add('hidden');
-            document.getElementById('passwordHint').textContent = 'Kosongkan jika tidak ingin mengubah password';
+            document.getElementById('passwordNote').textContent = '(kosongkan jika tidak ingin mengubah)';
+            document.getElementById('passwordHint').innerHTML = '<span class="material-symbols-outlined text-sm">lightbulb</span> Kosongkan jika tidak ingin mengubah password';
+            document.getElementById('userPassword').type = 'password';
+            document.getElementById('togglePasswordIcon').textContent = 'visibility_off';
+
+            // Show loading state
+            const submitBtn = document.getElementById('userSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg animate-spin">sync</span> Memuat...';
 
             fetch(`${API_URL}?action=get_user&id=${id}`)
                 .then(res => res.json())
@@ -405,18 +631,42 @@ include '../../components/admin/head.php';
                         document.getElementById('userRole').value = user.id_role;
                         document.getElementById('userStatus').value = user.is_active;
                         document.getElementById('userModal').classList.remove('hidden');
+                        document.body.style.overflow = 'hidden';
                     } else {
-                        alert(data.message);
+                        Swal.fire({
+                            title: 'Gagal!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonColor: '#882426'
+                        });
                     }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan saat memuat data',
+                        icon: 'error',
+                        confirmButtonColor: '#882426'
+                    });
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg">check_circle</span> <span id="submitBtnText">Update</span>';
                 });
         }
 
         function closeUserModal() {
             document.getElementById('userModal').classList.add('hidden');
+            document.body.style.overflow = '';
         }
 
         function submitUserForm(e) {
             e.preventDefault();
+
+            const submitBtn = document.getElementById('userSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg animate-spin">sync</span> Menyimpan...';
+
             const formData = new FormData(document.getElementById('userForm'));
             formData.append('action', isEditMode ? 'update_user' : 'create_user');
 
@@ -426,12 +676,37 @@ include '../../components/admin/head.php';
                 })
                 .then(res => res.json())
                 .then(data => {
+                    closeUserModal();
                     if (data.success) {
-                        alert(data.message);
-                        location.reload();
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonColor: '#882426'
+                        }).then(() => {
+                            location.reload();
+                        });
                     } else {
-                        alert(data.message);
+                        Swal.fire({
+                            title: 'Gagal!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonColor: '#882426'
+                        });
                     }
+                })
+                .catch(error => {
+                    closeUserModal();
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan saat menyimpan data',
+                        icon: 'error',
+                        confirmButtonColor: '#882426'
+                    });
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg">check_circle</span> <span id="submitBtnText">' + (isEditMode ? 'Update' : 'Simpan') + '</span>';
                 });
         }
 
@@ -439,14 +714,21 @@ include '../../components/admin/head.php';
             document.getElementById('deleteUserId').value = id;
             document.getElementById('deleteUserName').textContent = name;
             document.getElementById('deleteModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeDeleteModal() {
             document.getElementById('deleteModal').classList.add('hidden');
+            document.body.style.overflow = '';
         }
 
         function confirmDelete() {
             const id = document.getElementById('deleteUserId').value;
+
+            const confirmBtn = document.getElementById('deleteConfirmBtn');
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<span class="material-symbols-outlined text-lg animate-spin">sync</span> Menghapus...';
+
             const formData = new FormData();
             formData.append('action', 'delete_user');
             formData.append('id_admin', id);
@@ -457,12 +739,37 @@ include '../../components/admin/head.php';
                 })
                 .then(res => res.json())
                 .then(data => {
+                    closeDeleteModal();
                     if (data.success) {
-                        alert(data.message);
-                        location.reload();
+                        Swal.fire({
+                            title: 'Terhapus!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonColor: '#882426'
+                        }).then(() => {
+                            location.reload();
+                        });
                     } else {
-                        alert(data.message);
+                        Swal.fire({
+                            title: 'Gagal!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonColor: '#882426'
+                        });
                     }
+                })
+                .catch(error => {
+                    closeDeleteModal();
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan saat menghapus data',
+                        icon: 'error',
+                        confirmButtonColor: '#882426'
+                    });
+                })
+                .finally(() => {
+                    confirmBtn.disabled = false;
+                    confirmBtn.innerHTML = '<span class="material-symbols-outlined text-lg">delete_forever</span> Ya, Hapus!';
                 });
         }
 
@@ -487,6 +794,21 @@ include '../../components/admin/head.php';
             });
         });
 
+        // Close modals on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const userModal = document.getElementById('userModal');
+                const deleteModal = document.getElementById('deleteModal');
+
+                if (!userModal.classList.contains('hidden')) {
+                    closeUserModal();
+                }
+                if (!deleteModal.classList.contains('hidden')) {
+                    closeDeleteModal();
+                }
+            }
+        });
+
         // Lightbox functions
         function openLightbox(src) {
             const lightbox = document.getElementById('lightbox');
@@ -494,22 +816,22 @@ include '../../components/admin/head.php';
             img.src = src;
             lightbox.classList.remove('hidden');
             lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
             lightbox.classList.add('hidden');
             lightbox.classList.remove('flex');
+            document.body.style.overflow = '';
         }
-    </script>
 
-    <!-- Lightbox Modal -->
-    <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors">
-            <span class="material-symbols-outlined text-3xl">close</span>
-        </button>
-        <img id="lightbox-image" src="" alt="Preview" class="max-w-[90%] max-h-[85vh] object-contain rounded-lg shadow-2xl">
-    </div>
+        document.getElementById('lightbox')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+    </script>
 </body>
 
 </html>

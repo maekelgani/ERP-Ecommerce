@@ -118,9 +118,9 @@ include '../../components/admin/head.php';
 
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
             <div id="main-header" class="flex justify-between items-center mb-4">
-                <div class="mb-4">
-                    <h1 class="text-3xl font-bold">Web Management</h1>
-                    <p class="text-gray-400">Kelola pengaturan dan informasi mengenai website anda</p>
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Manajemen Website</h1>
+                    <p class="text-gray-500 mt-1">Kelola pengaturan dan informasi mengenai website anda</p>
                 </div>
             </div>
 
@@ -623,17 +623,17 @@ include '../../components/admin/head.php';
     </div>
 
     <!-- Modal: Add/Edit Article -->
-    <div id="articleModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl">
-            <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
+    <div id="articleModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+        <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl transform transition-all duration-300">
+            <div class="sticky top-0 z-10 px-6 py-5 flex items-center justify-between border-b border-gray-100 bg-[#882426]">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-[#882426] flex items-center justify-center">
+                    <div class="w-10 h-10 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
                         <span class="material-symbols-outlined text-white">article</span>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800" id="articleModalTitle">Tambah Artikel</h3>
+                    <h3 class="text-xl font-bold text-white" id="articleModalTitle">Tambah Artikel</h3>
                 </div>
-                <button id="closeArticleModal" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <span class="material-symbols-outlined text-gray-500">close</span>
+                <button id="closeArticleModal" class="p-2 hover:bg-white/20 rounded-lg transition-colors">
+                    <span class="material-symbols-outlined text-white">close</span>
                 </button>
             </div>
             <form id="articleForm" class="p-6 space-y-5 overflow-y-auto max-h-[calc(90vh-80px)]">

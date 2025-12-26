@@ -43,6 +43,12 @@ include '../../components/admin/head.php';
 
                 <!-- Hero Section -->
                 <div class="relative overflow-hidden rounded-2xl bg-[#882426] shadow-xl">
+                    <div class="absolute inset-0 opacity-10">
+                        <svg class="absolute right-0 top-0 h-full w-1/2" viewBox="0 0 400 400" fill="none">
+                            <circle cx="300" cy="100" r="150" fill="white" />
+                            <circle cx="350" cy="300" r="100" fill="white" />
+                        </svg>
+                    </div>
                     <div class="relative p-8 md:p-12">
                         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                             <div>

@@ -19,7 +19,7 @@ include '../../components/admin/head.php';
 
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
             <div class="mb-6">
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Reports</h1>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Laporan</h1>
                 <p class="text-gray-500 mt-1">Buat dan unduh laporan bisnis Anda</p>
             </div>
 
