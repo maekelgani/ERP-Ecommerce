@@ -8,7 +8,7 @@ AuthMiddleware::requireAdminLoginFromView();
 
 $orderRepo = new OrderRepository();
 
-// Modified: Added perPage variable like CustomerList.php
+// Modified: Added perPage variable like IncomingOrdersAdmin.php
 $perPage = (int)($_GET['per_page'] ?? 10);
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $limit = $perPage;
@@ -167,36 +167,19 @@ function getPaymentMethodLabel($method)
             </div>
 
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
-                <!-- Modified: Header with entries per page dropdown -->
                 <div class="p-4 md:p-6 border-b border-gray-100">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-800">Riwayat Pesanan</h2>
                             <p class="text-sm text-gray-500 mt-1">Semua pesanan yang pernah dibuat</p>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <!-- Entries per page dropdown -->
-                            <div class="flex items-center gap-2">
-                                <label for="per-page-select" class="text-sm text-gray-600">Show</label>
-                                <select id="per-page-select" onchange="changePerPage(this.value)"
-                                    class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] outline-none">
-                                    <option value="5" <?= $perPage == 5 ? 'selected' : '' ?>>5</option>
-                                    <option value="10" <?= $perPage == 10 ? 'selected' : '' ?>>10</option>
-                                    <option value="25" <?= $perPage == 25 ? 'selected' : '' ?>>25</option>
-                                    <option value="50" <?= $perPage == 50 ? 'selected' : '' ?>>50</option>
-                                    <option value="100" <?= $perPage == 100 ? 'selected' : '' ?>>100</option>
-                                </select>
-                                <span class="text-sm text-gray-600">entries</span>
-                            </div>
-                            <div class="text-sm text-gray-500">
-                                Showing <span class="font-semibold text-gray-800"><?= $startEntry ?></span> - <span class="font-semibold text-gray-800"><?= $endEntry ?></span> of <span class="font-semibold text-gray-800"><?= $totalOrders ?></span>
-                            </div>
+                        <div class="text-sm text-gray-500">
+                            Total: <span class="font-semibold text-gray-800"><?= $totalOrders ?></span> pesanan
                         </div>
                     </div>
                 </div>
 
                 <form method="GET" class="p-4 border-b border-gray-100 bg-gray-50/50">
-                    <!-- Added: Hidden input for per_page -->
                     <input type="hidden" name="per_page" value="<?= $perPage ?>">
                     <div class="flex flex-wrap items-end gap-3">
                         <div class="flex-1 min-w-[200px]">
@@ -250,6 +233,22 @@ function getPaymentMethodLabel($method)
                         </div>
                     </div>
                 </form>
+
+                <div class="px-4 md:px-6 py-3 border-b border-gray-100 flex items-center justify-between">
+                    <!-- LEFT: Entries per page -->
+                    <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                        <span class="material-symbols-outlined text-gray-400 text-sm">view_list</span>
+                        <select onchange="window.location.href='?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>&per_page=' + this.value"
+                            class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
+                            <?php foreach ([5, 10, 20, 50] as $option): ?>
+                                <option value="<?= $option ?>" <?= $perPage === $option ? 'selected' : '' ?>>
+                                    <?= $option ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="text-sm text-gray-600">entries per page</span>
+                    </div>
+                </div>
 
                 <div class="overflow-x-auto">
                     <table class="w-full">
@@ -398,7 +397,7 @@ function getPaymentMethodLabel($method)
                     <!-- Pagination Navigation with per_page -->
                     <div class="flex items-center gap-1 flex-shrink-0">
                         <?php if ($page > 1): ?>
-                            <a href="?page=<?= $page - 1 ?>&per_page=<?= $perPage ?>&<?= http_build_query(array_filter($filters)) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
                                 <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
                             </a>
                         <?php else: ?>
@@ -412,7 +411,7 @@ function getPaymentMethodLabel($method)
                         $endPage = min($totalPages, $page + 2);
                         if ($startPage > 1):
                         ?>
-                            <a href="?page=1&per_page=<?= $perPage ?>&<?= http_build_query(array_filter($filters)) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">1</a>
+                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">1</a>
                             <?php if ($startPage > 2): ?>
                                 <span class="px-2 py-2 text-gray-400">...</span>
                             <?php endif; ?>
@@ -422,7 +421,7 @@ function getPaymentMethodLabel($method)
                             <?php if ($i === $page): ?>
                                 <button class="px-3 py-2 rounded-lg text-white font-medium" style="background: #882426;"><?= $i ?></button>
                             <?php else: ?>
-                                <a href="?page=<?= $i ?>&per_page=<?= $perPage ?>&<?= http_build_query(array_filter($filters)) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium"><?= $i ?></a>
+                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium"><?= $i ?></a>
                             <?php endif; ?>
                         <?php endfor; ?>
 
@@ -430,11 +429,11 @@ function getPaymentMethodLabel($method)
                             <?php if ($endPage < $totalPages - 1): ?>
                                 <span class="px-2 py-2 text-gray-400">...</span>
                             <?php endif; ?>
-                            <a href="?page=<?= $totalPages ?>&per_page=<?= $perPage ?>&<?= http_build_query(array_filter($filters)) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium"><?= $totalPages ?></a>
+                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $totalPages, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium"><?= $totalPages ?></a>
                         <?php endif; ?>
 
                         <?php if ($page < $totalPages): ?>
-                            <a href="?page=<?= $page + 1 ?>&per_page=<?= $perPage ?>&<?= http_build_query(array_filter($filters)) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
+                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
                                 <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
                             </a>
                         <?php else: ?>
@@ -599,14 +598,6 @@ function getPaymentMethodLabel($method)
     </style>
 
     <script>
-        // Added: Function to change entries per page
-        function changePerPage(value) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('per_page', value);
-            url.searchParams.set('page', '1'); // Reset to first page when changing per_page
-            window.location.href = url.toString();
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.btn-view-detail').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -829,6 +820,26 @@ function getPaymentMethodLabel($method)
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+
+        // Function to change entries per page
+        function changePerPage(perPage) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('per_page', perPage);
+            url.searchParams.set('page', '1'); // Reset to first page when changing per page
+            window.location.href = url.toString();
+        }
+
+        // Keyboard shortcut to close modals with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                if (!document.getElementById('order-detail-modal').classList.contains('hidden')) {
+                    closeOrderDetailModal();
+                }
+                if (!document.getElementById('status-modal').classList.contains('hidden')) {
+                    closeStatusModal();
+                }
+            }
+        });
     </script>
 </body>
 

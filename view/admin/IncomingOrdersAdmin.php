@@ -173,7 +173,7 @@ function getShipmentStatusBadge($status)
                     <div class="flex flex-col gap-4">
                         <div class="min-w-0">
                             <h2 class="text-lg font-bold text-gray-800">Daftar Pesanan Masuk</h2>
-                            <p class="text-sm text-gray-500 mt-1">Menampilkan <?= $startEntry ?> - <?= $endEntry ?> dari <?= $totalOrders ?> pesanan</p>
+                            <p class="text-sm text-gray-500 mt-1">Pesanan yang perlu dikonfirmasi dan diproses</p>
                         </div>
                         <!-- KONTROL -->
                         <div class="flex items-center justify-between gap-4">
