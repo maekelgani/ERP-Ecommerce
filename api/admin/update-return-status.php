@@ -21,8 +21,8 @@ try {
 
     $adminId = (int) $_SESSION['admin_id'];
 
-    $idReturn = $_POST['id_return'] ?? null;
-    $status   = $_POST['status_return'] ?? null;
+    $idReturn = $_POST['return_id'] ?? null;
+    $status   = $_POST['status'] ?? null;
     $catatan  = $_POST['catatan_admin'] ?? null;
 
     if (!$idReturn || !$status) {

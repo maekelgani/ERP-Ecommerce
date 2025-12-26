@@ -426,7 +426,7 @@ include '../../components/admin/head.php';
         <div class="absolute inset-0 flex items-center justify-center p-4">
             <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all animate-modal-in">
                 <!-- Modern Header with Red Color for Delete -->
-                <div class="bg-red-600 px-6 py-5 flex items-center justify-between">
+                <div class="bg-[#882426] px-6 py-5 flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg animate-pulse-slow">
                             <span class="material-symbols-outlined text-white text-2xl">warning</span>
@@ -476,7 +476,7 @@ include '../../components/admin/head.php';
                         Batal
                     </button>
                     <button type="button" onclick="confirmDelete()" id="deleteConfirmBtn"
-                        class="inline-flex items-center gap-2 px-5 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30">
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30">
                         <span class="material-symbols-outlined text-lg">delete_forever</span>
                         Ya, Hapus!
                     </button>

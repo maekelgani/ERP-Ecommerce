@@ -109,58 +109,101 @@ function getPaymentMethodLabel($method)
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-gray-600">receipt_long</span>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 
+            hover:shadow-lg hover:border-gray-300 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center bg-gray-800">
+                            <span class="material-symbols-outlined text-white text-2xl">
+                                receipt_long
+                            </span>
                         </div>
                         <div>
-                            <p class="text-2xl font-bold text-gray-800"><?= $stats['total_orders'] ?? 0 ?></p>
-                            <p class="text-xs text-gray-500">Total Order</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+                                Total Order
+                            </p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1">
+                                <?= $stats['total_orders'] ?? 0 ?>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-yellow-600">schedule</span>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 
+            hover:shadow-lg hover:border-amber-200 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center"
+                            style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">
+                            <span class="material-symbols-outlined text-white text-2xl">
+                                schedule
+                            </span>
                         </div>
                         <div>
-                            <p class="text-2xl font-bold text-gray-800"><?= $stats['pending_orders'] ?? 0 ?></p>
-                            <p class="text-xs text-gray-500">Pending</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+                                Pending
+                            </p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1">
+                                <?= $stats['pending_orders'] ?? 0 ?>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-purple-600">local_shipping</span>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 
+            hover:shadow-lg hover:border-purple-200 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center"
+                            style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                            <span class="material-symbols-outlined text-white text-2xl">
+                                local_shipping
+                            </span>
                         </div>
                         <div>
-                            <p class="text-2xl font-bold text-gray-800"><?= $stats['shipping_orders'] ?? 0 ?></p>
-                            <p class="text-xs text-gray-500">Dikirim</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+                                Dikirim
+                            </p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1">
+                                <?= $stats['shipping_orders'] ?? 0 ?>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-green-600">check_circle</span>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 
+            hover:shadow-lg hover:border-green-200 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center"
+                            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <span class="material-symbols-outlined text-white text-2xl">
+                                check_circle
+                            </span>
                         </div>
                         <div>
-                            <p class="text-2xl font-bold text-gray-800"><?= $stats['completed_orders'] ?? 0 ?></p>
-                            <p class="text-xs text-gray-500">Selesai</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+                                Selesai
+                            </p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1">
+                                <?= $stats['completed_orders'] ?? 0 ?>
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm col-span-2 md:col-span-1">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-[#882426]/10 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[#882426]">payments</span>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 
+            hover:shadow-lg hover:border-[#882426]/30 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center"
+                            style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                            <span class="material-symbols-outlined text-white text-2xl">
+                                payments
+                            </span>
                         </div>
                         <div>
-                            <p class="text-lg font-bold text-gray-800"><?= formatRupiah($stats['total_revenue'] ?? 0) ?></p>
-                            <p class="text-xs text-gray-500">Total Revenue</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">
+                                Total Revenue
+                            </p>
+                            <p class="text-2xl font-bold text-gray-900 mt-1">
+                                <?= formatRupiah($stats['total_revenue'] ?? 0) ?>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -121,47 +121,48 @@ function getShipmentStatusBadge($status)
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-yellow-600">pending_actions</span>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-amber-200 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">
+                            <span class="material-symbols-outlined text-white text-2xl">pending_actions</span>
                         </div>
                         <div>
-                            <p class="text-2xl font-bold text-gray-800"><?= $stats['pending_orders'] ?? 0 ?></p>
-                            <p class="text-xs text-gray-500">Menunggu</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Menunggu</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1"><?= $stats['pending_orders'] ?? 0 ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-blue-600">inventory_2</span>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-blue-200 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                            <span class="material-symbols-outlined text-white text-2xl">inventory_2</span>
                         </div>
                         <div>
-                            <p class="text-2xl font-bold text-gray-800"><?= $stats['processing_orders'] ?? 0 ?></p>
-                            <p class="text-xs text-gray-500">Diproses</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Diproses</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1"><?= $stats['processing_orders'] ?? 0 ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-purple-600">local_shipping</span>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-purple-200 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center"
+                            style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                            <span class="material-symbols-outlined text-white text-2xl">local_shipping</span>
                         </div>
                         <div>
-                            <p class="text-2xl font-bold text-gray-800"><?= $stats['shipping_orders'] ?? 0 ?></p>
-                            <p class="text-xs text-gray-500">Dikirim</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Dikirim</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1"><?= $stats['shipping_orders'] ?? 0 ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-green-600">check_circle</span>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-green-200 transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <span class="material-symbols-outlined text-white text-2xl">check_circle</span>
                         </div>
                         <div>
-                            <p class="text-2xl font-bold text-gray-800"><?= $stats['completed_orders'] ?? 0 ?></p>
-                            <p class="text-xs text-gray-500">Selesai</p>
+                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Selesai</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1"><?= $stats['completed_orders'] ?? 0 ?></p>
                         </div>
                     </div>
                 </div>
