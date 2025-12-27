@@ -633,7 +633,7 @@ include '../../components/admin/head.php';
                                     <input type="datetime-local" name="mass_selesai" id="mass_selesai" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426]">
                                 </div>
                             </div> -->
-                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <!-- <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     <span class="flex items-center gap-1">
                                         <span class="material-symbols-outlined text-base text-gray-400">toggle_on</span>
@@ -652,7 +652,83 @@ include '../../components/admin/head.php';
                                     <span>Status ditentukan otomatis: <strong class="text-amber-600">Terjadwal</strong> (waktu mulai di masa depan),
                                         <strong class="text-emerald-600">Aktif</strong> (periode berjalan), <strong class="text-red-600">Berakhir</strong> (melewati waktu selesai).</span>
                                 </p>
+                            </div> -->
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                <label class="flex items-start gap-4 cursor-pointer">
+                                    <div class="toggle-switch mt-1">
+                                        <input type="checkbox" name="mass_is_nonaktif" id="mass_is_nonaktif">
+                                        <span class="toggle-slider"></span>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-sm font-semibold text-gray-700">
+                                            Status Diskon
+                                        </span>
+                                        <p class="text-xs text-gray-500 mt-0.5">
+                                            Nonaktifkan diskon secara manual (override semua jadwal)
+                                        </p>
+                                    </div>
+                                </label>
+
+                                <input type="hidden" name="mass_status" id="mass_status" value="aktif">
+
+                                <p class="text-xs text-gray-500 mt-3 flex items-start gap-1">
+                                    <span class="material-symbols-outlined text-sm mt-0.5">info</span>
+                                    <span>Status ditentukan otomatis: <strong class="text-amber-600">Terjadwal</strong> (waktu mulai di masa depan),
+                                        <strong class="text-emerald-600">Aktif</strong> (periode berjalan), <strong class="text-red-600">Berakhir</strong> (melewati waktu selesai).</span>
+                                </p>
                             </div>
+                            <style>
+                                .toggle-switch {
+                                    position: relative;
+                                    width: 56px;
+                                    height: 32px;
+                                    flex-shrink: 0;
+                                }
+
+                                .toggle-switch input {
+                                    opacity: 0;
+                                    width: 0;
+                                    height: 0;
+                                }
+
+                                .toggle-slider {
+                                    position: absolute;
+                                    inset: 0;
+                                    cursor: pointer;
+                                    background-color: #e5e7eb;
+                                    border-radius: 9999px;
+                                    transition: all 0.3s ease;
+                                }
+
+                                .toggle-slider::before {
+                                    content: "";
+                                    position: absolute;
+                                    height: 24px;
+                                    width: 24px;
+                                    left: 4px;
+                                    top: 4px;
+                                    background-color: #ffffff;
+                                    border-radius: 50%;
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                                    transition: transform 0.3s ease;
+                                }
+
+                                .toggle-switch input:checked+.toggle-slider {
+                                    background-color: #882426;
+                                }
+
+                                .toggle-switch input:checked+.toggle-slider::before {
+                                    transform: translateX(24px);
+                                }
+                            </style>
+                            <script>
+                                document.getElementById('mass_is_nonaktif').addEventListener('change', function() {
+                                    document.getElementById('mass_status').value = this.checked ?
+                                        'nonaktif' :
+                                        'aktif';
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
