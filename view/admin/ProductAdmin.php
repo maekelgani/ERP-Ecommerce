@@ -75,25 +75,7 @@ include '../../components/admin/head.php';
                 <p class="text-gray-500 text-sm md:text-base mt-1">Kelola semua produk yang tersedia di penyimpanan</p>
             </div>
 
-            <?php if ($flashSuccess): ?>
-                <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center gap-3" id="successAlert">
-                    <span class="material-symbols-outlined text-emerald-500">check_circle</span>
-                    <p class="text-emerald-700 flex-1"><?= htmlspecialchars($flashSuccess) ?></p>
-                    <button onclick="document.getElementById('successAlert').remove()" class="text-emerald-500 hover:text-emerald-700">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($flashError): ?>
-                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3" id="errorAlert">
-                    <span class="material-symbols-outlined text-red-500">error</span>
-                    <p class="text-red-700 flex-1"><?= htmlspecialchars($flashError) ?></p>
-                    <button onclick="document.getElementById('errorAlert').remove()" class="text-red-500 hover:text-red-700">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                </div>
-            <?php endif; ?>
+            <!-- Flash alerts are now handled by toast notifications -->
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
@@ -355,7 +337,7 @@ include '../../components/admin/head.php';
                                                         </button>
                                                     <?php else: ?>
                                                         <button type="button"
-                                                            onclick="confirmDelete('<?= $product['id_product'] ?>', '<?= htmlspecialchars(addslashes($product['nama_product'])) ?>')"
+                                                            onclick="confirmDelete('<?= $product['id_product'] ?>', '<?= htmlspecialchars(addslashes($product['nama_product'])) ?>', '<?= $imageSrc ?>', '<?= htmlspecialchars($product['nama_kategori'] ?? '-') ?>', '<?= $product['stok'] ?>', 'Rp <?= number_format($product['harga'], 0, ',', '.') ?>')"
                                                             class="inline-flex items-center gap-1.5 px-3 py-2 text-red-600 bg-red-50 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
                                                             title="Hapus">
                                                             <span class="material-symbols-outlined text-lg">delete</span>
@@ -480,7 +462,7 @@ include '../../components/admin/head.php';
                                                 <span class="material-symbols-outlined text-xl">edit</span>
                                             </a>
                                             <?php if (!$isUsedInOrders): ?>
-                                                <button onclick="confirmDelete('<?= $product['id_product'] ?>', '<?= htmlspecialchars(addslashes($product['nama_product'])) ?>')"
+                                                <button onclick="confirmDelete('<?= $product['id_product'] ?>', '<?= htmlspecialchars(addslashes($product['nama_product'])) ?>', '<?= $imageSrc ?>', '<?= htmlspecialchars($product['nama_kategori'] ?? '-') ?>', '<?= $product['stok'] ?>', 'Rp <?= number_format($product['harga'], 0, ',', '.') ?>')"
                                                     class="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors">
                                                     <span class="material-symbols-outlined text-xl">delete</span>
                                                 </button>
@@ -539,7 +521,7 @@ include '../../components/admin/head.php';
                                                         <span class="material-symbols-outlined text-lg">edit</span>
                                                     </a>
                                                     <?php if (!$isUsedInOrders): ?>
-                                                        <button onclick="confirmDelete('<?= $product['id_product'] ?>', '<?= htmlspecialchars(addslashes($product['nama_product'])) ?>')"
+                                                        <button onclick="confirmDelete('<?= $product['id_product'] ?>', '<?= htmlspecialchars(addslashes($product['nama_product'])) ?>', '<?= $imageSrc ?>', '<?= htmlspecialchars($product['nama_kategori'] ?? '-') ?>', '<?= $product['stok'] ?>', 'Rp <?= number_format($product['harga'], 0, ',', '.') ?>')"
                                                             class="p-1.5 rounded-lg hover:bg-red-50 text-red-600 transition-colors">
                                                             <span class="material-symbols-outlined text-lg">delete</span>
                                                         </button>
@@ -620,8 +602,398 @@ include '../../components/admin/head.php';
         <img id="lightbox-image" src="" alt="Preview" class="max-w-[90%] max-h-[85vh] object-contain rounded-lg shadow-2xl">
     </div>
 
+    <!-- Delete Product Modal - Consistent with CustomerList.php -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeDeleteModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all animate-modal-in">
+                <!-- Modern Header with Red/Danger Color -->
+                <div class="bg-[#882426] px-6 py-5 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
+                            <span class="material-symbols-outlined text-white text-2xl animate-pulse-warning">delete_forever</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Hapus Produk</h3>
+                            <p class="text-white/70 text-sm mt-0.5">Konfirmasi penghapusan data</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeDeleteModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6 bg-gray-50 space-y-5">
+                    <!-- Product Profile Card -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-24 h-24 rounded-xl overflow-hidden border-4 border-white shadow-lg ring-4 ring-red-500/20">
+                            <img id="deleteProductImage" src="" alt="Product"
+                                class="w-full h-full object-cover"
+                                onerror="this.src='../../assets/img/product/default-product.png'">
+                        </div>
+                        <div class="text-center">
+                            <p class="text-lg font-bold text-gray-800" id="deleteProductName"></p>
+                            <p class="text-sm text-gray-500" id="deleteProductId"></p>
+                        </div>
+                    </div>
+
+                    <!-- Warning Alert -->
+                    <div class="p-4 rounded-xl border-l-4 border-red-500 bg-red-50">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-500 text-xl flex-shrink-0">warning</span>
+                            <div>
+                                <p class="text-sm font-semibold text-red-700 mb-1">Peringatan!</p>
+                                <p class="text-sm text-red-600" id="deleteWarningText">Anda yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data terkait produk.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Details Card -->
+                    <div class="bg-white rounded-xl border-2 border-gray-200 p-4 space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-red-500 text-lg">category</span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Kategori</p>
+                                <p class="text-sm font-semibold text-gray-800" id="deleteProductCategory">-</p>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-100"></div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-red-500 text-lg">inventory_2</span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Stok</p>
+                                <p class="text-sm font-semibold text-gray-800" id="deleteProductStock">-</p>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-100"></div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-red-500 text-lg">payments</span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Harga</p>
+                                <p class="text-sm font-semibold text-gray-800" id="deleteProductPrice">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checkbox Confirmation -->
+                    <label class="flex items-center gap-3 p-4 bg-white rounded-xl border-2 border-gray-200 cursor-pointer hover:border-red-300 transition-colors">
+                        <input type="checkbox" id="deleteConfirmCheck" class="w-5 h-5 text-red-600 border-2 border-gray-300 rounded focus:ring-red-500 focus:ring-offset-0">
+                        <span class="text-sm text-gray-700">Saya mengerti dan ingin melanjutkan penghapusan</span>
+                    </label>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                        Batal
+                    </button>
+                    <button type="button" onclick="executeDelete()" id="deleteConfirmBtn" disabled
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
+                        <span class="material-symbols-outlined text-lg">delete_forever</span>
+                        Ya, Hapus Produk!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal Styles -->
+    <style>
+        @keyframes modal-in {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .animate-modal-in {
+            animation: modal-in 0.3s ease-out forwards;
+        }
+
+        @keyframes pulse-warning {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-warning {
+            animation: pulse-warning 1.5s ease-in-out infinite;
+        }
+
+        /* Hidden scrollbar but still scrollable */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Custom checkbox styling */
+        #deleteConfirmCheck:checked {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        /* Toast Animations */
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toast-out {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .toast-enter {
+            animation: toast-in 0.4s ease-out forwards;
+        }
+
+        .toast-exit {
+            animation: toast-out 0.3s ease-in forwards;
+        }
+
+        /* Circular Progress - runs from full to empty */
+        /* @keyframes circular-progress {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: 100;
+            }
+        } */
+
+        @keyframes circular-progress {
+            from {
+                stroke-dashoffset: 100;
+            }
+
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+
+        .circular-progress {
+            animation: circular-progress linear forwards;
+        }
+    </style>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Toast Notification System with Circular Progress
+        function showToast(type, title, message, duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const id = 'toast-' + Date.now();
+            const toast = document.createElement('div');
+            toast.id = id;
+
+            const colors = {
+                success: {
+                    bg: 'bg-white',
+                    border: 'border-emerald-200',
+                    icon: 'check_circle',
+                    iconBg: 'bg-emerald-500',
+                    iconColor: 'text-white',
+                    title: 'text-emerald-800',
+                    progressCircle: '#10b981'
+                },
+                error: {
+                    bg: 'bg-white',
+                    border: 'border-red-200',
+                    icon: 'error',
+                    iconBg: 'bg-red-500',
+                    iconColor: 'text-white',
+                    title: 'text-red-800',
+                    progressCircle: '#ef4444'
+                },
+                warning: {
+                    bg: 'bg-white',
+                    border: 'border-amber-200',
+                    icon: 'warning',
+                    iconBg: 'bg-amber-500',
+                    iconColor: 'text-white',
+                    title: 'text-amber-800',
+                    progressCircle: '#f59e0b'
+                },
+                info: {
+                    bg: 'bg-white',
+                    border: 'border-blue-200',
+                    icon: 'info',
+                    iconBg: 'bg-blue-500',
+                    iconColor: 'text-white',
+                    title: 'text-blue-800',
+                    progressCircle: '#3b82f6'
+                }
+            };
+
+            const c = colors[type] || colors.info;
+
+            toast.className = `${c.bg} border ${c.border} rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px] toast-enter`;
+            toast.innerHTML = `
+                <div class="p-4 flex items-start gap-3">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-10 h-10 ${c.iconBg} rounded-full flex items-center justify-center ${c.iconColor} shadow-lg">
+                            <span class="material-symbols-outlined">${c.icon}</span>
+                        </div>
+                        <svg class="absolute -top-1 -left-1 w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" stroke-width="2.5"></circle>
+                            <circle id="${id}-progress-circle" cx="18" cy="18" r="16" fill="none" stroke="${c.progressCircle}" stroke-width="2.5" 
+                                stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round"
+                                class="circular-progress" style="animation-duration: ${duration}ms;"></circle>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold ${c.title}">${title}</p>
+                        <p class="text-sm text-gray-600 mt-0.5">${message}</p>
+                    </div>
+                    <button onclick="removeToast('${id}')" class="flex-shrink-0 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                removeToast(id);
+            }, duration);
+        }
+
+        function removeToast(id) {
+            const toast = document.getElementById(id);
+            if (toast) {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+
+        // Delete Modal Variables
+        let currentDeleteProduct = null;
+
+        function confirmDelete(id, name, image = '', category = '-', stock = '-', price = '-') {
+            currentDeleteProduct = {
+                id,
+                name
+            };
+
+            // Set product image
+            const productImage = image || '../../assets/img/product/default-product.png';
+            document.getElementById('deleteProductImage').src = productImage;
+
+            // Set product info
+            document.getElementById('deleteProductName').textContent = name;
+            document.getElementById('deleteProductId').textContent = 'ID: ' + id;
+            document.getElementById('deleteProductCategory').textContent = category;
+            document.getElementById('deleteProductStock').textContent = stock + ' unit';
+            document.getElementById('deleteProductPrice').textContent = price;
+
+            // Reset checkbox and button
+            document.getElementById('deleteConfirmCheck').checked = false;
+            document.getElementById('deleteConfirmBtn').disabled = true;
+
+            // Show modal
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.body.style.overflow = '';
+            currentDeleteProduct = null;
+        }
+
+        // Enable/disable delete button based on checkbox
+        document.getElementById('deleteConfirmCheck').addEventListener('change', function() {
+            document.getElementById('deleteConfirmBtn').disabled = !this.checked;
+        });
+
+        function executeDelete() {
+            if (!currentDeleteProduct) return;
+
+            const confirmBtn = document.getElementById('deleteConfirmBtn');
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<span class="material-symbols-outlined text-lg animate-spin">sync</span> Menghapus...';
+
+            fetch(`../../app/controllers/productController.php?action=delete&id=${currentDeleteProduct.id}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    closeDeleteModal();
+                    if (data.success) {
+                        showToast('success', 'Berhasil!', data.message || 'Produk berhasil dihapus');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        showToast('error', 'Gagal!', data.message || 'Gagal menghapus produk');
+                    }
+                })
+                .catch(error => {
+                    closeDeleteModal();
+                    showToast('error', 'Error!', 'Terjadi kesalahan saat menghapus produk');
+                })
+                .finally(() => {
+                    confirmBtn.disabled = false;
+                    confirmBtn.innerHTML = '<span class="material-symbols-outlined text-lg">delete_forever</span> Ya, Hapus Produk!';
+                });
+        }
+
+        // Close delete modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const deleteModal = document.getElementById('deleteModal');
+                if (deleteModal && !deleteModal.classList.contains('hidden')) {
+                    closeDeleteModal();
+                }
+            }
+        });
+
         function openLightbox(src) {
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightbox-image');
@@ -713,67 +1085,15 @@ include '../../components/admin/head.php';
             window.location.href = '?' + params.toString();
         });
 
-        function confirmDelete(id, name) {
-            Swal.fire({
-                title: 'Hapus Produk?',
-                html: `Anda yakin ingin menghapus produk <strong>"${name}"</strong>?<br><br><small class="text-gray-500">Tindakan ini tidak dapat dibatalkan.</small>`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#882426',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(`../../app/controllers/productController.php?action=delete&id=${id}`, {
-                            method: 'GET',
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                Swal.fire({
-                                    title: 'Terhapus!',
-                                    text: data.message,
-                                    icon: 'success',
-                                    confirmButtonColor: '#882426'
-                                }).then(() => {
-                                    window.location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: 'Gagal!',
-                                    text: data.message,
-                                    icon: 'error',
-                                    confirmButtonColor: '#882426'
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: 'Terjadi kesalahan saat menghapus produk',
-                                icon: 'error',
-                                confirmButtonColor: '#882426'
-                            });
-                        });
-                }
-            });
-        }
-
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('#successAlert, #errorAlert');
-            alerts.forEach(alert => {
-                if (alert) {
-                    alert.style.transition = 'opacity 0.3s ease-out';
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 300);
-                }
-            });
-        }, 5000);
+        // Show flash messages as toast on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            <?php if ($flashSuccess): ?>
+                showToast('success', 'Berhasil!', '<?= addslashes(htmlspecialchars($flashSuccess)) ?>');
+            <?php endif; ?>
+            <?php if ($flashError): ?>
+                showToast('error', 'Gagal!', '<?= addslashes(htmlspecialchars($flashError)) ?>');
+            <?php endif; ?>
+        });
 
         function changePerPage(value) {
             const params = new URLSearchParams(window.location.search);
@@ -782,18 +1102,6 @@ include '../../components/admin/head.php';
             window.location.href = '?' + params.toString();
         }
     </script>
-
-    <style>
-        /* Hidden scrollbar but still scrollable */
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
 </body>
 
 </html>

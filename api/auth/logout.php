@@ -35,9 +35,10 @@ try {
         }
     }
 
+    $reason = $_GET['reason'] ?? 'success';
     $response['success'] = true;
     $response['message'] = 'Logout berhasil';
-    $response['redirect'] = '../../view/users/landingPage.php';
+    $response['redirect'] = '../../view/users/landingPage.php?logout=' . urlencode($reason);
 
     echo json_encode($response);
 

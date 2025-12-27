@@ -135,13 +135,13 @@ if ($errorMsg) {
                 <?php include '../../components/admin/NavbarAdmin.php'; ?>
             </header>
             <main class="flex-1 overflow-y-auto flex items-center justify-center">
-                <div class="max-w-md w-full mx-4 bg-white rounded-xl shadow-lg border border-red-100 p-6 text-center">
-                    <div class="mb-4">
-                        <span class="material-symbols-outlined text-5xl text-red-600">error</span>
+                <div class="max-w-md w-full mx-4 bg-white rounded-2xl shadow-xl border border-red-100 p-8 text-center">
+                    <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
+                        <span class="material-symbols-outlined text-4xl text-red-600">error</span>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-900 mb-2">Terjadi Kesalahan</h2>
-                    <p class="text-gray-600 mb-6"><?= $errorMsg ?></p>
-                    <a href="ReturnAdmin.php" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg hover:bg-[#6d1a1c] transition-all">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Terjadi Kesalahan</h2>
+                    <p class="text-gray-600 mb-8"><?= $errorMsg ?></p>
+                    <a href="ReturnAdmin.php" class="inline-flex items-center gap-2 px-6 py-3 bg-[#882426] text-white rounded-xl hover:bg-[#6d1a1c] transition-all font-semibold shadow-lg shadow-[#882426]/20">
                         <span class="material-symbols-outlined">arrow_back</span>
                         <span>Kembali ke List Return</span>
                     </a>
@@ -169,25 +169,25 @@ function formatDate($date)
 function getOrderStatusBadge($status)
 {
     $badges = [
-        'pending' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-800', 'label' => 'Menunggu'],
-        'dikonfirmasi' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'label' => 'Dikonfirmasi'],
-        'diproses' => ['bg' => 'bg-indigo-100', 'text' => 'text-indigo-800', 'label' => 'Diproses'],
-        'dikirim' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-800', 'label' => 'Dikirim'],
-        'selesai' => ['bg' => 'bg-green-100', 'text' => 'text-green-800', 'label' => 'Selesai'],
-        'dibatalkan' => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'label' => 'Dibatalkan']
+        'pending' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-800', 'label' => 'Menunggu', 'icon' => 'hourglass_empty'],
+        'dikonfirmasi' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'label' => 'Dikonfirmasi', 'icon' => 'verified'],
+        'diproses' => ['bg' => 'bg-indigo-100', 'text' => 'text-indigo-800', 'label' => 'Diproses', 'icon' => 'sync'],
+        'dikirim' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-800', 'label' => 'Dikirim', 'icon' => 'local_shipping'],
+        'selesai' => ['bg' => 'bg-green-100', 'text' => 'text-green-800', 'label' => 'Selesai', 'icon' => 'check_circle'],
+        'dibatalkan' => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'label' => 'Dibatalkan', 'icon' => 'cancel']
     ];
-    return $badges[$status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800', 'label' => ucfirst($status)];
+    return $badges[$status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800', 'label' => ucfirst($status), 'icon' => 'help'];
 }
 
 function getPaymentStatusBadge($status)
 {
     $badges = [
-        'pending' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800', 'label' => 'Belum Bayar'],
-        'verifikasi' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'label' => 'Verifikasi'],
-        'berhasil' => ['bg' => 'bg-green-100', 'text' => 'text-green-800', 'label' => 'Lunas'],
-        'gagal' => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'label' => 'Gagal']
+        'pending' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800', 'label' => 'Belum Bayar', 'icon' => 'schedule'],
+        'verifikasi' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'label' => 'Verifikasi', 'icon' => 'pending'],
+        'berhasil' => ['bg' => 'bg-green-100', 'text' => 'text-green-800', 'label' => 'Lunas', 'icon' => 'check_circle'],
+        'gagal' => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'label' => 'Gagal', 'icon' => 'cancel']
     ];
-    return $badges[$status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800', 'label' => ucfirst($status)];
+    return $badges[$status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800', 'label' => ucfirst($status), 'icon' => 'help'];
 }
 
 function getShipmentStatusBadge($status)
@@ -218,6 +218,100 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
 
 ?>
 
+<style>
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .animate-slide-in-right {
+        animation: slideInRight 0.5s ease-out forwards;
+    }
+
+    .delay-100 {
+        animation-delay: 0.1s;
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    .info-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .info-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-row:hover {
+        background: linear-gradient(90deg, rgba(136, 36, 38, 0.02) 0%, transparent 100%);
+    }
+
+    .timeline-step::before {
+        content: '';
+        position: absolute;
+        left: 15px;
+        top: 40px;
+        bottom: -20px;
+        width: 2px;
+        background: linear-gradient(to bottom, #e5e7eb, transparent);
+    }
+
+    .timeline-step:last-child::before {
+        display: none;
+    }
+
+    /* Custom scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+</style>
+
 <body class="bg-gray-50 h-screen flex">
     <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
@@ -226,23 +320,42 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
             <?php include '../../components/admin/NavbarAdmin.php'; ?>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
-            <!-- Header -->
-            <div class="bg-gradient-to-r from-[#882426] to-[#6d1a1c] text-white rounded-xl">
-                <div class="px-4 md:px-6 py-6">
-                    <div class="flex items-center gap-3 mb-4">
-                        <a href="<?= $backUrl ?>"
-                            class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
+        <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
+            <!-- Header with Gradient -->
+            <div class="bg-gradient-to-r from-[#882426] to-[#a62d30] text-white rounded-2xl overflow-hidden animate-fade-in-up">
+                <div class="px-6 py-6 relative">
+                    <!-- Decorative elements -->
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-white/5 rounded-full"></div>
+                    <div class="absolute -right-4 -bottom-12 w-48 h-48 bg-white/5 rounded-full"></div>
+
+                    <div class="relative flex flex-col md:flex-row md:items-center gap-4">
+                        <a href="<?= $backUrl ?>" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-sm self-start">
                             <span class="material-symbols-outlined">arrow_back</span>
                         </a>
-                        <div>
-                            <h1 class="text-2xl font-bold">Detail Pesanan</h1>
-                            <p class="text-white/80 text-sm mt-1">
-                                Order ID:
-                                <span class="font-mono font-semibold">
-                                    <?= htmlspecialchars($order['id_order']) ?>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-2xl">receipt_long</span>
+                                </div>
+                                <div>
+                                    <h1 class="text-2xl md:text-3xl font-bold">Detail Pesanan</h1>
+                                    <p class="text-white/70 text-sm">Halaman Return Order</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
+                                <p class="text-white/60 text-xs uppercase font-medium mb-1">Order ID</p>
+                                <p class="font-mono font-bold text-lg"><?= htmlspecialchars($order['id_order']) ?></p>
+                            </div>
+                            <?php $sb = getOrderStatusBadge($order['status_order']); ?>
+                            <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
+                                <p class="text-white/60 text-xs uppercase font-medium mb-1">Status</p>
+                                <span class="inline-flex items-center gap-1.5 text-white font-bold">
+                                    <span class="material-symbols-outlined text-sm"><?= $sb['icon'] ?></span>
+                                    <?= $sb['label'] ?>
                                 </span>
-                            </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -250,88 +363,148 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
 
             <!-- Order & Customer Info -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[#882426]">shopping_bag</span>
-                        Informasi Pesanan
-                    </h2>
-                    <div class="space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase mb-1">ID Pesanan</p>
-                                <p class="text-sm font-mono font-bold text-gray-900"><?= htmlspecialchars($order['id_order']) ?></p>
+                <!-- Order Information -->
+                <div class="lg:col-span-2 info-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-fade-in-up delay-100 opacity-0">
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 px-6 py-4 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[#882426]">shopping_bag</span>
+                            Informasi Pesanan
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="material-symbols-outlined text-gray-400 text-sm">tag</span>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase">ID Pesanan</p>
+                                </div>
+                                <p class="text-lg font-mono font-bold text-gray-900"><?= htmlspecialchars($order['id_order']) ?></p>
                             </div>
-                            <div>
-                                <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Tanggal</p>
-                                <p class="text-sm font-bold text-gray-900"><?= formatDate($order['tanggal_order']) ?></p>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="material-symbols-outlined text-gray-400 text-sm">calendar_month</span>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase">Tanggal Order</p>
+                                </div>
+                                <p class="text-lg font-bold text-gray-900"><?= formatDate($order['tanggal_order']) ?></p>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="material-symbols-outlined text-gray-400 text-sm">local_shipping</span>
+                                    <p class="text-xs font-semibold text-gray-500 uppercase">Metode Kirim</p>
+                                </div>
+                                <p class="text-lg font-bold text-gray-900"><?= htmlspecialchars($order['shipping_method'] ?? 'Standard') ?></p>
                             </div>
                         </div>
-                        <div class="border-t border-gray-100 pt-4">
-                            <div class="flex items-center justify-between">
-                                <p class="text-xs font-semibold text-gray-500 uppercase">Status</p>
-                                <?php $sb = getOrderStatusBadge($order['status_order']); ?>
-                                <span class="px-3 py-1.5 rounded-full text-xs font-bold <?= $sb['bg'] ?> <?= $sb['text'] ?>"><?= $sb['label'] ?></span>
-                            </div>
-                        </div>
+
                         <?php if (!empty($order['catatan_order'])): ?>
-                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
-                                <p class="text-xs font-semibold text-blue-700 uppercase mb-1">Catatan</p>
-                                <p class="text-sm text-blue-900"><?= htmlspecialchars(substr($order['catatan_order'], 0, 200)) ?></p>
+                            <div class="mt-6 bg-blue-50 border border-blue-100 rounded-xl p-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-blue-600 text-sm">notes</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold text-blue-700 uppercase mb-1">Catatan Pesanan</p>
+                                        <p class="text-sm text-blue-900"><?= htmlspecialchars(substr($order['catatan_order'], 0, 300)) ?></p>
+                                    </div>
+                                </div>
                             </div>
                         <?php endif; ?>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[#882426]">person</span>
-                        Pelanggan
-                    </h2>
-                    <div class="space-y-3">
-                        <div>
-                            <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Nama</p>
-                            <p class="text-sm font-bold text-gray-900"><?= htmlspecialchars($order['nama_lengkap'] ?? '-') ?></p>
+                <!-- Customer Information -->
+                <div class="info-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-slide-in-right delay-200 opacity-0">
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 px-6 py-4 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[#882426]">person</span>
+                            Pelanggan
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#882426] to-[#a62d30] flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-2xl">person</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-900 text-lg"><?= htmlspecialchars($order['nama_lengkap'] ?? '-') ?></p>
+                                <p class="text-sm text-gray-500">Customer</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Email</p>
-                            <p class="text-sm text-gray-700 break-all"><?= htmlspecialchars($order['email'] ?? '-') ?></p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-semibold text-gray-500 uppercase mb-1">No. HP</p>
-                            <p class="text-sm text-gray-700"><?= htmlspecialchars($order['no_telp'] ?? '-') ?></p>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                <div class="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-gray-500 text-sm">mail</span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs text-gray-400 uppercase font-medium">Email</p>
+                                    <p class="text-sm font-medium text-gray-900 truncate"><?= htmlspecialchars($order['email'] ?? '-') ?></p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                <div class="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-gray-500 text-sm">phone</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-xs text-gray-400 uppercase font-medium">No. HP</p>
+                                    <p class="text-sm font-medium text-gray-900"><?= htmlspecialchars($order['no_telp'] ?? '-') ?></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Order Items -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[#882426]">receipt_long</span>
-                    Daftar Produk (<?= count($items) ?> Item)
-                </h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
+            <div class="info-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-fade-in-up delay-200 opacity-0">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#882426]">receipt_long</span>
+                        Daftar Produk
+                    </h2>
+                    <span class="inline-flex items-center gap-1.5 bg-[#882426]/10 text-[#882426] px-3 py-1.5 rounded-full text-sm font-bold">
+                        <span class="material-symbols-outlined text-sm">inventory_2</span>
+                        <?= count($items) ?> Item
+                    </span>
+                </div>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-100">
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Produk</th>
-                                <th class="px-4 py-3 text-right font-semibold text-gray-700">Harga</th>
-                                <th class="px-4 py-3 text-right font-semibold text-gray-700">Diskon</th>
-                                <th class="px-4 py-3 text-right font-semibold text-gray-700">Qty</th>
-                                <th class="px-4 py-3 text-right font-semibold text-gray-700">Subtotal</th>
+                            <tr class="bg-gray-50/50">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Produk</th>
+                                <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Harga</th>
+                                <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Diskon</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Qty</th>
+                                <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <?php foreach ($items as $item): ?>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-3">
-                                        <p class="font-semibold text-gray-900"><?= htmlspecialchars($item['nama_product']) ?></p>
-                                        <p class="text-xs text-gray-500"><?= htmlspecialchars($item['id_product']) ?></p>
+                                <tr class="product-row transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                <span class="material-symbols-outlined text-gray-400">inventory_2</span>
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-gray-900"><?= htmlspecialchars($item['nama_product']) ?></p>
+                                                <p class="text-xs text-gray-400 font-mono"><?= htmlspecialchars($item['id_product']) ?></p>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td class="px-4 py-3 text-right text-gray-700"><?= formatRupiah($item['harga_satuan']) ?></td>
-                                    <td class="px-4 py-3 text-right text-red-600 font-medium"><?= formatRupiah($item['diskon_satuan']) ?></td>
-                                    <td class="px-4 py-3 text-right font-bold text-gray-900"><?= intval($item['jumlah']) ?></td>
-                                    <td class="px-4 py-3 text-right font-bold text-[#882426]"><?= formatRupiah($item['subtotal']) ?></td>
+                                    <td class="px-6 py-4 text-right text-gray-700 font-medium"><?= formatRupiah($item['harga_satuan']) ?></td>
+                                    <td class="px-6 py-4 text-right">
+                                        <?php if (floatval($item['diskon_satuan']) > 0): ?>
+                                            <span class="text-red-600 font-bold">-<?= formatRupiah($item['diskon_satuan']) ?></span>
+                                        <?php else: ?>
+                                            <span class="text-gray-400">-</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="inline-flex items-center justify-center min-w-[40px] px-3 py-1.5 bg-gray-100 rounded-full font-bold text-gray-900">
+                                            <?= intval($item['jumlah']) ?>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right font-bold text-[#882426] text-lg"><?= formatRupiah($item['subtotal']) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -341,51 +514,83 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
 
             <!-- Pricing Summary & Payment -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[#882426]">calculate</span>
-                        Ringkasan Biaya
-                    </h2>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center text-sm text-gray-600">
-                            <span>Subtotal (<?= count($items) ?> Barang)</span>
-                            <span class="font-semibold text-gray-900"><?= formatRupiah($originalSubtotal) ?></span>
-                        </div>
-                        <?php if ($productDiscount > 0): ?>
-                            <div class="flex justify-between items-center text-sm text-red-600">
-                                <span>Diskon Produk</span>
-                                <span class="font-semibold">-<?= formatRupiah($productDiscount) ?></span>
+                <!-- Pricing Summary -->
+                <div class="info-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-fade-in-up delay-300 opacity-0">
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 px-6 py-4 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[#882426]">calculate</span>
+                            Ringkasan Biaya
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center py-2">
+                                <span class="text-gray-600 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm text-gray-400">shopping_cart</span>
+                                    Subtotal (<?= count($items) ?> Barang)
+                                </span>
+                                <span class="font-semibold text-gray-900"><?= formatRupiah($originalSubtotal) ?></span>
                             </div>
-                        <?php endif; ?>
-                        <div class="flex justify-between items-center text-sm text-gray-600">
-                            <span>Pajak (11%)</span>
-                            <span class="font-semibold text-gray-900"><?= formatRupiah($taxAmount) ?></span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm text-gray-600">
-                            <span>Ongkos Kirim</span>
-                            <span class="font-semibold text-gray-900"><?= formatRupiah($shippingCost) ?></span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm text-gray-600">
-                            <span>Biaya Pengemasan</span>
-                            <span class="font-semibold text-gray-900"><?= formatRupiah($packingCost) ?></span>
-                        </div>
-                        <?php if ($voucherDiscount > 0): ?>
-                            <div class="flex justify-between items-center text-sm text-green-600 font-medium">
-                                <span>Diskon Voucher <?= $voucherUsage ? '(' . htmlspecialchars($voucherUsage['kode']) . ')' : '' ?></span>
-                                <span class="font-semibold">-<?= formatRupiah($voucherDiscount) ?></span>
+
+                            <?php if ($productDiscount > 0): ?>
+                                <div class="flex justify-between items-center py-2 text-red-600">
+                                    <span class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-sm">sell</span>
+                                        Diskon Produk
+                                    </span>
+                                    <span class="font-semibold">-<?= formatRupiah($productDiscount) ?></span>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="flex justify-between items-center py-2">
+                                <span class="text-gray-600 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm text-gray-400">account_balance</span>
+                                    Pajak (11%)
+                                </span>
+                                <span class="font-semibold text-gray-900"><?= formatRupiah($taxAmount) ?></span>
                             </div>
-                        <?php endif; ?>
-                        <div class="border-t border-dashed border-gray-200 pt-4 mt-2">
-                            <div class="flex justify-between items-center">
-                                <span class="text-base font-bold text-gray-900">Total Bayar</span>
-                                <span class="text-xl font-bold text-[#882426]"><?= formatRupiah($payment['total_bayar']) ?></span>
+
+                            <div class="flex justify-between items-center py-2">
+                                <span class="text-gray-600 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm text-gray-400">local_shipping</span>
+                                    Ongkos Kirim
+                                </span>
+                                <span class="font-semibold text-gray-900"><?= formatRupiah($shippingCost) ?></span>
+                            </div>
+
+                            <div class="flex justify-between items-center py-2">
+                                <span class="text-gray-600 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm text-gray-400">inventory_2</span>
+                                    Biaya Pengemasan
+                                </span>
+                                <span class="font-semibold text-gray-900"><?= formatRupiah($packingCost) ?></span>
+                            </div>
+
+                            <?php if ($voucherDiscount > 0): ?>
+                                <div class="flex justify-between items-center py-2 text-green-600">
+                                    <span class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-sm">confirmation_number</span>
+                                        Voucher <?= $voucherUsage ? '(' . htmlspecialchars($voucherUsage['kode']) . ')' : '' ?>
+                                    </span>
+                                    <span class="font-semibold">-<?= formatRupiah($voucherDiscount) ?></span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="border-t-2 border-dashed border-gray-200 pt-4 mt-4">
+                            <div class="bg-gradient-to-r from-[#882426]/5 to-[#882426]/10 rounded-xl p-4 border border-[#882426]/20">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg font-bold text-gray-900">Total Bayar</span>
+                                    <span class="text-2xl font-bold text-[#882426]"><?= formatRupiah($payment['total_bayar']) ?></span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Payment Card -->
                 <?php if ($payment): ?>
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="info-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-slide-in-right delay-300 opacity-0">
                         <!-- Header dengan gradient -->
                         <div class="bg-gradient-to-r from-[#882426] to-[#a62d30] px-6 py-4">
                             <div class="flex items-center justify-between">
@@ -395,7 +600,7 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
                                     </div>
                                     <div>
                                         <h2 class="text-lg font-bold text-white">Pembayaran</h2>
-                                        <p class="text-white/70 text-xs">Detail transaksi pembayaran</p>
+                                        <p class="text-white/70 text-xs">Detail transaksi</p>
                                     </div>
                                 </div>
                                 <?php $pb = getPaymentStatusBadge($payment['status_pembayaran']); ?>
@@ -426,8 +631,8 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
                                         <?= ucwords(str_replace('_', ' ', $payment['metode_pembayaran'])) ?>
                                     </p>
                                     <?php if (!empty($payment['tanggal_pembayaran'])): ?>
-                                        <p class="text-gray-400 text-xs mt-2">
-                                            <span class="material-symbols-outlined text-sm align-middle mr-1">schedule</span>
+                                        <p class="text-gray-400 text-xs mt-3 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-sm">schedule</span>
                                             <?= formatDate($payment['tanggal_pembayaran']) ?>
                                         </p>
                                     <?php endif; ?>
@@ -449,94 +654,123 @@ if (!empty($_SERVER['HTTP_REFERER'])) {
                         </div>
                     </div>
                 <?php endif; ?>
-
             </div>
 
             <!-- Shipment -->
             <?php if ($shipment): ?>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[#882426]">local_shipping</span>
-                        Pengiriman
-                    </h2>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div>
-                            <div class="mb-4">
-                                <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Status</p>
-                                <?php $sh = getShipmentStatusBadge($shipment['status_pengiriman']); ?>
-                                <div class="inline-flex items-center gap-2 px-3 py-2 rounded-lg <?= $sh['bg'] ?>">
-                                    <span class="material-symbols-outlined text-sm <?= $sh['text'] ?>"><?= $sh['icon'] ?></span>
-                                    <span class="font-bold <?= $sh['text'] ?>"><?= $sh['label'] ?></span>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div>
-                                    <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Kurir</p>
-                                    <p class="text-sm font-medium text-gray-900"><?= htmlspecialchars($shipment['jasa_pengiriman']) ?></p>
-                                </div>
-                                <?php if (!empty($shipment['no_resi'])): ?>
-                                    <div>
-                                        <p class="text-xs font-semibold text-gray-500 uppercase mb-1">No. Resi</p>
-                                        <p class="text-sm font-mono font-bold text-gray-900"><?= htmlspecialchars($shipment['no_resi']) ?></p>
-                                    </div>
-                                <?php endif; ?>
-                                <?php if (!empty($shipment['estimasi_hari'])): ?>
-                                    <div>
-                                        <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Estimasi</p>
-                                        <p class="text-sm text-gray-900"><?= intval($shipment['estimasi_hari']) ?> hari kerja</p>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <p class="text-xs font-semibold text-gray-600 uppercase mb-3">Alamat Pengiriman</p>
-                            <div class="space-y-2 text-sm">
-                                <div>
-                                    <p class="text-xs text-gray-500 mb-0.5">Penerima</p>
-                                    <p class="font-semibold text-gray-900"><?= htmlspecialchars($shipment['nama_penerima'] ?? $shipment['nama_pengiriman'] ?? '-') ?></p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 mb-0.5">No. HP</p>
-                                    <p class="text-gray-700"><?= htmlspecialchars($shipment['no_telp'] ?? $shipment['nomor_hp_penerima'] ?? '-') ?></p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 mb-0.5">Alamat</p>
-                                    <p class="text-gray-700"><?= htmlspecialchars($shipment['alamat_lengkap'] ?? $shipment['alamat_pengiriman'] ?? '-') ?></p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 mb-0.5">Kota</p>
-                                    <p class="text-gray-700"><?= htmlspecialchars($shipment['kota'] ?? '-') ?></p>
-                                </div>
-                            </div>
-                        </div>
+                <div class="info-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-fade-in-up">
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[#882426]">local_shipping</span>
+                            Pengiriman
+                        </h2>
+                        <?php $sh = getShipmentStatusBadge($shipment['status_pengiriman']); ?>
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold <?= $sh['bg'] ?> <?= $sh['text'] ?>">
+                            <span class="material-symbols-outlined text-sm"><?= $sh['icon'] ?></span>
+                            <?= $sh['label'] ?>
+                        </span>
                     </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Shipping Details -->
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-purple-600">local_shipping</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-400 uppercase font-medium">Jasa Kurir</p>
+                                        <p class="font-bold text-gray-900"><?= htmlspecialchars($shipment['jasa_pengiriman']) ?></p>
+                                    </div>
+                                </div>
 
-                    <?php if (!empty($shipment['tanggal_dikirim']) || !empty($shipment['tanggal_diterima'])): ?>
-                        <div class="mt-6 pt-6 border-t border-gray-100">
-                            <p class="text-xs font-semibold text-gray-500 uppercase mb-3">Timeline</p>
-                            <div class="space-y-2">
-                                <?php if (!empty($shipment['tanggal_dikirim'])): ?>
-                                    <div class="flex items-start gap-3">
-                                        <span class="material-symbols-outlined text-green-600">done</span>
-                                        <div>
-                                            <p class="text-xs text-gray-500 uppercase">Dikirim</p>
-                                            <p class="text-sm font-semibold text-gray-900"><?= formatDate($shipment['tanggal_dikirim']) ?></p>
+                                <?php if (!empty($shipment['no_resi'])): ?>
+                                    <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-blue-600">qr_code</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-xs text-gray-400 uppercase font-medium">No. Resi</p>
+                                            <p class="font-mono font-bold text-gray-900"><?= htmlspecialchars($shipment['no_resi']) ?></p>
                                         </div>
                                     </div>
                                 <?php endif; ?>
-                                <?php if (!empty($shipment['tanggal_diterima'])): ?>
-                                    <div class="flex items-start gap-3">
-                                        <span class="material-symbols-outlined text-blue-600">check_circle</span>
+
+                                <?php if (!empty($shipment['estimasi_hari'])): ?>
+                                    <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                                        <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-amber-600">schedule</span>
+                                        </div>
                                         <div>
-                                            <p class="text-xs text-gray-500 uppercase">Diterima</p>
-                                            <p class="text-sm font-semibold text-gray-900"><?= formatDate($shipment['tanggal_diterima']) ?></p>
+                                            <p class="text-xs text-gray-400 uppercase font-medium">Estimasi Pengiriman</p>
+                                            <p class="font-bold text-gray-900"><?= intval($shipment['estimasi_hari']) ?> hari kerja</p>
                                         </div>
                                     </div>
                                 <?php endif; ?>
                             </div>
+
+                            <!-- Shipping Address -->
+                            <div class="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-5 border border-gray-200">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <span class="material-symbols-outlined text-[#882426]">location_on</span>
+                                    <p class="text-sm font-bold text-gray-700 uppercase">Alamat Pengiriman</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <div>
+                                        <p class="text-xs text-gray-400 mb-1">Penerima</p>
+                                        <p class="font-bold text-gray-900"><?= htmlspecialchars($shipment['nama_penerima'] ?? $shipment['nama_pengiriman'] ?? '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-400 mb-1">No. HP</p>
+                                        <p class="text-gray-700"><?= htmlspecialchars($shipment['no_telp'] ?? $shipment['nomor_hp_penerima'] ?? '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-400 mb-1">Alamat Lengkap</p>
+                                        <p class="text-gray-700 leading-relaxed"><?= htmlspecialchars($shipment['alamat_lengkap'] ?? $shipment['alamat_pengiriman'] ?? '-') ?></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-400 mb-1">Kota</p>
+                                        <p class="text-gray-700"><?= htmlspecialchars($shipment['kota'] ?? '-') ?></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    <?php endif; ?>
+
+                        <!-- Timeline -->
+                        <?php if (!empty($shipment['tanggal_dikirim']) || !empty($shipment['tanggal_diterima'])): ?>
+                            <div class="mt-6 pt-6 border-t border-gray-100">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <span class="material-symbols-outlined text-[#882426]">timeline</span>
+                                    <p class="text-sm font-bold text-gray-700 uppercase">Timeline Pengiriman</p>
+                                </div>
+                                <div class="relative pl-8">
+                                    <?php if (!empty($shipment['tanggal_dikirim'])): ?>
+                                        <div class="timeline-step relative pb-6">
+                                            <div class="absolute left-0 top-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center -translate-x-1/2">
+                                                <span class="material-symbols-outlined text-green-600 text-sm">check</span>
+                                            </div>
+                                            <div class="ml-6">
+                                                <p class="text-xs text-gray-400 uppercase font-medium">Dikirim</p>
+                                                <p class="font-bold text-gray-900"><?= formatDate($shipment['tanggal_dikirim']) ?></p>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($shipment['tanggal_diterima'])): ?>
+                                        <div class="timeline-step relative">
+                                            <div class="absolute left-0 top-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center -translate-x-1/2">
+                                                <span class="material-symbols-outlined text-blue-600 text-sm">done_all</span>
+                                            </div>
+                                            <div class="ml-6">
+                                                <p class="text-xs text-gray-400 uppercase font-medium">Diterima</p>
+                                                <p class="font-bold text-gray-900"><?= formatDate($shipment['tanggal_diterima']) ?></p>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             <?php endif; ?>
 
