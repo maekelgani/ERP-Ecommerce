@@ -18,9 +18,17 @@ include '../../components/admin/head.php';
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
-            <div class="mb-6">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Laporan</h1>
-                <p class="text-gray-500 mt-1">Buat dan unduh laporan bisnis Anda</p>
+            <div class="mb-6 flex justify-between items-end">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Laporan</h1>
+                    <p class="text-gray-500 mt-1">Buat dan unduh laporan bisnis Anda</p>
+                </div>
+                <div>
+                    <a href="FormPengeluaran.php" class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
+                        <span class="material-symbols-outlined text-lg">add_card</span>
+                        Input Pengeluaran
+                    </a>
+                </div>
             </div>
 
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
@@ -49,6 +57,35 @@ include '../../components/admin/head.php';
                     </div>
                 </div>
             </div>
+
+            <!-- CARD BARU -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-xl p-6 text-gray-500 shadow-lg relative overflow-hidden">
+                    <div class="relative z-10">
+                        <p class="text-gray-500 text-sm font-medium mb-1">Total Pendapatan (Revenue)</p>
+                        <h3 id="txtRevenue" class="text-2xl font-bold text-green-600">Rp 0</h3>
+                    </div>
+                    <span class="material-symbols-outlined absolute right-4 bottom-4 text-white/10 text-6xl">trending_up</span>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm relative overflow-hidden">
+                    <div class="relative z-10">
+                        <p class="text-gray-500 text-sm font-medium mb-1">Total Pengeluaran (Expenses)</p>
+                        <h3 id="txtExpense" class="text-2xl font-bold text-red-600">Rp 0</h3>
+                    </div>
+                    <span class="material-symbols-outlined absolute right-4 bottom-4 text-red-100 text-6xl">trending_down</span>
+                </div>
+
+                <div class="bg-[#882426] rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+                    <div class="relative z-10">
+                        <p class="text-white text-sm font-medium mb-1">Laba Bersih (Net Profit)</p>
+                        <h3 id="txtProfit" class="text-2xl font-bold text-white">Rp 0</h3>
+                        <p class="text-xs text-white mt-1">*Pendapatan - Pengeluaran</p>
+                    </div>
+                    <span class="material-symbols-outlined absolute right-4 bottom-4 text-white/10 text-6xl">account_balance_wallet</span>
+                </div>
+            </div>
+            <!-- ============ -->
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
@@ -202,6 +239,29 @@ include '../../components/admin/head.php';
                     fetch(`../../app/controllers/reportController.php?action=inventory`),
                     fetch(`../../app/controllers/reportController.php?action=top_products&period=${period}&limit=10`)
                 ]);
+
+                const resFinance = await fetch(`../../app/controllers/reportController.php?action=financial_summary&period=${period}`);
+                const jsonFinance = await resFinance.json();
+
+                if (jsonFinance.success) {
+                    // 1. Update Pendapatan (Revenue)
+                    document.getElementById('txtRevenue').textContent = formatRupiah(jsonFinance.data.revenue);
+                    
+                    // 2. Update Pengeluaran (Expense) -> ID ini ada di HTML Card "Total Pengeluaran"
+                    document.getElementById('txtExpense').textContent = formatRupiah(jsonFinance.data.expense);
+                    
+                    // 3. Update Laba Bersih (Net Profit) -> ID ini ada di HTML Card "Laba Bersih"
+                    document.getElementById('txtProfit').textContent = formatRupiah(jsonFinance.data.net_profit);
+
+                    // Ganti warna teks Laba Bersih dinamis (Merah jika rugi, Putih/Hijau jika untung)
+                    const profitElem = document.getElementById('txtProfit');
+                    if(jsonFinance.data.net_profit < 0) {
+                        profitElem.classList.add('text-red-300'); // Jika minus warnanya agak merah
+                        profitElem.innerText = "- " + formatRupiah(Math.abs(jsonFinance.data.net_profit));
+                    } else {
+                        profitElem.classList.remove('text-red-300');
+                    }
+                }
 
                 const [sales, orders, customers, inventory, topProducts] = await Promise.all([
                     salesRes.json(),

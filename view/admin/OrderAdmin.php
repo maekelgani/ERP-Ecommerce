@@ -8,7 +8,6 @@ AuthMiddleware::requireAdminLoginFromView();
 
 $orderRepo = new OrderRepository();
 
-// Modified: Added perPage variable like IncomingOrdersAdmin.php
 $perPage = (int)($_GET['per_page'] ?? 10);
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $limit = $perPage;
@@ -28,7 +27,6 @@ $totalOrders = $result['total'];
 
 $stats = $orderRepo->getOrderStats();
 
-// Added: Calculate startEntry and endEntry early
 $startEntry = $totalOrders > 0 ? (($page - 1) * $limit) + 1 : 0;
 $endEntry = min($page * $limit, $totalOrders);
 
@@ -278,7 +276,6 @@ function getPaymentMethodLabel($method)
                 </form>
 
                 <div class="px-4 md:px-6 py-3 border-b border-gray-100 flex items-center justify-between">
-                    <!-- LEFT: Entries per page -->
                     <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
                         <span class="material-symbols-outlined text-gray-400 text-sm">view_list</span>
                         <select onchange="window.location.href='?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>&per_page=' + this.value"
@@ -429,7 +426,6 @@ function getPaymentMethodLabel($method)
                     </table>
                 </div>
 
-                <!-- Modified: Pagination Info & Controls with per_page parameter -->
                 <div class="px-4 md:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50/50">
                     <div class="flex items-center gap-4">
                         <div class="text-sm text-gray-600">
@@ -437,7 +433,6 @@ function getPaymentMethodLabel($method)
                         </div>
                     </div>
 
-                    <!-- Pagination Navigation with per_page -->
                     <div class="flex items-center gap-1 flex-shrink-0">
                         <?php if ($page > 1): ?>
                             <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
@@ -495,7 +490,6 @@ function getPaymentMethodLabel($method)
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeOrderDetailModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4">
             <div class="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col transform transition-all animate-modal-in">
-                <!-- Modern Header with Solid Primary Color -->
                 <div class="sticky top-0 bg-[#882426] px-6 py-5 flex items-center justify-between z-10">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
@@ -510,13 +504,11 @@ function getPaymentMethodLabel($method)
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>
-                <!-- Content with Custom Scrollbar -->
                 <div class="flex-1 overflow-y-auto p-6 bg-gray-50 space-y-5" id="modal-content">
                     <div class="flex items-center justify-center py-12">
                         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#882426]"></div>
                     </div>
                 </div>
-                <!-- Modal Footer -->
                 <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
                     <button onclick="closeOrderDetailModal()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200">
                         <span class="material-symbols-outlined text-lg">close</span>
@@ -532,7 +524,6 @@ function getPaymentMethodLabel($method)
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeStatusModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4">
             <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all animate-modal-in">
-                <!-- Modal Header with Primary Color -->
                 <div class="bg-[#882426] px-6 py-5 flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
@@ -548,9 +539,7 @@ function getPaymentMethodLabel($method)
                     </button>
                 </div>
 
-                <!-- Modal Body -->
                 <div class="p-6">
-                    <!-- Status Info Alert -->
                     <div class="mb-5 p-4 rounded-xl border-l-4 border-[#882426] bg-[#882426]/5">
                         <div class="flex items-start gap-3">
                             <span class="material-symbols-outlined text-[#882426] text-xl flex-shrink-0">info</span>
@@ -563,7 +552,6 @@ function getPaymentMethodLabel($method)
                     <form id="status-form" class="space-y-5">
                         <input type="hidden" name="order_id" id="status-order-id">
 
-                        <!-- Status Field -->
                         <div>
                             <label class="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
                                 <span class="material-symbols-outlined text-[#882426] text-lg">pending_actions</span>
@@ -583,7 +571,6 @@ function getPaymentMethodLabel($method)
                             </p>
                         </div>
 
-                        <!-- Action Buttons -->
                         <div class="flex gap-3 pt-2">
                             <button type="button" onclick="closeStatusModal()"
                                 class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
@@ -602,7 +589,7 @@ function getPaymentMethodLabel($method)
         </div>
     </div>
 
-    <!-- Custom Modal Styles -->
+    <!-- Toast & Modal Styles -->
     <style>
         @keyframes modal-in {
             from {
@@ -620,7 +607,6 @@ function getPaymentMethodLabel($method)
             animation: modal-in 0.3s ease-out forwards;
         }
 
-        /* Custom Scrollbar for Modal */
         #modal-content::-webkit-scrollbar {
             width: 6px;
         }
@@ -638,9 +624,148 @@ function getPaymentMethodLabel($method)
         #modal-content::-webkit-scrollbar-thumb:hover {
             background: #6d1a1c;
         }
+
+        /* Toast Animations */
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toast-out {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .toast-enter {
+            animation: toast-in 0.4s ease-out forwards;
+        }
+
+        .toast-exit {
+            animation: toast-out 0.3s ease-in forwards;
+        }
+
+        @keyframes circular-progress {
+            from {
+                stroke-dashoffset: 100;
+            }
+
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .circular-progress {
+            animation: circular-progress linear forwards;
+        }
     </style>
 
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3"></div>
+
     <script>
+        // ========== TOAST NOTIFICATION SYSTEM WITH CIRCULAR PROGRESS ==========
+        function showToast(type, title, message, duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const id = 'toast-' + Date.now();
+            const toast = document.createElement('div');
+            toast.id = id;
+
+            const colors = {
+                success: {
+                    bg: 'bg-white',
+                    border: 'border-emerald-200',
+                    icon: 'check_circle',
+                    iconBg: 'bg-emerald-500',
+                    iconColor: 'text-white',
+                    title: 'text-emerald-800',
+                    progressCircle: '#10b981'
+                },
+                error: {
+                    bg: 'bg-white',
+                    border: 'border-red-200',
+                    icon: 'error',
+                    iconBg: 'bg-red-500',
+                    iconColor: 'text-white',
+                    title: 'text-red-800',
+                    progressCircle: '#ef4444'
+                },
+                warning: {
+                    bg: 'bg-white',
+                    border: 'border-amber-200',
+                    icon: 'warning',
+                    iconBg: 'bg-amber-500',
+                    iconColor: 'text-white',
+                    title: 'text-amber-800',
+                    progressCircle: '#f59e0b'
+                },
+                info: {
+                    bg: 'bg-white',
+                    border: 'border-blue-200',
+                    icon: 'info',
+                    iconBg: 'bg-blue-500',
+                    iconColor: 'text-white',
+                    title: 'text-blue-800',
+                    progressCircle: '#3b82f6'
+                }
+            };
+
+            const c = colors[type] || colors.info;
+
+            toast.className = `${c.bg} border ${c.border} rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px] toast-enter`;
+            toast.innerHTML = `
+                <div class="p-4 flex items-start gap-3">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-10 h-10 ${c.iconBg} rounded-full flex items-center justify-center ${c.iconColor} shadow-lg">
+                            <span class="material-symbols-outlined">${c.icon}</span>
+                        </div>
+                        <svg class="absolute -top-1 -left-1 w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" stroke-width="2.5"></circle>
+                            <circle id="${id}-progress-circle" cx="18" cy="18" r="16" fill="none" stroke="${c.progressCircle}" stroke-width="2.5" 
+                                stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round"
+                                class="circular-progress" style="animation-duration: ${duration}ms;"></circle>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold ${c.title}">${title}</p>
+                        <p class="text-sm text-gray-600 mt-0.5">${message}</p>
+                    </div>
+                    <button onclick="removeToast('${id}')" class="flex-shrink-0 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                removeToast(id);
+            }, duration);
+        }
+
+        function removeToast(id) {
+            const toast = document.getElementById(id);
+            if (toast) {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+
+        // ========== ORDER MANAGEMENT SCRIPTS ==========
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.btn-view-detail').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -845,31 +970,15 @@ function getPaymentMethodLabel($method)
                 });
                 const result = await response.json();
                 if (result.success) {
-                    showToast('Status order berhasil diupdate', 'success');
+                    showToast('success', 'Berhasil!', 'Status order berhasil diupdate');
                     closeStatusModal();
-                    setTimeout(() => location.reload(), 1000);
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    showToast(result.message || 'Gagal update status', 'error');
+                    showToast('error', 'Gagal!', result.message || 'Gagal update status');
                 }
             } catch (error) {
-                showToast('Terjadi kesalahan', 'error');
+                showToast('error', 'Error!', 'Terjadi kesalahan');
             }
-        }
-
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
-            toast.innerHTML = `<span class="material-symbols-outlined text-lg">${type === 'success' ? 'check_circle' : 'error'}</span>${message}`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        // Function to change entries per page
-        function changePerPage(perPage) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('per_page', perPage);
-            url.searchParams.set('page', '1'); // Reset to first page when changing per page
-            window.location.href = url.toString();
         }
 
         // Keyboard shortcut to close modals with Escape key

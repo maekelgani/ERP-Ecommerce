@@ -1,8 +1,12 @@
 <?php
 
 require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../Database/DatabaseConnection.php';
+require_once __DIR__ . '/../Services/pengeluaranServices.php';
 
 use App\Repository\ReportRepository;
+use App\Database\DatabaseConnection;
+use App\Services\PengeluaranServices;
 
 header('Content-Type: application/json');
 
@@ -63,7 +67,30 @@ try {
             $data = $reportRepo->getTopProducts($period, $limit);
             echo json_encode(['success' => true, 'data' => $data]);
             break;
+        
+        case 'financial_summary':
 
+            $salesData = $reportRepo->getSalesReport($period);
+            
+            $totalRevenue = $salesData['summary']['total_revenue'] ?? 0;
+
+            $db = DatabaseConnection::getInstance()->getConnection();
+            $expenseModel = new PengeluaranServices($db);
+            
+            $totalExpense = $expenseModel->getTotalByPeriod($period);
+
+            $netProfit = $totalRevenue - $totalExpense;
+
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'revenue'    => (float)$totalRevenue,
+                    'expense'    => (float)$totalExpense,
+                    'net_profit' => (float)$netProfit
+                ]
+            ]);
+            break;
+            
         case 'export_pdf':
             $type = $_GET['type'] ?? 'sales';
             exportPDF($type, $period, $reportRepo);

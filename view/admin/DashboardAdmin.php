@@ -91,19 +91,34 @@ $chartDataJson = json_encode([
                     <p class="text-xs text-gray-400 mt-1"><?= $totalOrders['thisMonth'] ?> pesanan bulan ini</p>
                 </div>
 
-                <div class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-12 h-12 rounded-lg bg-orange-50 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-orange-600 text-2xl">assignment_return</span>
+                <a href="ReturnAdmin.php" class="block">
+                    <div
+                        class="rounded-xl border border-gray-100 bg-white shadow-sm p-6 
+               hover:shadow-md transition-shadow cursor-pointer
+               hover:ring-2 hover:ring-orange-200">
+
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 rounded-lg bg-orange-50 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-orange-600 text-2xl">
+                                    assignment_return
+                                </span>
+                            </div>
+
+                            <?php if ($pendingReturns > 0): ?>
+                                <span
+                                    class="text-xs px-2 py-1 rounded-full bg-orange-100 text-orange-700 animate-pulse">
+                                    Perlu Tindakan
+                                </span>
+                            <?php endif; ?>
                         </div>
-                        <?php if ($pendingReturns > 0): ?>
-                            <span class="text-xs px-2 py-1 rounded-full bg-orange-100 text-orange-700 animate-pulse">Perlu Tindakan</span>
-                        <?php endif; ?>
+
+                        <h2 class="text-sm text-gray-500 mb-1 font-medium">Permintaan Return</h2>
+                        <p class="font-bold text-2xl text-gray-800"><?= $pendingReturns ?></p>
+                        <p class="text-xs text-gray-400 mt-1">Menunggu diproses</p>
+
                     </div>
-                    <h2 class="text-sm text-gray-500 mb-1 font-medium">Permintaan Return</h2>
-                    <p class="font-bold text-2xl text-gray-800"><?= $pendingReturns ?></p>
-                    <p class="text-xs text-gray-400 mt-1">Menunggu diproses</p>
-                </div>
+                </a>
+
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
