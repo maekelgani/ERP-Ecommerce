@@ -624,6 +624,9 @@
   .z-\[100\] {
     z-index: 100;
   }
+  .z-\[200\] {
+    z-index: 200;
+  }
   .z-\[9999\] {
     z-index: 9999;
   }
@@ -1068,6 +1071,12 @@
   .max-h-\[calc\(90vh-80px\)\] {
     max-height: calc(90vh - 80px);
   }
+  .max-h-\[calc\(90vh-88px\)\] {
+    max-height: calc(90vh - 88px);
+  }
+  .max-h-\[calc\(90vh-90px\)\] {
+    max-height: calc(90vh - 90px);
+  }
   .max-h-\[calc\(90vh-100px\)\] {
     max-height: calc(90vh - 100px);
   }
@@ -1166,9 +1175,6 @@
   }
   .w-32 {
     width: calc(var(--spacing) * 32);
-  }
-  .w-36 {
-    width: calc(var(--spacing) * 36);
   }
   .w-40 {
     width: calc(var(--spacing) * 40);
@@ -3747,6 +3753,10 @@
     --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
+  .shadow-\[0_-4px_20px_rgba\(0\,0\,0\,0\.05\)\] {
+    --tw-shadow: 0 -4px 20px var(--tw-shadow-color, rgba(0,0,0,0.05));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
   .shadow-\[0_0_30px_rgba\(255\,255\,255\,0\.3\)\] {
     --tw-shadow: 0 0 30px var(--tw-shadow-color, rgba(255,255,255,0.3));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -5034,13 +5044,6 @@
       }
     }
   }
-  .hover\:bg-blue-600 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-blue-600);
-      }
-    }
-  }
   .hover\:bg-blue-700 {
     &:hover {
       @media (hover: hover) {
@@ -5552,13 +5555,6 @@
       }
     }
   }
-  .hover\:text-green-800 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-green-800);
-      }
-    }
-  }
   .hover\:text-indigo-600 {
     &:hover {
       @media (hover: hover) {
@@ -5612,13 +5608,6 @@
     &:hover {
       @media (hover: hover) {
         color: var(--color-red-700);
-      }
-    }
-  }
-  .hover\:text-red-800 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-red-800);
       }
     }
   }

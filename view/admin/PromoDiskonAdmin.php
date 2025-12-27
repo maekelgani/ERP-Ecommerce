@@ -328,18 +328,20 @@ include '../../components/admin/head.php';
 
                         <!-- Status -->
                         <div class="p-4 bg-white rounded-xl border-2 border-gray-200">
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">
-                                <span class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-base text-[#882426]">toggle_on</span>
-                                    Status Diskon
-                                </span>
+                            <label class="flex items-start gap-4 cursor-pointer">
+                                <div class="toggle-switch mt-1">
+                                    <input type="checkbox" name="is_nonaktif" id="is_nonaktif">
+                                    <span class="toggle-slider"></span>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-semibold text-gray-700">
+                                        Status Diskon
+                                    </span>
+                                    <p class="text-xs text-gray-500 mt-0.5">
+                                        Nonaktifkan diskon secara manual tanpa mengubah jadwal
+                                    </p>
+                                </div>
                             </label>
-                            <div class="flex items-center gap-3">
-                                <label class="flex items-center gap-2 cursor-pointer select-none">
-                                    <input type="checkbox" name="is_nonaktif" id="is_nonaktif" class="w-5 h-5 rounded border-gray-300 text-[#882426] focus:ring-[#882426]">
-                                    <span class="text-sm text-gray-600">Nonaktifkan diskon</span>
-                                </label>
-                            </div>
                             <input type="hidden" name="status" id="status" value="aktif">
                             <p class="text-xs text-gray-500 mt-3 flex items-start gap-1">
                                 <span class="material-symbols-outlined text-sm mt-0.5">info</span>
@@ -347,6 +349,57 @@ include '../../components/admin/head.php';
                                     <strong class="text-emerald-600">Aktif</strong> (periode berjalan), <strong class="text-red-600">Berakhir</strong> (melewati waktu selesai).</span>
                             </p>
                         </div>
+                        <style>
+                            .toggle-switch {
+                                position: relative;
+                                width: 56px;
+                                height: 32px;
+                                flex-shrink: 0;
+                            }
+
+                            .toggle-switch input {
+                                opacity: 0;
+                                width: 0;
+                                height: 0;
+                            }
+
+                            .toggle-slider {
+                                position: absolute;
+                                cursor: pointer;
+                                inset: 0;
+                                background-color: #e5e7eb;
+                                border-radius: 9999px;
+                                transition: all 0.3s ease;
+                            }
+
+                            .toggle-slider::before {
+                                content: "";
+                                position: absolute;
+                                height: 24px;
+                                width: 24px;
+                                left: 4px;
+                                top: 4px;
+                                background-color: #ffffff;
+                                border-radius: 50%;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                                transition: transform 0.3s ease;
+                            }
+
+                            .toggle-switch input:checked+.toggle-slider {
+                                background-color: #882426;
+                            }
+
+                            .toggle-switch input:checked+.toggle-slider::before {
+                                transform: translateX(24px);
+                            }
+                        </style>
+                        <script>
+                            document.getElementById('is_nonaktif').addEventListener('change', function() {
+                                document.getElementById('status').value = this.checked ? 'nonaktif' : 'aktif';
+                            });
+                        </script>
+
+
                     </div>
 
                     <!-- Modal Footer -->
