@@ -138,6 +138,10 @@ include '../../components/admin/head.php';
                         <span class="material-symbols-outlined text-lg">article</span>
                         Blog & Artikel
                     </button>
+                    <button class="tab-btn-managementweb px-5 py-2.5 rounded-lg text-gray-500 cursor-pointer whitespace-nowrap hover:bg-[#882426]/10 hover:text-[#882426] transition-all duration-300 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-lg">article</span>
+                        Site Setting
+                    </button>
                 </nav>
             </div>
 
@@ -421,6 +425,166 @@ include '../../components/admin/head.php';
                         <div class="flex items-center gap-1 flex-shrink-0" id="articlePaginationNav">
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Site Settings -->
+            <div class="tab-content-managementweb hidden">
+                <form id="siteSettingsForm" enctype="multipart/form-data" class="h-full flex flex-col">
+                    <div class="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden flex-1">
+                        
+                        <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-800">Pengaturan Situs</h2>
+                                <p class="text-sm text-gray-500">Konfigurasi informasi global, logo, dan kontak website.</p>
+                            </div>
+                            <button id="btnSaveSettings" class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
+                                <span class="material-symbols-outlined text-xl">save</span>
+                                Simpan Perubahan
+                            </button>
+                        </div>
+
+                        <div class="p-6 overflow-y-auto space-y-8">
+                            
+                            <div class="bg-gray-50/50 rounded-xl p-6 border border-gray-200">
+                                <div class="flex items-center gap-2 mb-5">
+                                    <div class="w-8 h-8 rounded-lg bg-[#882426] flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white text-sm">language</span>
+                                    </div>
+                                    <h4 class="font-bold text-gray-800">Identitas & SEO</h4>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 gap-5">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Judul Website</label>
+                                        <div class="relative">
+                                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">badge</span>
+                                            <input type="text" name="site_title" placeholder="Contoh: Nano Komputer" 
+                                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white">
+                                        <input type="hidden" name="existing_site_logo" id="existing_site_logo">
+                                        <input type="hidden" name="existing_site_favicon" id="existing_site_favicon">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi Website (SEO)</label>
+                                        <textarea name="site_description" rows="3" placeholder="Deskripsi singkat untuk mesin pencari..."
+                                            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white resize-none"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50/50 rounded-xl p-6 border border-gray-200">
+                                <div class="flex items-center gap-2 mb-5">
+                                    <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white text-sm">image</span>
+                                    </div>
+                                    <h4 class="font-bold text-gray-800">Logo & Aset Visual</h4>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                                        <label class="block text-sm font-semibold text-gray-700 mb-3">Logo Utama</label>
+                                        <div class="flex items-start gap-4">
+                                            <div class="w-24 h-24 bg-gray-100 rounded-lg border border-dashed border-gray-300 flex items-center justify-center overflow-hidden shrink-0 relative group">
+                                                <img id="preview_site_logo" src="" alt="" class="w-full h-full object-contain p-1 hidden">
+                                                <span class="material-symbols-outlined text-gray-400 group-hover:hidden" id="icon_site_logo">image</span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <input type="file" name="site_logo" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#882426]/10 file:text-[#882426] hover:file:bg-[#882426]/20 transition cursor-pointer mb-2"
+                                                    onchange="document.getElementById('preview_site_logo').src = window.URL.createObjectURL(this.files[0]); document.getElementById('preview_site_logo').classList.remove('hidden'); document.getElementById('icon_site_logo').classList.add('hidden');">
+                                                <p class="text-xs text-gray-400">Format: PNG/SVG (Transparan). Max 2MB.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                                        <label class="block text-sm font-semibold text-gray-700 mb-3">Favicon (Icon Tab)</label>
+                                        <div class="flex items-start gap-4">
+                                            <div class="w-16 h-16 bg-gray-100 rounded-lg border border-dashed border-gray-300 flex items-center justify-center overflow-hidden shrink-0 relative">
+                                                <img id="preview_site_favicon" src="" alt="" class="w-full h-full object-contain p-1 hidden">
+                                                <!-- <span class="material-symbols-outlined text-gray-400" id="icon_site_favicon">stars</span> -->
+                                            </div>
+                                            <div class="flex-1">
+                                                <input type="file" name="site_favicon" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#882426]/10 file:text-[#882426] hover:file:bg-[#882426]/20 transition cursor-pointer mb-2"
+                                                    onchange="document.getElementById('preview_site_favicon').src = window.URL.createObjectURL(this.files[0]); document.getElementById('preview_site_favicon').classList.remove('hidden'); document.getElementById('icon_site_favicon').classList.add('hidden');">
+                                                <p class="text-xs text-gray-400">Format: ICO/PNG (Kotak). Max 1MB.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50/50 rounded-xl p-6 border border-gray-200">
+                                <div class="flex items-center gap-2 mb-5">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white text-sm">share</span>
+                                    </div>
+                                    <h4 class="font-bold text-gray-800">Kontak & Sosial Media</h4>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email Kontak</label>
+                                        <div class="relative">
+                                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">mail</span>
+                                            <input type="email" name="contact_email" placeholder="admin@domain.com"
+                                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor WhatsApp</label>
+                                        <div class="relative">
+                                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">chat</span>
+                                            <input type="number" name="contact_phone" placeholder="628123xxxx"
+                                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Facebook URL</label>
+                                        <div class="relative">
+                                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">public</span>
+                                            <input type="url" name="facebook_url" placeholder="https://facebook.com/page"
+                                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Instagram URL</label>
+                                        <div class="relative">
+                                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">photo_camera</span>
+                                            <input type="url" name="instagram_url" placeholder="https://instagram.com/username"
+                                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">TikTok URL</label>
+                                        <div class="relative">
+                                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">music_note</span>
+                                            <input type="url" name="tiktok_url" placeholder="https://tiktok.com/@username"
+                                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">X (Twitter) URL</label>
+                                        <div class="relative">
+                                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">alternate_email</span>
+                                            <input type="url" name="x_url" placeholder="https://x.com/username"
+                                                class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hidden z-50">
+                    <span id="toastMessage"></span>
                 </div>
             </div>
         </main>
