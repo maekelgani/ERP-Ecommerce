@@ -8,10 +8,8 @@ AuthMiddleware::requireAdminLoginFromView();
 
 $orderRepo = new OrderRepository();
 
-// Modified: Added perPage variable like CustomerList.php
-$perPage = (int)($_GET['per_page'] ?? 10);
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$limit = $perPage;
+$limit = isset($_GET['limit']) ? max(5, min(50, intval($_GET['limit']))) : 10;
 
 $filters = [
     'search' => $_GET['search'] ?? '',
@@ -27,10 +25,6 @@ $totalPages = $result['total_pages'];
 $totalOrders = $result['total'];
 
 $stats = $orderRepo->getOrderStats();
-
-// Added: Calculate startEntry and endEntry early
-$startEntry = $totalOrders > 0 ? (($page - 1) * $limit) + 1 : 0;
-$endEntry = min($page * $limit, $totalOrders);
 
 $pageTitle = "Incoming Orders";
 include '../../components/admin/head.php';
@@ -107,6 +101,9 @@ function getShipmentStatusBadge($status)
 ?>
 
 <body class="bg-gray-50 h-screen flex">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3"></div>
+
     <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
     <div class="flex-1 flex flex-col overflow-hidden min-w-0">
@@ -116,88 +113,71 @@ function getShipmentStatusBadge($status)
 
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
             <div class="mb-6">
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Pesanan Masuk</h1>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Incoming Orders</h1>
                 <p class="text-gray-500 mt-1">Kelola pesanan yang masuk dan perlu diproses</p>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-amber-200 transition-all duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">
-                            <span class="material-symbols-outlined text-white text-2xl">pending_actions</span>
+                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-yellow-600">pending_actions</span>
                         </div>
                         <div>
-                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Menunggu</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-1"><?= $stats['pending_orders'] ?? 0 ?></p>
+                            <p class="text-2xl font-bold text-gray-800"><?= $stats['pending_orders'] ?? 0 ?></p>
+                            <p class="text-xs text-gray-500">Menunggu</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-blue-200 transition-all duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
-                            <span class="material-symbols-outlined text-white text-2xl">inventory_2</span>
+                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-blue-600">inventory_2</span>
                         </div>
                         <div>
-                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Diproses</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-1"><?= $stats['processing_orders'] ?? 0 ?></p>
+                            <p class="text-2xl font-bold text-gray-800"><?= $stats['processing_orders'] ?? 0 ?></p>
+                            <p class="text-xs text-gray-500">Diproses</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-purple-200 transition-all duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center"
-                            style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
-                            <span class="material-symbols-outlined text-white text-2xl">local_shipping</span>
+                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-purple-600">local_shipping</span>
                         </div>
                         <div>
-                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Dikirim</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-1"><?= $stats['shipping_orders'] ?? 0 ?></p>
+                            <p class="text-2xl font-bold text-gray-800"><?= $stats['shipping_orders'] ?? 0 ?></p>
+                            <p class="text-xs text-gray-500">Dikirim</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-green-200 transition-all duration-300">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                            <span class="material-symbols-outlined text-white text-2xl">check_circle</span>
+                <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-green-600">check_circle</span>
                         </div>
                         <div>
-                            <p class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Selesai</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-1"><?= $stats['completed_orders'] ?? 0 ?></p>
+                            <p class="text-2xl font-bold text-gray-800"><?= $stats['completed_orders'] ?? 0 ?></p>
+                            <p class="text-xs text-gray-500">Selesai</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
-                <!-- Modified: Header section like CustomerList.php with entries per page -->
                 <div class="p-4 md:p-6 border-b border-gray-100">
-                    <div class="flex flex-col gap-4">
-                        <div class="min-w-0">
-                            <h2 class="text-lg font-bold text-gray-800">Daftar Pesanan Masuk</h2>
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-800">Daftar Pesanan Masuk</h2>
                             <p class="text-sm text-gray-500 mt-1">Pesanan yang perlu dikonfirmasi dan diproses</p>
                         </div>
-                        <!-- KONTROL -->
-                        <div class="flex items-center justify-between gap-4">
-                            <!-- LEFT: Entries per page -->
-                            <div class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
-                                <span class="material-symbols-outlined text-gray-400 text-sm">view_list</span>
-                                <select onchange="window.location.href='?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>&per_page=' + this.value"
-                                    class="bg-transparent text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
-                                    <?php foreach ([5, 10, 20, 50] as $option): ?>
-                                        <option value="<?= $option ?>" <?= $perPage === $option ? 'selected' : '' ?>>
-                                            <?= $option ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <span class="text-sm text-gray-600">entries per page</span>
-                            </div>
+                        <div class="text-sm text-gray-500">
+                            Total: <span class="font-semibold text-gray-800"><?= $totalOrders ?></span> pesanan
                         </div>
                     </div>
                 </div>
 
                 <form method="GET" class="p-4 border-b border-gray-100 bg-gray-50/50">
-                    <!-- Hidden input to preserve per_page when filtering -->
-                    <input type="hidden" name="per_page" value="<?= $perPage ?>">
                     <div class="flex flex-wrap items-end gap-3">
                         <div class="flex-1 min-w-[200px]">
                             <label class="block text-xs font-medium text-gray-600 mb-1">Cari Pesanan</label>
@@ -250,23 +230,22 @@ function getShipmentStatusBadge($status)
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-100">
-                                <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-12">No</th>
-                                <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Order ID</th>
-                                <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Customer</th>
-                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Items</th>
-                                <th class="px-5 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Total</th>
-                                <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Pembayaran</th>
-                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status Order</th>
-                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Pengiriman</th>
-                                <th class="px-5 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Aksi</th>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Order ID</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Items</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Total</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Pembayaran</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Status Order</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Pengiriman</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <?php if (empty($orders)): ?>
                                 <tr>
-                                    <td colspan="10" class="px-4 py-12 text-center">
+                                    <td colspan="9" class="px-4 py-12 text-center">
                                         <div class="flex flex-col items-center">
                                             <span class="material-symbols-outlined text-6xl text-gray-300 mb-3">inbox</span>
                                             <p class="text-gray-500 font-medium">Tidak ada pesanan masuk</p>
@@ -275,12 +254,8 @@ function getShipmentStatusBadge($status)
                                     </td>
                                 </tr>
                             <?php else: ?>
-                                <?php $no = (($page - 1) * $limit) + 1;
-                                foreach ($orders as $order): ?>
-                                    <tr class="hover:bg-orange-50 transition-colors" data-order-id="<?= htmlspecialchars($order['id_order']) ?>">
-                                        <td class="px-4 py-3 text-center font-medium text-gray-700">
-                                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#882426]/10 text-[#882426]"><?= $no++ ?></span>
-                                        </td>
+                                <?php foreach ($orders as $order): ?>
+                                    <tr class="hover:bg-gray-50 transition-colors" data-order-id="<?= htmlspecialchars($order['id_order']) ?>">
                                         <td class="px-4 py-3">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm font-mono font-medium text-[#882426]">#<?= htmlspecialchars(substr($order['id_order'], -8)) ?></span>
@@ -351,11 +326,11 @@ function getShipmentStatusBadge($status)
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center justify-center gap-1">
-                                                <button class="btn-view-detail inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
+                                                <button class="btn-view-detail p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"
                                                     data-order-id="<?= htmlspecialchars($order['id_order']) ?>" title="Lihat Detail">
                                                     <span class="material-symbols-outlined text-lg">visibility</span>
                                                 </button>
-                                                <button class="btn-update-shipment inline-flex items-center gap-1.5 px-3 py-2 text-purple-600 bg-purple-50 rounded-lg text-sm font-medium hover:bg-purple-100 transition-colors"
+                                                <button class="btn-update-shipment p-1.5 text-purple-600 hover:bg-purple-50 rounded-lg transition"
                                                     data-order-id="<?= htmlspecialchars($order['id_order']) ?>" title="Update Pengiriman">
                                                     <span class="material-symbols-outlined text-lg">local_shipping</span>
                                                 </button>
@@ -368,63 +343,39 @@ function getShipmentStatusBadge($status)
                     </table>
                 </div>
 
-                <!-- Modified: Pagination Info & Controls with per_page support -->
-                <div class="px-4 md:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50/50">
-                    <div class="flex items-center gap-4">
-                        <div class="text-sm text-gray-600">
-                            Showing <span class="font-semibold text-gray-800"><?= $startEntry ?></span> to <span class="font-semibold text-gray-800"><?= $endEntry ?></span> of <span class="font-semibold text-gray-800"><?= $totalOrders ?></span> entries
+                <?php if ($totalPages > 1): ?>
+                    <div class="px-4 py-4 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="text-sm text-gray-500">
+                            Halaman <?= $page ?> dari <?= $totalPages ?> (<?= $totalOrders ?> total)
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <?php if ($page > 1): ?>
+                                <a href="?page=<?= $page - 1 ?>&<?= http_build_query(array_filter($filters)) ?>"
+                                    class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition">
+                                    <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
+                                </a>
+                            <?php endif; ?>
+
+                            <?php
+                            $startPage = max(1, $page - 2);
+                            $endPage = min($totalPages, $page + 2);
+                            for ($i = $startPage; $i <= $endPage; $i++):
+                            ?>
+                                <a href="?page=<?= $i ?>&<?= http_build_query(array_filter($filters)) ?>"
+                                    class="px-3 py-1.5 border rounded-lg text-sm transition <?= $i === $page ? 'bg-[#882426] text-white border-[#882426]' : 'border-gray-300 hover:bg-gray-50' ?>">
+                                    <?= $i ?>
+                                </a>
+                            <?php endfor; ?>
+
+                            <?php if ($page < $totalPages): ?>
+                                <a href="?page=<?= $page + 1 ?>&<?= http_build_query(array_filter($filters)) ?>"
+                                    class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition">
+                                    <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </div>
-
-                    <!-- Pagination Navigation -->
-                    <div class="flex items-center gap-1 flex-shrink-0">
-                        <?php if ($page > 1): ?>
-                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
-                                <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
-                            </a>
-                        <?php else: ?>
-                            <button disabled class="px-3 py-2 rounded-lg border border-gray-200 text-gray-300 cursor-not-allowed text-sm font-medium">
-                                <span class="material-symbols-outlined text-lg align-middle">chevron_left</span>
-                            </button>
-                        <?php endif; ?>
-
-                        <?php
-                        $startPage = max(1, $page - 2);
-                        $endPage = min($totalPages, $page + 2);
-                        if ($startPage > 1):
-                        ?>
-                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">1</a>
-                            <?php if ($startPage > 2): ?>
-                                <span class="px-2 py-2 text-gray-400">...</span>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                        <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
-                            <?php if ($i === $page): ?>
-                                <button class="px-3 py-2 rounded-lg text-white font-medium" style="background: #882426;"><?= $i ?></button>
-                            <?php else: ?>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium"><?= $i ?></a>
-                            <?php endif; ?>
-                        <?php endfor; ?>
-
-                        <?php if ($endPage < $totalPages): ?>
-                            <?php if ($endPage < $totalPages - 1): ?>
-                                <span class="px-2 py-2 text-gray-400">...</span>
-                            <?php endif; ?>
-                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $totalPages, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium"><?= $totalPages ?></a>
-                        <?php endif; ?>
-
-                        <?php if ($page < $totalPages): ?>
-                            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1, 'per_page' => $perPage])) ?>" class="px-3 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium">
-                                <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
-                            </a>
-                        <?php else: ?>
-                            <button disabled class="px-3 py-2 rounded-lg border border-gray-200 text-gray-300 cursor-not-allowed text-sm font-medium">
-                                <span class="material-symbols-outlined text-lg align-middle">chevron_right</span>
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         </main>
     </div>
@@ -551,7 +502,7 @@ function getShipmentStatusBadge($status)
         </div>
     </div>
 
-    <!-- Custom Modal Styles -->
+    <!-- Custom Modal & Toast Styles -->
     <style>
         @keyframes modal-in {
             from {
@@ -586,6 +537,54 @@ function getShipmentStatusBadge($status)
 
         #modal-content::-webkit-scrollbar-thumb:hover {
             background: #6d1a1c;
+        }
+
+        /* Toast Animations */
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toast-out {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .toast-enter {
+            animation: toast-in 0.4s ease-out forwards;
+        }
+
+        .toast-exit {
+            animation: toast-out 0.3s ease-in forwards;
+        }
+
+        /* Circular Progress - runs from full to empty */
+        @keyframes circular-progress {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: 100;
+            }
+        }
+
+        .circular-progress {
+            animation: circular-progress linear forwards;
         }
     </style>
 
@@ -636,12 +635,13 @@ function getShipmentStatusBadge($status)
                 });
                 const result = await response.json();
                 if (result.success) {
-                    showToast('Status order berhasil diupdate', 'success');
+                    showToast('success', 'Berhasil!', 'Status order berhasil diupdate');
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    showToast(result.message || 'Gagal update status', 'error');
+                    showToast('error', 'Gagal!', result.message || 'Gagal update status');
                 }
             } catch (error) {
-                showToast('Terjadi kesalahan', 'error');
+                showToast('error', 'Error!', 'Terjadi kesalahan saat update status');
             }
         }
 
@@ -824,23 +824,107 @@ function getShipmentStatusBadge($status)
                 });
                 const result = await response.json();
                 if (result.success) {
-                    showToast('Status pengiriman berhasil diupdate', 'success');
+                    showToast('success', 'Berhasil!', 'Status pengiriman berhasil diupdate');
                     closeShipmentModal();
-                    setTimeout(() => location.reload(), 1000);
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    showToast(result.message || 'Gagal update status', 'error');
+                    showToast('error', 'Gagal!', result.message || 'Gagal update status');
                 }
             } catch (error) {
-                showToast('Terjadi kesalahan', 'error');
+                showToast('error', 'Error!', 'Terjadi kesalahan saat update status');
             }
         }
 
-        function showToast(message, type = 'success') {
+        // Toast Notification System with Circular Progress
+        function showToast(type, title, message, duration = 4000) {
+            const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
-            toast.innerHTML = `<span class="material-symbols-outlined text-lg">${type === 'success' ? 'check_circle' : 'error'}</span>${message}`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            const id = 'toast-' + Date.now();
+            toast.id = id;
+
+            const colors = {
+                success: {
+                    bg: 'bg-white',
+                    border: 'border-emerald-200',
+                    icon: 'check_circle',
+                    iconBg: 'bg-emerald-500',
+                    iconColor: 'text-white',
+                    progress: 'bg-emerald-500',
+                    title: 'text-emerald-800',
+                    progressCircle: '#10b981'
+                },
+                error: {
+                    bg: 'bg-white',
+                    border: 'border-red-200',
+                    icon: 'error',
+                    iconBg: 'bg-red-500',
+                    iconColor: 'text-white',
+                    progress: 'bg-red-500',
+                    title: 'text-red-800',
+                    progressCircle: '#ef4444'
+                },
+                warning: {
+                    bg: 'bg-white',
+                    border: 'border-amber-200',
+                    icon: 'warning',
+                    iconBg: 'bg-amber-500',
+                    iconColor: 'text-white',
+                    progress: 'bg-amber-500',
+                    title: 'text-amber-800',
+                    progressCircle: '#f59e0b'
+                },
+                info: {
+                    bg: 'bg-white',
+                    border: 'border-blue-200',
+                    icon: 'info',
+                    iconBg: 'bg-blue-500',
+                    iconColor: 'text-white',
+                    progress: 'bg-blue-500',
+                    title: 'text-blue-800',
+                    progressCircle: '#3b82f6'
+                }
+            };
+
+            const c = colors[type] || colors.info;
+
+            toast.className = `${c.bg} border ${c.border} rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px] toast-enter`;
+            toast.innerHTML = `
+                <div class="p-4 flex items-start gap-3">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-10 h-10 ${c.iconBg} rounded-full flex items-center justify-center ${c.iconColor} shadow-lg">
+                            <span class="material-symbols-outlined">${c.icon}</span>
+                        </div>
+                        <svg class="absolute -top-1 -left-1 w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" stroke-width="2.5"></circle>
+                            <circle id="${id}-progress-circle" cx="18" cy="18" r="16" fill="none" stroke="${c.progressCircle}" stroke-width="2.5" 
+                                stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round"
+                                class="circular-progress" style="animation-duration: ${duration}ms;"></circle>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold ${c.title}">${title}</p>
+                        <p class="text-sm text-gray-600 mt-0.5">${message}</p>
+                    </div>
+                    <button onclick="removeToast('${id}')" class="flex-shrink-0 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                removeToast(id);
+            }, duration);
+        }
+
+        function removeToast(id) {
+            const toast = document.getElementById(id);
+            if (toast) {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }
         }
     </script>
 </body>

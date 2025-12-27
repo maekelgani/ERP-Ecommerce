@@ -182,7 +182,7 @@ class ReportRepository
                 p.nama_bank,
                 p.status_pembayaran,
                 -- s.nama_kurir,
-                s.nama_layanan,
+                s.jasa_pengiriman,
                 s.no_resi
             FROM orders o
             JOIN customers c ON o.id_customer = c.id_customer
@@ -256,7 +256,7 @@ class ReportRepository
         }
 
         $sql .= " GROUP BY c.id_customer, c.nama_lengkap, c.email, c.no_telp, c.login_type, c.is_active, c.created_at
-                  ORDER BY total_spent DESC";
+                    ORDER BY total_spent DESC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
@@ -308,7 +308,7 @@ class ReportRepository
             LEFT JOIN orders o ON od.id_order = o.id_order 
                 AND o.status_order NOT IN ('dibatalkan')
             GROUP BY p.id_product, p.nama_product, p.harga, p.stok, p.status_produk, 
-                     k.nama_kategori, b.nama_brand
+                        k.nama_kategori, b.nama_brand
             ORDER BY p.stok ASC";
 
         $stmt = $this->db->query($sql);
