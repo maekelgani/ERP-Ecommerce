@@ -95,7 +95,7 @@ include '../../components/admin/head.php';
                                 class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex items-end gap-2">
-                            <button type="submit" class="px-6 py-2 bg-[#882426] text-white rounded-lg hover:bg-gray-700 transition-colors">
+                            <button type="submit" class="inline-flex items-center gap-2 px-6 py-2 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
                                 Filter
                             </button>
                             <?php if (!empty($filters['date_from']) || !empty($filters['date_to'])): ?>

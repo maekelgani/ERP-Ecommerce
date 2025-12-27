@@ -41,6 +41,9 @@ include '../../components/admin/head.php';
 ?>
 
 <body class="bg-gray-50 h-screen flex">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-[100] flex flex-col gap-3"></div>
+
     <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
     <div class="flex-1 flex flex-col overflow-hidden min-w-0">
@@ -49,51 +52,12 @@ include '../../components/admin/head.php';
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
-            <?php if (isset($_SESSION['flash_success'])): ?>
-                <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-300 rounded-lg text-green-700 flex items-center justify-between shadow-sm" id="successAlert">
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-green-600">check_circle</span>
-                        <span><?= htmlspecialchars($_SESSION['flash_success']) ?></span>
-                    </div>
-                    <button onclick="closeAlert('successAlert')" class="text-green-600 hover:text-green-800 transition-colors">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                </div>
-                <script>
-                    setTimeout(() => {
-                        const alert = document.getElementById('successAlert');
-                        if (alert) {
-                            alert.style.transition = 'opacity 0.3s ease-out';
-                            alert.style.opacity = '0';
-                            setTimeout(() => alert.remove(), 300);
-                        }
-                    }, 4000);
-                </script>
-                <?php unset($_SESSION['flash_success']); ?>
-            <?php endif; ?>
-
-            <?php if (isset($_SESSION['flash_error'])): ?>
-                <div class="mb-4 p-4 bg-gradient-to-r from-red-50 to-rose-50 border border-red-300 rounded-lg text-red-700 flex items-center justify-between shadow-sm" id="errorAlert">
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-red-600">error</span>
-                        <span><?= htmlspecialchars($_SESSION['flash_error']) ?></span>
-                    </div>
-                    <button onclick="closeAlert('errorAlert')" class="text-red-600 hover:text-red-800 transition-colors">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                </div>
-                <script>
-                    setTimeout(() => {
-                        const alert = document.getElementById('errorAlert');
-                        if (alert) {
-                            alert.style.transition = 'opacity 0.3s ease-out';
-                            alert.style.opacity = '0';
-                            setTimeout(() => alert.remove(), 300);
-                        }
-                    }, 4000);
-                </script>
-                <?php unset($_SESSION['flash_error']); ?>
-            <?php endif; ?>
+            <!-- Flash messages now handled by toast notifications -->
+            <?php
+            $flashSuccess = $_SESSION['flash_success'] ?? null;
+            $flashError = $_SESSION['flash_error'] ?? null;
+            unset($_SESSION['flash_success'], $_SESSION['flash_error']);
+            ?>
 
             <div class="mb-6">
                 <div>
@@ -637,10 +601,147 @@ include '../../components/admin/head.php';
         #isActive:checked~div:last-child {
             transform: translateX(20px);
         }
+
+        /* Toast Animations */
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toast-out {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .toast-enter {
+            animation: toast-in 0.4s ease-out forwards;
+        }
+
+        .toast-exit {
+            animation: toast-out 0.3s ease-in forwards;
+        }
+
+        @keyframes circular-progress {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: 100;
+            }
+        }
+
+        .circular-progress {
+            animation: circular-progress linear forwards;
+        }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Toast Notification System with Circular Progress
+        function showToast(type, title, message, duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const id = 'toast-' + Date.now();
+            toast.id = id;
+            const colors = {
+                success: {
+                    bg: 'bg-white',
+                    border: 'border-emerald-200',
+                    icon: 'check_circle',
+                    iconBg: 'bg-emerald-500',
+                    iconColor: 'text-white',
+                    title: 'text-emerald-800',
+                    progressCircle: '#10b981'
+                },
+                error: {
+                    bg: 'bg-white',
+                    border: 'border-red-200',
+                    icon: 'error',
+                    iconBg: 'bg-red-500',
+                    iconColor: 'text-white',
+                    title: 'text-red-800',
+                    progressCircle: '#ef4444'
+                },
+                warning: {
+                    bg: 'bg-white',
+                    border: 'border-amber-200',
+                    icon: 'warning',
+                    iconBg: 'bg-amber-500',
+                    iconColor: 'text-white',
+                    title: 'text-amber-800',
+                    progressCircle: '#f59e0b'
+                },
+                info: {
+                    bg: 'bg-white',
+                    border: 'border-blue-200',
+                    icon: 'info',
+                    iconBg: 'bg-blue-500',
+                    iconColor: 'text-white',
+                    title: 'text-blue-800',
+                    progressCircle: '#3b82f6'
+                }
+            };
+            const c = colors[type] || colors.info;
+            toast.className = `${c.bg} border ${c.border} rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px] toast-enter`;
+            toast.innerHTML = `
+                <div class="p-4 flex items-start gap-3">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-10 h-10 ${c.iconBg} rounded-full flex items-center justify-center ${c.iconColor} shadow-lg">
+                            <span class="material-symbols-outlined">${c.icon}</span>
+                        </div>
+                        <svg class="absolute -top-1 -left-1 w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" stroke-width="2.5"></circle>
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="${c.progressCircle}" stroke-width="2.5" stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round" class="circular-progress" style="animation-duration: ${duration}ms;"></circle>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold ${c.title}">${title}</p>
+                        <p class="text-sm text-gray-600 mt-0.5">${message}</p>
+                    </div>
+                    <button onclick="removeToast('${id}')" class="flex-shrink-0 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>`;
+            container.appendChild(toast);
+            setTimeout(() => removeToast(id), duration);
+        }
+
+        function removeToast(id) {
+            const toast = document.getElementById(id);
+            if (toast) {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+
+        // Show flash messages as toast on page load
+        <?php if ($flashSuccess): ?>
+            document.addEventListener('DOMContentLoaded', function() {
+                showToast('success', 'Berhasil!', '<?= addslashes($flashSuccess) ?>');
+            });
+        <?php endif; ?>
+        <?php if ($flashError): ?>
+            document.addEventListener('DOMContentLoaded', function() {
+                showToast('error', 'Error!', '<?= addslashes($flashError) ?>');
+            });
+        <?php endif; ?>
+
         function openLightbox(src) {
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightbox-image');
@@ -801,31 +902,15 @@ include '../../components/admin/head.php';
                 .then(data => {
                     closeStatusModal();
                     if (data.success) {
-                        Swal.fire({
-                            title: 'Berhasil!',
-                            text: 'Status pelanggan telah diubah',
-                            icon: 'success',
-                            confirmButtonColor: '#882426'
-                        }).then(() => {
-                            location.reload();
-                        });
+                        showToast('success', 'Berhasil!', 'Status pelanggan telah diubah');
+                        setTimeout(() => location.reload(), 1500);
                     } else {
-                        Swal.fire({
-                            title: 'Gagal!',
-                            text: data.message,
-                            icon: 'error',
-                            confirmButtonColor: '#882426'
-                        });
+                        showToast('error', 'Gagal!', data.message || 'Gagal mengubah status pelanggan.');
                     }
                 })
                 .catch(error => {
                     closeStatusModal();
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Terjadi kesalahan saat mengubah status pelanggan',
-                        icon: 'error',
-                        confirmButtonColor: '#882426'
-                    });
+                    showToast('error', 'Error!', 'Terjadi kesalahan saat mengubah status pelanggan');
                 })
                 .finally(() => {
                     confirmBtn.disabled = false;

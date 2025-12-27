@@ -157,6 +157,9 @@ function formatTanggalAdmin($date)
 ?>
 
 <body class="bg-gray-50 h-screen flex">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-[100] flex flex-col gap-3"></div>
+
     <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
     <div class="flex-1 flex flex-col overflow-hidden min-w-0">
@@ -181,7 +184,7 @@ function formatTanggalAdmin($date)
             <div class="mb-8">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <h1 class="text-3xl font-bold text-gray-900">Manajemen Pengembalian Produk</h1>
+                        <h1 class="text-3xl font-bold text-gray-900">Manajemen Return</h1>
                         <p class="text-gray-500 text-sm mt-2">Kelola pengajuan pengembalian produk dari pelanggan Anda dengan mudah</p>
                     </div>
                 </div>
@@ -288,7 +291,7 @@ function formatTanggalAdmin($date)
                                     <option value="ditolak" <?= $status === 'ditolak' ? 'selected' : '' ?>>Ditolak</option>
                                     <option value="selesai" <?= $status === 'selesai' ? 'selected' : '' ?>>Selesai</option>
                                 </select>
-                                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
+                                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-mediums">
                                     <span class="material-symbols-outlined text-base">search</span>
                                     Cari
                                 </button>
@@ -338,7 +341,7 @@ function formatTanggalAdmin($date)
                                             </span>
                                         </td>
                                         <td class="px-6 py-5">
-                                            <a href="ReturnOrderDetailPage.php?id=<?= urlencode($return['id_order']) ?>"
+                                            <a href="orderDetail.php?id=<?= urlencode($return['id_order']) ?>"
                                                 class="inline-flex items-center gap-1.5 text-[#882426] hover:text-[#6d1a1c] font-semibold transition-colors hover:underline">
                                                 <span><?= htmlspecialchars($return['id_order']) ?></span>
                                                 <span class="material-symbols-outlined text-base">open_in_new</span>
@@ -571,6 +574,54 @@ function formatTanggalAdmin($date)
 
     <!-- Custom Modal Styles -->
     <style>
+        /* Toast Animations */
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toast-out {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .toast-enter {
+            animation: toast-in 0.4s ease-out forwards;
+        }
+
+        .toast-exit {
+            animation: toast-out 0.3s ease-in forwards;
+        }
+
+        /* Circular Progress - runs from full to empty */
+        @keyframes circular-progress {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: 100;
+            }
+        }
+
+        .circular-progress {
+            animation: circular-progress linear forwards;
+        }
+
         @keyframes modal-in {
             from {
                 opacity: 0;
@@ -1046,7 +1097,7 @@ function formatTanggalAdmin($date)
             const status = document.getElementById('actionStatus').value;
 
             if (!returnId || !status) {
-                showToast('Data tidak lengkap. Silakan coba lagi.', 'error');
+                showToast('error', 'Error!', 'Data tidak lengkap. Silakan coba lagi.');
                 return;
             }
 
@@ -1083,17 +1134,17 @@ function formatTanggalAdmin($date)
                 const result = await response.json();
 
                 if (result && result.success) {
-                    showToast(result.message, 'success');
+                    showToast('success', 'Berhasil!', result.message || 'Status return berhasil diubah.');
                     closeActionModal();
                     setTimeout(() => location.reload(), 1500);
                 } else if (result && result.message) {
-                    showToast(result.message, 'error');
+                    showToast('error', 'Gagal!', result.message);
                 } else {
-                    showToast('Respons server tidak valid', 'error');
+                    showToast('error', 'Error!', 'Respons server tidak valid');
                 }
             } catch (error) {
                 console.error('Submit Action Error:', error);
-                showToast('Terjadi kesalahan koneksi. Silakan coba lagi.', 'error');
+                showToast('error', 'Error!', 'Terjadi kesalahan koneksi. Silakan coba lagi.');
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalHtml;
@@ -1112,35 +1163,96 @@ function formatTanggalAdmin($date)
             });
         }
 
-        function showToast(message, type = 'info') {
-            const existingToasts = document.querySelectorAll('.toast-notification');
-            existingToasts.forEach(t => t.remove());
-
-            const bgColors = {
-                'success': 'bg-green-600',
-                'error': 'bg-red-600',
-                'info': 'bg-[#882426]'
-            };
-
-            const icons = {
-                'success': 'check_circle',
-                'error': 'error',
-                'info': 'info'
-            };
-
+        // Toast Notification System with Circular Progress
+        function showToast(type, title, message, duration = 4000) {
+            const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `toast-notification fixed bottom-6 right-6 px-5 py-4 rounded-xl shadow-2xl text-white font-medium z-[60] transition-all flex items-center gap-3 ${bgColors[type] || bgColors.info}`;
+            const id = 'toast-' + Date.now();
+            toast.id = id;
+
+            const colors = {
+                success: {
+                    bg: 'bg-white',
+                    border: 'border-emerald-200',
+                    icon: 'check_circle',
+                    iconBg: 'bg-emerald-500',
+                    iconColor: 'text-white',
+                    progress: 'bg-emerald-500',
+                    title: 'text-emerald-800',
+                    progressCircle: '#10b981'
+                },
+                error: {
+                    bg: 'bg-white',
+                    border: 'border-red-200',
+                    icon: 'error',
+                    iconBg: 'bg-red-500',
+                    iconColor: 'text-white',
+                    progress: 'bg-red-500',
+                    title: 'text-red-800',
+                    progressCircle: '#ef4444'
+                },
+                warning: {
+                    bg: 'bg-white',
+                    border: 'border-amber-200',
+                    icon: 'warning',
+                    iconBg: 'bg-amber-500',
+                    iconColor: 'text-white',
+                    progress: 'bg-amber-500',
+                    title: 'text-amber-800',
+                    progressCircle: '#f59e0b'
+                },
+                info: {
+                    bg: 'bg-white',
+                    border: 'border-blue-200',
+                    icon: 'info',
+                    iconBg: 'bg-blue-500',
+                    iconColor: 'text-white',
+                    progress: 'bg-blue-500',
+                    title: 'text-blue-800',
+                    progressCircle: '#3b82f6'
+                }
+            };
+
+            const c = colors[type] || colors.info;
+
+            toast.className = `${c.bg} border ${c.border} rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px] toast-enter`;
             toast.innerHTML = `
-                <span class="material-symbols-outlined text-xl">${icons[type] || icons.info}</span>
-                <span>${message}</span>
+                <div class="p-4 flex items-start gap-3">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-10 h-10 ${c.iconBg} rounded-full flex items-center justify-center ${c.iconColor} shadow-lg">
+                            <span class="material-symbols-outlined">${c.icon}</span>
+                        </div>
+                        <svg class="absolute -top-1 -left-1 w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" stroke-width="2.5"></circle>
+                            <circle id="${id}-progress-circle" cx="18" cy="18" r="16" fill="none" stroke="${c.progressCircle}" stroke-width="2.5" 
+                                stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round"
+                                class="circular-progress" style="animation-duration: ${duration}ms;"></circle>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold ${c.title}">${title}</p>
+                        <p class="text-sm text-gray-600 mt-0.5">${message}</p>
+                    </div>
+                    <button onclick="removeToast('${id}')" class="flex-shrink-0 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>
             `;
-            document.body.appendChild(toast);
+
+            container.appendChild(toast);
 
             setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(10px)';
+                removeToast(id);
+            }, duration);
+        }
+
+        function removeToast(id) {
+            const toast = document.getElementById(id);
+            if (toast) {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
                 setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            }
         }
 
         function changePerPage(value) {

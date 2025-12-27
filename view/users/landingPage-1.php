@@ -33,29 +33,29 @@ $allProductIds = array_merge(
     array_column($catalogProducts, 'id_product')
 );
 $allProductIds = array_unique($allProductIds);
-// $soldRatings = $productHelper->getProductsSoldAndRatings($allProductIds);
+$soldRatings = $productHelper->getProductsSoldAndRatings($allProductIds);
 
 foreach ($bestSellers as &$product) {
     $pid = $product['id_product'];
-    $product['sold_count'] = $soldRatings[$pid]['sold_count'] ?? 0;
+    $product["total_terjual"] = $soldRatings[$pid]['sold_count'] ?? 0;
     $product['avg_rating'] = $soldRatings[$pid]['avg_rating'] ?? 0;
-    $product['review_count'] = $soldRatings[$pid]['review_count'] ?? 0;
+    $product["total_reviews"] = $soldRatings[$pid]['review_count'] ?? 0;
 }
 unset($product);
 
 foreach ($newProducts as &$product) {
     $pid = $product['id_product'];
-    $product['sold_count'] = $soldRatings[$pid]['sold_count'] ?? 0;
+    $product["total_terjual"] = $soldRatings[$pid]['sold_count'] ?? 0;
     $product['avg_rating'] = $soldRatings[$pid]['avg_rating'] ?? 0;
-    $product['review_count'] = $soldRatings[$pid]['review_count'] ?? 0;
+    $product["total_reviews"] = $soldRatings[$pid]['review_count'] ?? 0;
 }
 unset($product);
 
 foreach ($catalogProducts as &$product) {
     $pid = $product['id_product'];
-    $product['sold_count'] = $soldRatings[$pid]['sold_count'] ?? 0;
+    $product["total_terjual"] = $soldRatings[$pid]['sold_count'] ?? 0;
     $product['avg_rating'] = $soldRatings[$pid]['avg_rating'] ?? 0;
-    $product['review_count'] = $soldRatings[$pid]['review_count'] ?? 0;
+    $product["total_reviews"] = $soldRatings[$pid]['review_count'] ?? 0;
 }
 unset($product);
 
@@ -69,7 +69,7 @@ unset($product);
 
     <!-- Main content with responsive padding to offset fixed navbar -->
     <!-- Mobile: navbar 64px, Desktop: promo banner 44px + navbar 72px = 116px -->
-    <main class="max-w-full mb-10 pt-16 md:pt-[11productCollection.php dan faq.php saat mode desktop dan tablet ada yang tertutup 6px]">
+    <main class="max-w-full mb-10 pt-16 md:pt-[116px]">
         <!-- banner promosi slider -->
         <section class="w-full relative overflow-hidden group">
             <div class="swiper banner-swiper w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] xl:aspect-[21/8]">

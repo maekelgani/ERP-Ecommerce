@@ -219,7 +219,7 @@ include '../../components/admin/head.php';
                                 <option value="stock-desc" <?= $filters['sort'] === 'stock-desc' ? 'selected' : '' ?>>Stok Tertinggi</option>
                             </select>
 
-                            <button type="submit" class="px-5 py-2.5 text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg active:scale-95 flex items-center gap-2px-4 py-2 bg-[#882426] text-white rounded-lg text-sm font-medium hover:bg-[#6d1d1f] transition flex">
+                            <button type="submit" class="px-5 py-2.5 text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg active:scale-95 flex items-center gap-2 bg-[#882426] hover:bg-[#6d1d1f]">
                                 <span class="material-symbols-outlined text-lg">filter_alt</span>
                                 <span class="hidden sm:inline">Filter</span>
                             </button>
@@ -630,7 +630,7 @@ include '../../components/admin/head.php';
                         <div class="w-24 h-24 rounded-xl overflow-hidden border-4 border-white shadow-lg ring-4 ring-red-500/20">
                             <img id="deleteProductImage" src="" alt="Product"
                                 class="w-full h-full object-cover"
-                                onerror="this.src='../../assets/img/product/default-product.png'">
+                                onerror="this.src='../../assets/img/products/default-product.jpg'">
                         </div>
                         <div class="text-center">
                             <p class="text-lg font-bold text-gray-800" id="deleteProductName"></p>
@@ -789,17 +789,7 @@ include '../../components/admin/head.php';
             animation: toast-out 0.3s ease-in forwards;
         }
 
-        /* Circular Progress - runs from full to empty */
-        /* @keyframes circular-progress {
-            0% {
-                stroke-dashoffset: 0;
-            }
-
-            100% {
-                stroke-dashoffset: 100;
-            }
-        } */
-
+        /* Circular Progress */
         @keyframes circular-progress {
             from {
                 stroke-dashoffset: 100;
@@ -810,7 +800,6 @@ include '../../components/admin/head.php';
             }
         }
 
-
         .circular-progress {
             animation: circular-progress linear forwards;
         }
@@ -819,7 +808,7 @@ include '../../components/admin/head.php';
     <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- FIXED: Removed duplicate SweetAlert2 script (already loaded in head.php) -->
     <script>
         // Toast Notification System with Circular Progress
         function showToast(type, title, message, duration = 4000) {
@@ -919,7 +908,7 @@ include '../../components/admin/head.php';
             };
 
             // Set product image
-            const productImage = image || '../../assets/img/product/default-product.png';
+            const productImage = image || '../../assets/img/products/default-product.jpg';
             document.getElementById('deleteProductImage').src = productImage;
 
             // Set product info
@@ -1085,15 +1074,18 @@ include '../../components/admin/head.php';
             window.location.href = '?' + params.toString();
         });
 
-        // Show flash messages as toast on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            <?php if ($flashSuccess): ?>
-                showToast('success', 'Berhasil!', '<?= addslashes(htmlspecialchars($flashSuccess)) ?>');
-            <?php endif; ?>
-            <?php if ($flashError): ?>
-                showToast('error', 'Gagal!', '<?= addslashes(htmlspecialchars($flashError)) ?>');
-            <?php endif; ?>
-        });
+        // FIXED: Flash messages - Following BrandAdmin.php pattern to prevent loading issues
+        <?php if ($flashSuccess): ?>
+            document.addEventListener('DOMContentLoaded', function() {
+                showToast('success', 'Berhasil!', '<?= addslashes($flashSuccess) ?>');
+            });
+        <?php endif; ?>
+
+        <?php if ($flashError): ?>
+            document.addEventListener('DOMContentLoaded', function() {
+                showToast('error', 'Gagal!', '<?= addslashes($flashError) ?>');
+            });
+        <?php endif; ?>
 
         function changePerPage(value) {
             const params = new URLSearchParams(window.location.search);

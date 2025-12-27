@@ -7,7 +7,7 @@ class SessionManager
     private const SESSION_LIFETIME = 86400;
     private const ADMIN_SESSION_LIFETIME = 3600;
     private const ADMIN_SESSION_WITH_REMEMBER = 86400;
-    private const CUSTOMER_SESSION_LIFETIME = 10;
+    private const CUSTOMER_SESSION_LIFETIME = 3600;
     private const CUSTOMER_SESSION_WITH_REMEMBER = 86400;
     private const REMEMBER_ME_LIFETIME = 2592000;
     private const REMEMBER_ME_COOKIE_NAME = 'remember_token';
