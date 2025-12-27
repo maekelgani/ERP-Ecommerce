@@ -207,86 +207,237 @@ include '../../components/admin/head.php';
     </main>
     </div>
 
-    <div id="diskonModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
-            <div class="sticky top-0 bg-white border-b border-gray-100 p-4 flex justify-between items-center">
-                <h2 id="modalTitle" class="text-lg font-semibold">Tambah Diskon</h2>
-                <button onclick="closeModal()" class="p-1 hover:bg-gray-100 rounded-lg">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
+    <!-- Modal Tambah/Edit Diskon - Modern Design -->
+    <div id="diskonModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-hidden transform transition-all animate-modal-in" onclick="event.stopPropagation()">
+                <!-- Modern Header with Gradient -->
+                <div class="sticky top-0 z-10 px-6 py-5 flex items-center justify-between" style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
+                            <span id="modalIcon" class="material-symbols-outlined text-white text-2xl">percent</span>
+                        </div>
+                        <div>
+                            <h2 id="modalTitle" class="text-xl font-bold text-white">Tambah Diskon</h2>
+                            <p id="modalSubtitle" class="text-white/70 text-sm mt-0.5">Atur diskon untuk produk</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <form id="diskonForm" class="overflow-y-auto max-h-[calc(90vh-180px)]">
+                    <div class="p-6 bg-gray-50 space-y-5">
+                        <input type="hidden" id="diskonId" name="id">
+
+                        <!-- Produk Select -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <span class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-base text-[#882426]">inventory_2</span>
+                                    Produk <span class="text-red-500">*</span>
+                                </span>
+                            </label>
+                            <select name="id_produk" id="id_produk" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white transition-all">
+                                <option value="">Pilih Produk</option>
+                            </select>
+                        </div>
+
+                        <!-- Label Diskon -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <span class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-base text-[#882426]">label</span>
+                                    Label Diskon
+                                </span>
+                            </label>
+                            <input type="text" name="label" id="label" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white transition-all" placeholder="Contoh: Flash Sale 50%">
+                        </div>
+
+                        <!-- Jenis & Nilai Diskon -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-base text-[#882426]">category</span>
+                                        Jenis Diskon <span class="text-red-500">*</span>
+                                    </span>
+                                </label>
+                                <select name="jenis" id="jenis" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white transition-all">
+                                    <option value="persen">Persen (%)</option>
+                                    <option value="nominal">Nominal (Rp)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-base text-[#882426]">money</span>
+                                        Nilai <span class="text-red-500">*</span>
+                                    </span>
+                                </label>
+                                <input type="number" name="nilai" id="nilai" required min="0.01" step="0.01" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white transition-all" placeholder="Contoh: 10">
+                            </div>
+                        </div>
+
+                        <!-- Stok & Maks Qty -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-base text-[#882426]">warehouse</span>
+                                        Stok Promo
+                                    </span>
+                                </label>
+                                <input type="number" name="stok_promo" id="stok_promo" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white transition-all" placeholder="Unlimited">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-base text-[#882426]">person</span>
+                                        Maks Qty/User
+                                    </span>
+                                </label>
+                                <input type="number" name="maks_qty_per_pengguna" id="maks_qty_per_pengguna" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white transition-all" placeholder="Unlimited">
+                            </div>
+                        </div>
+
+                        <!-- Periode -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-base text-[#882426]">event</span>
+                                        Mulai
+                                    </span>
+                                </label>
+                                <input type="datetime-local" name="mulai_pada" id="mulai_pada" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-base text-[#882426]">event_busy</span>
+                                        Selesai
+                                    </span>
+                                </label>
+                                <input type="datetime-local" name="selesai_pada" id="selesai_pada" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] bg-white transition-all">
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="p-4 bg-white rounded-xl border-2 border-gray-200">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                                <span class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-base text-[#882426]">toggle_on</span>
+                                    Status Diskon
+                                </span>
+                            </label>
+                            <div class="flex items-center gap-3">
+                                <label class="flex items-center gap-2 cursor-pointer select-none">
+                                    <input type="checkbox" name="is_nonaktif" id="is_nonaktif" class="w-5 h-5 rounded border-gray-300 text-[#882426] focus:ring-[#882426]">
+                                    <span class="text-sm text-gray-600">Nonaktifkan diskon</span>
+                                </label>
+                            </div>
+                            <input type="hidden" name="status" id="status" value="aktif">
+                            <p class="text-xs text-gray-500 mt-3 flex items-start gap-1">
+                                <span class="material-symbols-outlined text-sm mt-0.5">info</span>
+                                <span>Status ditentukan otomatis: <strong class="text-amber-600">Terjadwal</strong> (waktu mulai di masa depan),
+                                    <strong class="text-emerald-600">Aktif</strong> (periode berjalan), <strong class="text-red-600">Berakhir</strong> (melewati waktu selesai).</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
+                        <button type="button" onclick="closeModal()"
+                            class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
+                            <span class="material-symbols-outlined text-lg">close</span>
+                            Batal
+                        </button>
+                        <button type="submit" id="submitBtn"
+                            class="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-[#882426] to-[#a52a2c] text-white font-semibold rounded-xl hover:from-[#6d1d1f] hover:to-[#882426] transition-all duration-200 shadow-lg shadow-[#882426]/30">
+                            <span class="material-symbols-outlined text-lg">check_circle</span>
+                            Simpan Diskon
+                        </button>
+                    </div>
+                </form>
             </div>
-            <form id="diskonForm" class="p-6 space-y-4">
-                <input type="hidden" id="diskonId" name="id">
+        </div>
+    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Produk <span class="text-red-500">*</span></label>
-                    <select name="id_produk" id="id_produk" required class="w-full px-4 py-2 border border-gray-200 rounded-lg">
-                        <option value="">Pilih Produk</option>
-                    </select>
+    <!-- Delete Confirmation Modal - Modern Design -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeDeleteModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all animate-modal-in" onclick="event.stopPropagation()">
+                <!-- Modern Header with Red/Danger Color -->
+                <div class="bg-[#882426] px-6 py-5 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
+                            <span class="material-symbols-outlined text-white text-2xl animate-pulse-warning">delete_forever</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Hapus Diskon</h3>
+                            <p class="text-white/70 text-sm mt-0.5">Konfirmasi penghapusan diskon</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeDeleteModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Label Diskon</label>
-                    <input type="text" name="label" id="label" class="w-full px-4 py-2 border border-gray-200 rounded-lg" placeholder="Contoh: Flash Sale 50%">
+                <!-- Modal Body -->
+                <div class="p-6 bg-gray-50 space-y-5">
+                    <!-- Diskon Info Card -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div id="deleteDiskonImageContainer" class="w-20 h-20 rounded-2xl overflow-hidden border-4 border-white shadow-lg ring-4 ring-red-500/20 bg-white">
+                            <img id="deleteDiskonImage" src="" alt="Product"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; document.getElementById('deleteDiskonImageFallback').style.display='flex';">
+                        </div>
+                        <div id="deleteDiskonImageFallback" class="w-20 h-20 rounded-2xl overflow-hidden border-4 border-white shadow-lg ring-4 ring-red-500/20 bg-gradient-to-br from-gray-100 to-gray-200 items-center justify-center" style="display: none;">
+                            <span class="material-symbols-outlined text-3xl text-gray-400">percent</span>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-lg font-bold text-gray-800" id="deleteDiskonName"></p>
+                            <p class="text-sm text-[#882426] font-semibold" id="deleteDiskonValue"></p>
+                        </div>
+                    </div>
+
+                    <!-- Warning Alert -->
+                    <div class="p-4 rounded-xl border-l-4 border-red-500 bg-red-50">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-500 text-xl flex-shrink-0">warning</span>
+                            <div>
+                                <p class="text-sm font-semibold text-red-700 mb-1">Peringatan!</p>
+                                <p class="text-sm text-red-600">Anda yakin ingin menghapus diskon ini? Tindakan ini tidak dapat dibatalkan.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checkbox Confirmation -->
+                    <label class="flex items-center gap-3 p-4 bg-white rounded-xl border-2 border-gray-200 cursor-pointer hover:border-red-300 transition-colors">
+                        <input type="checkbox" id="deleteConfirmCheck" class="w-5 h-5 text-red-600 border-2 border-gray-300 rounded focus:ring-red-500 focus:ring-offset-0">
+                        <span class="text-sm text-gray-700">Saya mengerti dan ingin melanjutkan penghapusan</span>
+                    </label>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Diskon <span class="text-red-500">*</span></label>
-                        <select name="jenis" id="jenis" required class="w-full px-4 py-2 border border-gray-200 rounded-lg">
-                            <option value="persen">Persen (%)</option>
-                            <option value="nominal">Nominal (Rp)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nilai <span class="text-red-500">*</span></label>
-                        <input type="number" name="nilai" id="nilai" required min="0.01" step="0.01" class="w-full px-4 py-2 border border-gray-200 rounded-lg" placeholder="Contoh: 10">
-                    </div>
+                <!-- Modal Footer -->
+                <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                        Batal
+                    </button>
+                    <button type="button" onclick="executeDelete()" id="deleteConfirmBtn" disabled
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
+                        <span class="material-symbols-outlined text-lg">delete_forever</span>
+                        Ya, Hapus Diskon!
+                    </button>
                 </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Stok Promo</label>
-                        <input type="number" name="stok_promo" id="stok_promo" min="0" class="w-full px-4 py-2 border border-gray-200 rounded-lg" placeholder="Unlimited">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Maks Qty/User</label>
-                        <input type="number" name="maks_qty_per_pengguna" id="maks_qty_per_pengguna" min="0" class="w-full px-4 py-2 border border-gray-200 rounded-lg" placeholder="Unlimited">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Mulai</label>
-                        <input type="datetime-local" name="mulai_pada" id="mulai_pada" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Selesai</label>
-                        <input type="datetime-local" name="selesai_pada" id="selesai_pada" class="w-full px-4 py-2 border border-gray-200 rounded-lg">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <div class="flex items-center gap-3">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="is_nonaktif" id="is_nonaktif" class="w-4 h-4 rounded border-gray-300 text-[#882426] focus:ring-[#882426]">
-                            <span class="text-sm text-gray-600">Nonaktifkan diskon</span>
-                        </label>
-                    </div>
-                    <input type="hidden" name="status" id="status" value="aktif">
-                    <p class="text-xs text-gray-500 mt-2">
-                        <span class="material-symbols-outlined text-sm align-middle">info</span>
-                        Status akan ditentukan otomatis: <strong>Terjadwal</strong> jika waktu mulai di masa depan,
-                        <strong>Aktif</strong> jika sudah memasuki periode, <strong>Berakhir</strong> jika melewati waktu selesai.
-                    </p>
-                </div>
-
-                <div class="flex gap-3 pt-4 border-t">
-                    <button type="button" onclick="closeModal()" class="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">Batal</button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-[#882426] text-white rounded-lg hover:bg-[#6d1d1f]">Simpan</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -467,8 +618,189 @@ include '../../components/admin/head.php';
         </div>
     </div>
 
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3"></div>
+
+    <!-- Custom Modal Styles -->
+    <style>
+        @keyframes modal-in {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .animate-modal-in {
+            animation: modal-in 0.3s ease-out forwards;
+        }
+
+        @keyframes pulse-warning {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-warning {
+            animation: pulse-warning 1.5s ease-in-out infinite;
+        }
+
+        #deleteConfirmCheck:checked {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        /* Toast Animations */
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toast-out {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .toast-enter {
+            animation: toast-in 0.4s ease-out forwards;
+        }
+
+        .toast-exit {
+            animation: toast-out 0.3s ease-in forwards;
+        }
+
+        /* Circular Progress - runs from full to empty */
+        @keyframes circular-progress {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: 100;
+            }
+        }
+
+        .circular-progress {
+            animation: circular-progress linear forwards;
+        }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Toast Notification System with Circular Progress
+        function showToast(type, title, message, duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const id = 'toast-' + Date.now();
+            toast.id = id;
+
+            const colors = {
+                success: {
+                    bg: 'bg-white',
+                    border: 'border-emerald-200',
+                    icon: 'check_circle',
+                    iconBg: 'bg-emerald-500',
+                    iconColor: 'text-white',
+                    title: 'text-emerald-800',
+                    progressCircle: '#10b981'
+                },
+                error: {
+                    bg: 'bg-white',
+                    border: 'border-red-200',
+                    icon: 'error',
+                    iconBg: 'bg-red-500',
+                    iconColor: 'text-white',
+                    title: 'text-red-800',
+                    progressCircle: '#ef4444'
+                },
+                warning: {
+                    bg: 'bg-white',
+                    border: 'border-amber-200',
+                    icon: 'warning',
+                    iconBg: 'bg-amber-500',
+                    iconColor: 'text-white',
+                    title: 'text-amber-800',
+                    progressCircle: '#f59e0b'
+                },
+                info: {
+                    bg: 'bg-white',
+                    border: 'border-blue-200',
+                    icon: 'info',
+                    iconBg: 'bg-blue-500',
+                    iconColor: 'text-white',
+                    title: 'text-blue-800',
+                    progressCircle: '#3b82f6'
+                }
+            };
+
+            const c = colors[type] || colors.info;
+
+            toast.className = `${c.bg} border ${c.border} rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px] toast-enter`;
+            toast.innerHTML = `
+                <div class="p-4 flex items-start gap-3">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-10 h-10 ${c.iconBg} rounded-full flex items-center justify-center ${c.iconColor} shadow-lg">
+                            <span class="material-symbols-outlined">${c.icon}</span>
+                        </div>
+                        <svg class="absolute -top-1 -left-1 w-12 h-12 -rotate-90" viewBox="0 0 36 36">
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" stroke-width="2.5"></circle>
+                            <circle id="${id}-progress-circle" cx="18" cy="18" r="16" fill="none" stroke="${c.progressCircle}" stroke-width="2.5" 
+                                stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round"
+                                class="circular-progress" style="animation-duration: ${duration}ms;"></circle>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold ${c.title}">${title}</p>
+                        <p class="text-sm text-gray-600 mt-0.5">${message}</p>
+                    </div>
+                    <button onclick="removeToast('${id}')" class="flex-shrink-0 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
+                        <span class="material-symbols-outlined text-lg">close</span>
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                removeToast(id);
+            }, duration);
+        }
+
+        function removeToast(id) {
+            const toast = document.getElementById(id);
+            if (toast) {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+
+        // Delete Modal Variables
+        let currentDeleteDiskon = null;
         let diskons = [];
         let products = [];
         let selectedProducts = new Set();
@@ -629,13 +961,17 @@ include '../../components/admin/head.php';
 
         function openModal() {
             document.getElementById('modalTitle').textContent = 'Tambah Diskon';
+            document.getElementById('modalSubtitle').textContent = 'Atur diskon untuk produk';
+            document.getElementById('modalIcon').textContent = 'percent';
             document.getElementById('diskonForm').reset();
             document.getElementById('diskonId').value = '';
             document.getElementById('diskonModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('diskonModal').classList.add('hidden');
+            document.body.style.overflow = '';
         }
 
         async function editDiskon(id) {
@@ -646,6 +982,8 @@ include '../../components/admin/head.php';
                 if (data.success) {
                     const d = data.data;
                     document.getElementById('modalTitle').textContent = 'Edit Diskon';
+                    document.getElementById('modalSubtitle').textContent = 'Perbarui pengaturan diskon';
+                    document.getElementById('modalIcon').textContent = 'edit';
                     document.getElementById('diskonId').value = d.id_diskon;
                     document.getElementById('id_produk').value = d.id_produk || '';
                     document.getElementById('label').value = d.label || '';
@@ -658,46 +996,118 @@ include '../../components/admin/head.php';
                     document.getElementById('is_nonaktif').checked = d.status === 'nonaktif';
                     document.getElementById('status').value = d.status;
                     document.getElementById('diskonModal').classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
                 }
             } catch (error) {
-                Swal.fire('Error', 'Gagal memuat data', 'error');
+                showToast('error', 'Error!', 'Gagal memuat data diskon');
             }
         }
 
-        async function deleteDiskon(id) {
-            const result = await Swal.fire({
-                title: 'Hapus Diskon?',
-                text: 'Diskon yang dihapus tidak dapat dikembalikan',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#882426',
-                confirmButtonText: 'Ya, Hapus',
-                cancelButtonText: 'Batal'
-            });
+        // Delete functions with new modal
+        function deleteDiskon(id) {
+            const diskon = diskons.find(d => d.id_diskon === id);
+            if (!diskon) return;
 
-            if (result.isConfirmed) {
-                try {
-                    const formData = new FormData();
-                    formData.append('action', 'delete');
-                    formData.append('id', id);
+            currentDeleteDiskon = {
+                id: id,
+                name: diskon.nama_product || 'Produk',
+                value: diskon.jenis === 'persen' ? diskon.nilai + '%' : 'Rp ' + Number(diskon.nilai).toLocaleString('id-ID'),
+                image: diskon.gambar_produk
+            };
 
-                    const response = await fetch('../../app/controllers/diskonController.php', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const data = await response.json();
+            // Set image
+            const imageEl = document.getElementById('deleteDiskonImage');
+            const imageContainer = document.getElementById('deleteDiskonImageContainer');
+            const fallbackContainer = document.getElementById('deleteDiskonImageFallback');
 
-                    if (data.success) {
-                        Swal.fire('Berhasil', data.message, 'success');
-                        loadDiskons();
-                    } else {
-                        Swal.fire('Gagal', data.message, 'error');
-                    }
-                } catch (error) {
-                    Swal.fire('Error', 'Terjadi kesalahan', 'error');
+            if (diskon.gambar_produk) {
+                imageEl.src = '../../uploads/products/' + diskon.gambar_produk;
+                imageEl.style.display = 'block';
+                imageContainer.style.display = 'block';
+                fallbackContainer.style.display = 'none';
+            } else {
+                imageEl.style.display = 'none';
+                imageContainer.style.display = 'none';
+                fallbackContainer.style.display = 'flex';
+            }
+
+            // Set info
+            document.getElementById('deleteDiskonName').textContent = diskon.nama_product || 'Produk';
+            document.getElementById('deleteDiskonValue').textContent = 'Diskon: ' + (diskon.jenis === 'persen' ? diskon.nilai + '%' : 'Rp ' + Number(diskon.nilai).toLocaleString('id-ID'));
+
+            // Reset checkbox
+            document.getElementById('deleteConfirmCheck').checked = false;
+            document.getElementById('deleteConfirmBtn').disabled = true;
+
+            // Show modal
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.body.style.overflow = '';
+            currentDeleteDiskon = null;
+        }
+
+        // Enable/disable delete button based on checkbox
+        document.getElementById('deleteConfirmCheck').addEventListener('change', function() {
+            document.getElementById('deleteConfirmBtn').disabled = !this.checked;
+        });
+
+        async function executeDelete() {
+            if (!currentDeleteDiskon) return;
+
+            const confirmBtn = document.getElementById('deleteConfirmBtn');
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<span class="material-symbols-outlined text-lg animate-spin">sync</span> Menghapus...';
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'delete');
+                formData.append('id', currentDeleteDiskon.id);
+
+                const response = await fetch('../../app/controllers/diskonController.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                closeDeleteModal();
+
+                if (data.success) {
+                    showToast('success', 'Berhasil Dihapus!', data.message || 'Diskon berhasil dihapus dari sistem.');
+                    loadDiskons();
+                } else {
+                    showToast('error', 'Gagal Menghapus!', data.message || 'Terjadi kesalahan saat menghapus diskon.');
+                }
+            } catch (error) {
+                closeDeleteModal();
+                showToast('error', 'Error!', 'Terjadi kesalahan saat menghapus diskon.');
+            } finally {
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = '<span class="material-symbols-outlined text-lg">delete_forever</span> Ya, Hapus Diskon!';
+            }
+        }
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const deleteModal = document.getElementById('deleteModal');
+                const diskonModal = document.getElementById('diskonModal');
+                const massModal = document.getElementById('massModal');
+
+                if (deleteModal && !deleteModal.classList.contains('hidden')) {
+                    closeDeleteModal();
+                }
+                if (diskonModal && !diskonModal.classList.contains('hidden')) {
+                    closeModal();
+                }
+                if (massModal && !massModal.classList.contains('hidden')) {
+                    closeMassModal();
                 }
             }
-        }
+        });
 
         document.getElementById('diskonForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -705,10 +1115,14 @@ include '../../components/admin/head.php';
             const nilaiField = document.getElementById('nilai');
             const nilai = parseFloat(nilaiField.value);
             if (isNaN(nilai) || nilai <= 0) {
-                Swal.fire('Perhatian', 'Masukkan nilai diskon yang valid (lebih dari 0)', 'warning');
+                showToast('warning', 'Perhatian!', 'Masukkan nilai diskon yang valid (lebih dari 0)');
                 nilaiField.focus();
                 return;
             }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg animate-spin">sync</span> Menyimpan...';
 
             const formData = new FormData(e.target);
             const diskonId = document.getElementById('diskonId').value;
@@ -717,11 +1131,6 @@ include '../../components/admin/head.php';
             const isNonaktif = document.getElementById('is_nonaktif').checked;
             formData.set('status', isNonaktif ? 'nonaktif' : 'aktif');
 
-            console.log('Submitting diskon form:');
-            for (let [key, value] of formData.entries()) {
-                console.log(key + ': ' + value);
-            }
-
             try {
                 const response = await fetch('../../app/controllers/diskonController.php', {
                     method: 'POST',
@@ -729,27 +1138,26 @@ include '../../components/admin/head.php';
                 });
 
                 const responseText = await response.text();
-                console.log('Response:', responseText);
-
                 let data;
                 try {
                     data = JSON.parse(responseText);
                 } catch (parseError) {
-                    console.error('JSON Parse Error:', parseError);
-                    Swal.fire('Error', 'Server response invalid: ' + responseText.substring(0, 100), 'error');
+                    showToast('error', 'Error!', 'Server response invalid');
                     return;
                 }
 
                 if (data.success) {
-                    Swal.fire('Berhasil', data.message, 'success');
+                    showToast('success', diskonId ? 'Berhasil Diperbarui!' : 'Berhasil Ditambahkan!', data.message || 'Diskon berhasil disimpan.');
                     closeModal();
                     loadDiskons();
                 } else {
-                    Swal.fire('Gagal', data.message || 'Terjadi kesalahan', 'error');
+                    showToast('error', 'Gagal!', data.message || 'Terjadi kesalahan');
                 }
             } catch (error) {
-                console.error('Submit error:', error);
-                Swal.fire('Error', 'Terjadi kesalahan koneksi', 'error');
+                showToast('error', 'Error!', 'Terjadi kesalahan koneksi');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined text-lg">check_circle</span> Simpan Diskon';
             }
         });
 
@@ -801,13 +1209,13 @@ include '../../components/admin/head.php';
             e.preventDefault();
 
             if (selectedProducts.size === 0) {
-                Swal.fire('Perhatian', 'Pilih minimal satu produk', 'warning');
+                showToast('warning', 'Perhatian!', 'Pilih minimal satu produk');
                 return;
             }
 
             const nilaiValue = document.getElementById('mass_nilai').value;
             if (!nilaiValue || parseFloat(nilaiValue) <= 0) {
-                Swal.fire('Perhatian', 'Masukkan nilai diskon yang valid', 'warning');
+                showToast('warning', 'Perhatian!', 'Masukkan nilai diskon yang valid');
                 return;
             }
 
@@ -825,11 +1233,6 @@ include '../../components/admin/head.php';
             formData.append('selesai_pada', document.getElementById('mass_selesai').value);
             formData.append('status', isNonaktif ? 'nonaktif' : 'aktif');
 
-            console.log('Mass create form data:');
-            for (let [key, value] of formData.entries()) {
-                console.log(key + ': ' + value);
-            }
-
             try {
                 const response = await fetch('../../app/controllers/diskonController.php', {
                     method: 'POST',
@@ -837,30 +1240,26 @@ include '../../components/admin/head.php';
                 });
 
                 const responseText = await response.text();
-                console.log('Mass create response:', responseText);
-
                 let data;
                 try {
                     data = JSON.parse(responseText);
                 } catch (parseError) {
-                    console.error('JSON Parse Error:', parseError);
-                    Swal.fire('Error', 'Server response invalid', 'error');
+                    showToast('error', 'Error!', 'Server response invalid');
                     return;
                 }
 
                 if (data.success) {
-                    Swal.fire('Berhasil', data.message, 'success');
+                    showToast('success', 'Berhasil!', data.message || 'Diskon berhasil diterapkan ke produk terpilih.');
                     closeMassModal();
                     loadDiskons();
                     document.getElementById('massForm').reset();
                     selectedProducts.clear();
                     document.getElementById('selectedCount').textContent = '0';
                 } else {
-                    Swal.fire('Gagal', data.message || 'Terjadi kesalahan', 'error');
+                    showToast('error', 'Gagal!', data.message || 'Terjadi kesalahan');
                 }
             } catch (error) {
-                console.error('Mass create error:', error);
-                Swal.fire('Error', 'Terjadi kesalahan koneksi', 'error');
+                showToast('error', 'Error!', 'Terjadi kesalahan koneksi');
             }
         });
     </script>

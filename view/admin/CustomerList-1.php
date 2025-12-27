@@ -41,9 +41,6 @@ include '../../components/admin/head.php';
 ?>
 
 <body class="bg-gray-50 h-screen flex">
-    <!-- Toast Container -->
-    <div id="toastContainer" class="fixed top-4 right-4 z-[100] flex flex-col gap-3"></div>
-
     <?php include '../../components/admin/sidebarAdmin.php'; ?>
 
     <div class="flex-1 flex flex-col overflow-hidden min-w-0">
@@ -52,12 +49,51 @@ include '../../components/admin/head.php';
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 md:p-6">
-            <!-- Flash messages now handled by toast notifications -->
-            <?php
-            $flashSuccess = $_SESSION['flash_success'] ?? null;
-            $flashError = $_SESSION['flash_error'] ?? null;
-            unset($_SESSION['flash_success'], $_SESSION['flash_error']);
-            ?>
+            <?php if (isset($_SESSION['flash_success'])): ?>
+                <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-300 rounded-lg text-green-700 flex items-center justify-between shadow-sm" id="successAlert">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-green-600">check_circle</span>
+                        <span><?= htmlspecialchars($_SESSION['flash_success']) ?></span>
+                    </div>
+                    <button onclick="closeAlert('successAlert')" class="text-green-600 hover:text-green-800 transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <script>
+                    setTimeout(() => {
+                        const alert = document.getElementById('successAlert');
+                        if (alert) {
+                            alert.style.transition = 'opacity 0.3s ease-out';
+                            alert.style.opacity = '0';
+                            setTimeout(() => alert.remove(), 300);
+                        }
+                    }, 4000);
+                </script>
+                <?php unset($_SESSION['flash_success']); ?>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['flash_error'])): ?>
+                <div class="mb-4 p-4 bg-gradient-to-r from-red-50 to-rose-50 border border-red-300 rounded-lg text-red-700 flex items-center justify-between shadow-sm" id="errorAlert">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-red-600">error</span>
+                        <span><?= htmlspecialchars($_SESSION['flash_error']) ?></span>
+                    </div>
+                    <button onclick="closeAlert('errorAlert')" class="text-red-600 hover:text-red-800 transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <script>
+                    setTimeout(() => {
+                        const alert = document.getElementById('errorAlert');
+                        if (alert) {
+                            alert.style.transition = 'opacity 0.3s ease-out';
+                            alert.style.opacity = '0';
+                            setTimeout(() => alert.remove(), 300);
+                        }
+                    }, 4000);
+                </script>
+                <?php unset($_SESSION['flash_error']); ?>
+            <?php endif; ?>
 
             <div class="mb-6">
                 <div>
@@ -88,7 +124,7 @@ include '../../components/admin/head.php';
                     <div class="flex flex-col gap-4">
                         <div class="min-w-0">
                             <h2 class="text-lg font-bold text-gray-800">Daftar Pelanggan</h2>
-                            <p class="text-sm text-gray-500 mt-1">Menampilkan data pelanggan yang terdaftar dan aktif dalam sistem</p>
+                            <p class="text-sm text-gray-500 mt-1">Menampilkan <?= $startEntry ?> - <?= $endEntry ?> dari <?= $totalCustomers ?> pelanggan</p>
                         </div>
                         <!-- KONTROL -->
                         <div class="flex items-center justify-between gap-4">
@@ -110,7 +146,8 @@ include '../../components/admin/head.php';
 
                             <!-- RIGHT: Tambah User -->
                             <?php if ($canManageCustomers): ?>
-                                <button onclick="openAddModal()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
+                                <button onclick="openAddModal()" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 text-white font-medium text-sm rounded-lg shadow transition-all duration-300 hover:shadow-lg active:scale-95 whitespace-nowrap"
+                                    style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
                                     <span class="material-symbols-outlined text-base">add_circle</span>
                                     <span>Tambah Pelanggan</span>
                                 </button>
@@ -139,7 +176,8 @@ include '../../components/admin/head.php';
                                 <option value="google" <?= $filters['login_type'] === 'google' ? 'selected' : '' ?>>Google</option>
                             </select>
 
-                            <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#882426] text-white rounded-lg transition-all duration-300 hover:bg-[#6d1a1c] hover:shadow-lg active:scale-95 font-medium">
+                            <button type="submit" class="px-5 py-2.5 text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg active:scale-95 flex items-center gap-2"
+                                style="background: linear-gradient(135deg, #882426 0%, #6d1a1c 100%);">
                                 <span class="material-symbols-outlined text-lg">filter_alt</span>
                                 <span class="hidden sm:inline">Filter</span>
                             </button>
@@ -251,18 +289,18 @@ include '../../components/admin/head.php';
                                         <td class="px-4 py-3">
                                             <div class="flex items-center justify-center gap-2">
                                                 <a href="CustomerDetail.php?id=<?= $customer['id_customer'] ?>"
-                                                    class="inline-flex items-center gap-1.5 px-3 py-2 text-purple-600 bg-purple-50 rounded-lg text-sm font-medium hover:bg-purple-100 transition-colors"
+                                                    class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-white transition-all duration-300 hover:shadow-lg active:scale-95 bg-blue-500 hover:bg-blue-600"
                                                     title="Lihat Detail">
                                                     <span class="material-symbols-outlined text-lg">visibility</span>
                                                 </a>
                                                 <?php if ($canManageCustomers): ?>
                                                     <button onclick="openEditModal(<?= htmlspecialchars(json_encode($customer)) ?>)"
-                                                        class="inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
+                                                        class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-white transition-all duration-300 hover:shadow-lg active:scale-95 bg-amber-500 hover:bg-amber-600"
                                                         title="Edit Pelanggan">
                                                         <span class="material-symbols-outlined text-lg">edit</span>
                                                     </button>
                                                     <button onclick="confirmToggleStatus(<?= htmlspecialchars(json_encode($customer)) ?>)"
-                                                        class="inline-flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-300 hover:shadow-lg active:scale-95 <?= $customer['is_active'] ? ' text-red-600 bg-red-50 hover:bg-red-100' : 'text-amber-600 bg-amber-50 hover:bg-amber-100' ?>"
+                                                        class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-white transition-all duration-300 hover:shadow-lg active:scale-95 <?= $customer['is_active'] ? 'bg-red-500 hover:bg-red-600' : 'bg-amber-500 hover:bg-amber-600' ?>"
                                                         title="<?= $customer['is_active'] ? 'Nonaktifkan Pelanggan' : 'Aktifkan Pelanggan' ?>">
                                                         <span class="material-symbols-outlined text-lg"><?= $customer['is_active'] ? 'person_off' : 'person_check' ?></span>
                                                     </button>
@@ -342,93 +380,6 @@ include '../../components/admin/head.php';
             <span class="material-symbols-outlined text-3xl">close</span>
         </button>
         <img id="lightbox-image" src="" alt="Preview" class="max-w-[90%] max-h-[85vh] object-contain rounded-lg shadow-2xl">
-    </div>
-
-    <!-- Status Change Modal - Consistent with Edit Pelanggan Modal -->
-    <div id="statusModal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeStatusModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all animate-modal-in">
-                <!-- Modern Header with Solid Primary Color -->
-                <div class="bg-[#882426] px-6 py-5 flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
-                            <span class="material-symbols-outlined text-white text-2xl" id="statusModalIcon">sync_alt</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white" id="statusModalTitle">Ubah Status Pelanggan</h3>
-                            <p class="text-white/70 text-sm mt-0.5" id="statusModalSubtitle">Konfirmasi perubahan status</p>
-                        </div>
-                    </div>
-                    <button type="button" onclick="closeStatusModal()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all duration-200">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="p-6 bg-gray-50 space-y-5">
-                    <!-- Customer Profile Card -->
-                    <div class="flex flex-col items-center gap-4">
-                        <div class="w-24 h-24 rounded-xl overflow-hidden border-4 border-white shadow-lg ring-4 ring-[#882426]/20">
-                            <img id="statusCustomerImage" src="" alt="Customer"
-                                class="w-full h-full object-cover"
-                                onerror="this.src='../../assets/img/profil/default-customer.jpg'">
-                        </div>
-                        <div class="text-center">
-                            <p class="text-lg font-bold text-gray-800" id="statusCustomerName"></p>
-                            <p class="text-sm text-gray-500" id="statusCustomerId"></p>
-                        </div>
-                    </div>
-
-                    <!-- Action Description -->
-                    <div class="p-4 rounded-xl border-l-4 border-[#882426] bg-[#882426]/5">
-                        <div class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-[#882426] text-xl flex-shrink-0">info</span>
-                            <div>
-                                <p class="text-sm text-gray-700" id="statusActionText"></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Customer Details Card -->
-                    <div class="bg-white rounded-xl border-2 border-gray-200 p-4 space-y-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-[#882426]/10 flex items-center justify-center flex-shrink-0">
-                                <span class="material-symbols-outlined text-[#882426] text-lg">mail</span>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Email</p>
-                                <p class="text-sm font-semibold text-gray-800 truncate" id="statusCustomerEmail"></p>
-                            </div>
-                        </div>
-                        <div class="border-t border-gray-100"></div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-[#882426]/10 flex items-center justify-center flex-shrink-0">
-                                <span class="material-symbols-outlined text-[#882426] text-lg">swap_horiz</span>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Status Baru</p>
-                                <span id="statusNewBadge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mt-1"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
-                    <button type="button" onclick="closeStatusModal()"
-                        class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
-                        <span class="material-symbols-outlined text-lg">close</span>
-                        Batal
-                    </button>
-                    <button type="button" onclick="executeStatusChange()" id="statusConfirmBtn"
-                        class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-[#6d1a1c] transition-all duration-200 shadow-lg shadow-[#882426]/30">
-                        <span class="material-symbols-outlined text-lg">check_circle</span>
-                        Ya, Ubah Status!
-                    </button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Enhanced Customer Modal - Consistent with ReturnAdmin.php -->
@@ -521,6 +472,7 @@ include '../../components/admin/head.php';
                             </p>
                         </div>
 
+                        <!-- Status Aktif -->
                         <!-- Status Aktif -->
                         <div class="p-4 bg-white rounded-xl border-2 border-gray-200">
                             <label class="flex items-center gap-3 cursor-pointer">
@@ -647,147 +599,10 @@ include '../../components/admin/head.php';
         #isActive:checked~div:last-child {
             transform: translateX(20px);
         }
-
-        /* Toast Animations */
-        @keyframes toast-in {
-            from {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes toast-out {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-
-            to {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-        }
-
-        .toast-enter {
-            animation: toast-in 0.4s ease-out forwards;
-        }
-
-        .toast-exit {
-            animation: toast-out 0.3s ease-in forwards;
-        }
-
-        @keyframes circular-progress {
-            0% {
-                stroke-dashoffset: 0;
-            }
-
-            100% {
-                stroke-dashoffset: 100;
-            }
-        }
-
-        .circular-progress {
-            animation: circular-progress linear forwards;
-        }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Toast Notification System with Circular Progress
-        function showToast(type, title, message, duration = 4000) {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            const id = 'toast-' + Date.now();
-            toast.id = id;
-            const colors = {
-                success: {
-                    bg: 'bg-white',
-                    border: 'border-emerald-200',
-                    icon: 'check_circle',
-                    iconBg: 'bg-emerald-500',
-                    iconColor: 'text-white',
-                    title: 'text-emerald-800',
-                    progressCircle: '#10b981'
-                },
-                error: {
-                    bg: 'bg-white',
-                    border: 'border-red-200',
-                    icon: 'error',
-                    iconBg: 'bg-red-500',
-                    iconColor: 'text-white',
-                    title: 'text-red-800',
-                    progressCircle: '#ef4444'
-                },
-                warning: {
-                    bg: 'bg-white',
-                    border: 'border-amber-200',
-                    icon: 'warning',
-                    iconBg: 'bg-amber-500',
-                    iconColor: 'text-white',
-                    title: 'text-amber-800',
-                    progressCircle: '#f59e0b'
-                },
-                info: {
-                    bg: 'bg-white',
-                    border: 'border-blue-200',
-                    icon: 'info',
-                    iconBg: 'bg-blue-500',
-                    iconColor: 'text-white',
-                    title: 'text-blue-800',
-                    progressCircle: '#3b82f6'
-                }
-            };
-            const c = colors[type] || colors.info;
-            toast.className = `${c.bg} border ${c.border} rounded-xl shadow-2xl overflow-hidden min-w-[320px] max-w-[400px] toast-enter`;
-            toast.innerHTML = `
-                <div class="p-4 flex items-start gap-3">
-                    <div class="relative flex-shrink-0">
-                        <div class="w-10 h-10 ${c.iconBg} rounded-full flex items-center justify-center ${c.iconColor} shadow-lg">
-                            <span class="material-symbols-outlined">${c.icon}</span>
-                        </div>
-                        <svg class="absolute -top-1 -left-1 w-12 h-12 -rotate-90" viewBox="0 0 36 36">
-                            <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" stroke-width="2.5"></circle>
-                            <circle cx="18" cy="18" r="16" fill="none" stroke="${c.progressCircle}" stroke-width="2.5" stroke-dasharray="100" stroke-dashoffset="0" stroke-linecap="round" class="circular-progress" style="animation-duration: ${duration}ms;"></circle>
-                        </svg>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="font-bold ${c.title}">${title}</p>
-                        <p class="text-sm text-gray-600 mt-0.5">${message}</p>
-                    </div>
-                    <button onclick="removeToast('${id}')" class="flex-shrink-0 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
-                        <span class="material-symbols-outlined text-lg">close</span>
-                    </button>
-                </div>`;
-            container.appendChild(toast);
-            setTimeout(() => removeToast(id), duration);
-        }
-
-        function removeToast(id) {
-            const toast = document.getElementById(id);
-            if (toast) {
-                toast.classList.remove('toast-enter');
-                toast.classList.add('toast-exit');
-                setTimeout(() => toast.remove(), 300);
-            }
-        }
-
-        // Show flash messages as toast on page load
-        <?php if ($flashSuccess): ?>
-            document.addEventListener('DOMContentLoaded', function() {
-                showToast('success', 'Berhasil!', '<?= addslashes($flashSuccess) ?>');
-            });
-        <?php endif; ?>
-        <?php if ($flashError): ?>
-            document.addEventListener('DOMContentLoaded', function() {
-                showToast('error', 'Error!', '<?= addslashes($flashError) ?>');
-            });
-        <?php endif; ?>
-
         function openLightbox(src) {
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightbox-image');
@@ -885,94 +700,78 @@ include '../../components/admin/head.php';
             }
         });
 
-        // Status Modal Variables
-        let currentStatusCustomer = null;
-        let newStatusValue = null;
-
         function confirmToggleStatus(customer) {
-            currentStatusCustomer = customer;
-
             const profileImage = customer.profile_image ?
-                '../../uploads/customers/' + customer.profile_image :
+                '../../uploads/profiles/' + customer.profile_image :
                 '../../assets/img/profil/default-customer.jpg';
 
             const actionText = customer.is_active ? 'menonaktifkan' : 'mengaktifkan';
             const statusLabel = customer.is_active ? 'Nonaktif' : 'Aktif';
-            newStatusValue = customer.is_active ? 0 : 1;
+            const newStatus = customer.is_active ? 0 : 1;
 
-            // Update modal icon based on action
-            const modalIcon = document.getElementById('statusModalIcon');
-            modalIcon.textContent = customer.is_active ? 'person_off' : 'person_check';
-
-            // Update modal subtitle
-            document.getElementById('statusModalSubtitle').textContent = customer.is_active ? 'Nonaktifkan pelanggan' : 'Aktifkan pelanggan';
-
-            // Update customer info
-            document.getElementById('statusCustomerImage').src = profileImage;
-            document.getElementById('statusCustomerName').textContent = customer.nama_lengkap;
-            document.getElementById('statusCustomerId').textContent = 'ID: ' + customer.id_customer;
-            document.getElementById('statusCustomerEmail').textContent = customer.email;
-            document.getElementById('statusActionText').innerHTML = 'Anda yakin ingin <strong>' + actionText + '</strong> pelanggan ini? Perubahan status akan mempengaruhi akses login pelanggan ke sistem.';
-
-            // Update status badge
-            const statusBadge = document.getElementById('statusNewBadge');
-            if (newStatusValue) {
-                statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mt-1 bg-emerald-100 text-emerald-700';
-                statusBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>' + statusLabel;
-            } else {
-                statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold mt-1 bg-red-100 text-red-700';
-                statusBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span>' + statusLabel;
-            }
-
-            // Show modal
-            document.getElementById('statusModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeStatusModal() {
-            document.getElementById('statusModal').classList.add('hidden');
-            document.body.style.overflow = '';
-            currentStatusCustomer = null;
-            newStatusValue = null;
-        }
-
-        function executeStatusChange() {
-            if (!currentStatusCustomer) return;
-
-            const confirmBtn = document.getElementById('statusConfirmBtn');
-            confirmBtn.disabled = true;
-            confirmBtn.innerHTML = '<span class="material-symbols-outlined text-lg animate-spin">sync</span> Memproses...';
-
-            fetch('../../app/controllers/CustomerController.php?action=toggleStatus&id=' + currentStatusCustomer.id_customer + '&status=' + newStatusValue)
-                .then(response => response.json())
-                .then(data => {
-                    closeStatusModal();
-                    if (data.success) {
-                        showToast('success', 'Berhasil!', 'Status pelanggan telah diubah');
-                        setTimeout(() => location.reload(), 1500);
-                    } else {
-                        showToast('error', 'Gagal!', data.message || 'Gagal mengubah status pelanggan.');
-                    }
-                })
-                .catch(error => {
-                    closeStatusModal();
-                    showToast('error', 'Error!', 'Terjadi kesalahan saat mengubah status pelanggan');
-                })
-                .finally(() => {
-                    confirmBtn.disabled = false;
-                    confirmBtn.innerHTML = '<span class="material-symbols-outlined text-lg">check_circle</span> Ya, Ubah Status!';
-                });
-        }
-
-        // Close status modal on Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const statusModal = document.getElementById('statusModal');
-                if (statusModal && !statusModal.classList.contains('hidden')) {
-                    closeStatusModal();
+            Swal.fire({
+                title: 'Ubah Status Pelanggan?',
+                html: `
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-24 h-24 rounded-lg overflow-hidden border-2 border-gray-200 shadow-md">
+                            <img src="${profileImage}" alt="${customer.nama_lengkap}" 
+                                class="w-full h-full object-cover"
+                                onerror="this.src='../../assets/img/profil/default-customer.jpg'">
+                        </div>
+                        <div class="text-center">
+                            <p class="text-lg font-semibold text-gray-800">${customer.nama_lengkap}</p>
+                            <p class="text-sm text-gray-500 mb-3">ID: ${customer.id_customer}</p>
+                            <p class="text-sm text-gray-600">
+                                Anda yakin ingin <strong>${actionText}</strong> pelanggan ini?
+                            </p>
+                        </div>
+                        <div class="w-full bg-gray-50 rounded-lg p-3 text-left text-sm">
+                            <p class="text-gray-600"><span class="font-medium">Email:</span> ${customer.email}</p>
+                            <p class="text-gray-600"><span class="font-medium">Status Baru:</span> <span class="inline-block px-2 py-1 rounded text-xs font-medium ${newStatus ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${statusLabel}</span></p>
+                        </div>
+                    </div>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#882426',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Ubah Status!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('../../app/controllers/CustomerController.php?action=toggleStatus&id=' + customer.id_customer + '&status=' + newStatus)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: 'Status pelanggan telah diubah',
+                                    icon: 'success',
+                                    confirmButtonColor: '#882426'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Gagal!',
+                                    text: data.message,
+                                    icon: 'error',
+                                    confirmButtonColor: '#882426'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Terjadi kesalahan saat mengubah status pelanggan',
+                                icon: 'error',
+                                confirmButtonColor: '#882426'
+                            });
+                        });
                 }
-            }
-        });
+            });
+        }
     </script>
 </body>
 

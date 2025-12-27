@@ -246,16 +246,16 @@ include '../../components/admin/head.php';
                 if (jsonFinance.success) {
                     // 1. Update Pendapatan (Revenue)
                     document.getElementById('txtRevenue').textContent = formatRupiah(jsonFinance.data.revenue);
-                    
+
                     // 2. Update Pengeluaran (Expense) -> ID ini ada di HTML Card "Total Pengeluaran"
                     document.getElementById('txtExpense').textContent = formatRupiah(jsonFinance.data.expense);
-                    
+
                     // 3. Update Laba Bersih (Net Profit) -> ID ini ada di HTML Card "Laba Bersih"
                     document.getElementById('txtProfit').textContent = formatRupiah(jsonFinance.data.net_profit);
 
                     // Ganti warna teks Laba Bersih dinamis (Merah jika rugi, Putih/Hijau jika untung)
                     const profitElem = document.getElementById('txtProfit');
-                    if(jsonFinance.data.net_profit < 0) {
+                    if (jsonFinance.data.net_profit < 0) {
                         profitElem.classList.add('text-red-300'); // Jika minus warnanya agak merah
                         profitElem.innerText = "- " + formatRupiah(Math.abs(jsonFinance.data.net_profit));
                     } else {
