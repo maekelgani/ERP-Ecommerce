@@ -435,9 +435,6 @@
   .top-0 {
     top: calc(var(--spacing) * 0);
   }
-  .top-0\.5 {
-    top: calc(var(--spacing) * 0.5);
-  }
   .top-1 {
     top: calc(var(--spacing) * 1);
   }
@@ -569,9 +566,6 @@
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
-  }
-  .left-0\.5 {
-    left: calc(var(--spacing) * 0.5);
   }
   .left-1 {
     left: calc(var(--spacing) * 1);
@@ -1173,8 +1167,14 @@
   .w-32 {
     width: calc(var(--spacing) * 32);
   }
+  .w-36 {
+    width: calc(var(--spacing) * 36);
+  }
   .w-40 {
     width: calc(var(--spacing) * 40);
+  }
+  .w-42 {
+    width: calc(var(--spacing) * 42);
   }
   .w-48 {
     width: calc(var(--spacing) * 48);
@@ -4466,12 +4466,6 @@
       @media (hover: hover) {
         --tw-ring-color: var(--color-amber-200);
       }
-    }
-  }
-  .peer-checked\:translate-x-5 {
-    &:is(:where(.peer):checked ~ *) {
-      --tw-translate-x: calc(var(--spacing) * 5);
-      translate: var(--tw-translate-x) var(--tw-translate-y);
     }
   }
   .peer-checked\:bg-\[\#882426\] {

@@ -287,9 +287,9 @@ include '../../components/admin/head.php';
                 <div class="p-6 bg-gray-50 space-y-5">
                     <!-- Campaign Profile Card -->
                     <div class="flex flex-col items-center gap-4">
-                        <div id="deleteCampaignImageContainer" class="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white shadow-lg ring-4 ring-red-500/20 bg-gradient-to-br from-[#882426] to-[#6d1a1c]">
+                        <div id="deleteCampaignImageContainer" class="w-42 h-24 rounded-2xl overflow-hidden border-4 border-white shadow-lg ring-4 ring-red-500/20 bg-gradient-to-br from-[#882426] to-[#6d1a1c]">
                             <img id="deleteCampaignImage" src="" alt="Campaign"
-                                class="w-full h-full object-cover"
+                                class="w-full h-full object-contain"
                                 onerror="this.style.display='none'; document.getElementById('deleteCampaignImageFallback').style.display='flex';">
                         </div>
                         <div id="deleteCampaignImageFallback" class="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white shadow-lg ring-4 ring-red-500/20 bg-gradient-to-br from-[#882426] to-[#6d1a1c] items-center justify-center" style="display: none;">
