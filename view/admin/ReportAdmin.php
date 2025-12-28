@@ -58,31 +58,91 @@ include '../../components/admin/head.php';
                 </div>
             </div>
 
-            <!-- CARD BARU -->
+            <!-- FINANCIAL SUMMARY CARDS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div class="bg-white rounded-xl p-6 text-gray-500 shadow-lg relative overflow-hidden">
-                    <div class="relative z-10">
-                        <p class="text-gray-500 text-sm font-medium mb-1">Total Pendapatan (Revenue)</p>
-                        <h3 id="txtRevenue" class="text-2xl font-bold text-green-600">Rp 0</h3>
+                <!-- Revenue Card -->
+                <div class="group bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 shadow-lg hover:shadow-xl hover:shadow-emerald-500/25 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden cursor-pointer">
+                    <!-- Background Pattern -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white"></div>
+                        <div class="absolute -right-4 -bottom-4 w-24 h-24 rounded-full bg-white"></div>
                     </div>
-                    <span class="material-symbols-outlined absolute right-4 bottom-4 text-white/10 text-6xl">trending_up</span>
+                    <!-- Animated Icon -->
+                    <div class="absolute right-4 top-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                        <span class="material-symbols-outlined text-white text-2xl">trending_up</span>
+                    </div>
+                    <!-- Content -->
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                            <p class="text-emerald-100 text-sm font-medium uppercase tracking-wide">Total Pendapatan</p>
+                        </div>
+                        <h3 id="txtRevenue" class="text-3xl font-bold text-white mb-1">Rp 0</h3>
+                        <p class="text-emerald-200 text-xs flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">arrow_upward</span>
+                            Revenue dari penjualan
+                        </p>
+                    </div>
+                    <!-- Bottom Decoration -->
+                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-white/0 via-white/30 to-white/0"></div>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm relative overflow-hidden">
-                    <div class="relative z-10">
-                        <p class="text-gray-500 text-sm font-medium mb-1">Total Pengeluaran (Expenses)</p>
-                        <h3 id="txtExpense" class="text-2xl font-bold text-red-600">Rp 0</h3>
+                <!-- Expenses Card -->
+                <div class="group bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl p-6 shadow-lg hover:shadow-xl hover:shadow-rose-500/25 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden cursor-pointer">
+                    <!-- Background Pattern -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white"></div>
+                        <div class="absolute -right-4 -bottom-4 w-24 h-24 rounded-full bg-white"></div>
                     </div>
-                    <span class="material-symbols-outlined absolute right-4 bottom-4 text-red-100 text-6xl">trending_down</span>
+                    <!-- Animated Icon -->
+                    <div class="absolute right-4 top-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300">
+                        <span class="material-symbols-outlined text-white text-2xl">trending_down</span>
+                    </div>
+                    <!-- Content -->
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                            <p class="text-rose-100 text-sm font-medium uppercase tracking-wide">Total Pengeluaran</p>
+                        </div>
+                        <h3 id="txtExpense" class="text-3xl font-bold text-white mb-1">Rp 0</h3>
+                        <p class="text-rose-200 text-xs flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">arrow_downward</span>
+                            Expenses operasional
+                        </p>
+                    </div>
+                    <!-- Bottom Decoration -->
+                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-white/0 via-white/30 to-white/0"></div>
                 </div>
 
-                <div class="bg-[#882426] rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
-                    <div class="relative z-10">
-                        <p class="text-white text-sm font-medium mb-1">Laba Bersih (Net Profit)</p>
-                        <h3 id="txtProfit" class="text-2xl font-bold text-white">Rp 0</h3>
-                        <p class="text-xs text-white mt-1">*Pendapatan - Pengeluaran</p>
+                <!-- Net Profit Card -->
+                <div class="group bg-gradient-to-br from-[#882426] to-[#6d1a1c] rounded-2xl p-6 shadow-lg hover:shadow-xl hover:shadow-[#882426]/25 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden cursor-pointer">
+                    <!-- Background Pattern -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white"></div>
+                        <div class="absolute -right-4 -bottom-4 w-24 h-24 rounded-full bg-white"></div>
                     </div>
-                    <span class="material-symbols-outlined absolute right-4 bottom-4 text-white/10 text-6xl">account_balance_wallet</span>
+                    <!-- Animated Icon -->
+                    <div class="absolute right-4 top-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
+                        <span class="material-symbols-outlined text-white text-2xl">account_balance_wallet</span>
+                    </div>
+                    <!-- Content -->
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                            <p class="text-amber-100 text-sm font-medium uppercase tracking-wide ml-18">Laba Bersih</p>
+                        </div>
+                        <h3 id="txtProfit" class="text-3xl font-bold text-white mb-1">Rp 0</h3>
+                        <p class="text-white/70 text-xs flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">calculate</span>
+                            Pendapatan - Pengeluaran
+                        </p>
+                    </div>
+                    <!-- Bottom Decoration -->
+                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400/0 via-amber-400/50 to-amber-400/0"></div>
+                    <!-- Badge -->
+                    <div class="absolute top-4 left-4 px-2 py-1 bg-amber-400/20 backdrop-blur-sm rounded-full">
+                        <span class="text-amber-300 text-[10px] font-semibold uppercase tracking-wider ml-2.5">Net Profit</span>
+                    </div>
                 </div>
             </div>
             <!-- ============ -->

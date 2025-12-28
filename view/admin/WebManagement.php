@@ -613,7 +613,7 @@ include '../../components/admin/head.php';
             <div class="tab-content-managementweb hidden">
                 <form id="siteSettingsForm" enctype="multipart/form-data" class="h-full flex flex-col">
                     <div class="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden flex-1">
-                        
+
                         <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                             <div>
                                 <h2 class="text-xl font-bold text-gray-800">Pengaturan Situs</h2>
@@ -626,7 +626,7 @@ include '../../components/admin/head.php';
                         </div>
 
                         <div class="p-6 overflow-y-auto space-y-8">
-                            
+
                             <div class="bg-gray-50/50 rounded-xl p-6 border border-gray-200">
                                 <div class="flex items-center gap-2 mb-5">
                                     <div class="w-8 h-8 rounded-lg bg-[#882426] flex items-center justify-center">
@@ -634,16 +634,16 @@ include '../../components/admin/head.php';
                                     </div>
                                     <h4 class="font-bold text-gray-800">Identitas & SEO</h4>
                                 </div>
-                                
+
                                 <div class="grid grid-cols-1 gap-5">
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Judul Website</label>
                                         <div class="relative">
                                             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">badge</span>
-                                            <input type="text" name="site_title" placeholder="Contoh: Nano Komputer" 
+                                            <input type="text" name="site_title" placeholder="Contoh: Nano Komputer"
                                                 class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#882426]/20 focus:border-[#882426] focus:outline-none transition-all bg-white">
-                                        <input type="hidden" name="existing_site_logo" id="existing_site_logo">
-                                        <input type="hidden" name="existing_site_favicon" id="existing_site_favicon">
+                                            <input type="hidden" name="existing_site_logo" id="existing_site_logo">
+                                            <input type="hidden" name="existing_site_favicon" id="existing_site_favicon">
                                         </div>
                                     </div>
 
@@ -1035,18 +1035,28 @@ include '../../components/admin/head.php';
                         <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center ring-4 ring-red-50">
                             <span class="material-symbols-outlined text-red-500 text-4xl">delete_forever</span>
                         </div>
+                        <div class="text-center">
+                            <p class="text-lg font-bold text-gray-800" id="deleteItemName"></p>
+                            <p class="text-sm text-gray-500" id="deleteItemId"></p>
+                        </div>
                     </div>
 
                     <!-- Warning Alert -->
                     <div class="p-4 rounded-xl border-l-4 border-red-500 bg-red-50">
                         <div class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-red-500 text-xl flex-shrink-0">error</span>
+                            <span class="material-symbols-outlined text-red-500 text-xl flex-shrink-0">warning</span>
                             <div>
-                                <p class="text-sm text-red-700 font-medium" id="deleteMessage">Apakah Anda yakin ingin menghapus data ini?</p>
-                                <p class="text-xs text-red-600 mt-1">Tindakan ini tidak dapat dibatalkan dan data akan dihapus permanen.</p>
+                                <p class="text-sm font-semibold text-red-700 mb-1">Peringatan!</p>
+                                <p class="text-sm text-red-600" id="deleteMessage">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan dan data akan dihapus permanen.</p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Checkbox Confirmation -->
+                    <label class="flex items-center gap-3 p-4 bg-white rounded-xl border-2 border-gray-200 cursor-pointer hover:border-red-300 transition-colors delete-confirm-label">
+                        <input type="checkbox" id="deleteConfirmCheck" class="w-5 h-5 text-red-600 border-2 border-gray-300 rounded focus:ring-red-500 focus:ring-offset-0 delete-confirm-checkbox">
+                        <span class="text-sm text-gray-700">Saya mengerti dan ingin melanjutkan penghapusan</span>
+                    </label>
                 </div>
 
                 <!-- Modal Footer -->
@@ -1056,8 +1066,8 @@ include '../../components/admin/head.php';
                         <span class="material-symbols-outlined text-lg">close</span>
                         Batal
                     </button>
-                    <button type="button" id="confirmDeleteBtn"
-                        class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30 btn-primary">
+                    <button type="button" id="confirmDeleteBtn" disabled
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30 btn-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
                         <span class="material-symbols-outlined text-lg">delete_forever</span>
                         Ya, Hapus!
                     </button>
@@ -1279,31 +1289,46 @@ include '../../components/admin/head.php';
                     </button>
                 </div>
                 <div class="p-6 bg-gray-50 space-y-5">
+                    <!-- Article Preview -->
                     <div class="flex flex-col items-center gap-4">
                         <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center ring-4 ring-red-50">
                             <span class="material-symbols-outlined text-red-500 text-4xl">article</span>
                         </div>
+                        <div class="text-center">
+                            <p class="text-lg font-bold text-gray-800" id="deleteArticleName"></p>
+                            <p class="text-sm text-gray-500" id="deleteArticleId"></p>
+                        </div>
                     </div>
+
+                    <!-- Warning Alert -->
                     <div class="p-4 rounded-xl border-l-4 border-red-500 bg-red-50">
                         <div class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-red-500 text-xl flex-shrink-0">error</span>
+                            <span class="material-symbols-outlined text-red-500 text-xl flex-shrink-0">warning</span>
                             <div>
-                                <p class="text-sm text-red-700 font-medium" id="deleteArticleMessage">Apakah Anda yakin ingin menghapus artikel ini?</p>
-                                <p class="text-xs text-red-600 mt-1">Artikel akan dihapus permanen dan tidak dapat dikembalikan.</p>
+                                <p class="text-sm font-semibold text-red-700 mb-1">Peringatan!</p>
+                                <p class="text-sm text-red-600" id="deleteArticleMessage">Apakah Anda yakin ingin menghapus artikel ini? Artikel akan dihapus permanen dan tidak dapat dikembalikan.</p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Checkbox Confirmation -->
+                    <label class="flex items-center gap-3 p-4 bg-white rounded-xl border-2 border-gray-200 cursor-pointer hover:border-red-300 transition-colors delete-confirm-label">
+                        <input type="checkbox" id="deleteArticleConfirmCheck" class="w-5 h-5 text-red-600 border-2 border-gray-300 rounded focus:ring-red-500 focus:ring-offset-0 delete-confirm-checkbox">
+                        <span class="text-sm text-gray-700">Saya mengerti dan ingin melanjutkan penghapusan</span>
+                    </label>
                 </div>
+
+                <!-- Modal Footer -->
                 <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
                     <button type="button" id="cancelDeleteArticleBtn"
-                        class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200">
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent">
                         <span class="material-symbols-outlined text-lg">close</span>
                         Batal
                     </button>
-                    <button type="button" id="confirmDeleteArticleBtn"
-                        class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30">
+                    <button type="button" id="confirmDeleteArticleBtn" disabled
+                        class="inline-flex items-center gap-2 px-5 py-3 bg-[#882426] text-white font-semibold rounded-xl hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
                         <span class="material-symbols-outlined text-lg">delete_forever</span>
-                        Ya, Hapus!
+                        Ya, Hapus Artikel!
                     </button>
                 </div>
             </div>
@@ -1388,6 +1413,9 @@ include '../../components/admin/head.php';
             setTimeout(() => removeToast(id), duration);
         }
 
+        // Make showToast available globally
+        window.showToast = showToast;
+
         function removeToast(id) {
             const toast = document.getElementById(id);
             if (toast) {
@@ -1461,99 +1489,170 @@ include '../../components/admin/head.php';
                 }
             }
         });
+
+        // Delete Modal Checkbox Confirmation Handler
+        const deleteConfirmCheck = document.getElementById('deleteConfirmCheck');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+        if (deleteConfirmCheck && confirmDeleteBtn) {
+            deleteConfirmCheck.addEventListener('change', function() {
+                confirmDeleteBtn.disabled = !this.checked;
+            });
+        }
+
+        // Delete Article Modal Checkbox Confirmation Handler
+        const deleteArticleConfirmCheck = document.getElementById('deleteArticleConfirmCheck');
+        const confirmDeleteArticleBtn = document.getElementById('confirmDeleteArticleBtn');
+
+        if (deleteArticleConfirmCheck && confirmDeleteArticleBtn) {
+            deleteArticleConfirmCheck.addEventListener('change', function() {
+                confirmDeleteArticleBtn.disabled = !this.checked;
+            });
+        }
+
+        // Reset checkbox and button when modal is closed
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+                // Reset checkbox and button
+                if (deleteConfirmCheck) deleteConfirmCheck.checked = false;
+                if (confirmDeleteBtn) confirmDeleteBtn.disabled = true;
+            }
+        }
+
+        function closeDeleteArticleModal() {
+            const modal = document.getElementById('deleteArticleModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+                // Reset checkbox and button
+                if (deleteArticleConfirmCheck) deleteArticleConfirmCheck.checked = false;
+                if (confirmDeleteArticleBtn) confirmDeleteArticleBtn.disabled = true;
+            }
+        }
+
+        // Confirm Delete Functions (can be overridden by external JS)
+        function confirmDelete(itemName = '', itemId = '', message = '') {
+            const modal = document.getElementById('deleteModal');
+            if (modal) {
+                // Reset state
+                if (deleteConfirmCheck) deleteConfirmCheck.checked = false;
+                if (confirmDeleteBtn) confirmDeleteBtn.disabled = true;
+
+                // Set item info if provided
+                const nameEl = document.getElementById('deleteItemName');
+                const idEl = document.getElementById('deleteItemId');
+                const msgEl = document.getElementById('deleteMessage');
+
+                if (nameEl) nameEl.textContent = itemName || '';
+                if (idEl) idEl.textContent = itemId ? 'ID: ' + itemId : '';
+                if (msgEl && message) msgEl.textContent = message;
+
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function confirmDeleteArticle(articleName = '', articleId = '', message = '') {
+            const modal = document.getElementById('deleteArticleModal');
+            if (modal) {
+                // Reset state
+                if (deleteArticleConfirmCheck) deleteArticleConfirmCheck.checked = false;
+                if (confirmDeleteArticleBtn) confirmDeleteArticleBtn.disabled = true;
+
+                // Set article info if provided
+                const nameEl = document.getElementById('deleteArticleName');
+                const idEl = document.getElementById('deleteArticleId');
+                const msgEl = document.getElementById('deleteArticleMessage');
+
+                if (nameEl) nameEl.textContent = articleName || '';
+                if (idEl) idEl.textContent = articleId ? 'ID: ' + articleId : '';
+                if (msgEl && message) msgEl.textContent = message;
+
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
     </script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('siteSettingsForm');
-        const btnSave = document.getElementById('btnSaveSettings');
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('siteSettingsForm');
+            const btnSave = document.getElementById('btnSaveSettings');
 
-        fetch('../../api/settings/get_settings.php') 
-            .then(response => response.json())
-            .then(res => {
-                if (res.status === 'success' && res.data) {
-                    const d = res.data;
-                
-                // Isi Input Text
-                form.querySelector('[name="site_title"]').value = d.site_title || '';
-                form.querySelector('[name="site_description"]').value = d.site_description || '';
-                form.querySelector('[name="contact_email"]').value = d.contact_email || '';
-                form.querySelector('[name="contact_phone"]').value = d.contact_phone || '';
-                form.querySelector('[name="facebook_url"]').value = d.facebook_url || '';
-                form.querySelector('[name="instagram_url"]').value = d.instagram_url || '';
-                form.querySelector('[name="tiktok_url"]').value = d.tiktok_url || '';
-                form.querySelector('[name="youtube_url"]').value = d.youtube_url || '';
+            fetch('../../api/settings/get_settings.php')
+                .then(response => response.json())
+                .then(res => {
+                    if (res.status === 'success' && res.data) {
+                        const d = res.data;
 
-                // Handle Preview Logo
-                if (d.site_logo) {
-                    const img = document.getElementById('preview_site_logo');
-                    img.src = '../../' + d.site_logo + '?v=' + new Date().getTime(); 
-                    img.classList.remove('hidden');
-                    document.getElementById('icon_site_logo').classList.add('hidden');
-                }
+                        // Isi Input Text
+                        form.querySelector('[name="site_title"]').value = d.site_title || '';
+                        form.querySelector('[name="site_description"]').value = d.site_description || '';
+                        form.querySelector('[name="contact_email"]').value = d.contact_email || '';
+                        form.querySelector('[name="contact_phone"]').value = d.contact_phone || '';
+                        form.querySelector('[name="facebook_url"]').value = d.facebook_url || '';
+                        form.querySelector('[name="instagram_url"]').value = d.instagram_url || '';
+                        form.querySelector('[name="tiktok_url"]').value = d.tiktok_url || '';
+                        form.querySelector('[name="youtube_url"]').value = d.youtube_url || '';
 
-                // Handle Preview Favicon
-                if (d.site_favicon) {
-                    const img = document.getElementById('preview_site_favicon');
-                    img.src = '../../' + d.site_favicon + '?v=' + new Date().getTime();
-                    img.classList.remove('hidden');
-                    // document.getElementById('icon_site_favicon').classList.add('hidden');
-                }
-            }
-        })
-        .catch(err => console.error('Gagal memuat pengaturan:', err));
+                        // Handle Preview Logo
+                        if (d.site_logo) {
+                            const img = document.getElementById('preview_site_logo');
+                            img.src = '../../' + d.site_logo + '?v=' + new Date().getTime();
+                            img.classList.remove('hidden');
+                            document.getElementById('icon_site_logo').classList.add('hidden');
+                        }
+
+                        // Handle Preview Favicon
+                        if (d.site_favicon) {
+                            const img = document.getElementById('preview_site_favicon');
+                            img.src = '../../' + d.site_favicon + '?v=' + new Date().getTime();
+                            img.classList.remove('hidden');
+                            // document.getElementById('icon_site_favicon').classList.add('hidden');
+                        }
+                    }
+                })
+                .catch(err => console.error('Gagal memuat pengaturan:', err));
 
 
-    // --- 2. Simpan Data (Event Listener Tombol) ---
-    btnSave.addEventListener('click', function(e) {
-        e.preventDefault();
+            // --- 2. Simpan Data (Event Listener Tombol) ---
+            btnSave.addEventListener('click', function(e) {
+                e.preventDefault();
 
-        // UI Loading State
-        const originalBtnText = btnSave.innerHTML;
-        btnSave.innerHTML = '<span class="material-symbols-outlined animate-spin text-xl">progress_activity</span> Menyimpan...';
-        btnSave.disabled = true;
+                // UI Loading State
+                const originalBtnText = btnSave.innerHTML;
+                btnSave.innerHTML = '<span class="material-symbols-outlined animate-spin text-xl">progress_activity</span> Menyimpan...';
+                btnSave.disabled = true;
 
-        const formData = new FormData(form);
+                const formData = new FormData(form);
 
-        fetch('../../api/settings/save_settings.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(res => {
-            if (res.status === 'success') {
-                showToast(res.message, 'bg-green-600');
-            } else {
-                showToast(res.message || 'Terjadi kesalahan', 'bg-red-600');
-            }
-        })
-
-        .catch(err => {
-            showToast('Error koneksi server', 'bg-red-500');
-            console.error(err);
-        })
-        .finally(() => {
-            // Restore UI
-            btnSave.innerHTML = originalBtnText;
-            btnSave.disabled = false;
+                fetch('../../api/settings/save_settings.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(res => {
+                        if (res.status === 'success') {
+                            window.showToast('success', 'Berhasil!', res.message || 'Pengaturan berhasil disimpan');
+                        } else {
+                            window.showToast('error', 'Gagal!', res.message || 'Terjadi kesalahan');
+                        }
+                    })
+                    .catch(err => {
+                        window.showToast('error', 'Error!', 'Error koneksi server');
+                        console.error(err);
+                    })
+                    .finally(() => {
+                        // Restore UI
+                        btnSave.innerHTML = originalBtnText;
+                        btnSave.disabled = false;
+                    });
+            });
         });
-    });
-
-    // Helper Toast Notification
-    function showToast(message, bgColorClass) {
-        toastMessage.textContent = message;
-        toast.className = `fixed top-4 right-4 text-white px-6 py-3 rounded-xl shadow-2xl z-[9999] flex items-center gap-2 transform transition-all duration-300 ${bgColorClass}`;
-        toast.classList.remove('hidden');
-        
-        setTimeout(() => {
-            toast.classList.add('opacity-0', 'translate-x-full');
-            setTimeout(() => toast.classList.add('hidden'), 300);
-        }, 3000);
-    }
-});
-</script>
+    </script>
 
     <script src="../../assets/js/main.js" defer></script>
     <script src="../../assets/js/admin/webManagement.js" defer></script>

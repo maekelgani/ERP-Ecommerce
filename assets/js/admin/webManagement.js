@@ -1138,38 +1138,57 @@ function appendNewReply(reply, ticketId) {
         const statusSelect = document.getElementById('ticketStatusUpdate');
         const faqCheckbox = document.getElementById('isFaqCheckbox');
 
+        if (!statusSelect) {
+            console.error('Element ticketStatusUpdate not found');
+            return;
+        }
+
         const status = statusSelect.value;
-        let isFaq = faqCheckbox.checked ? 1 : 0;
+        let isFaq = faqCheckbox ? (faqCheckbox.checked ? 1 : 0) : 0;
+
+        if (!status) {
+            showToast('Silakan pilih status', 'error');
+            return;
+        }
 
         // 🔒 RULE FRONTEND
         if (!['Resolved', 'Closed'].includes(status)) {
             isFaq = 0;
         }
 
-        const response = await fetch(`${API_BASE}support-ticket.php?action=updateStatus`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                id_ticket: ticketId,
-                status,
-                is_faq: isFaq
-            })
-        });
+        try {
+            const response = await fetch(`${API_BASE}support-ticket.php?action=updateStatus`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id_ticket: ticketId,
+                    status,
+                    is_faq: isFaq
+                })
+            });
 
-        const result = await response.json();
+            const result = await response.json();
 
-        if (!result.success) {
-            showToast(result.message || 'Gagal update status', 'error');
-            return;
+            if (!result.success) {
+                showToast(result.message || 'Gagal update status', 'error');
+                return;
+            }
+
+            // 🔥 REALTIME SYNC
+            updateStatusBadge(status);
+            syncStatusSelect(status);
+            updateFaqCheckboxState(status, isFaq);
+            if (typeof updateTicketTableStatus === 'function') {
+                updateTicketTableStatus(ticketId, status);
+            } else if (typeof updateTicketRowStatus === 'function') {
+                updateTicketRowStatus(ticketId, status);
+            }
+
+            showToast('Status tiket diperbarui', 'success');
+        } catch (error) {
+            console.error('Error updating status:', error);
+            showToast('Terjadi kesalahan saat memperbarui status', 'error');
         }
-
-        // 🔥 REALTIME SYNC
-        updateStatusBadge(status);
-        syncStatusSelect(status);
-        updateFaqCheckboxState(status, isFaq);
-        updateTicketTableStatus(ticketId, status);        
-
-        showToast('Status tiket diperbarui', 'success');
     };
 
     window.deleteTicket = function(id) {

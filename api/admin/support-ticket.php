@@ -178,12 +178,18 @@ function handleUpdateStatus(SupportTicketRepository $repo): void
         return;
     }
 
-    $ticketId = $_POST['id_ticket'] ?? '';
-    $status   = $_POST['status'] ?? '';
-    $isFaq    = isset($_POST['is_faq']) ? (int)$_POST['is_faq'] : 0;
+    $data = json_decode(file_get_contents('php://input'), true);
+    $ticketId = $_POST['id_ticket'] ?? $data['id_ticket'] ?? '';
+    $status   = $_POST['status'] ?? $data['status'] ?? '';
+    $isFaq    = isset($_POST['is_faq']) ? (int)$_POST['is_faq'] : (isset($data['is_faq']) ? (int)$data['is_faq'] : 0);
 
-    if (empty($ticketId) || empty($status)) {
-        sendJsonResponse(['success' => false, 'message' => 'Data tidak lengkap']);
+    if (empty($ticketId)) {
+        sendJsonResponse(['success' => false, 'message' => 'ID tiket tidak ditemukan']);
+        return;
+    }
+
+    if (empty($status)) {
+        sendJsonResponse(['success' => false, 'message' => 'Silakan pilih status']);
         return;
     }
 
