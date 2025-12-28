@@ -1,6 +1,20 @@
 <?php
 $pageTitle = "Tentang Kami & Hubungi Kami";
 require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../app/Database/DatabaseConnection.php';
+require_once __DIR__ . '/../../app/Services/SiteSetting.php';
+
+use App\Database\DatabaseConnection;
+use App\Services\SiteSetting;
+
+if (!isset($settingService)) {
+    $db = DatabaseConnection::getInstance()->getConnection();
+    $settingService = new SiteSetting($db);
+}
+
+if (!isset($globalSettings)) {
+    $globalSettings = $settingService->getAllSettings();
+}
 
 $isLoggedIn = \App\Auth\CustomerAuthMiddleware::isLoggedIn();
 $customer = \App\Auth\CustomerAuthMiddleware::getCurrentCustomer();
@@ -11,6 +25,20 @@ $breadcrumbs = [
     ['label' => 'Home', 'url' => 'landingPage.php'],
     ['label' => 'Tentang Kami', 'url' => null]
 ];
+
+function formatProvinsi(?string $text): string
+{
+    if (!$text) return '';
+    $text = mb_strtolower($text, 'UTF-8');
+    if ($text === 'dki jakarta') return 'DKI Jakarta';
+    return mb_convert_case($text, MB_CASE_TITLE, 'UTF-8');
+}
+
+$isLoggedIn = $isLoggedIn ?? false;
+
+$hasName  = $isLoggedIn && !empty($customer['nama_lengkap']);
+$hasEmail = $isLoggedIn && !empty($customer['email']);
+$hasPhone = $isLoggedIn && !empty($customer['no_telp']);
 ?>
 
 <body class="w-full min-h-screen [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-customer-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
@@ -30,7 +58,9 @@ $breadcrumbs = [
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
-                <h1 class="text-2xl md:text-4xl font-bold text-white mb-3">Tentang Nano Komputer</h1>
+                <h1 class="text-2xl md:text-4xl font-bold text-white mb-3">Tentang
+                    <?= !empty($globalSettings['site_title']) ? htmlspecialchars($globalSettings['site_title']) : 'Nano Komputer' ?>
+                </h1>
                 <p class="text-white/80 text-sm md:text-base max-w-xl mx-auto">Mengenal lebih dekat perjalanan dan komitmen kami dalam menyediakan solusi teknologi terbaik</p>
             </div>
         </section>
@@ -50,7 +80,10 @@ $breadcrumbs = [
                     </div>
                     <div class="space-y-4 text-gray-600 leading-relaxed text-sm md:text-base">
                         <p>
-                            <strong class="text-gray-900">Nano Komputer</strong> adalah toko komputer terpercaya yang telah melayani kebutuhan teknologi masyarakat Indonesia sejak tahun 2010. Berlokasi di pusat perdagangan Jakarta, kami berkomitmen untuk menyediakan produk-produk komputer berkualitas tinggi dengan harga yang kompetitif.
+                            <strong class="text-gray-900">
+                                <?= !empty($globalSettings['site_title']) ? htmlspecialchars($globalSettings['site_title']) : 'Nano Komputer' ?>
+                            </strong>
+                            adalah toko komputer terpercaya yang telah melayani kebutuhan teknologi masyarakat Indonesia sejak tahun 2010. Berlokasi di pusat perdagangan Jakarta, kami berkomitmen untuk menyediakan produk-produk komputer berkualitas tinggi dengan harga yang kompetitif.
                         </p>
                         <p>
                             Dengan pengalaman lebih dari satu dekade, kami memahami kebutuhan pelanggan dari berbagai kalangan - mulai dari gamer profesional, content creator, hingga pengguna korporat. Tim kami terdiri dari para ahli teknologi yang siap memberikan konsultasi dan solusi terbaik untuk setiap kebutuhan Anda.
@@ -186,32 +219,71 @@ $breadcrumbs = [
                     <form id="contactForm" class="space-y-4" enctype="multipart/form-data">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
-                                <input type="text" name="nama_lengkap" id="nama_lengkap" required
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Nama Lengkap <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text"
+                                    name="nama_lengkap"
+                                    id="nama_lengkap"
+                                    required
                                     value="<?= $isLoggedIn && $customer ? htmlspecialchars($customer['nama_lengkap'] ?? '') : '' ?>"
-                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#882426] focus:ring-2 focus:ring-[#882426]/10 transition-all text-sm"
+                                    <?= $hasName ? 'readonly' : '' ?>
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 placeholder-gray-400
+                                    focus:outline-none focus:border-[#882426] focus:ring-2 focus:ring-[#882426]/10 transition-all text-sm
+                                    <?= $hasName ? 'bg-gray-100 cursor-not-allowed' : '' ?>"
                                     placeholder="Masukkan nama lengkap Anda">
                                 <p class="text-xs text-red-500 mt-1 hidden" id="nama_lengkap_error"></p>
+                                <?php if ($hasName): ?>
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        Nama diambil dari akun Anda. Ubah melalui Pengaturan Akun.
+                                    </p>
+                                <?php endif; ?>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Email <span class="text-red-500">*</span></label>
-                                <input type="email" name="email" id="email" required
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Email <span class="text-red-500">*</span>
+                                </label>
+                                <input type="email"
+                                    name="email"
+                                    id="email"
+                                    required
                                     value="<?= $isLoggedIn && $customer ? htmlspecialchars($customer['email'] ?? '') : '' ?>"
-                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#882426] focus:ring-2 focus:ring-[#882426]/10 transition-all text-sm"
+                                    <?= $hasEmail ? 'readonly' : '' ?>
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 placeholder-gray-400
+                                    focus:outline-none focus:border-[#882426] focus:ring-2 focus:ring-[#882426]/10 transition-all text-sm
+                                    <?= $hasEmail ? 'bg-gray-100 cursor-not-allowed' : '' ?>"
                                     placeholder="nama@email.com">
                                 <p class="text-xs text-red-500 mt-1 hidden" id="email_error"></p>
+
+                                <?php if ($hasEmail): ?>
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        Email diambil dari akun Anda dan tidak dapat diubah.
+                                    </p>
+                                <?php endif; ?>
                             </div>
                         </div>
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Nomor Telepon</label>
-                                <input type="tel" name="no_telepon" id="no_telepon"
-                                    value="<?= $isLoggedIn && $customer ? htmlspecialchars($customer['phone'] ?? '') : '' ?>"
-                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#882426] focus:ring-2 focus:ring-[#882426]/10 transition-all text-sm"
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Nomor Telepon
+                                </label>
+                                <input type="tel"
+                                    name="no_telepon"
+                                    id="no_telepon"
+                                    value="<?= $isLoggedIn && $customer ? htmlspecialchars($customer['no_telp'] ?? '') : '' ?>"
+                                    <?= $hasPhone ? 'readonly' : '' ?>
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 placeholder-gray-400
+                                    focus:outline-none focus:border-[#882426] focus:ring-2 focus:ring-[#882426]/10 transition-all text-sm
+                                    <?= $hasPhone ? 'bg-gray-100 cursor-not-allowed' : '' ?>"
                                     placeholder="08xx-xxxx-xxxx">
                                 <p class="text-xs text-red-500 mt-1 hidden" id="no_telepon_error"></p>
+                                <?php if ($hasPhone): ?>
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        Nomor telepon diambil dari akun Anda. Ubah melalui Pengaturan Akun.
+                                    </p>
+                                <?php endif; ?>
                             </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
                                 <select name="kategori" id="kategori" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:border-[#882426] focus:ring-2 focus:ring-[#882426]/10 transition-all text-sm">
@@ -285,6 +357,12 @@ $breadcrumbs = [
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                         <h3 class="text-base font-bold text-gray-900 mb-4">Informasi Kontak</h3>
                         <div class="space-y-4">
+                            <?php
+                            require_once __DIR__ . '/../../app/Repository/StoreLocationRepository.php';
+                            $storeRepo = new \App\Repository\StoreLocationRepository();
+                            $activeStores = $storeRepo->getActiveStores();
+                            $primaryStore = !empty($activeStores) ? $activeStores[0] : null;
+                            ?>
                             <div class="flex items-start gap-3">
                                 <div class="w-9 h-9 bg-[#882426]/10 rounded-lg flex items-center justify-center flex-shrink-0">
                                     <svg class="w-4 h-4 text-[#882426]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,7 +372,18 @@ $breadcrumbs = [
                                 </div>
                                 <div>
                                     <h4 class="font-medium text-gray-900 text-sm">Alamat</h4>
-                                    <p class="text-gray-600 text-xs mt-0.5 leading-relaxed">Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 2, Mangga Dua Sel., Kecamatan Sawah Besar, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10730</p>
+                                    <p class="text-gray-600 text-xs mt-0.5 leading-relaxed">
+                                        <?php if ($primaryStore): ?>
+                                            <?= htmlspecialchars($primaryStore['alamat']) ?>,
+                                            <?= htmlspecialchars(formatProvinsi($primaryStore['kelurahan'] ?? '')) ?>,
+                                            <?= htmlspecialchars(formatProvinsi($primaryStore['kecamatan'] ?? '')) ?>,
+                                            <?= htmlspecialchars(formatProvinsi($primaryStore['kota_kabupaten'] ?? '')) ?>,
+                                            <?= htmlspecialchars(formatProvinsi($primaryStore['provinsi'] ?? '')) ?>
+                                            <?= htmlspecialchars($primaryStore['kode_pos'] ?? '') ?>
+                                        <?php else: ?>
+                                            Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 2, Mangga Dua Sel., Kecamatan Sawah Besar, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10730
+                                        <?php endif; ?>
+                                    </p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
@@ -305,8 +394,12 @@ $breadcrumbs = [
                                 </div>
                                 <div>
                                     <h4 class="font-medium text-gray-900 text-sm">Telepon</h4>
-                                    <p class="text-gray-600 text-xs mt-0.5">(021) 623-09578</p>
-                                    <p class="text-gray-600 text-xs">0816-765-801(WhatsApp)</p>
+                                    <p class="text-gray-600 text-xs mt-0.5">
+                                        <?= !empty($globalSettings['contact_phone']) ? htmlspecialchars($globalSettings['contact_phone']) : '(021) 623-09578' ?> (Nomor Telepon Utama)
+                                    </p>
+                                    <?php if ($primaryStore && !empty($primaryStore['no_telepon'])): ?>
+                                        <p class="text-gray-600 text-xs"><?= htmlspecialchars($primaryStore['no_telepon']) ?> (Toko)</p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div class="flex items-start gap-3">
@@ -317,7 +410,7 @@ $breadcrumbs = [
                                 </div>
                                 <div id="lokasiMap">
                                     <h4 class="font-medium text-gray-900 text-sm">Email</h4>
-                                    <p class="text-gray-600 text-xs mt-0.5">cs@nanokomputer.com</p>
+                                    <p class="text-gray-600 text-xs mt-0.5"><?= !empty($globalSettings['contact_email']) ? htmlspecialchars(strtolower($globalSettings['contact_email'])) : 'cs@nanokomputer.com' ?> (Email Utama) </p>
                                     <p class="text-gray-600 text-xs">support@nanokomputer.com</p>
                                 </div>
                             </div>
@@ -329,8 +422,12 @@ $breadcrumbs = [
                                 </div>
                                 <div>
                                     <h4 class="font-medium text-gray-900 text-sm">Jam Operasional</h4>
-                                    <p class="text-gray-600 text-xs mt-0.5">Senin - Sabtu: 10:00 - 20:00</p>
-                                    <p class="text-gray-600 text-xs">Minggu: 10:00 - 18:00</p>
+                                    <?php if ($primaryStore && !empty($primaryStore['jam_buka']) && !empty($primaryStore['jam_tutup'])): ?>
+                                        <p class="text-gray-600 text-xs mt-0.5">Setiap Hari: <?= substr($primaryStore['jam_buka'], 0, 5) ?> - <?= substr($primaryStore['jam_tutup'], 0, 5) ?></p>
+                                    <?php else: ?>
+                                        <p class="text-gray-600 text-xs mt-0.5">Senin - Sabtu: 10:00 - 20:00</p>
+                                        <p class="text-gray-600 text-xs">Minggu: 10:00 - 18:00</p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

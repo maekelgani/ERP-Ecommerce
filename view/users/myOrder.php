@@ -133,8 +133,8 @@ try {
 
     $ordersSql = "
         SELECT o.*, 
-               p.id_payment, p.status_pembayaran, p.metode_pembayaran, p.expiry_time, p.total_bayar as payment_total,
-               s.id_shipment, s.jasa_pengiriman, s.no_resi, s.status_pengiriman, s.estimasi_hari
+                p.id_payment, p.status_pembayaran, p.metode_pembayaran, p.expiry_time, p.total_bayar as payment_total,
+                s.id_shipment, s.jasa_pengiriman, s.no_resi, s.status_pengiriman, s.estimasi_hari
         FROM orders o
         LEFT JOIN payment p ON o.id_order = p.id_order
         LEFT JOIN shipment s ON o.id_order = s.id_order
@@ -181,6 +181,10 @@ try {
 include '../../components/users/head.php';
 ?>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<script src="../../assets/js/common/toast.js"></script>
+
 <!-- Custom Styles for Modern UI with Solid Colors -->
 <style>
     :root {
@@ -188,6 +192,141 @@ include '../../components/users/head.php';
         --primary-light: #a82e31;
         --primary-dark: #6a1c1e;
         --primary-glow: rgba(136, 36, 38, 0.15);
+    }
+
+    #customToastContainer {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: none;
+    }
+
+    .custom-toast {
+        position: relative;
+        min-width: 320px;
+        max-width: 420px;
+        padding: 16px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transform: translateX(120%);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        pointer-events: auto;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .custom-toast.show {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .custom-toast.hiding {
+        transform: translateX(120%);
+        opacity: 0;
+        margin-top: -70px;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), margin-top 0.3s ease 0.2s;
+    }
+
+    .custom-toast.hiding .custom-toast-progress {
+        display: none;
+    }
+
+    .custom-toast.success {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
+    }
+
+    .custom-toast.warning {
+        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+        color: white;
+    }
+
+    .custom-toast.info {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        color: white;
+    }
+
+    .custom-toast-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .custom-toast-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .custom-toast-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+    }
+
+    .custom-toast-message {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        line-height: 1.4;
+    }
+
+    .custom-toast-close {
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transition: all 0.2s;
+        flex-shrink: 0;
+    }
+
+    .custom-toast-close:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: rotate(90deg);
+    }
+
+    .custom-toast-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        width: 100%;
+        transform-origin: left;
+        animation: toast-progress linear forwards;
+    }
+
+    @keyframes toast-progress {
+        from {
+            transform: scaleX(1);
+        }
+
+        to {
+            transform: scaleX(0);
+        }
     }
 
     .order-card {
@@ -1130,17 +1269,15 @@ include '../../components/users/head.php';
         let currentBuyAgainOrderId = null;
 
         function showToast(message, type = 'info') {
-            const existingToasts = document.querySelectorAll('.toast-notification');
-            existingToasts.forEach(t => t.remove());
-
-            const toast = document.createElement('div');
-            toast.className = `toast-notification fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white font-medium z-[60] transition-all transform ${type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'}`;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            if (typeof window.showCustomToast === 'function') {
+                const toastTitles = {
+                    'success': 'Berhasil',
+                    'error': 'Gagal',
+                    'warning': 'Peringatan',
+                    'info': 'Informasi'
+                };
+                window.showCustomToast(message, type, toastTitles[type] || 'Notifikasi');
+            }
         }
 
         function cancelOrder(orderId) {
@@ -1210,30 +1347,44 @@ include '../../components/users/head.php';
 
             const btn = document.getElementById('btnConfirmReceived');
             btn.disabled = true;
-            btn.innerHTML = '<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+            btn.innerHTML = `
+        <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 
+                5.291A7.962 7.962 0 014 12H0c0 
+                3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+        </svg>
+    `;
 
             try {
                 const response = await fetch('../../api/orders/confirm-received.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: JSON.stringify({
-                        order_id: currentReceivedOrderId
-                    })
+                    body: `order_id=${encodeURIComponent(currentReceivedOrderId)}`
                 });
-                const result = await response.json();
 
-                if (result.success) {
-                    showToast('Pesanan dikonfirmasi selesai', 'success');
-                    setTimeout(() => location.reload(), 1500);
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast(data.message || 'Pesanan berhasil dikonfirmasi', 'success');
+
+                    closeConfirmReceivedModal();
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
                 } else {
-                    showToast(result.message || 'Gagal mengkonfirmasi pesanan', 'error');
+                    showToast(data.message || 'Gagal mengkonfirmasi pesanan', 'error');
                     btn.disabled = false;
                     btn.innerHTML = '<span>Ya, Sudah Diterima</span>';
                 }
             } catch (error) {
-                showToast('Terjadi kesalahan. Silakan coba lagi.', 'error');
+                console.error(error);
+                showToast('Terjadi kesalahan sistem', 'error');
                 btn.disabled = false;
                 btn.innerHTML = '<span>Ya, Sudah Diterima</span>';
             }
@@ -1508,7 +1659,8 @@ include '../../components/users/head.php';
                     }
 
                     closeBuyAgainModal();
-                    setTimeout(() => window.location.href = 'cart.php', 1500);
+                    // Wait for toast progress bar to complete (4000ms) before redirecting
+                    setTimeout(() => window.location.href = 'cart.php', 2000);
                 } else {
                     showToast(result.message || 'Gagal menambahkan produk', 'error');
                     btn.disabled = false;

@@ -19,7 +19,36 @@ $title = ($pageTitle === "Home")
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?></title>
-    <link rel="icon" href="../../assets/img/logo-nano-transparant.png" type="image/x-icon">
+    <?php
+    if (!isset($globalSettings)) {
+        require_once __DIR__ . '/../../app/Database/DatabaseConnection.php';
+        require_once __DIR__ . '/../../app/Services/SiteSetting.php';
+        $db = \App\Database\DatabaseConnection::getInstance()->getConnection();
+        $settingService = new \App\Services\SiteSetting($db);
+        $globalSettings = $settingService->getAllSettings();
+    }
+
+    // Menggunakan path absolut untuk favicon agar bekerja di semua level direktori
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'];
+    $baseUrl = $protocol . '://' . $host;
+
+    // Cari posisi folder root proyek jika di subdirektori
+    $scriptName = $_SERVER['SCRIPT_NAME'];
+    $projectRoot = str_replace('/view/users/landingPage.php', '', $scriptName);
+    // Jika tidak di landingPage, coba deteksi pola umum
+    if ($projectRoot === $scriptName) {
+        $projectRoot = preg_replace('/\/view\/users\/.*$/', '', $scriptName);
+        if ($projectRoot === $scriptName) {
+            $projectRoot = preg_replace('/\/view\/admin\/.*$/', '', $scriptName);
+        }
+    }
+
+    $fullBaseUrl = $baseUrl . $projectRoot;
+    $faviconPath = !empty($globalSettings['site_favicon']) ? $globalSettings['site_favicon'] : 'assets/img/logo-nano-transparant.png';
+    $favicon = $fullBaseUrl . '/' . ltrim($faviconPath, '/');
+    ?>
+    <link rel="icon" href="<?= htmlspecialchars($favicon) ?>" type="image/x-icon">
     <link rel="stylesheet" href="../../src/output.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />

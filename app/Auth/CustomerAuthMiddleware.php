@@ -4,6 +4,7 @@ namespace App\Auth;
 
 use App\Auth\SessionManager;
 use App\Auth\CustomerRepository;
+use App\Database\DatabaseConnection; // ✅ INI WAJIB
 
 class CustomerAuthMiddleware
 {
@@ -95,9 +96,67 @@ class CustomerAuthMiddleware
         return SessionManager::isCustomerRememberMeActive();
     }
 
+    // public static function getCurrentCustomer(): ?array
+    // {
+    //     return SessionManager::getCurrentCustomer();
+    // }
+
     public static function getCurrentCustomer(): ?array
     {
-        return SessionManager::getCurrentCustomer();
+        if (!self::isLoggedIn()) {
+            return null;
+        }
+
+        $customerId = $_SESSION['customer_id'] ?? null;
+        if (!$customerId) {
+            return null;
+        }
+
+        $db = DatabaseConnection::getInstance()->getConnection();
+
+        $stmt = $db->prepare("
+        SELECT 
+            id_customer,
+            nama_lengkap,
+            email,
+            no_telp,
+            login_type,
+            google_name,
+            profile_image
+        FROM customers
+        WHERE id_customer = :id
+        LIMIT 1
+    ");
+        $stmt->execute([':id' => $customerId]);
+        $customer = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$customer) {
+            return null;
+        }
+
+        /**
+         * 🔥 SINKRON GOOGLE NAME → NAMA_LENGKAP (SEKALI SAJA)
+         */
+        if (
+            $customer['login_type'] === 'google' &&
+            empty($customer['nama_lengkap']) &&
+            !empty($customer['google_name'])
+        ) {
+            $update = $db->prepare("
+            UPDATE customers
+            SET nama_lengkap = :nama
+            WHERE id_customer = :id
+        ");
+            $update->execute([
+                ':nama' => $customer['google_name'],
+                ':id'   => $customer['id_customer']
+            ]);
+
+            // update array agar langsung dipakai di view
+            $customer['nama_lengkap'] = $customer['google_name'];
+        }
+
+        return $customer;
     }
 
     public static function getCustomerId(): ?int

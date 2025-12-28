@@ -18,6 +18,7 @@ $totalCustomers = $dashboardRepo->getTotalCustomers();
 $totalOrders = $dashboardRepo->getTotalOrders();
 $pendingReturns = $dashboardRepo->getPendingReturns();
 $revenueChart = $dashboardRepo->getRevenueChart(6);
+$expensesChart = $dashboardRepo->getExpensesChart(6);
 $ordersChart = $dashboardRepo->getOrdersChart(6);
 $recentOrders = $dashboardRepo->getRecentOrders(5);
 $orderStatus = $dashboardRepo->getOrderStatusDistribution();
@@ -28,6 +29,7 @@ $lowStock = $productRepo->getLowStockProducts(threshold: 9, limit: 5);
 
 $chartDataJson = json_encode([
     'revenue' => $revenueChart,
+    'expenses' => $expensesChart,
     'orders' => $ordersChart,
     'orderStatus' => $orderStatus,
     'paymentMethods' => $paymentMethods
@@ -333,8 +335,10 @@ $chartDataJson = json_encode([
         let mainChart;
         let currentChartType = 'revenue';
 
-        const primaryColor = '#882426';
-        const primaryColorLight = 'rgba(136, 36, 38, 0.1)';
+        const primaryColor = '#3b82f6';
+        const primaryColorLight = 'rgba(59, 130, 246, 0.1)';
+        const expenseColor = '#d946ef';
+        const expenseColorLight = 'rgba(217, 70, 239, 0.1)';
 
         document.addEventListener('DOMContentLoaded', function() {
             initMainChart();
@@ -345,31 +349,72 @@ $chartDataJson = json_encode([
 
         function initMainChart() {
             const ctx = document.getElementById('mainChart').getContext('2d');
+
+            const revenueData = chartData.revenue ? chartData.revenue.data : [];
+            const revenueLabels = chartData.revenue ? chartData.revenue.labels : [];
+            const expenseData = chartData.expenses ? chartData.expenses.data : [];
+
             mainChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: chartData.revenue.labels,
+                    labels: revenueLabels,
                     datasets: [{
-                        label: 'Pendapatan',
-                        data: chartData.revenue.data,
-                        borderColor: primaryColor,
-                        backgroundColor: primaryColorLight,
-                        borderWidth: 3,
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: primaryColor,
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
-                    }]
+                            // Dataset 0: Ini yang akan berubah jadi "Pendapatan" atau "Pesanan"
+                            label: 'Pendapatan',
+                            data: revenueData,
+                            borderColor: primaryColor, // Tetap Warna Biru
+                            backgroundColor: primaryColorLight,
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: primaryColor,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            order: 1
+                        },
+                        {
+                            // Dataset 1: Pengeluaran (Akan di-hide saat mode Pesanan)
+                            label: 'Pengeluaran',
+                            data: expenseData,
+                            borderColor: expenseColor, // Warna Pink
+                            backgroundColor: expenseColorLight,
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: expenseColor,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            order: 2
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
                     plugins: {
                         legend: {
-                            display: false
+                            display: true,
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                // Filter legend agar saat mode 'orders', label 'Pengeluaran' di legend juga hilang
+                                filter: function(item, chart) {
+                                    if (currentChartType === 'orders' && item.text === 'Pengeluaran') {
+                                        return false;
+                                    }
+                                    return true;
+                                }
+                            }
                         },
                         tooltip: {
                             backgroundColor: '#1f2937',
@@ -379,13 +424,24 @@ $chartDataJson = json_encode([
                             cornerRadius: 8,
                             callbacks: {
                                 label: function(context) {
-                                    if (currentChartType === 'revenue') {
-                                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(context.raw);
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
                                     }
-                                    return context.raw + ' pesanan';
+                                    if (context.parsed.y !== null) {
+                                        // LOGIC BARU: Cek Tipe Chart
+                                        if (currentChartType === 'revenue') {
+                                            // Format Rupiah
+                                            label += 'Rp ' + new Intl.NumberFormat('id-ID').format(context.parsed.y);
+                                        } else {
+                                            // Format Angka Biasa (Pesanan)
+                                            label += context.parsed.y + ' Trx';
+                                        }
+                                    }
+                                    return label;
                                 }
                             }
-                        }
+                        },
                     },
                     scales: {
                         x: {
@@ -404,12 +460,16 @@ $chartDataJson = json_encode([
                             ticks: {
                                 color: '#6b7280',
                                 callback: function(value) {
-                                    if (currentChartType === 'revenue') {
-                                        if (value >= 1000000) return 'Rp ' + (value / 1000000).toFixed(1) + 'jt';
-                                        if (value >= 1000) return 'Rp ' + (value / 1000).toFixed(0) + 'rb';
-                                        return 'Rp ' + value;
+                                    // LOGIC BARU: Cek Tipe Chart
+                                    if (currentChartType === 'orders') {
+                                        return value; // Kembalikan angka polos
                                     }
-                                    return value;
+
+                                    // Format Rupiah Singkat
+                                    if (value >= 1000000000) return 'Rp ' + (value / 1000000000).toFixed(1) + 'M';
+                                    if (value >= 1000000) return 'Rp ' + (value / 1000000).toFixed(1) + 'jt';
+                                    if (value >= 1000) return 'Rp ' + (value / 1000).toFixed(0) + 'rb';
+                                    return 'Rp ' + value;
                                 }
                             }
                         }
@@ -425,6 +485,15 @@ $chartDataJson = json_encode([
             mainChart.data.labels = data.labels;
             mainChart.data.datasets[0].data = data.data;
             mainChart.data.datasets[0].label = type === 'revenue' ? 'Pendapatan' : 'Pesanan';
+
+
+
+            if (type === 'orders') {
+                mainChart.data.datasets[1].hidden = true;
+            } else {
+                mainChart.data.datasets[1].hidden = false;
+            }
+
             mainChart.update();
 
             document.getElementById('btnRevenue').className = type === 'revenue' ?

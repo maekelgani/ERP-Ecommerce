@@ -1,6 +1,28 @@
 <?php
 $pageTitle = "Kebijakan Privasi";
 require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../app/Database/DatabaseConnection.php';
+require_once __DIR__ . '/../../app/Services/SiteSetting.php';
+
+use App\Database\DatabaseConnection;
+use App\Services\SiteSetting;
+
+if (!isset($settingService)) {
+    $db = DatabaseConnection::getInstance()->getConnection();
+    $settingService = new SiteSetting($db);
+}
+
+if (!isset($globalSettings)) {
+    $globalSettings = $settingService->getAllSettings();
+}
+
+function formatProvinsi(?string $text): string
+{
+    if (!$text) return '';
+    $text = mb_strtolower($text, 'UTF-8');
+    if ($text === 'dki jakarta') return 'DKI Jakarta';
+    return mb_convert_case($text, MB_CASE_TITLE, 'UTF-8');
+}
 
 $isLoggedIn = \App\Auth\CustomerAuthMiddleware::isLoggedIn();
 $customer = \App\Auth\CustomerAuthMiddleware::getCurrentCustomer();
@@ -838,7 +860,8 @@ $lastUpdated = "1 Desember 2025";
             <i data-lucide="check-circle" class="notice-icon" style="width: 1.5rem; height: 1.5rem;"></i>
             <div>
                 <h3>Komitmen Kami</h3>
-                <p>Nano Komputer berkomitmen untuk melindungi privasi Anda. Kebijakan ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi pribadi Anda sesuai dengan peraturan yang berlaku di Indonesia.</p>
+                <p><?= !empty($globalSettings['site_title']) ? htmlspecialchars(strtolower($globalSettings['site_title'])) : 'Nano Komputer' ?>
+                    berkomitmen untuk melindungi privasi Anda. Kebijakan ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi pribadi Anda sesuai dengan peraturan yang berlaku di Indonesia.</p>
             </div>
         </div>
 
@@ -1189,7 +1212,7 @@ $lastUpdated = "1 Desember 2025";
                                 </div>
                                 <div>
                                     <div class="contact-label">Email</div>
-                                    <div class="contact-value">cs@nanokomputer.com</div>
+                                    <div class="contact-value"><?= !empty($globalSettings['contact_email']) ? htmlspecialchars(strtolower($globalSettings['contact_email'])) : 'cs@nanokomputer.com' ?></div>
                                 </div>
                             </div>
                             <div class="contact-item">
@@ -1198,7 +1221,7 @@ $lastUpdated = "1 Desember 2025";
                                 </div>
                                 <div>
                                     <div class="contact-label">Telepon</div>
-                                    <div class="contact-value">(021) 623-09578</div>
+                                    <div class="contact-value"><?= !empty($globalSettings['contact_phone']) ? htmlspecialchars(strtolower($globalSettings['contact_phone'])) : '(021) 623-09578' ?></div>
                                 </div>
                             </div>
                             <div class="contact-item address">
@@ -1206,8 +1229,25 @@ $lastUpdated = "1 Desember 2025";
                                     <i data-lucide="map-pin" style="width: 1.25rem; height: 1.25rem;"></i>
                                 </div>
                                 <div>
+                                    <?php
+                                    require_once __DIR__ . '/../../app/Repository/StoreLocationRepository.php';
+                                    $storeRepo = new \App\Repository\StoreLocationRepository();
+                                    $activeStores = $storeRepo->getActiveStores();
+                                    $primaryStore = !empty($activeStores) ? $activeStores[0] : null;
+                                    ?>
                                     <div class="contact-label">Alamat</div>
-                                    <div class="contact-value">Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 2, Mangga Dua Sel., Kec. Sawah Besar, Jakarta Pusat, DKI Jakarta 10730</div>
+                                    <div class="contact-value">
+                                        <?php if ($primaryStore): ?>
+                                            <?= htmlspecialchars($primaryStore['alamat']) ?>,
+                                            <?= htmlspecialchars(formatProvinsi($primaryStore['kelurahan'] ?? '')) ?>,
+                                            <?= htmlspecialchars(formatProvinsi($primaryStore['kecamatan'] ?? '')) ?>,
+                                            <?= htmlspecialchars(formatProvinsi($primaryStore['kota_kabupaten'] ?? '')) ?>,
+                                            <?= htmlspecialchars(formatProvinsi($primaryStore['provinsi'] ?? '')) ?>
+                                            <?= htmlspecialchars($primaryStore['kode_pos'] ?? '') ?>
+                                        <?php else: ?>
+                                            Mangga Dua Mall, Jl. Mangga Dua Raya No.47A-B Lantai 2, Mangga Dua Sel., Kecamatan Sawah Besar, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta 10730
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>

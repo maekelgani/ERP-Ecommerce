@@ -1,6 +1,20 @@
 <?php
 $pageTitle = "Syarat & Ketentuan";
 require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../app/Database/DatabaseConnection.php';
+require_once __DIR__ . '/../../app/Services/SiteSetting.php';
+
+use App\Database\DatabaseConnection;
+use App\Services\SiteSetting;
+
+if (!isset($settingService)) {
+    $db = DatabaseConnection::getInstance()->getConnection();
+    $settingService = new SiteSetting($db);
+}
+
+if (!isset($globalSettings)) {
+    $globalSettings = $settingService->getAllSettings();
+}
 
 $isLoggedIn = \App\Auth\CustomerAuthMiddleware::isLoggedIn();
 $customer = \App\Auth\CustomerAuthMiddleware::getCurrentCustomer();
@@ -11,7 +25,11 @@ $breadcrumbs = [
     ['label' => 'Home', 'url' => 'landingPage.php'],
     ['label' => 'Syarat & Ketentuan', 'url' => null]
 ];
-
+function formatKapitalDepan(string $title): string
+{
+    $title = mb_convert_case($title, MB_CASE_TITLE, 'UTF-8');
+    return str_replace(['Pc', 'It'], ['PC', 'IT'], $title);
+}
 $lastUpdated = "1 Desember 2025";
 ?>
 
@@ -162,7 +180,13 @@ $lastUpdated = "1 Desember 2025";
                 </div>
                 <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">Syarat & Ketentuan</h1>
                 <p class="text-white/80 text-lg max-w-2xl mx-auto">
-                    Harap membaca syarat dan ketentuan ini dengan saksama sebelum melakukan transaksi di Nano Komputer.
+                    Harap membaca syarat dan ketentuan ini dengan saksama sebelum melakukan transaksi di
+                    <span class="text-white/70 font-medium">
+                        <?= !empty($globalSettings['site_title'])
+                            ? htmlspecialchars(mb_convert_case(formatKapitalDepan($globalSettings['site_title']), MB_CASE_TITLE, 'UTF-8'))
+                            : 'Nano Komputer'
+                        ?>
+                    </span>
                 </p>
 
                 <div class="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-white/70">
@@ -248,7 +272,13 @@ $lastUpdated = "1 Desember 2025";
                         </div>
                         <div class="p-6 md:p-8">
                             <div class="prose text-gray-600 leading-relaxed space-y-4">
-                                <p>Selamat datang di <strong class="text-[#882426]">Nano Komputer</strong>. Syarat & ketentuan berikut menjelaskan peraturan dan ketentuan penggunaan Website Nano Komputer.</p>
+                                <p>Selamat datang di <strong class="text-[#882426]">
+                                        <?= !empty($globalSettings['site_title'])
+                                            ? htmlspecialchars(mb_convert_case(formatKapitalDepan($globalSettings['site_title']), MB_CASE_TITLE, 'UTF-8'))
+                                            : 'Nano Komputer'
+                                        ?>
+                                    </strong>.
+                                    Syarat & ketentuan berikut menjelaskan peraturan dan ketentuan penggunaan Website <?= !empty($globalSettings['site_title']) ? htmlspecialchars(strtolower($globalSettings['site_title'])) : 'Nano Komputer' ?>.</p>
                                 <p>Dengan menggunakan layanan kami, Anda dianggap telah <strong>menyetujui seluruh ketentuan</strong> yang berlaku di halaman ini.</p>
                                 <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mt-4">
                                     <p class="text-sm text-blue-800 flex items-start gap-2">
@@ -472,7 +502,15 @@ $lastUpdated = "1 Desember 2025";
                         </div>
                         <div class="p-6 md:p-8">
                             <div class="prose text-gray-600 leading-relaxed space-y-4">
-                                <p><strong class="text-[#882426]">Nano Komputer</strong> menghargai privasi Anda. Informasi pribadi yang Anda berikan (Nama, Alamat, No. Telepon) hanya digunakan untuk keperluan pemrosesan pesanan dan pengiriman.</p>
+                                <p>
+                                    <strong class="text-[#882426] capitalize">
+                                        <?= !empty($globalSettings['site_title'])
+                                            ? htmlspecialchars(mb_convert_case(formatKapitalDepan($globalSettings['site_title']), MB_CASE_TITLE, 'UTF-8'))
+                                            : 'Nano Komputer'
+                                        ?>
+                                    </strong>
+                                    menghargai privasi Anda. Informasi pribadi yang Anda berikan (Nama, Alamat, No. Telepon) hanya digunakan untuk keperluan pemrosesan pesanan dan pengiriman.
+                                </p>
                                 <p>Kami <strong>tidak akan</strong> menjual, menyewakan, atau membagikan informasi pribadi Anda kepada pihak ketiga manapun tanpa persetujuan Anda, kecuali jika diwajibkan oleh hukum atau untuk keperluan logistik (Ekspedisi).</p>
 
                                 <div class="bg-purple-50 border border-purple-100 rounded-xl p-5 mt-6">

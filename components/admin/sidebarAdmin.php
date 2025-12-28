@@ -25,8 +25,22 @@
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
+require_once __DIR__ . '/../../app/Database/DatabaseConnection.php';
+require_once __DIR__ . '/../../app/Services/SiteSetting.php';
+
 use App\Auth\PermissionHelper;
 use App\Auth\SessionManager;
+use App\Database\DatabaseConnection;
+use App\Services\SiteSetting;
+
+if (!isset($settingService)) {
+    $db = DatabaseConnection::getInstance()->getConnection();
+    $settingService = new SiteSetting($db);
+}
+
+if (!isset($globalSettings)) {
+    $globalSettings = $settingService->getAllSettings();
+}
 
 $currentAdmin = SessionManager::getCurrentAdmin();
 $isSuperAdmin = PermissionHelper::isSuperAdmin();
@@ -604,8 +618,10 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
     <!-- Logo Section -->
     <div class="logo-section flex items-center justify-between p-5 border-b border-[#a83236]">
         <div class="logo-container flex items-center gap-3 overflow-hidden w-full">
-            <img class="h-8 w-8 rounded-lg flex-shrink-0 bg-white" src="../../assets/img/logo-nano.png" alt="Logo Nano Komputer">
-            <span class="logo-text font-bold text-md text-white whitespace-nowrap">NANO KOMPUTER</span>
+            <img class="h-8 w-8 rounded-lg flex-shrink-0 bg-white" src="<?= !empty($globalSettings['site_logo']) ? '../../' . htmlspecialchars($globalSettings['site_logo']) : '../../assets/img/mainicon.png' ?>" alt="<?= !empty($globalSettings['site_title']) ? htmlspecialchars($globalSettings['site_title']) : 'Logo Nano Komputer' ?> Logo">
+            <?php if (!empty($globalSettings['site_title'])): ?>
+                <span class="logo-text font-bold text-md text-white whitespace-nowrap uppercase"><?= htmlspecialchars($globalSettings['site_title']) ?></span>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -850,10 +866,12 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         <div class="sidebar-footer-content">
             <div class="sidebar-footer-brand">
                 <div class="footer-icon-wrapper">
-                    <img class="h-8 w-8 rounded-lg flex-shrink-0 object-contain" src="../../assets/img/logo-nano.png" alt="Logo Nano Komputer">
+                    <img class="h-8 w-8 rounded-lg flex-shrink-0 object-contain" src="<?= !empty($globalSettings['site_logo']) ? '../../' . htmlspecialchars($globalSettings['site_logo']) : '../../assets/img/mainicon.png' ?>" alt="<?= !empty($globalSettings['site_title']) ? htmlspecialchars($globalSettings['site_title']) : 'Logo Nano Komputer' ?> Logo">
                 </div>
                 <div class="sidebar-footer-brand-text menu-text">
-                    <span class="sidebar-footer-brand-name">Nano Komputer</span>
+                    <span class="sidebar-footer-brand-name capitalize">
+                        <?= !empty($globalSettings['site_title']) ? htmlspecialchars(strtolower($globalSettings['site_title'])) : 'Nano Komputer' ?>
+                    </span>
                     <span class="sidebar-footer-brand-tagline">Panel Admin</span>
                 </div>
             </div>
@@ -869,7 +887,7 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                 </div>
             </div>
         </div>
-        <div class="sidebar-footer-copyright">© 2024 Nano Komputer. Hak cipta dilindungi.</div>
+        <div class="sidebar-footer-copyright">© 2024 <span class="capitalize"><?= !empty($globalSettings['site_title']) ? htmlspecialchars(strtolower($globalSettings['site_title'])) : 'Nano Komputer' ?></span>. Hak cipta dilindungi.</div>
     </div>
 </aside>
 
@@ -886,7 +904,9 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
     <div class="flex items-center justify-between p-5 py-4 border-b border-[#a83236]">
         <div class="flex items-center gap-3">
             <img class="h-8 w-8 rounded-lg bg-white" src="../../assets/img/logo-nano.png" alt="Logo Nano Komputer">
-            <span class="font-bold text-sm">NANO KOMPUTER</span>
+            <span class="font-bold text-sm uppercase">
+                <?= !empty($globalSettings['site_title']) ? htmlspecialchars(strtolower($globalSettings['site_title'])) : 'Nano Komputer' ?>
+            </span>
         </div>
         <button id="closeDrawerBtn" type="button" class="h-8 w-8 flex items-center justify-center text-white/90 hover:bg-white/10 rounded-md transition-colors" aria-label="Tutup menu">
             <span class="material-symbols-outlined text-[24px]">close</span>
@@ -1124,10 +1144,12 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
         <div class="sidebar-footer-content">
             <div class="sidebar-footer-brand">
                 <div class="footer-icon-wrapper">
-                    <span class="material-symbols-outlined">storefront</span>
+                    <img class="h-8 w-8 rounded-lg flex-shrink-0 object-contain" src="<?= !empty($globalSettings['site_logo']) ? '../../' . htmlspecialchars($globalSettings['site_logo']) : '../../assets/img/mainicon.png' ?>" alt="<?= !empty($globalSettings['site_title']) ? htmlspecialchars($globalSettings['site_title']) : 'Logo Nano Komputer' ?> Logo">
                 </div>
                 <div class="sidebar-footer-brand-text menu-text">
-                    <span class="sidebar-footer-brand-name">Nano Komputer</span>
+                    <span class="sidebar-footer-brand-name capitalize">
+                        <?= !empty($globalSettings['site_title']) ? htmlspecialchars(strtolower($globalSettings['site_title'])) : 'Nano Komputer' ?>
+                    </span>
                     <span class="sidebar-footer-brand-tagline">Panel Admin</span>
                 </div>
             </div>
@@ -1143,7 +1165,7 @@ $showCrmMenu = $canManageCrm || $canViewCrmDashboard || $canViewCustomers || $ca
                 </div>
             </div>
         </div>
-        <div class="sidebar-footer-copyright">© 2024 Nano Komputer. Hak cipta dilindungi.</div>
+        <div class="sidebar-footer-copyright">© 2025 <span class="capitalize"><?= !empty($globalSettings['site_title']) ? htmlspecialchars(strtolower($globalSettings['site_title'])) : 'Nano Komputer' ?></span>. Hak cipta dilindungi.</div>
     </div>
 </aside>
 

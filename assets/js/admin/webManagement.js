@@ -227,10 +227,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                         </div>
                         <div class="flex gap-1">
-                            <button onclick="editStore('${store.id_toko}')" class="p-1.5 hover:bg-gray-200 rounded-lg transition-colors" title="Edit">
-                                <span class="material-symbols-outlined text-gray-600 text-lg">edit</span>
+                            <button onclick="editStore('${store.id_toko}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors" title="Edit">
+                                <span class="material-symbols-outlined text-blue-600 text-lg">edit</span>
                             </button>
-                            <button onclick="deleteStore('${store.id_toko}')" class="p-1.5 hover:bg-red-100 rounded-lg transition-colors" title="Hapus">
+                            <button onclick="deleteStore('${store.id_toko}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-red-600 bg-red-50 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors" title="Hapus">
                                 <span class="material-symbols-outlined text-red-600 text-lg">delete</span>
                             </button>
                         </div>
@@ -520,10 +520,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td class="px-4 py-3 text-gray-500">${formatDate(ticket.created_at)}</td>
                     <td class="px-4 py-3 text-center">
                         <div class="flex items-center justify-center gap-1">
-                            <button onclick="viewTicket('${ticket.id_ticket}')" class="p-1.5 hover:bg-gray-200 rounded-lg transition-colors" title="Lihat Detail">
-                                <span class="material-symbols-outlined text-gray-600 text-lg">visibility</span>
+                            <button onclick="viewTicket('${ticket.id_ticket}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-purple-600 bg-purple-50 rounded-lg text-sm font-medium hover:bg-purple-100 transition-colors" title="Lihat Detail">
+                                <span class="material-symbols-outlined text-purple-600 text-lg">visibility</span>
                             </button>
-                            <button onclick="deleteTicket('${ticket.id_ticket}')" class="p-1.5 hover:bg-red-100 rounded-lg transition-colors" title="Hapus">
+                            <button onclick="deleteTicket('${ticket.id_ticket}')" class="inline-flex items-center gap-1.5 px-3 py-2 text-red-600 bg-red-50 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors" title="Hapus">
                                 <span class="material-symbols-outlined text-red-600 text-lg">delete</span>
                             </button>
                         </div>

@@ -1,6 +1,19 @@
 <?php
+require_once __DIR__ . '/../../app/Database/DatabaseConnection.php';
+require_once __DIR__ . '/../../app/Services/SiteSetting.php';
 
 use App\Auth\SessionManager;
+use App\Database\DatabaseConnection;
+use App\Services\SiteSetting;
+
+if (!isset($settingService)) {
+    $db = DatabaseConnection::getInstance()->getConnection();
+    $settingService = new SiteSetting($db);
+}
+
+if (!isset($globalSettings)) {
+    $globalSettings = $settingService->getAllSettings();
+}
 
 $isLoggedIn = SessionManager::isCustomerLoggedIn();
 $currentCustomer = SessionManager::getCurrentCustomer();
@@ -162,10 +175,13 @@ if (!function_exists('formatTimeAgo')) {
                     <a href="../../view/users/landingPage.php" class="flex items-center gap-3 group">
                         <div class="relative">
                             <div class="absolute inset-0 bg-[#882426]/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <img src="../../assets/img/logo-nano.png" alt="Nano Komputer" class="relative h-10 w-10 lg:h-11 lg:w-11 object-contain transform group-hover:scale-105 transition-transform duration-300" />
+                            <img alt="<?= !empty($globalSettings['site_title']) ? htmlspecialchars($globalSettings['site_title']) : 'Nano Komputer' ?> Logo"
+                                src="<?= !empty($globalSettings['site_logo']) ? '../../' . htmlspecialchars($globalSettings['site_logo']) : '../../assets/img/mainicon.png' ?>" class="relative h-10 w-10 lg:h-11 lg:w-11 object-contain transform group-hover:scale-105 transition-transform duration-300" />
                         </div>
                         <div class="hidden sm:flex flex-col">
-                            <span class="font-bold text-gray-900 text-base lg:text-lg group-hover:text-[#882426] transition-colors duration-200">Nano Komputer</span>
+                            <span class="font-bold text-gray-900 text-base lg:text-lg group-hover:text-[#882426] transition-colors duration-200 capitalize">
+                                <?= !empty($globalSettings['site_title']) ? htmlspecialchars(strtolower($globalSettings['site_title'])) : 'Nano Komputer' ?>
+                            </span>
                             <span class="text-[10px] text-gray-500 font-medium tracking-wider uppercase">Computer Store</span>
                         </div>
                     </a>

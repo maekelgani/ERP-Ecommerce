@@ -132,6 +132,35 @@ class DashboardRepository
 
         return ['labels' => $labels, 'data' => $data];
     }
+    public function getExpensesChart(int $months = 6): array
+    {
+        $labels = [];
+        $data = [];
+        $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $date = strtotime("-{$i} months");
+            $monthStart = date('Y-m-01', $date);
+            $monthEnd = date('Y-m-t 23:59:59', $date);
+
+            $labels[] = $monthNames[date('n', $date) - 1] . ' ' . date('Y', $date);
+
+            $sql = "SELECT COALESCE(SUM(jumlah), 0) as total
+                    FROM pengeluaran 
+                    WHERE tgl_pengeluaran >= :start_date 
+                    AND tgl_pengeluaran <= :end_date";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                'start_date' => $monthStart,
+                'end_date' => $monthEnd
+            ]);
+
+            $data[] = (float) $stmt->fetchColumn();
+        }
+
+        return ['labels' => $labels, 'data' => $data];
+    }
 
     public function getOrdersChart(int $months = 6): array
     {

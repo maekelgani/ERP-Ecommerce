@@ -31,10 +31,10 @@ if ($customerId) {
         // Fetch cart items with product info (tanpa discount JOIN)
         $stmt = $db->prepare("
             SELECT c.id_cart, c.jumlah as quantity, c.harga_satuan, 
-                   c.tanggal_ditambahkan as created_at, c.tgl_diubah as updated_at,
-                   p.id_product, p.nama_product, p.harga, p.stok, p.status_produk, 
-                   p.gambar, p.deskripsi_speksifikasi,
-                   k.nama_kategori, b.nama_brand
+                    c.tanggal_ditambahkan as created_at, c.tgl_diubah as updated_at,
+                    p.id_product, p.nama_product, p.harga, p.stok, p.status_produk, 
+                    p.gambar, p.deskripsi_speksifikasi,
+                    k.nama_kategori, b.nama_brand
             FROM cart c
             JOIN products p ON c.id_product = p.id_product
             LEFT JOIN kategori k ON p.id_kategori = k.id_kategori

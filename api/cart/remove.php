@@ -33,22 +33,29 @@ try {
     if ($stmt->rowCount() === 0) {
         throw new Exception('Item keranjang tidak ditemukan');
     }
-
     $stmtTotals = $db->prepare("
-        SELECT 
-            COALESCE(SUM(COALESCE(d.harga_setelah_diskon, p.harga) * c.jumlah), 0) as subtotal,
-            COALESCE(SUM(c.jumlah), 0) as total_items,
-            COUNT(*) as cart_count
-        FROM cart c
-        JOIN products p ON c.id_product = p.id_product
-        LEFT JOIN diskon d ON p.id_product = d.id_product 
-            AND d.status = 'aktif' 
-            AND NOW() BETWEEN d.tanggal_mulai AND d.tanggal_berakhir
-        WHERE c.id_customer = :customer_id
-            AND p.stok > 0 
-            AND p.status_produk NOT IN ('habis', 'nonaktif')
+    SELECT 
+        COALESCE(SUM(
+            COALESCE(pd.harga_diskon, p.harga) * c.jumlah
+        ), 0) AS subtotal,
+        COALESCE(SUM(c.jumlah), 0) AS total_items,
+        COUNT(*) AS cart_count
+    FROM cart c
+    JOIN products p 
+        ON c.id_product = p.id_product
+    LEFT JOIN promo_diskon pd 
+        ON pd.id_produk = p.id_product
+        AND pd.status = 'aktif'
+        AND NOW() BETWEEN pd.mulai_pada AND pd.selesai_pada
+    WHERE c.id_customer = :customer_id
+        AND p.stok > 0
+        AND p.status_produk NOT IN ('habis', 'nonaktif')
     ");
-    $stmtTotals->execute([':customer_id' => $customerId]);
+
+    $stmtTotals->execute([
+        ':customer_id' => $customerId
+    ]);
+
     $totals = $stmtTotals->fetch(PDO::FETCH_ASSOC);
 
     $subtotal = (float)($totals['subtotal'] ?? 0);

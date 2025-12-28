@@ -64,6 +64,17 @@
         const timeoutId = setTimeout(() => removeToast(toast), duration);
         toast.dataset.timeoutId = timeoutId;
 
+        // Auto-remove progress bar elements if toast is already hiding
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class' && toast.classList.contains('hiding')) {
+                    const progress = toast.querySelector('.custom-toast-progress');
+                    if (progress) progress.style.display = 'none';
+                }
+            });
+        });
+        observer.observe(toast, { attributes: true });
+
         function removeToast(toastElement) {
             if (toastElement.classList.contains('hiding')) return;
 

@@ -11,7 +11,31 @@ if (!isset($pageTitle)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($pageTitle) ? $pageTitle . ' - ' : '' ?>Nano Komputer Admin</title>
-    <link rel="icon" href="../../assets/img/logo-nano-transparant.png" type="image/x-icon">
+    <?php
+    require_once __DIR__ . '/../../app/Database/DatabaseConnection.php';
+    require_once __DIR__ . '/../../app/Services/SiteSetting.php';
+    if (!isset($globalSettings)) {
+        $db = \App\Database\DatabaseConnection::getInstance()->getConnection();
+        $settingService = new \App\Services\SiteSetting($db);
+        $globalSettings = $settingService->getAllSettings();
+    }
+
+    // Menggunakan path absolut untuk favicon agar bekerja di semua level direktori
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'];
+    $baseUrl = $protocol . '://' . $host;
+
+    $scriptName = $_SERVER['SCRIPT_NAME'];
+    $projectRoot = preg_replace('/\/view\/admin\/.*$/', '', $scriptName);
+    if ($projectRoot === $scriptName) {
+        $projectRoot = preg_replace('/\/view\/users\/.*$/', '', $scriptName);
+    }
+
+    $fullBaseUrl = $baseUrl . $projectRoot;
+    $faviconPath = !empty($globalSettings['site_favicon']) ? $globalSettings['site_favicon'] : 'assets/img/logo-nano-transparant.png';
+    $favicon = $fullBaseUrl . '/' . ltrim($faviconPath, '/');
+    ?>
+    <link rel="icon" href="<?= htmlspecialchars($favicon) ?>" type="image/x-icon">
     <link rel="stylesheet" href="../../src/output.css">
     <!-- Material Symbols -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
@@ -21,16 +45,6 @@ if (!isset($pageTitle)) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Custom Sidebar JS -->
     <script src="../../assets/js/admin/sidebar.js" defer></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- jsPDF for PDF Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-    <!-- Lucide Icons -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 
     <style>
         body {

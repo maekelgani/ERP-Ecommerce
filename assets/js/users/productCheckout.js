@@ -668,6 +668,20 @@ document.addEventListener('DOMContentLoaded', function() {
             kode_pos: formData.get('kode_pos'),
             default_alamat: formData.get('default_alamat') ? 1 : 0
         };
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnContent = submitBtn ? submitBtn.innerHTML : '';
+        
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                <span>Menyimpan...</span>
+            `;
+        }
         
         try {
             const response = await fetch('../../api/customer/address-book.php?action=add', {
@@ -681,14 +695,123 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
             
             if (result.success) {
-                showToast('Alamat berhasil ditambahkan', 'success');
-                setTimeout(() => location.reload(), 1000);
+                if (window.Toast) {
+                    Toast.success('Alamat berhasil disimpan');
+                } else {
+                    showToast('Alamat berhasil ditambahkan', 'success');
+                }
+                
+                // Tutup modal
+                document.getElementById('addAddressModal')?.classList.add('hidden');
+                document.body.style.overflow = '';
+                
+                // Tambahkan alamat baru ke list secara dinamis
+                const addressList = document.getElementById('addressList');
+                const noAddressDiv = document.querySelector('.text-center.py-12');
+                
+                const newAddress = result.address || {
+                    id_alamat: result.id || Date.now(),
+                    ...data
+                };
+
+                const isDefault = data.default_alamat == 1;
+                const addressCardHtml = `
+                    <label class="address-card block relative cursor-pointer ${isDefault ? 'selected' : ''}">
+                        <input type="radio" name="selected_address" value="${newAddress.id_alamat}"
+                            class="sr-only address-radio" ${isDefault ? 'checked' : ''}
+                            data-address='${JSON.stringify(newAddress)}'>
+                        <div class="border-2 rounded-xl p-4 transition-all duration-200 hover:border-[#882426]/50 ${isDefault ? 'border-[#882426] bg-[#882426]/5' : 'border-gray-200'}">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start gap-3">
+                                    <div class="address-check w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 transition-all duration-200 ${isDefault ? 'border-[#882426] bg-[#882426]' : 'border-gray-300'}">
+                                        <svg class="w-4 h-4 text-white ${isDefault ? '' : 'hidden'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="font-bold text-gray-900">${newAddress.label_alamat || 'Alamat'}</span>
+                                            ${isDefault ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-[#882426] text-white">UTAMA</span>' : ''}
+                                        </div>
+                                        <p class="text-sm text-gray-900 font-medium">${newAddress.nama_penerima}</p>
+                                        <p class="text-sm text-gray-500">${newAddress.nomor_hp}</p>
+                                        <p class="text-sm text-gray-600 mt-2 line-clamp-2">${newAddress.alamat_lengkap}</p>
+                                        <p class="text-sm text-gray-500 mt-1">
+                                            ${newAddress.kelurahan}, ${newAddress.kecamatan}, ${newAddress.kota}, ${newAddress.provinsi} ${newAddress.kode_pos}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                `;
+
+                if (noAddressDiv) {
+                    const container = noAddressDiv.parentElement;
+                    container.innerHTML = `
+                        <div class="space-y-4" id="addressList">
+                            ${addressCardHtml}
+                        </div>
+                        <button type="button" id="btnAddNewAddress" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 hover:border-[#882426] hover:text-[#882426] transition-all duration-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Tambah Alamat Baru
+                        </button>
+                    `;
+                    initStep1(); // Re-initialize listeners
+                } else if (addressList) {
+                    if (isDefault) {
+                        // Unselect others if new one is default
+                        document.querySelectorAll('.address-card').forEach(c => {
+                            c.classList.remove('selected');
+                            const innerDiv = c.querySelector('div');
+                            innerDiv.classList.remove('border-[#882426]', 'bg-[#882426]/5');
+                            innerDiv.classList.add('border-gray-200');
+                            const check = c.querySelector('.address-check');
+                            check.classList.remove('border-[#882426]', 'bg-[#882426]');
+                            check.classList.add('border-gray-300');
+                            check.querySelector('svg').classList.add('hidden');
+                        });
+                    }
+                    addressList.insertAdjacentHTML('afterbegin', addressCardHtml);
+                    initStep1(); // Re-initialize listeners
+                }
+
+                // Auto select the new address
+                const newCard = document.querySelector(`.address-card input[value="${newAddress.id_alamat}"]`)?.closest('.address-card');
+                if (newCard) {
+                    newCard.click();
+                }
+
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnContent;
+                }
+                form.reset();
+                $('.select2-wilayah').val(null).trigger('change');
             } else {
-                showToast(result.message || 'Gagal menambahkan alamat', 'error');
+                if (window.Toast) {
+                    Toast.error(result.message || 'Gagal menambahkan alamat');
+                } else {
+                    showToast(result.message || 'Gagal menambahkan alamat', 'error');
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnContent;
+                }
             }
         } catch (error) {
             console.error('Error:', error);
-            showToast('Terjadi kesalahan', 'error');
+            if (window.Toast) {
+                Toast.error('Terjadi kesalahan jaringan saat menyimpan alamat');
+            } else {
+                showToast('Terjadi kesalahan', 'error');
+            }
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnContent;
+            }
         } finally {
             spinner?.classList.add('hidden');
         }
@@ -1235,24 +1358,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function showToast(message, type = 'info') {
-        const toast = document.createElement('div');
-        toast.className = `fixed top-24 right-4 z-50 px-6 py-4 rounded-xl shadow-lg text-white font-medium transition-all duration-300 transform translate-x-full ${
-            type === 'success' ? 'bg-green-500' : 
-            type === 'error' ? 'bg-red-500' : 
-            'bg-blue-500'
-        }`;
-        toast.textContent = message;
-        
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.classList.remove('translate-x-full');
-        }, 100);
-        
-        setTimeout(() => {
-            toast.classList.add('translate-x-full');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
+        if (typeof window.showCustomToast === 'function') {
+            const toastTitles = {
+                'success': 'Berhasil',
+                'error': 'Gagal',
+                'warning': 'Peringatan',
+                'info': 'Informasi'
+            };
+            window.showCustomToast(message, type, toastTitles[type] || 'Notifikasi');
+        }
     }
     
     function launchConfetti() {

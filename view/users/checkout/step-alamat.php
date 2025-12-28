@@ -111,15 +111,15 @@
 <div id="addAddressModal" class="address-modal-overlay hidden">
     <div class="address-modal-content">
         <div class="address-modal-header">
-            <div class="address-modal-header-icon">
-                <span class="material-symbols-outlined">location_on</span>
+            <div class="address-modal-header-icon bg-[#882426]/10">
+                <span class="material-symbols-outlined text-[#882426]">location_on</span>
             </div>
             <div>
-                <h3 class="address-modal-title text-gray-600">Tambah Alamat Baru</h3>
-                <p class="address-modal-subtitle text-gray-600">Lengkapi informasi alamat pengiriman Anda</p>
+                <h3 class="address-modal-title text-gray-900 font-bold">Tambah Alamat Baru</h3>
+                <p class="address-modal-subtitle text-gray-500">Lengkapi informasi alamat pengiriman Anda</p>
             </div>
-            <button type="button" class="close-modal address-modal-close">
-                <span class="material-symbols-outlined">close</span>
+            <button type="button" class="close-modal address-modal-close hover:bg-gray-100 transition-colors">
+                <span class="material-symbols-outlined text-gray-400">close</span>
             </button>
         </div>
         <form id="addAddressForm" class="address-modal-form">
