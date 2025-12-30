@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 28, 2025 at 08:46 PM
+-- Generation Time: Dec 30, 2025 at 12:13 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -84,7 +84,7 @@ CREATE TABLE `administrators` (
 --
 
 INSERT INTO `administrators` (`id_admin`, `id_role`, `nama_lengkap`, `email`, `password_hash`, `photo`, `remember_token`, `remember_expires`, `is_active`, `last_login`, `created_at`, `updated_at`, `username`, `phone`, `password_updated_at`) VALUES
-(1, 1, 'Fajar Nano Komputer', 'fajarnanokomp@gmail.com', '$2y$10$astJh04o3V9LU2jtOsDKhuDoKu.JptPrj8KPZkRnCdnKY5.pgR6r6', NULL, NULL, NULL, 1, '2025-12-29 03:38:44', '2025-11-25 08:38:19', '2025-12-29 03:38:44', 'nanocomp', '081234567890', '2025-12-01 01:42:22'),
+(1, 1, 'Fajar Nano Komputer', 'fajarnanokomp@gmail.com', '$2y$10$astJh04o3V9LU2jtOsDKhuDoKu.JptPrj8KPZkRnCdnKY5.pgR6r6', NULL, NULL, NULL, 1, '2025-12-29 04:46:37', '2025-11-25 08:38:19', '2025-12-29 04:46:37', 'nanocomp', '081234567890', '2025-12-01 01:42:22'),
 (2, 2, 'Faizal Ardi', 'faizalardi@gmail.com', '$2y$10$g55WWArkauw.WR2wyA5.rOdS3KS/HGCxN3CbYzM6onKijcgcH19jC', NULL, NULL, NULL, 1, '2025-11-30 18:54:35', '2025-11-25 08:38:19', '2025-11-30 18:54:35', NULL, NULL, NULL),
 (3, 2, 'Maekel Gani', 'maekelgani@gmail.com', '$2y$10$CF0hB8G7NMEemnjWpFeQpuhGzOaW4fzuZNvj5Moqwd5r2id6Wzve2', NULL, NULL, NULL, 1, '2025-11-25 16:51:00', '2025-11-25 08:38:19', '2025-11-29 12:11:41', NULL, NULL, NULL),
 (4, 2, 'Isfahan Kaefal', 'isfahankaefal@gmail.com', '$2y$10$MxnS65hsh9C8iTxSZhLYWuSqyERCIukMTqHIczUq.EBj4x1bEW4Pu', NULL, NULL, NULL, 1, '2025-11-25 16:59:25', '2025-11-25 08:38:19', '2025-11-30 18:16:02', NULL, '', NULL);
@@ -207,9 +207,10 @@ CREATE TABLE `blog_posts` (
 
 INSERT INTO `blog_posts` (`id_post`, `id_admin`, `id_category`, `judul`, `slug`, `excerpt`, `konten`, `thumbnail`, `status`, `views`, `published_at`, `created_at`, `updated_at`) VALUES
 (4, 1, 1, 'Perbedaan GPU RTX dan GTX untuk Gaming', 'perbedaan-gpu-rtx-dan-gtx-untuk-gaming', 'Mengenal Perbedaan GPU RTX dan GTX untuk Kebutuhan Gaming Modern: Dalam dunia gaming modern, GPU (Graphics Processing Unit) menjadi komponen kunci yang sangat menentukan kualitas visual dan performa permainan. NVIDIA sebagai salah satu produsen GPU terbesar di dunia memiliki dua lini populer yang sering dibandingkan oleh gamer, yaitu GTX dan RTX. Artikel ini akan membahas secara lengkap perbedaan GPU RTX dan GTX, serta membantu Anda menentukan pilihan terbaik sesuai kebutuhan gaming saat ini.', 'Apa Itu GPU NVIDIA GTX?\n\nSeri NVIDIA GeForce GTX merupakan lini GPU yang telah hadir lebih dulu sebelum RTX. GPU GTX berfokus pada rasterization tradisional, yaitu teknik rendering grafis konvensional yang digunakan oleh sebagian besar game sebelum era ray tracing.', 'blog_137d5c46139947c3_1765871172.jpg', 'publish', 5, '2025-12-16 07:46:15', '2025-12-16 14:46:15', '2025-12-19 10:03:41'),
-(5, 1, 2, 'Cara Merakit PC Gaming untuk Pemula 2025', 'cara-merakit-pc-gaming-untuk-pemula-2025', 'Merakit PC gaming sendiri di tahun 2025 menjadi pilihan populer bagi banyak gamer, terutama pemula yang ingin mendapatkan performa maksimal sesuai budget. Selain lebih hemat, merakit PC juga memberi fleksibilitas dalam memilih komponen dan memudahkan upgrade di masa depan. Artikel ini akan membahas panduan lengkap dan mudah dipahami tentang cara merakit PC gaming untuk pemula di tahun 2025.', 'Mengapa Merakit PC Gaming Sendiri?\n\nSebelum masuk ke tahap perakitan, penting untuk mengetahui keuntungannya:\n- Lebih hemat biaya dibanding PC rakitan pabrikan\n-  Bebas memilih spesifikasi sesuai kebutuhan\n- Mudah di-upgrade ke depannya\n- Menambah pengetahuan hardware komputer', 'blog_6e94a3fcd73a81db_1765871514.jpg', 'publish', 13, '2025-12-16 07:52:22', '2025-12-16 14:52:22', '2025-12-19 10:04:00'),
+(5, 1, 2, 'Cara Merakit PC Gaming untuk Pemula 2025', 'cara-merakit-pc-gaming-untuk-pemula-2025', 'Merakit PC gaming sendiri di tahun 2025 menjadi pilihan populer bagi banyak gamer, terutama pemula yang ingin mendapatkan performa maksimal sesuai budget. Selain lebih hemat, merakit PC juga memberi fleksibilitas dalam memilih komponen dan memudahkan upgrade di masa depan. Artikel ini akan membahas panduan lengkap dan mudah dipahami tentang cara merakit PC gaming untuk pemula di tahun 2025.', 'Mengapa Merakit PC Gaming Sendiri?\n\nSebelum masuk ke tahap perakitan, penting untuk mengetahui keuntungannya:\n- Lebih hemat biaya dibanding PC rakitan pabrikan\n-  Bebas memilih spesifikasi sesuai kebutuhan\n- Mudah di-upgrade ke depannya\n- Menambah pengetahuan hardware komputer', 'blog_6e94a3fcd73a81db_1765871514.jpg', 'publish', 25, '2025-12-16 07:52:22', '2025-12-16 14:52:22', '2025-12-29 03:47:08'),
 (6, 1, 3, 'NVIDIA GeForce RTX 50 Series Resmi Diumumkan', 'nvidia-geforce-rtx-50-series-resmi-diumumkan', 'NVIDIA kembali menggebrak dunia teknologi dengan resmi mengumumkan NVIDIA GeForce RTX 50 Series, generasi terbaru GPU yang dirancang untuk menghadirkan lompatan besar dalam performa gaming, grafis realistis, dan pemrosesan berbasis AI. Kehadiran seri RTX 50 menjadi tonggak penting bagi gamer, content creator, dan profesional yang membutuhkan performa grafis kelas atas di era modern.', 'Sekilas Tentang NVIDIA GeForce RTX 50 Series: GeForce RTX 50 Series merupakan penerus langsung dari RTX 40 Series dan dibangun untuk menjawab kebutuhan game generasi terbaru, resolusi tinggi, serta teknologi AI yang semakin kompleks. NVIDIA memposisikan seri ini sebagai GPU next-generation yang tidak hanya fokus pada gaming, tetapi juga produktivitas dan komputasi AI.', 'blog_130010319e1b73cc_1765909043.jpg', 'publish', 8, '2025-12-17 01:15:57', '2025-12-17 01:15:57', '2025-12-22 16:49:41'),
-(7, 1, 4, 'Review Montech XR: Casing Budget Rasa Premium', 'review-montech-xr-casing-budget-rasa-premium', 'Pasar casing PC semakin kompetitif, terutama di segmen budget hingga mid-range. Salah satu produk yang belakangan menarik perhatian adalah Montech XR, sebuah casing PC yang menawarkan desain modern, airflow optimal, dan fitur yang biasanya ditemui di kelas harga lebih tinggi. Dalam artikel ini, kita akan membahas review lengkap Montech XR, mulai dari desain, build quality, airflow, hingga apakah casing ini layak disebut budget rasa premium.', 'Sekilas Tentang Montech XR\n\nMontech dikenal sebagai brand yang fokus menghadirkan produk PC dengan value tinggi. Montech XR diposisikan sebagai casing entry–mid level yang menargetkan gamer dan PC builder pemula hingga menengah yang menginginkan tampilan elegan tanpa harus mengeluarkan biaya besar.\n\n- Segmentasi pengguna Montech XR:\n- PC gaming entry hingga mid-range\n- Builder pemula\n- Pengguna yang mengutamakan airflow dan estetika minimalis', 'blog_af0d0175f86f2b77_1765909168.jpg', 'publish', 12, '2025-12-17 01:19:56', '2025-12-17 01:19:56', '2025-12-28 11:29:37');
+(7, 1, 4, 'Review Montech XR: Casing Budget Rasa Premium', 'review-montech-xr-casing-budget-rasa-premium', 'Pasar casing PC semakin kompetitif, terutama di segmen budget hingga mid-range. Salah satu produk yang belakangan menarik perhatian adalah Montech XR, sebuah casing PC yang menawarkan desain modern, airflow optimal, dan fitur yang biasanya ditemui di kelas harga lebih tinggi. Dalam artikel ini, kita akan membahas review lengkap Montech XR, mulai dari desain, build quality, airflow, hingga apakah casing ini layak disebut budget rasa premium.', 'Sekilas Tentang Montech XR\n\nMontech dikenal sebagai brand yang fokus menghadirkan produk PC dengan value tinggi. Montech XR diposisikan sebagai casing entry–mid level yang menargetkan gamer dan PC builder pemula hingga menengah yang menginginkan tampilan elegan tanpa harus mengeluarkan biaya besar.\n\n- Segmentasi pengguna Montech XR:\n- PC gaming entry hingga mid-range\n- Builder pemula\n- Pengguna yang mengutamakan airflow dan estetika minimalis', 'blog_af0d0175f86f2b77_1765909168.jpg', 'publish', 12, '2025-12-17 01:19:56', '2025-12-17 01:19:56', '2025-12-28 11:29:37'),
+(9, 1, 1, 'AI Boom Picu Kenaikan Harga RAM, Produsen Kurangi Produksi untuk Konsumen', 'ai-boom-picu-kenaikan-harga-ram-produsen-kurangi-produksi-untuk-konsumen', 'Perkembangan Artificial Intelligence (AI) yang sangat pesat dalam beberapa tahun terakhir ternyata membawa dampak besar pada industri hardware komputer. Salah satu efek paling terasa adalah kenaikan harga RAM di pasar global. Banyak konsumen bertanya-tanya, mengapa harga RAM kembali naik dan apa hubungannya dengan AI serta keputusan produsen menghentikan atau mengurangi produksi?\n\nArtikel ini akan membahas secara lengkap efek AI terhadap kenaikan harga RAM, faktor stop produsen, serta dampaknya bagi konsumen dan industri PC.', 'AI dan Lonjakan Permintaan Hardware: Booming teknologi AI mulai dari AI generatif, machine learning, hingga data center skala besar membutuhkan sumber daya hardware yang sangat besar. Salah satu komponen utama yang paling dibutuhkan adalah RAM berkapasitas besar dan berkecepatan tinggi.\nPermintaan RAM meningkat drastis karena: Server AI membutuhkan RAM besar untuk training model, Data center memperluas infrastruktur AI, Perusahaan teknologi berlomba-lomba mengembangkan layanan AI, Lonjakan permintaan ini membuat stok RAM di pasar global semakin terbatas.', 'blog_3bb79f0d1733ade5_1766958255.webp', 'publish', 0, '2025-12-29 04:44:54', '2025-12-29 04:44:54', '2025-12-29 04:44:54');
 
 -- --------------------------------------------------------
 
@@ -273,7 +274,8 @@ INSERT INTO `cart` (`id_cart`, `id_customer`, `id_product`, `jumlah`, `harga_sat
 ('CRT0000014', 2, 'PRD007', 1, 859000.00, '2025-12-25 09:44:00', '2025-12-25 09:51:43'),
 ('CRT0000015', 2, 'PRD003', 1, 1799000.00, '2025-12-25 09:53:22', '2025-12-25 09:53:22'),
 ('CRT0000016', 2, 'PRD011', 2, 1689000.00, '2025-12-25 09:53:41', '2025-12-25 10:00:19'),
-('CRT0000017', 1, 'PRD011', 2, 1689000.00, '2025-12-25 10:01:15', '2025-12-25 10:01:16');
+('CRT0000017', 1, 'PRD011', 2, 1689000.00, '2025-12-25 10:01:15', '2025-12-25 10:01:16'),
+('CRT0000018', 10, 'PRD004', 1, 18099000.00, '2025-12-30 19:13:19', '2025-12-30 19:13:19');
 
 -- --------------------------------------------------------
 
@@ -311,25 +313,7 @@ INSERT INTO `customers` (`id_customer`, `nama_lengkap`, `email`, `no_telp`, `pas
 (3, 'Jason Susanto', 'susanto.customer@gmail.com', '081246379958', '$2y$10$E0Z/97QeW3WFUwFuexZ8D.W6O09hmW7EB/gCV9A5JP.I1TZ6yuZS.', NULL, NULL, NULL, 'regular', NULL, NULL, 0, 0, NULL, NULL, '2025-11-30 16:41:05', '2025-11-30 16:41:57'),
 (8, '0728_Muhamad Faizal Ardiansyah', 'mhmdfaizalardi@gmail.com', NULL, NULL, '114145390091505445484', 'mhmdfaizalardi@gmail.com', '0728_Muhamad Faizal Ardiansyah', 'google', NULL, NULL, 1, 1, '2025-12-10 13:37:29', 'google_profile_69391529751f4_1765348649.jpg', '2025-12-10 13:37:29', '2025-12-19 12:42:18'),
 (9, 'Faizal Ardi', 'mhfaizalardillia22@gmail.com', '081291203984', '$2y$10$7bwAM.e86D2PrYiVjesl2OzzFd85avhS6AUJbFkFR79uYDuQORZ/i', NULL, NULL, NULL, 'regular', NULL, NULL, 1, 0, NULL, NULL, '2025-12-17 13:50:21', '2025-12-19 01:02:42'),
-(10, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '081290413082', '$2y$10$ChYfYaCUnBypkG.0BdcgeuliA4VvlNOAI82WQnVN2/E42ZcGBmbMK', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', 'a1521e39ce89d8f33eb3c3e3bc56fa0de95688670df29ed9ac35161364166b3d', '2026-01-28 01:49:52', 1, 1, '2025-12-19 01:03:30', 'google_profile_694441f2dd3bf_1766081010.jpg', '2025-12-19 01:03:30', '2025-12-29 01:50:32');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `diskon`
---
-
-CREATE TABLE `diskon` (
-  `id_diskon` varchar(10) NOT NULL,
-  `id_product` varchar(10) DEFAULT NULL,
-  `nama_diskon` varchar(100) DEFAULT NULL,
-  `tipe_diskon` enum('persen','nominal') DEFAULT 'persen',
-  `nilai_diskon` decimal(12,2) NOT NULL,
-  `harga_setelah_diskon` decimal(12,2) DEFAULT NULL,
-  `tanggal_mulai` datetime DEFAULT NULL,
-  `tanggal_berakhir` datetime DEFAULT NULL,
-  `status` varchar(20) DEFAULT 'aktif'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+(10, 'Muhamad Faizal Ardiansyah', 'faizalardi2016@gmail.com', '081290413082', '$2y$10$ChYfYaCUnBypkG.0BdcgeuliA4VvlNOAI82WQnVN2/E42ZcGBmbMK', '109385904418557831706', 'faizalardi2016@gmail.com', 'Muhamad Faizal Ardiansyah', 'google', 'eead4b87adac5e2859bcdb5a29422f6ee492fcec867f322d29e62f41edc6a828', '2026-01-29 19:13:14', 1, 1, '2025-12-19 01:03:30', 'google_profile_694441f2dd3bf_1766081010.jpg', '2025-12-19 01:03:30', '2025-12-30 19:13:14');
 
 -- --------------------------------------------------------
 
@@ -445,8 +429,13 @@ INSERT INTO `notification` (`id_notifikasi`, `id_customer`, `id_order`, `tipe_no
 ('0f663003-dc9f-11f0-9a4d-9c6b00666658', 10, 'ORD2025121987F0A23D', 'order', 'Status pesanan berubah: dikirim', 'Pesanan #ORD2025121987F0A23D kini berstatus: dikirim', 'dibaca', '2025-12-19 12:53:36'),
 ('1443e5f5-dc9f-11f0-9a4d-9c6b00666658', 10, 'ORD2025121987F0A23D', 'order', 'Status pesanan berubah: selesai', 'Pesanan #ORD2025121987F0A23D kini berstatus: selesai', 'dibaca', '2025-12-19 12:53:44'),
 ('144a5b4b-e0fa-11f0-abbe-9c6b00666658', 2, 'ORD20251225BD8530FE', 'order', 'Status pesanan berubah: diproses', 'Pesanan #ORD20251225BD8530FE kini berstatus: diproses', 'belum_dibaca', '2025-12-25 01:55:13'),
+('19552147-e43a-11f0-ac3b-9c6b00666658', 10, 'ORD20251229A21C4C2D', 'order', 'Status pesanan berubah: dikirim', 'Pesanan #ORD20251229A21C4C2D kini berstatus: dikirim', 'belum_dibaca', '2025-12-29 05:11:03'),
 ('1a04b6a0-df4f-11f0-bfce-9c6b00666658', 10, 'ORD2025121937709A75', 'order', 'Status pesanan berubah: dibatalkan', 'Pesanan #ORD2025121937709A75 kini berstatus: dibatalkan', 'belum_dibaca', '2025-12-22 22:58:48'),
+('1e011db0-e43a-11f0-ac3b-9c6b00666658', 10, 'ORD20251229A21C4C2D', 'order', 'Status pesanan berubah: diproses', 'Pesanan #ORD20251229A21C4C2D kini berstatus: diproses', 'belum_dibaca', '2025-12-29 05:11:11'),
+('209faf19-e43a-11f0-ac3b-9c6b00666658', 2, 'ORD20251225BD8530FE', 'order', 'Status pesanan berubah: diproses', 'Pesanan #ORD20251225BD8530FE kini berstatus: diproses', 'belum_dibaca', '2025-12-29 05:11:15'),
 ('2477105a-e42e-11f0-ac3b-9c6b00666658', 10, 'ORD20251229A21C4C2D', 'order', 'Status pesanan berubah: diproses', 'Pesanan #ORD20251229A21C4C2D kini berstatus: diproses', 'belum_dibaca', '2025-12-29 03:45:27'),
+('27127f67-e43a-11f0-ac3b-9c6b00666658', 10, 'ORD20251229A21C4C2D', 'order', 'Status pesanan berubah: dikirim', 'Pesanan #ORD20251229A21C4C2D kini berstatus: dikirim', 'belum_dibaca', '2025-12-29 05:11:26'),
+('2a6619c5-e43a-11f0-ac3b-9c6b00666658', 2, 'ORD20251225BD8530FE', 'order', 'Status pesanan berubah: dikirim', 'Pesanan #ORD20251225BD8530FE kini berstatus: dikirim', 'belum_dibaca', '2025-12-29 05:11:31'),
 ('2d3da0bd-df1a-11f0-bfce-9c6b00666658', 10, 'ORD202512190CC2FD2B', 'order', 'Status pesanan berubah: selesai', 'Pesanan #ORD202512190CC2FD2B kini berstatus: selesai', 'dibaca', '2025-12-22 16:39:56'),
 ('311b965c-e02a-11f0-9920-9c6b00666658', 10, 'ORD202512232406BAC7', 'order', 'Status pesanan berubah: dibatalkan', 'Pesanan #ORD202512232406BAC7 kini berstatus: dibatalkan', 'belum_dibaca', '2025-12-24 01:07:06'),
 ('34a82524-df4a-11f0-bfce-9c6b00666658', 10, 'ORD2025121937709A75', 'order', 'Status pesanan berubah: dibatalkan', 'Pesanan #ORD2025121937709A75 kini berstatus: dibatalkan', 'belum_dibaca', '2025-12-22 22:23:45'),
@@ -538,7 +527,7 @@ INSERT INTO `orders` (`id_order`, `id_customer`, `tanggal_order`, `total_harga`,
 ('ORD20251224B7062359', 10, '2025-12-24 01:42:14', 1689000.00, 0.00, 0.00, 1689000.00, 'dibatalkan', 'Extra Packing: Bubble Wrap (+Rp 5.000)\n\n[SISTEM] Pesanan otomatis dibatalkan oleh Nano Komputer karena waktu pembayaran habis pada 29/12/2025 03:41', 1, 0, 5000.00, 0, 'pickup', 'TKO0001'),
 ('ORD20251225A2F6B29E', 1, '2025-12-25 10:03:04', 919000.00, 0.00, 22000.00, 941000.00, 'selesai', 'Extra Packing: Bubble Wrap (+Rp 5.000)', 1, 0, 5000.00, 0, 'delivery', NULL),
 ('ORD20251225BD8530FE', 2, '2025-12-25 01:54:53', 5179000.00, 0.00, 0.00, 5179000.00, 'dikirim', 'Extra Packing: Bubble Wrap (+Rp 5.000)', 1, 0, 5000.00, 0, 'pickup', 'TKO0001'),
-('ORD20251229A21C4C2D', 10, '2025-12-29 03:45:25', 18099000.00, 0.00, 0.00, 18099000.00, 'diproses', 'Extra Packing: Bubble Wrap (+Rp 5.000)', 1, 0, 5000.00, 0, 'pickup', 'TKO0001');
+('ORD20251229A21C4C2D', 10, '2025-12-29 03:45:25', 18099000.00, 0.00, 0.00, 18099000.00, 'dikirim', 'Extra Packing: Bubble Wrap (+Rp 5.000)', 1, 0, 5000.00, 0, 'pickup', 'TKO0001');
 
 --
 -- Triggers `orders`
@@ -772,6 +761,10 @@ CREATE TABLE `pengeluaran` (
 --
 
 INSERT INTO `pengeluaran` (`id`, `tgl_pengeluaran`, `kategori`, `description`, `jumlah`, `created_at`) VALUES
+('EXP-20251227-2246', '2025-12-26', 'barang_masuk', 'Restock Casing BRAND', 20000000.00, '2025-12-26 22:49:01'),
+('EXP-20251227-5033', '2025-12-25', 'gaji_karyawan', 'Gaji Atmin', 2300000.00, '2025-12-26 21:18:54'),
+('EXP-20251227-7325', '2025-12-27', 'pembelian_domain', 'Beli domain ', 3000000.00, '2025-12-26 22:47:40'),
+('EXP-20251227-8753', '2025-12-27', 'operasional', 'Return Barang', 300000.00, '2025-12-26 22:48:00'),
 ('EXP-20251228-2473', '2025-12-28', 'gaji_karyawan', 'Gaji Admin Bulan Desember', 2000001.00, '2025-12-28 04:18:37');
 
 -- --------------------------------------------------------
@@ -1173,7 +1166,7 @@ INSERT INTO `shipment` (`id_shipment`, `id_order`, `id_alamat`, `jasa_pengiriman
 ('SHP2025122491362649', 'ORD20251224B7062359', 8, 'Ambil di Toko - Nano Komputer - Jakarta Pusat', NULL, 'Faizal Ardi', '081290413082', 'Perumahan Bukit Waringin Blok H4 No. 10 RT 08/RW 014, CIMANGGIS, BOJONG GEDE, KABUPATEN BOGOR, JAWA BARAT 16924', 'KABUPATEN BOGOR', '16924', 0.00, NULL, 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL),
 ('SHP2025122563C49A01', 'ORD20251225A2F6B29E', 2, 'J&T Express Regular', NULL, 'Fauzan Eldianzah', '081234567890', 'PT Maju Jaya Sejahtera\nJl. Teknologi Raya No. 88, Gedung Inovasi Lantai 3, CIPINANG MUARA, JATINEGARA, KOTA JAKARTA TIMUR, DKI JAKARTA 13420', 'KOTA JAKARTA TIMUR', '13420', 22000.00, 2, 'diterima', NULL, '2025-12-25 10:04:41', NULL, 'jnt', NULL, 'fallback-jnt', NULL, NULL, 0, 0, NULL),
 ('SHP202512257E11FA48', 'ORD20251225BD8530FE', 3, 'Ambil di Toko - Nano Komputer - Jakarta Pusat', '', 'Akmal Dwi Saputra', '089576893421', 'Jalan Gg. Noble Blok J4 no.05 RT 13/RW 02, KARADENAN, CIBINONG, KABUPATEN BOGOR, JAWA BARAT 16920', 'KABUPATEN BOGOR', '16920', 0.00, NULL, 'dikirim', '2025-12-25 10:03:43', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL),
-('SHP2025122901843B94', 'ORD20251229A21C4C2D', 8, 'Ambil di Toko - Nano Komputer - Jakarta Pusat', NULL, 'Faizal Ardi', '081290413082', 'Perumahan Bukit Waringin Blok H4 No. 10 RT 08/RW 014, CIMANGGIS, BOJONG GEDE, KABUPATEN BOGOR, JAWA BARAT 16924', 'KABUPATEN BOGOR', '16924', 0.00, NULL, 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL);
+('SHP2025122901843B94', 'ORD20251229A21C4C2D', 8, 'Ambil di Toko - Nano Komputer - Jakarta Pusat', '', 'Faizal Ardi', '081290413082', 'Perumahan Bukit Waringin Blok H4 No. 10 RT 08/RW 014, CIMANGGIS, BOJONG GEDE, KABUPATEN BOGOR, JAWA BARAT 16924', 'KABUPATEN BOGOR', '16924', 0.00, NULL, 'dikirim', '2025-12-29 05:11:20', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -1202,7 +1195,7 @@ CREATE TABLE `site_settings` (
 --
 
 INSERT INTO `site_settings` (`id`, `site_title`, `site_description`, `site_logo`, `site_favicon`, `contact_email`, `contact_phone`, `facebook_url`, `instagram_url`, `tiktok_url`, `youtube_url`, `x_url`, `updated_at`) VALUES
-(1, 'Nano Komputer', 'Di Nano Komputer , kami memahami pentingnya kualitas dan keamanan dalam setiap pembelian. Kami hanya menyediakan produk 100% original dan bergaransi resmi.', 'assets/img/mainicon.png', 'assets/img/favicon.png', 'cs@nanokomputer.com', '081808415055', 'https://www.facebook.com/nanokomputer', 'https://www.instagram.com/nanokomputer', 'https://www.tiktok.com/@nanokomputerofficial', 'https://youtube.com/nanokomputer', '', '2025-12-28 20:12:53');
+(1, 'Nano Komputer', 'Di Nano Komputer, kami memahami pentingnya kualitas dan keamanan dalam setiap pembelian. Kami hanya menyediakan produk 100% original dan bergaransi resmi distributor.', 'assets/img/mainicon.png', 'assets/img/favicon.png', 'cs@nanokomputer.com', '081808415055', 'https://www.facebook.com/nanokomputer', 'https://www.instagram.com/nanokomputer', 'https://www.tiktok.com/@nanokomputerofficial', 'https://youtube.com/nanokomputer', '', '2025-12-28 22:12:17');
 
 -- --------------------------------------------------------
 
@@ -1232,7 +1225,7 @@ CREATE TABLE `store_locations` (
 --
 
 INSERT INTO `store_locations` (`id_toko`, `nama_toko`, `no_telepon`, `alamat`, `provinsi`, `kota_kabupaten`, `kecamatan`, `kelurahan`, `kode_pos`, `jam_buka`, `jam_tutup`, `is_active`, `created_at`, `updated_at`) VALUES
-('TKO0001', 'Nano Komputer - Jakarta Pusat', '0816765803', 'Mangga Dua Mall, Jalan Mangga Dua Raya No.47A-B Lantai 2', 'DKI JAKARTA', 'KOTA JAKARTA PUSAT', 'SAWAH BESAR', 'MANGGA DUA SELATAN', '10730', '08:00:00', '18:00:00', 1, '2025-12-18 15:16:48', '2025-12-29 01:14:22');
+('TKO0001', 'Nano Komputer - Jakarta Pusat', '0816765803', 'Mangga Dua Mall, Jalan Mangga Dua Raya No.47A-B Lantai 2', 'DKI JAKARTA', 'KOTA JAKARTA PUSAT', 'SAWAH BESAR', 'MANGGA DUA SELATAN', '10730', '08:00:00', '18:00:00', 1, '2025-12-18 15:16:48', '2025-12-29 05:13:37');
 
 -- --------------------------------------------------------
 
@@ -1275,7 +1268,7 @@ INSERT INTO `support_tickets` (`id_ticket`, `id_customer`, `nama_pengaju`, `emai
 ('TKT00010', NULL, 'Jason Susanto', 'susanto.customer@gmail.com', '089576891020', 'Bagaimana cara melacak pesanan saya?', 'Status Pesanan', 'Saya ingin mengetahui bagaimana cara melacak status dan posisi pengiriman pesanan yang telah saya lakukan di Nano Komputer.', NULL, 'Resolved', 'Medium', 1, '2025-12-18 06:01:52', '2025-12-18 06:02:19', 1),
 ('TKT00011', NULL, 'Fauzan Eldianzah', 'fauzan.customer@gmail.com', '081234567890', 'Produk yang saya terima tidak sesuai pesanan dan deskripsi. Bagaimana prosedur pengembalian atau penukarannya?', 'Komplain', 'Saya menerima produk yang tidak sesuai dengan pesanan yang saya lakukan. Bagaimana prosedur pengembalian atau penukarannya?', NULL, 'Resolved', 'Medium', 1, '2025-12-18 06:03:28', '2025-12-18 06:03:42', 1),
 ('TKT00012', NULL, 'Maekel Gani', 'maekelgani@gmail.com', '081299802020', 'Apakah stok di website selalu update secara realtime?', 'Pertanyaan Produk', 'Saya ingin memastikan apakah informasi stok produk yang ditampilkan di website Nano Komputer selalu diperbarui secara real-time.', NULL, 'Resolved', 'Medium', 1, '2025-12-18 06:04:37', '2025-12-18 15:29:33', 1),
-('TKT00013', 8, 'Ardi', 'mhmdfaizalardi@gmail.com', '081290413082', 'Kenapa harga RAM sangat mahal sampai sudah seharga motor?', 'Pertanyaan Produk', 'Saya ingin menanyakan mengapa harga RAM komputer belakangan ini bisa menjadi sangat mahal, bahkan sampai setara dengan harga sepeda motor. Apa penyebab kenaikan harga RAM yang signifikan seperti itu dan apakah ini normal di pasar saat ini?', NULL, 'Resolved', 'Medium', 1, '2025-12-19 12:41:24', '2025-12-19 16:35:13', 1);
+('TKT00013', 8, 'Ardi', 'mhmdfaizalardi@gmail.com', '081290413082', 'Kenapa harga RAM sangat mahal sampai sudah seharga motor?', 'Pertanyaan Produk', 'Saya ingin menanyakan mengapa harga RAM komputer belakangan ini bisa menjadi sangat mahal, bahkan sampai setara dengan harga sepeda motor. Apa penyebab kenaikan harga RAM yang signifikan seperti itu dan apakah ini normal di pasar saat ini?', NULL, 'Resolved', 'Medium', 1, '2025-12-19 12:41:24', '2025-12-29 04:15:20', 1);
 
 -- --------------------------------------------------------
 
@@ -1314,7 +1307,7 @@ INSERT INTO `ticket_replies` (`id_reply`, `id_ticket`, `id_admin`, `id_customer`
 (64, 'TKT00008', 1, NULL, 'Saat ini, pembelian di website Nano Komputer mengharuskan pelanggan memiliki akun. Hal ini bertujuan untuk memudahkan proses pelacakan pesanan, garansi, dan layanan purna jual. Proses pendaftaran akun sangat cepat, mudah dan gratis.', NULL, 0, '2025-12-18 17:54:23'),
 (65, 'TKT00009', 1, NULL, 'Nano Komputer menyediakan penawaran khusus untuk pembelian dalam jumlah tertentu, terutama untuk kebutuhan kantor atau instansi.\r\n\r\nSilakan hubungi tim sales kami untuk mendapatkan penawaran dan informasi lebih lanjut.', NULL, 0, '2025-12-18 18:06:03'),
 (66, 'TKT00009', 1, NULL, 'Nano Komputer menyediakan penawaran khusus untuk pembelian dalam jumlah tertentu, terutama untuk kebutuhan kantor atau instansi.\r\n\r\nSilakan hubungi tim sales kami untuk mendapatkan penawaran dan informasi lebih lanjut.', NULL, 0, '2025-12-19 12:41:53'),
-(67, 'TKT00013', 1, NULL, 'Karena lagi bubble AI', NULL, 0, '2025-12-19 16:35:13');
+(69, 'TKT00013', 1, NULL, 'karena lagi maraknya bubble AI ini bikin sangat parah', NULL, 0, '2025-12-29 04:14:22');
 
 --
 -- Triggers `ticket_replies`
@@ -1412,7 +1405,6 @@ INSERT INTO `wishlist` (`id_wishlist`, `id_customer`, `id_product`, `tanggal_dit
 ('WSH0000015', 1, 'PRD001', '2025-12-17 01:48:15', '2025-12-17 01:48:15'),
 ('WSH0000016', 1, 'PRD003', '2025-12-17 01:48:33', '2025-12-17 01:48:33'),
 ('WSH0000017', 1, 'PRD010', '2025-12-17 09:58:04', '2025-12-17 09:58:04'),
-('WSH0000018', 10, 'PRD004', '2025-12-19 01:04:15', '2025-12-19 01:04:15'),
 ('WSH0000019', 10, 'PRD010', '2025-12-19 01:22:27', '2025-12-19 01:22:27'),
 ('WSH0000025', 10, 'PRD009', '2025-12-19 17:12:18', '2025-12-19 17:12:18'),
 ('WSH0000027', 10, 'PRD006', '2025-12-22 13:04:05', '2025-12-22 13:04:05'),
@@ -1421,7 +1413,8 @@ INSERT INTO `wishlist` (`id_wishlist`, `id_customer`, `id_product`, `tanggal_dit
 ('WSH0000030', 2, 'PRD006', '2025-12-25 01:41:04', '2025-12-25 01:41:04'),
 ('WSH0000032', 2, 'PRD002', '2025-12-25 02:28:17', '2025-12-25 02:28:17'),
 ('WSH0000033', 2, 'PRD011', '2025-12-25 02:40:38', '2025-12-25 02:40:38'),
-('WSH0000034', 2, 'PRD001', '2025-12-25 09:00:38', '2025-12-25 09:00:38');
+('WSH0000034', 2, 'PRD001', '2025-12-25 09:00:38', '2025-12-25 09:00:38'),
+('WSH0000035', 10, 'PRD004', '2025-12-30 19:13:22', '2025-12-30 19:13:22');
 
 --
 -- Indexes for dumped tables
@@ -1505,13 +1498,6 @@ ALTER TABLE `customers`
   ADD KEY `idx_customer_login_type` (`login_type`);
 
 --
--- Indexes for table `diskon`
---
-ALTER TABLE `diskon`
-  ADD PRIMARY KEY (`id_diskon`),
-  ADD KEY `idx_diskon_product` (`id_product`);
-
---
 -- Indexes for table `kampanye_produk`
 --
 ALTER TABLE `kampanye_produk`
@@ -1586,6 +1572,12 @@ ALTER TABLE `payment`
   ADD KEY `idx_payment_status` (`status_pembayaran`),
   ADD KEY `idx_payment_midtrans` (`midtrans_transaction_id`),
   ADD KEY `idx_payment_midtrans_order` (`midtrans_order_id`);
+
+--
+-- Indexes for table `pengeluaran`
+--
+ALTER TABLE `pengeluaran`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `penggunaan_voucher`
@@ -1762,7 +1754,7 @@ ALTER TABLE `blog_categories`
 -- AUTO_INCREMENT for table `blog_posts`
 --
 ALTER TABLE `blog_posts`
-  MODIFY `id_post` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_post` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `customers`
@@ -1816,7 +1808,7 @@ ALTER TABLE `role_permissions`
 -- AUTO_INCREMENT for table `ticket_replies`
 --
 ALTER TABLE `ticket_replies`
-  MODIFY `id_reply` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id_reply` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- Constraints for dumped tables
@@ -1847,12 +1839,6 @@ ALTER TABLE `blog_posts`
 ALTER TABLE `cart`
   ADD CONSTRAINT `fk_cart_customer` FOREIGN KEY (`id_customer`) REFERENCES `customers` (`id_customer`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_cart_product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id_product`) ON DELETE CASCADE;
-
---
--- Constraints for table `diskon`
---
-ALTER TABLE `diskon`
-  ADD CONSTRAINT `fk_diskon_product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id_product`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `kampanye_produk`
