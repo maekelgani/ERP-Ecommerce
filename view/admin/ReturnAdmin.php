@@ -904,7 +904,7 @@ function formatTanggalAdmin($date)
                             </div>
                             <h4>ID Order</h4>
                         </div>
-                        <a href="orderDetail.php?id=${data.id_order}" class="text-xl font-bold text-[#882426] hover:text-[#6d1a1c] transition-colors inline-flex items-center gap-2 font-mono">
+                        <a href="ReturnOrderDetailPage.php?id=${data.id_order}" class="text-xl font-bold text-[#882426] hover:text-[#6d1a1c] transition-colors inline-flex items-center gap-2 font-mono">
                             ${data.id_order}
                             <span class="material-symbols-outlined text-base">open_in_new</span>
                         </a>
