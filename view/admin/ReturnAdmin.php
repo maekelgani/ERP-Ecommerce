@@ -341,7 +341,7 @@ function formatTanggalAdmin($date)
                                             </span>
                                         </td>
                                         <td class="px-6 py-5">
-                                            <a href="orderDetail.php?id=<?= urlencode($return['id_order']) ?>"
+                                            <a href="ReturnOrderDetailPage.php?id=<?= urlencode($return['id_order']) ?>"
                                                 class="inline-flex items-center gap-1.5 text-[#882426] hover:text-[#6d1a1c] font-semibold transition-colors hover:underline">
                                                 <span><?= htmlspecialchars($return['id_order']) ?></span>
                                                 <span class="material-symbols-outlined text-base">open_in_new</span>
